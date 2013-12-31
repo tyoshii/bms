@@ -1,0 +1,21 @@
+[submodule "ybm/fuel/core"]
+	path = ybm/fuel/core
+	url = git://github.com/fuel/core.git
+[submodule "ybm/fuel/packages/oil"]
+	path = ybm/fuel/packages/oil
+	url = git://github.com/fuel/oil.git
+[submodule "ybm/fuel/packages/auth"]
+	path = ybm/fuel/packages/auth
+	url = git://github.com/fuel/auth.git
+[submodule "ybm/fuel/packages/parser"]
+	path = ybm/fuel/packages/parser
+	url = git://github.com/fuel/parser.git
+[submodule "ybm/fuel/packages/orm"]
+	path = ybm/fuel/packages/orm
+	url = git://github.com/fuel/orm.git
+[submodule "ybm/fuel/packages/email"]
+	path = ybm/fuel/packages/email
+	url = git://github.com/fuel/email.git
+[submodule "ybm/docs"]
+	path = ybm/docs
+	url = git://github.com/fuel/docs.git

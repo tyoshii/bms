@@ -4,3 +4,6 @@
 
 # php conf
 ../conf/bms.ini /etc/php.d/bms.ini
+
+# fuel app
+../bms /var/www/bms

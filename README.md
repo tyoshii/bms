@@ -1,3 +1,3 @@
-Yahoo Baseball Management
-=========================
+Baseball Management System
+==========================
 

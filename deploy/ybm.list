@@ -1,0 +1,3 @@
+# httpd conf
+../conf/virtualhost-00.conf  /etc/httpd/conf.d/virtualhost-00.conf
+../conf/virtualhost-ybm.conf /etc/httpd/conf.d/virtualhost-ybm.conf

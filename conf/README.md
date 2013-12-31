@@ -1,4 +1,8 @@
 config file included httpd
 ==========================
 
-/etc/httpd/conf.d/*
+file:
+    virtualhost-*
+
+dir:
+    /etc/httpd/conf.d/*

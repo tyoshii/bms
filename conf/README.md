@@ -6,3 +6,6 @@ file:
 
 dir:
     /etc/httpd/conf.d/*
+
+config file included php
+========================

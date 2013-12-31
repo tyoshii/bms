@@ -6,6 +6,7 @@ symlink ../conf/virtualhost-bms.conf /etc/httpd/conf.d/virtualhost-bms.conf
 symlink ../conf/bms.ini /etc/php.d/bms.ini
 
 # fuel app
-symlink ../bms /var/www/bms
+symlink ../bms/fuel/          /var/www/bms/fuel/
+symlink ../bms/public/assets/ /var/www/bms/public/assets/
 
 copy ../bms/public/index.php /var/www/bms/public/index.php

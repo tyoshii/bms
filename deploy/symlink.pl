@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use File::Spec;
 
-my $list = 'ybm.list';
+my $list = 'bms.list';
 
 my @files = `cat $list`;
 

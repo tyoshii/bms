@@ -16,6 +16,3 @@
 [submodule "bms/fuel/packages/email"]
 	path = bms/fuel/packages/email
 	url = git://github.com/fuel/email.git
-[submodule "bms/docs"]
-	path = bms/docs
-	url = git://github.com/fuel/docs.git

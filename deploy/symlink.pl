@@ -10,10 +10,10 @@ my @files = `cat $list`;
 
 for my $row ( @files ) {
 
-    next if $row =~ m{^#};
-
     chomp $row;
     $row =~ s{\s+}{ }g; 
+
+    next if $row =~ m{^#} || $row =~ m{^$};
 
     my ( $orig, $dest ) = split(' ', $row);
 
@@ -28,6 +28,6 @@ for my $row ( @files ) {
         print "symlink $dest -> $orig\n";
     }
     else {
-        warn $!;
+        warn "Failed symlink $orig : $!";
     }
 }

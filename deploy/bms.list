@@ -1,3 +1,7 @@
+# dir
+dir /var/www/bms/
+dir /var/www/bms/public/
+
 # httpd conf
 symlink ../conf/virtualhost-00.conf  /etc/httpd/conf.d/virtualhost-00.conf
 symlink ../conf/virtualhost-bms.conf /etc/httpd/conf.d/virtualhost-bms.conf

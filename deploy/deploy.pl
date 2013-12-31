@@ -2,8 +2,10 @@
 
 use strict;
 use warnings;
+use File::Basename;
 use File::Copy qw( copy );
 use File::Spec;
+use File::Path;
 
 my $list = 'bms.list';
 
@@ -49,10 +51,35 @@ for my $hash_sym ( @{$hash->{'symlink'}} ) {
     my $orig = $hash_sym->{'orig'};
 
     if ( -f $dest || -l $dest || -d $dest ) {
-        `rm -rf $dest`;
+        `rm -irf $dest`;
     }
 
-    _symlink($orig, $dest);
+    if ( -d $orig ) {
+
+        # mkdir
+        mkdir $dest;
+        chdir $dest;
+
+        my @orig_lists = `find $orig -type f`;
+        for my $f ( @orig_lists ) {
+            chomp $f;
+            next if $f =~ m{\.git};
+
+            my $dest_path = $f; 
+            $dest_path =~ s{$orig}{};
+            $dest_path =~ s{^/}{};
+            my $orig_path = File::Spec->catfile( $orig, $dest_path);
+
+            if ( ! -d dirname($dest_path) ) {
+                mkpath dirname($dest_path);
+            }
+
+            _symlink($orig_path, $dest_path);
+        }
+    }
+    else {
+        _symlink($orig, $dest);
+    }
 }
     
 for my $hash_copy ( @{$hash->{'copy'}} ) {
@@ -61,7 +88,7 @@ for my $hash_copy ( @{$hash->{'copy'}} ) {
     my $orig = $hash_copy->{'orig'};
 
     if ( -f $dest || -l $dest || -d $dest ) {
-        `rm -rf $dest`;
+        `rm -irf $dest`;
     }
 
     _copy($orig, $dest)

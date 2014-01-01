@@ -50,9 +50,9 @@ for my $hash_sym ( @{$hash->{'symlink'}} ) {
     my $dest = $hash_sym->{'dest'};
     my $orig = $hash_sym->{'orig'};
 
-    if ( -f $dest || -l $dest || -d $dest ) {
-        `rm -irf $dest`;
-    }
+#    if ( -f $dest || -l $dest || -d $dest ) {
+#        `rm -irf $dest`;
+#    }
 
     if ( -d $orig ) {
 
@@ -87,9 +87,9 @@ for my $hash_copy ( @{$hash->{'copy'}} ) {
     my $dest = $hash_copy->{'dest'};
     my $orig = $hash_copy->{'orig'};
 
-    if ( -f $dest || -l $dest || -d $dest ) {
-        `rm -irf $dest`;
-    }
+#    if ( -f $dest || -l $dest || -d $dest ) {
+#        `rm -irf $dest`;
+#    }
 
     _copy($orig, $dest)
 }
@@ -98,11 +98,16 @@ sub _copy {
     my $orig = shift;
     my $dest = shift;
 
+    if ( -f $dest || -d $dest ) {
+        print "delete dest file for copy\n";
+        `rm -i $dest`;
+    }
+
     if ( copy $orig, $dest ) {
-        print "copy $dest -> $orig\n";
+        _green("copy $dest -> $orig");
     }
     else {
-        warn "Failed copy $orig : $!";
+        _red("Failed copy $orig : $!");
     } 
 }
 
@@ -110,10 +115,25 @@ sub _symlink {
     my $orig = shift;
     my $dest = shift;
 
+    if ( -l $dest ) {
+        `rm $dest`;
+    }
+
     if ( symlink $orig, $dest ) {
-        print "symlink $dest -> $orig\n";
+        _green("symlink $dest -> $orig");
     }
     else {
-        warn "Failed symlink $orig : $!";
+        _red("Failed symlink $orig : $!");
     }
 }
+
+sub _red {
+    my $msg = shift;
+    print "\e[31m$msg\e[m\n";
+}
+
+sub _green {
+    my $msg = shift;
+    print "\e[32m$msg\e[m\n";
+}
+

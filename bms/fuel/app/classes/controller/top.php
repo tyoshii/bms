@@ -5,8 +5,7 @@ class Controller_Top extends Controller
 
 	public function action_index()
 	{
-    echo "hoge";
-		// return Response::forge(View::forge('welcome/index'));
+		return Response::forge(View::forge('top/index.twig'));
 	}
 
 }

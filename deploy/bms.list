@@ -1,6 +1,7 @@
 # dir
 dir /var/www/bms/
 dir /var/www/bms/public/
+dir /var/www/bms/fuel/app/cache/
 
 # httpd conf
 symlink ../conf/virtualhost-00.conf  /etc/httpd/conf.d/virtualhost-00.conf

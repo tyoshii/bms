@@ -10,6 +10,7 @@
 [submodule "bms/fuel/packages/parser"]
 	path = bms/fuel/packages/parser
 	url = git://github.com/fuel/parser.git
+    ignore = dirty
 [submodule "bms/fuel/packages/orm"]
 	path = bms/fuel/packages/orm
 	url = git://github.com/fuel/orm.git

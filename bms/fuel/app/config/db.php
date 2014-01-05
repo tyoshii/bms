@@ -1,10 +1,11 @@
 <?php
-/**
- * Use this file to override global defaults.
- *
- * See the individual environment DB configs for specific config information.
- */
 
 return array(
-
+	'default' => array(
+		'connection'  => array(
+			'dsn'        => 'mysql:host=localhost;dbname=bms;port=3306',
+			'username'   => 'root',
+			'password'   => Config::get('password.mysql'),
+		),
+	),
 );

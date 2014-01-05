@@ -8,17 +8,22 @@ class Controller_Top extends Controller
     $view = View::forge('top/index.twig');
 
     // login form
-    $form = Fieldset::forge();
+    $form = Fieldset::forge('login', array(
+      'form_attributes' => array(
+        'class' => 'navbar-form navbar-right',
+        'role'  => 'form',
+      ),
+    ));
 
-    $form->add('username', 'アカウント', array('maxlength' => 8))
+    $form->add('username', 'アカウント', array('maxlength' => 8, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('password', 'パスワード', array('type' => 'password'))
+    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'ログイン'));
+    $form->add('submit', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
 
     $form->repopulate();
 

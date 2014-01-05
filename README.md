@@ -12,3 +12,4 @@ IGNORE FILES
 
     fuel/app/config/salt.php
     fuel/app/config/password.php
+    fuel/app/config/crypt.php

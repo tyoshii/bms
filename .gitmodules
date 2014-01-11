@@ -1,6 +1,3 @@
-[submodule "bms/fuel/core"]
-	path = bms/fuel/core
-	url = git://github.com/fuel/core.git
 [submodule "bms/fuel/packages/oil"]
 	path = bms/fuel/packages/oil
 	url = git://github.com/fuel/oil.git

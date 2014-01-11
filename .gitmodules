@@ -4,9 +4,6 @@
 [submodule "bms/fuel/packages/auth"]
 	path = bms/fuel/packages/auth
 	url = git://github.com/fuel/auth.git
-[submodule "bms/fuel/packages/parser"]
-	path = bms/fuel/packages/parser
-	url = git://github.com/fuel/parser.git
 [submodule "bms/fuel/packages/orm"]
 	path = bms/fuel/packages/orm
 	url = git://github.com/fuel/orm.git

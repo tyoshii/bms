@@ -19,4 +19,10 @@ class Controller_Top extends Controller_Base
 
 		return Response::forge($view);
 	}
+
+  public function action_logout()
+  {
+    Auth::logout();
+    Response::redirect(Uri::create('/'));
+  }
 }

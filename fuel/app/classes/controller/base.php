@@ -18,8 +18,7 @@ class Controller_Base extends Controller
         $auth = Auth::instance();
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
-          echo "login success";
-          $this->_login = true;
+          Response::redirect(Uri::current());
         }
         else
         {
@@ -27,6 +26,11 @@ class Controller_Base extends Controller
           // Response::redirect('hoge/fuga');
         }
       }
+    }
+    else
+    {
+      // 既にログイン済みかどうか
+      $this->_login = Auth::check();
     }
   }
 

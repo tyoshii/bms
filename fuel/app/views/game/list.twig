@@ -1,0 +1,34 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+<table class="table">
+
+<thead>
+<tr>
+    <th>実施日</th>
+    <th>先攻</th>
+    <th>後攻</th>
+    <th></th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+    <td>YYYY-MM-DD</td>
+    <td>ヤフー</td>
+    <td>ダブルクリック</td>
+    <td>
+        <form action="/game/edit">
+            <input type="hidden" value="ゲームID">
+            <input type="submit" class="btn btn-success" value="編集">
+        </form>
+    </td>
+</tr>
+
+</tbody>
+</table>
+
+
+{% endblock %}

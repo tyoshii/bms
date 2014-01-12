@@ -1,0 +1,103 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+
+<form class="form" action="#" method="POST">
+
+<table class="table">
+
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>ポジション</th>
+
+<th>内野ゴロ</th>
+<th>内野フライ</th>
+<th>外野フライ</th>
+
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>打撃妨害</th>
+
+<th>ヒット</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+
+</tr>
+
+<tr>
+<td>1</td>
+<td><input type="text" class="form-control input-sm"></td>
+<td><input type="text" class="form-control input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+</tr>
+
+</table>
+
+<input type="submit" class="btn btn-success" value="登録">
+</form>
+
+{% endblock %}
+
+
+
+{% block css %}
+{{ parent() }}
+<link href="/bootstrap_formhelpers/css/bootstrap-formhelpers.css" rel="stylesheet">
+
+<style>
+table th,
+table td {
+    width: 150px;
+}
+
+table td span {
+    width: 10px;
+}
+</style>
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script type="text/javascript" src="/bootstrap_formhelpers/js/bootstrap-formhelpers.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    // add bfh-number
+    $('table td input').each(function() {
+        var $number = $(this);
+        $number.addClass("bfh-number");
+        $number.bfhnumber($number.data());
+    })
+
+    // delete bfh-number
+    $('input.bfh-numer').each(function() {
+        var $number = $(this);
+
+        $number.removeClass('bfh-number');
+        $number.find('span').
+    });
+});
+</script>
+{% endblock %}

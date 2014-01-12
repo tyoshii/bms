@@ -3,8 +3,7 @@ return array(
   '_root_' => 'top/index',
   'logout' => 'top/logout',
 
-  'admin/signup' => 'admin/signup',
-  'admin/team'   => 'admin/team',
+  'admin' => 'admin/index',
 
   'game/create' => 'game/create',
   'game/edit'   => 'game/edit',

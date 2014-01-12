@@ -11,19 +11,19 @@ class Controller_Top extends Controller
     $form = Fieldset::forge('login', array(
       'form_attributes' => array(
         'class' => 'navbar-form navbar-right',
-        'role'  => 'form',
+        'role'  => 'search',
       ),
     ));
 
-    $form->add('username', 'アカウント', array('maxlength' => 8, 'class' => 'form-control'))
+    $form->add('username', '', array('maxlength' => 8, 'class' => 'form-control', 'placeholder' => 'Account'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
+    $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
+    $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign In', 'class' => 'btn btn-success'));
 
     $form->repopulate();
 
@@ -31,7 +31,7 @@ class Controller_Top extends Controller
     $auth = Auth::instance();
     Auth::logout(); 
 
-    $view->set_safe('login_form', $form->build(Uri::create('/')));
+    $view->set_safe('login', $form->build(Uri::create('/')));
 
 		return $view;
 	}

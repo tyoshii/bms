@@ -10,6 +10,11 @@ class Controller_Base extends Controller
   {
     $this->_login_form = self::_get_login_form();
 
+    if ( Auth::check() ) {
+      $this->_login = true;
+      return;
+    }
+
     if ( Input::post() )
     {
       Auth::logout();
@@ -22,15 +27,9 @@ class Controller_Base extends Controller
         }
         else
         {
-          echo "login failed";
-          // Response::redirect('hoge/fuga');
+          Response::redirect('hoge/fuga');
         }
       }
-    }
-    else
-    {
-      // 既にログイン済みかどうか
-      $this->_login = Auth::check();
     }
   }
 

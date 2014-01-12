@@ -1,6 +1,8 @@
 <?php
 return array(
   '_root_' => 'top/index',
+  'logout' => 'top/logout',
+
   'admin/signup' => 'admin/signup',
 
   'game/create' => 'game/create',

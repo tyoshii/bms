@@ -7,20 +7,30 @@ class Controller_Admin extends Controller_Base
     $view = View::forge('admin/signup.twig');
     $form = self::_get_signup_form();
 
-    $view->set_safe('form', $form->build(Uri::current()));
 
     if ( Input::post() )
     {
       if ( $form->validation()->run())
       {
-        Auth::create_user( Input::post('username'), Input::post('password'), Input::post('mail') );
-        echo "success signup";
+        try {
+          Auth::create_user( Input::post('username'), Input::post('password'), Input::post('mail') );
+          echo "success signup";
+        }
+        catch ( Exception $e )
+        {
+          echo "signup failed"; 
+          echo $e->getMessage();
+          $form->repopulate();
+        }
       }
       else
       {
         echo "signup failed";
+        $form->repopulate();
       }
     }
+    
+    $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge( $view );
   }

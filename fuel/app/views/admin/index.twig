@@ -1,0 +1,40 @@
+{% extends "base.twig" %}
+
+{% block user %}
+
+<div class="row">
+  <div class="col-md-4">{% include "user/menu.twig" %}</div>
+  <div class="col-md-8">{% include "user/list.twig" %}</div>
+</div>
+
+{% endblock user %}
+
+
+
+{% block team %}
+
+{{ team }}
+
+<table class="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>チーム名</th>
+<th>所属リーグ</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for team in list %}
+<tr>
+<td>{{ team.id }}</td>
+<td>{{ team.name }}</td>
+<td></td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+{% endblock team %}

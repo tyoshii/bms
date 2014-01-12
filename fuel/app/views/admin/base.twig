@@ -24,6 +24,7 @@
 
   </head>
   <body>
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -81,10 +82,31 @@
   </div><!-- /.navbar-collapse -->
 </nav>
 
+    <div class="container">
 
+<div class="page-header">
+<h1>Admin <small>管理者権限をもっていろいろ操作するページ</small></h1>
+</div>
+
+<ul class="nav nav-tabs">
+  <li><a href="#user"   data-toggle="tab">利用ユーザー</a></li>
+  <li><a href="#member" data-toggle="tab">選手管理</a></li>
+  <li><a href="#team"   data-toggle="tab">チーム管理</a></li>
+  <li><a href="#league" data-toggle="tab">リーグ管理</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane fade in active" id="user">{% block user %}{% endblock %}</div>
+  <div class="tab-pane fade" id="member">{% block member %}{% endblock %}</div>
+  <div class="tab-pane fade" id="team">{% block team %}{% endblock %}</div>
+  <div class="tab-pane fade" id="league">{% block league %}{% endblock %}</div>
+</div>
 
     {% block content %}
     {% endblock %}
+
+    </div><!-- .container -->
   </body>
 </html>
 

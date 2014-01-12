@@ -16,17 +16,14 @@ class Controller_Admin extends Controller_Base
     }
   }
 
-  public function action_team()
+  public function action_index()
   {
-    $view = View::forge('admin/team.twig');
+    $view = View::forge('admin/index.twig');
 
-    $team_form   = self::_get_team_form();
-    $league_form = self::_get_league_form();
+    $form = self::_get_team_form();
 
-    $view->set_safe( 'team_form',   $team_form->build(Uri::current()) );
-    $view->set_safe( 'league_form', $league_form->build(Uri::current()) );
-
-    $view->team_list =  Model_Team::find('all');
+    $view->set_safe( 'form', $form->build(Uri::current()) );
+    $view->list =  Model_Team::find('all');
 
     return Response::forge($view);
   }

@@ -1,5 +1,10 @@
 {% extends "base.twig" %}
 
+
+{% block content %}
+
+<pre>
+
 自分の成績
 
 個人成績
@@ -24,7 +29,7 @@
 
 
 
-{% block content %}
+</pre>
 
 <ul class="nav nav-tabs" id="myTab">
   <li class="active"><a href="#home" data-toggle="tab">個人成績</a></li>
@@ -33,7 +38,6 @@
   <li><a href="#settings" data-toggle="tab">Settings</a></li>
 </ul>
 
-<div class="tab-content">
   <div class="tab-pane active" id="home">...</div>
   <div class="tab-pane" id="profile">...</div>
   <div class="tab-pane" id="messages">...</div>

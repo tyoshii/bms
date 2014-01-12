@@ -1,6 +1,6 @@
 <?php
 
-public Controller_Score extends Controller_Base
+class Controller_Score extends Controller_Base
 {
   public function action_index()
   {

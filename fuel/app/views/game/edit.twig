@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<ul id="mytab" class="nav nav-tabs">
+    <!-- hrefにdiv.tab-paneと一緒に指定するIDを -->
+    <li class="active"><a href="#team1" data-toggle="tab">チームあああ</a></li>
+    <li class=""><a href="#team2" data-toggle="tab">チームいいい</a></li>
+</ul>
+
+<div class="tab-content">
+
+<div class="tab-pane active" id="team1">
 
 <form class="form" action="#" method="POST">
 
@@ -57,6 +66,69 @@
 <input type="submit" class="btn btn-success" value="登録">
 </form>
 
+</div>
+
+
+<div class="tab-pane" id="team2">
+
+<form class="form" action="#" method="POST">
+
+<table class="table">
+
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>ポジション</th>
+
+<th>内野ゴロ</th>
+<th>内野フライ</th>
+<th>外野フライ</th>
+
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>打撃妨害</th>
+
+<th>ヒット</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+
+</tr>
+
+<tr>
+<td>4</td>
+<td><input type="text" class="form-control input-sm"></td>
+<td><input type="text" class="form-control input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+<td><input type="text" class="form-control bfh-number input-sm"></td>
+</tr>
+
+</table>
+
+<input type="submit" class="btn btn-success" value="登録">
+</form>
+
+</div>
+
+</div>
+
 {% endblock %}
 
 
@@ -83,9 +155,6 @@ table td span {
 
 
 <script>
-$(document).ready(function() {
-});
-
 function add_bfh_number() {
     // add bfh-number
     $('table td input').each(function() {
@@ -112,5 +181,9 @@ function delete_bfh_number() {
         $number.parent().find('span').hide();
     });
 }
+
+$(document).ready(function() {
+});
+
 </script>
 {% endblock %}

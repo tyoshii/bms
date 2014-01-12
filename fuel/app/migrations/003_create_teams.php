@@ -2,16 +2,13 @@
 
 namespace Fuel\Migrations;
 
-class Create_games
+class Create_teams
 {
 	public function up()
 	{
-		\DBUtil::create_table('games', array(
+		\DBUtil::create_table('teams', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
-			'date' => array('type' => 'date'),
-			'team_top' => array('constraint' => 11, 'type' => 'int'),
-			'team_bottom' => array('constraint' => 11, 'type' => 'int'),
-			'game_status' => array('constraint' => 11, 'type' => 'int'),
+			'name' => array('constraint' => 64, 'type' => 'varchar'),
 			'created_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 			'updated_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 
@@ -20,6 +17,6 @@ class Create_games
 
 	public function down()
 	{
-		\DBUtil::drop_table('games');
+		\DBUtil::drop_table('teams');
 	}
 }

@@ -64,8 +64,11 @@
 -->
 
     <ul class="nav navbar-nav navbar-right">
+      {% if login == true %}
         <li><a href="#">{{ screen_name }}</a></li>
+      {% else %}
         {{ login_form }}
+      {% endif %}
     <ul>
 <!--
       <li><a href="#">Link</a></li>

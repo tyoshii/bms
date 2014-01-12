@@ -18,7 +18,7 @@ class Controller_Admin extends Controller_Base
 
   public function action_index()
   {
-    $view = View::forge('admin/index.twig');
+    $view = View::forge('admin.twig');
 
     $form = self::_get_team_form();
 

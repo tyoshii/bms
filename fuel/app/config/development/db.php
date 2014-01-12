@@ -1,14 +1,11 @@
 <?php
-/**
- * The development database settings. These get merged with the global settings.
- */
 
 return array(
 	'default' => array(
 		'connection'  => array(
-			'dsn'        => 'mysql:host=localhost;dbname=fuel_dev',
+			'dsn'        => 'mysql:host=localhost;dbname=bms;port=3306',
 			'username'   => 'root',
-			'password'   => 'root',
+			'password'   => Config::get('password.mysql.development.root'),
 		),
 	),
 );

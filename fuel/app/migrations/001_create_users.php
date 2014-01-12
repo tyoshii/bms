@@ -10,7 +10,7 @@ class Create_users
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
 			'username' => array('constraint' => 50, 'type' => 'varchar'),
 			'password' => array('constraint' => 255, 'type' => 'varchar'),
-			'group_id' => array('constraint' => 11, 'type' => 'int'),
+			'group' => array('constraint' => 11, 'type' => 'int'),
 			'email' => array('constraint' => 255, 'type' => 'varchar'),
 			'last_login' => array('constraint' => 11, 'type' => 'int'),
 			'login_hash' => array('constraint' => 255, 'type' => 'varchar'),

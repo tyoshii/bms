@@ -10,6 +10,8 @@ return array(
 				1 => '002_create_games',
 				2 => '003_create_teams',
 				3 => '004_create_members',
+				4 => '005_create_leagues',
+				5 => '006_add_leagueinfo_to_teams',
 			),
 		),
 		'module' => 

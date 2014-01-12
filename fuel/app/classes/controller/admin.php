@@ -2,6 +2,35 @@
 
 class Controller_Admin extends Controller_Base
 {
+  public function post_team()
+  {
+    $form = self::_get_team_form(); 
+
+    if ( $form->validation()->run() )
+    {
+      $team = Model_Team::forge();
+      $team->name = Input::post('name');
+      $team->save();
+
+      Response::redirect(Uri::current());
+    }
+  }
+
+  public function action_team()
+  {
+    $view = View::forge('admin/team.twig');
+
+    $team_form   = self::_get_team_form();
+    $league_form = self::_get_league_form();
+
+    $view->set_safe( 'team_form',   $team_form->build(Uri::current()) );
+    $view->set_safe( 'league_form', $league_form->build(Uri::current()) );
+
+    $view->team_list =  Model_Team::find('all');
+
+    return Response::forge($view);
+  }
+
   public function action_signup()
   {
     $view = View::forge('admin/signup.twig');
@@ -33,6 +62,51 @@ class Controller_Admin extends Controller_Base
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge( $view );
+  }
+
+  static private function _get_league_form()
+  {
+    $form = Fieldset::forge('league', array(
+      'form_attributes' => array(
+        'class' => 'form',
+        'role'  => 'search',
+      ),
+    ));
+    
+    $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'League Name'))
+      ->add_rule('required')
+      ->add_rule('max_length', 64);
+
+    $form->add('submit', '', array('type' => 'submit', 'value' => 'Add League', 'class' => 'btn btn-success'));
+
+    return $form;
+
+  }
+
+  static private function _get_team_form()
+  {
+    $form = Fieldset::forge('team', array(
+      'form_attributes' => array(
+        'class' => 'form',
+        'role'  => 'search',
+      ),
+    ));
+    
+    $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'TeamName'))
+      ->add_rule('required')
+      ->add_rule('max_length', 64);
+    
+    $leagues = Model_League::find(':all');
+
+    if ( $leagues )
+    {
+      $form->add('league', '', array('class' => 'form-control', 'options' => $leagues, 'type' => 'select'))
+        ->add_rule('in_array', $leagues);
+    }
+
+    $form->add('submit', '', array('type' => 'submit', 'value' => 'Add Team', 'class' => 'btn btn-success'));
+
+    return $form;
   }
 
   static private function _get_signup_form()

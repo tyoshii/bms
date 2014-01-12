@@ -4,6 +4,7 @@ return array(
   'logout' => 'top/logout',
 
   'admin/signup' => 'admin/signup',
+  'admin/team'   => 'admin/team',
 
   'game/create' => 'game/create',
   'game/edit'   => 'game/edit',

@@ -84,20 +84,33 @@ table td span {
 
 <script>
 $(document).ready(function() {
+});
+
+function add_bfh_number() {
     // add bfh-number
     $('table td input').each(function() {
         var $number = $(this);
-        $number.addClass("bfh-number");
-        $number.bfhnumber($number.data());
-    })
 
+        $number.addClass("bfh-number");
+
+        var $span = $number.parent().find('span');
+        if ( $span[0] ) {
+            $span.show();
+        }
+        else {
+            $number.bfhnumber($number.data());
+        }
+    })
+}
+
+function delete_bfh_number() {
     // delete bfh-number
-    $('input.bfh-numer').each(function() {
+    $('input.bfh-number').each(function() {
         var $number = $(this);
 
         $number.removeClass('bfh-number');
-        $number.find('span').
+        $number.parent().find('span').hide();
     });
-});
+}
 </script>
 {% endblock %}

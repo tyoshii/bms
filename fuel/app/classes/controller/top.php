@@ -7,6 +7,42 @@ class Controller_Top extends Controller
 	{
     $view = View::forge('top/index.twig');
 
+
+    $form = self::_get_login_form();
+
+    // ログイン認証
+    $auth = Auth::instance();
+
+    if ( Input::post() )
+    {
+      Auth::logout();
+      if ($form->validation()->run())
+      {
+        if ( $auth->login(Input::post('username'), Input::post('password')) )
+        {
+          echo "login success";
+        }
+        else
+        {
+          echo "login failed";
+          // Response::redirect('hoge/fuga');
+        }
+      }
+    }
+    else
+    {
+      Auth::logout(); 
+      $form->repopulate();
+      $view->set_safe('login', $form->build(Uri::create('/')));
+    }
+
+
+		return $view;
+	}
+
+
+  static private function _get_login_form ()
+  {
     // login form
     $form = Fieldset::forge('login', array(
       'form_attributes' => array(
@@ -25,14 +61,7 @@ class Controller_Top extends Controller
 
     $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign In', 'class' => 'btn btn-success'));
 
-    $form->repopulate();
 
-    // ログイン認証
-    $auth = Auth::instance();
-    Auth::logout(); 
-
-    $view->set_safe('login', $form->build(Uri::create('/')));
-
-		return $view;
-	}
+    return $form;
+  }
 }

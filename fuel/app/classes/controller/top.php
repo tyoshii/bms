@@ -8,7 +8,7 @@ class Controller_Top extends Controller_Base
 
     if ( $this->_login )
     {
-      $view->set('screen_name', Auth::Instance()->get_user_array()['screen_name']);
+      $view->set('screen_name', Auth::get_screen_name());
     }
     else
     {

@@ -2,7 +2,6 @@
 
 class Controller_Top extends Controller_Base
 {
-
 	public function action_index()
 	{
     $view = View::forge('top/index.twig');
@@ -18,6 +17,6 @@ class Controller_Top extends Controller_Base
       $view->set_safe('login', $this->_login_form->build(Uri::create('/')));
     }
 
-		return $view;
+		return Response::forge($view);
 	}
 }

@@ -4,7 +4,7 @@ class Controller_Top extends Controller_Base
 {
 	public function action_index()
 	{
-    $view = View::forge('top/index.twig');
+    $view = View::forge('top.twig');
 
     if ( $this->_login )
     {

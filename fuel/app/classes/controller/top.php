@@ -8,13 +8,13 @@ class Controller_Top extends Controller_Base
 
     if ( $this->_login )
     {
-      $view->set('login', 'ほげほげさんでログイン');
+      $view->set('screen_name', Auth::Instance()->get_user_array()['screen_name']);
     }
     else
     {
       Auth::logout(); 
       $this->_login_form->repopulate();
-      $view->set_safe('login', $this->_login_form->build(Uri::create('/')));
+      $view->set_safe('login_form', $this->_login_form->build(Uri::create('/')));
     }
 
 		return Response::forge($view);

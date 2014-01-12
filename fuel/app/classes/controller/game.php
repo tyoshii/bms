@@ -43,9 +43,18 @@ class Controller_Game extends Controller_Base
 
 	public function action_delete()
 	{
-		$data["subnav"] = array('delete'=> 'active' );
-		$this->template->title = 'Game &raquo; Delete';
-		$this->template->content = View::forge('game/delete', $data);
+    // Fieldset::forge
+
+    return Response::forge( View::forge('game/delete.twig') );
 	}
+
+  public function post_delete()
+  {
+    // validation
+
+    // delete
+
+    Response::redirect(Uri::create('/game/list'));
+  }
 
 }

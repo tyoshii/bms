@@ -1,9 +1,17 @@
-{% extends "base.twig" %}
+{% extends "layout.twig" %}
 
 {% block content %}
 
-<table class="table">
+<div class="row">
 
+<div class="col-md-3">
+<h3>新規ゲーム追加</h3>
+{{ form }}
+</div>
+
+<div class="col-md-9">
+
+<table class="table">
 <thead>
 <tr>
     <th>実施日</th>
@@ -15,20 +23,37 @@
 
 <tbody>
 
+{% for game in games %}
 <tr>
-    <td>YYYY-MM-DD</td>
-    <td>ヤフー</td>
-    <td>ダブルクリック</td>
-    <td>
-        <form action="/game/edit">
-            <input type="hidden" value="ゲームID">
-            <input type="submit" class="btn btn-success" value="編集">
-        </form>
-    </td>
+<td>{{ game.date }}</td>
+<td>{{ game.team_top }}</td>
+<td>{{ game.team_bottom }}</td>
+<td>
+  <form action="/game/edit">
+    <input type="hidden" value="{{game.id}}">
+    <input type="submit" class="btn btn-success" value="編集">
+  </form>
+</td>
 </tr>
+{% endfor %}
 
 </tbody>
 </table>
 
+</div>
 
+</div>
+
+{% endblock %}
+
+
+{% block js %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+  $('input.form-datepicker').each(function() {
+    $(this).datepicker();
+  });
+});
+</script>
 {% endblock %}

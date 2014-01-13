@@ -27,4 +27,9 @@ class Model_User extends \Orm\Model
 	);
 	protected static $_table_name = 'users';
 
+
+  public static function getMyTeamId()
+  {
+    return Auth::get_profile_fields('team');
+  }
 }

@@ -11,6 +11,8 @@
 
     {% block css %}
     <link href="/twbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/chosen/chosen.css" type="text/css" rel="stylesheet">
+    <link href="/datepicker/css/datepicker.css" type="text/css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -115,8 +117,18 @@
 </html>
 
 {% block js %} 
-    <script src="/js/jquery.js"></script>
-    <script src="/twbootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/twbootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="/bootstrap_formhelpers/js/bootstrap-formhelpers.min.js"></script>
+<script type="text/javascript" src="/datepicker/js/bootstrap-datepicker.js"></script>
 
-    {{ js }}
+<script type="text/javascript">
+$(document).ready(function() {
+  // select searchable plugin
+  $('select.chosen-select').each(function() {
+    $(this).chosen();
+  });
+});
+</script>
 {% endblock %}

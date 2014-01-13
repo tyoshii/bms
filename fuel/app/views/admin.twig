@@ -39,27 +39,15 @@
 {% endblock %}
 
 
-{% block css %}
-{{ parent() }}
-<link href="/chosen/chosen.css" type="text/css" rel="stylesheet">
-{% endblock %}
 
 
 {% block js %}
 {{ parent() }}
 
-{# form select searchable plugin #}
-<script src="/chosen/chosen.jquery.min.js" type="text/javascript"></script>
-
 <script>
 $(document).ready(function(){
   // navvar active
   $('div#bms-navbar li.bms-navbar-admin').addClass('active');
-
-  // select searchable plugin
-  $('select.chosen-select').each(function() {
-    $(this).chosen();
-  });
 });
 </script>
 {% endblock %}

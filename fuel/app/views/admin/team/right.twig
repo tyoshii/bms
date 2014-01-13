@@ -1,0 +1,18 @@
+<table class="table">
+
+<thead>
+<tr>
+
+<th>id</th>
+<th>チーム名</th>
+</tr>
+</thead>
+
+<tbody>
+{% for team in teams %}
+<tr>
+<td>{{ team.id }}</td>
+<td>{{ team.name }}</td>
+</tr>
+{% endfor %}
+</tbody>

@@ -24,7 +24,8 @@ class Controller_Base extends Controller
         }
         else
         {
-          Response::redirect('hoge/fuga');
+          Session::set_flash('error', 'ログインに失敗しました');
+          $this->_login_form->repopulate();
         }
       }
     }

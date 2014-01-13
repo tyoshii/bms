@@ -2,8 +2,6 @@
 
 class Controller_Base extends Controller
 {
-
-  protected $_login      = false;
   protected $_login_form = '';
 
   public function before()
@@ -11,7 +9,6 @@ class Controller_Base extends Controller
     $this->_login_form = self::_get_login_form();
 
     if ( Auth::check() ) {
-      $this->_login = true;
       return;
     }
 
@@ -51,7 +48,7 @@ class Controller_Base extends Controller
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign In', 'class' => 'btn btn-success'));
+    $form->add('login', '', array('type' => 'submit', 'value' => 'Login', 'class' => 'btn btn-success'));
 
     return $form;
   }

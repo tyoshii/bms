@@ -6,11 +6,7 @@ class Controller_Top extends Controller_Base
 	{
     $view = View::forge('top.twig');
 
-    if ( $this->_login )
-    {
-      $view->set('screen_name', Auth::get_screen_name());
-    }
-    else
+    if ( ! Auth::check() )
     {
       Auth::logout(); 
       $this->_login_form->repopulate();

@@ -2,6 +2,10 @@
 
 class Base_Twig_Extension extends Twig_Extension
 {
+  public function getName()
+  {
+  }
+
   public function getGlobals()
   {
     return array(
@@ -10,7 +14,15 @@ class Base_Twig_Extension extends Twig_Extension
     );
   }
 
-  public function getName()
+  public function getFunctions()
   {
+    return array(
+      new Twig_SimpleFunction('has_access', array($this, 'hasAccess')),
+    );
+  }
+
+  public function hasAccess($v)
+  {
+    return Auth::has_access($v); 
   }
 }

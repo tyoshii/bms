@@ -87,6 +87,7 @@ return array(
 	 * Roles as name => array(location => rights)
 	 */
 	'roles' => array(
+    'admin' => true,
 		/**
 		 * Examples
 		 * ---

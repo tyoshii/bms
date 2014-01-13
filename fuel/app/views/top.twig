@@ -1,4 +1,18 @@
 {% extends "layout/layout.twig" %}
 
 {% block content %}
+
+<h1>Hello <small>野球ばか</small></h1>
+
+{% endblock %}
+
+
+{% block js %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+  $('div#bms-navvar li.bms-navvar-top').addClass('active');
+});
+</script>
+
 {% endblock %}

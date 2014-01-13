@@ -5,7 +5,7 @@
 <div class="page-header">
 <h1>Admin <small>管理者権限をもっていろいろ操作するページ</small></h1>
 <ul class="nav nav-pills">
-  <li class="{{active.account}}"><a href="/admin/account">利用アカウント</a></li>
+  <li class="{{active.user}}"><a href="/admin/user">利用者管理</a></li>
   <li class="{{active.member}}"><a href="/admin/member">選手管理</a></li>
   <li class="{{active.team}}"><a href="/admin/team">チーム管理</a></li>
   <li class="{{active.league}}"><a href="/admin/league">リーグ管理</a></li>
@@ -14,8 +14,8 @@
 
 
 <div class="row">
-  <div class="col-md-4">{% include 'admin/' ~ kind ~ "/left.twig" %}</div>
-  <div class="col-md-8">{% include 'admin/' ~ kind ~ "/right.twig" %}</div>
+  <div class="col-md-3">{% include 'admin/' ~ kind ~ "/left.twig" %}</div>
+  <div class="col-md-9">{% include 'admin/' ~ kind ~ "/right.twig" %}</div>
 </div>
 
 {#

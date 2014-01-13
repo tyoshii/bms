@@ -4,6 +4,10 @@ return array(
   'logout' => 'top/logout',
 
   'admin' => 'admin/index',
+  'admin/user' => 'admin/user',
+  'admin/member'  => 'admin/member',
+  'admin/team'    => 'admin/team',
+  'admin/league'  => 'admin/league',
 
   'game/create' => 'game/create',
   'game/edit'   => 'game/edit',

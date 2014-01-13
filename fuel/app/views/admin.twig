@@ -12,11 +12,12 @@
 </ul>
 </div>
 
-
+{% if kind %}
 <div class="row">
   <div class="col-md-3">{% include 'admin/' ~ kind ~ "/left.twig" %}</div>
   <div class="col-md-9">{% include 'admin/' ~ kind ~ "/right.twig" %}</div>
 </div>
+{% endif %}
 
 {#
 <ul id="admin-tab" class="nav nav-pills">

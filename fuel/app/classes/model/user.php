@@ -6,7 +6,7 @@ class Model_User extends \Orm\Model
 		'id',
 		'username',
 		'password',
-		'group_id',
+		'group',
 		'email',
 		'last_login',
 		'login_hash',

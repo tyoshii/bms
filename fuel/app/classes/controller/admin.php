@@ -26,6 +26,7 @@ class Controller_Admin extends Controller_Base
     $form = self::_get_adduser_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->list = Model_User::find('all');
 
     return Response::forge( $this->view );
   }
@@ -33,26 +34,34 @@ class Controller_Admin extends Controller_Base
   public function post_user()
   {
     $form = self::_get_adduser_form();
+
     if ( $form->validation()->run())
     {
       try {
-        Auth::create_user( Input::post('username'), Input::post('password'), Input::post('mail') );
-        echo "success signup";
+        Auth::create_user(
+          Input::post('username'),
+          Input::post('password'),
+          Input::post('mail')
+        );
+
+        Response::redirect(Uri::create('admin/user'));
       }
       catch ( Exception $e )
       {
-        echo "signup failed"; 
         echo $e->getMessage();
-        $form->repopulate();
       }
     }
     else
     {
       echo "signup failed";
-      $form->repopulate();
     }
 
-    return Response::forge( $view );
+    $form->repopulate();
+    
+    $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->list = Model_User::find('all');
+
+    return Response::forge($this->view);
   }
 
   public function get_team()

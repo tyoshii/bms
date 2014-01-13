@@ -8,21 +8,61 @@ class Controller_Admin extends Controller_Base
 
     if ( ! Auth::has_access('admin.admin') )
       Response::redirect(Uri::create('/'));
+
+    $kind = Uri::segment(2);
+
+    $this->view = View::forge('admin.twig');
+    $this->view->kind = $kind;
+    $this->view->active = array( $kind => 'active' );
+  }
+
+  public function action_index()
+  {
+    return Response::forge( View::forge('admin.twig') );
+  }
+
+  public function get_user()
+  {
+    $form = self::_get_adduser_form();
+
+    $this->view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge( $this->view );
+  }
+
+  public function post_user()
+  {
+    $form = self::_get_adduser_form();
+    if ( $form->validation()->run())
+    {
+      try {
+        Auth::create_user( Input::post('username'), Input::post('password'), Input::post('mail') );
+        echo "success signup";
+      }
+      catch ( Exception $e )
+      {
+        echo "signup failed"; 
+        echo $e->getMessage();
+        $form->repopulate();
+      }
+    }
+    else
+    {
+      echo "signup failed";
+      $form->repopulate();
+    }
+
+    return Response::forge( $view );
   }
 
   public function get_team()
   {
     $form = $this->_get_team_form();
 
-    $view = View::forge('admin.twig');
+    $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->set_safe('teams', Model_Team::find('all'));
 
-    $view->kind = Uri::segment(2);
-    $view->active = array( $view->kind => 'active' );
-
-    $view->set_safe('form', $form->build(Uri::current()));
-    $view->set_safe('teams', Model_Team::find('all'));
-
-    return Response::forge($view);
+    return Response::forge($this->view);
   }
 
   public function post_team()
@@ -37,61 +77,15 @@ class Controller_Admin extends Controller_Base
 
       Response::redirect(Uri::current());
     }
-  }
-
-  public function action_index()
-  {
-    $view = View::forge('admin.twig');
-
-    // 追加フォーム
-/*
-    $user_form = self::_getUserForm();
-    $memb_form = self::_getMemberForm();
-    $team_form = self::_getTeamForm();
-    $leag_form = self::_getLeagueForm();
-
-    $view->set_safe( 'user_form', $user_form->build(Uri::current()) );
-    $view->set_safe( 'memb_form', $memb_form->build(Uri::current()) );
-    $view->set_safe( 'team_form', $team_form->build(Uri::current()) );
-    $view->set_safe( 'leag_form', $leag_form->build(Uri::current()) );
-*/
-
-    $view->list = Model_Team::find('all');
-
-    return Response::forge($view);
-  }
-
-  public function action_signup()
-  {
-    $view = View::forge('admin/signup.twig');
-    $form = self::_get_signup_form();
-
-
-    if ( Input::post() )
+    else
     {
-      if ( $form->validation()->run())
-      {
-        try {
-          Auth::create_user( Input::post('username'), Input::post('password'), Input::post('mail') );
-          echo "success signup";
-        }
-        catch ( Exception $e )
-        {
-          echo "signup failed"; 
-          echo $e->getMessage();
-          $form->repopulate();
-        }
-      }
-      else
-      {
-        echo "signup failed";
-        $form->repopulate();
-      }
-    }
-    
-    $view->set_safe('form', $form->build(Uri::current()));
+      $form->repopurate();
+      
+      $this->view->set_safe('form', $form->build(Uri::current()));
+      $this->view->set_safe('teams', Model_Team::find('all'));
 
-    return Response::forge( $view );
+      return Response::forge($this->view);
+    }    
   }
 
   static private function _get_league_form()
@@ -139,11 +133,11 @@ class Controller_Admin extends Controller_Base
     return $form;
   }
 
-  static private function _get_signup_form()
+  static private function _get_adduser_form()
   {
-    $form = Fieldset::forge('signup', array(
+    $form = Fieldset::forge('adduser', array(
       'form_attributes' => array(
-        'class' => '',
+        'class' => 'form',
         'role'  => 'search',
       ),
     ));

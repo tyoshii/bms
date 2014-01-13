@@ -13,6 +13,12 @@
 <tr>
 <td>{{ team.id }}</td>
 <td>{{ team.name }}</td>
+<td>
+<form method="DELETE">
+<input type="hidden" value="{{team.id}}">
+<input type="submit" class="btn btn-danger" value="削除">
+</form>
+</td>
 </tr>
 {% endfor %}
 </tbody>

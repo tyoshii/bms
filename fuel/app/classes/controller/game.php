@@ -67,29 +67,22 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-	public function action_create()
-	{
-    // form disp
-
-    // validation
-
-    return Response::forge( View::forge('game/create.twig') );
-	}
-
 	public function action_edit()
 	{
-    if (Input::post())
-    {
-      // 成績登録処理
-    }
-
     // ゲームデータ表示
     // 権限のあるチームのみ表示
 
     // 複数権限もっている場合はタブで両方表示
 
-    return Response::forge( View::forge('game/edit.twig') );
+    $view = View::forge('game/edit.twig');
+
+    return Response::forge($view);
 	}
+
+  public function post_edit()
+  {
+
+  }
 
 	public function action_delete()
 	{

@@ -13,6 +13,8 @@ return array(
 				4 => '005_create_leagues',
 				5 => '006_add_leagueinfo_to_teams',
 				6 => '007_delete_league_from_teams',
+				7 => '008_rename_field_group_to_group_id_in_users',
+				8 => '009_rename_field_group_id_to_group_in_users',
 			),
 		),
 		'module' => 

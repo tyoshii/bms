@@ -22,3 +22,12 @@
 </div>
 
 {% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+  $('div#bms-navvar li.bms-navvar-admin').addClass('active');
+});
+</script>
+{% endblock %}

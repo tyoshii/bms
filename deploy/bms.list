@@ -20,3 +20,4 @@ symlink ../public/datepicker/            /var/www/bms/public/datepicker/
 symlink ../public/js/                    /var/www/bms/public/js/
 
 copy ../public/index.php /var/www/bms/public/index.php
+copy ../fuel/app/views/game/layout.twig /var/www/bms/fuel/app/views/game/layout.twig

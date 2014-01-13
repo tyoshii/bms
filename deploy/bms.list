@@ -11,8 +11,12 @@ symlink ../conf/virtualhost-bms.conf /etc/httpd/conf.d/virtualhost-bms.conf
 symlink ../conf/bms.ini /etc/php.d/bms.ini
 
 # fuel app
-symlink ../bms/fuel/               /var/www/bms/fuel/
-symlink ../bms/public/assets/      /var/www/bms/public/assets/
-symlink ../bms/public/twbootstrap/ /var/www/bms/public/twbootstrap/
+symlink ../fuel/                         /var/www/bms/fuel/
+symlink ../public/assets/                /var/www/bms/public/assets/
+symlink ../public/twbootstrap/           /var/www/bms/public/twbootstrap/
+symlink ../public/bootstrap_formhelpers/ /var/www/bms/public/bootstrap_formhelpers/
+symlink ../public/chosen/                /var/www/bms/public/chosen/
+symlink ../public/datepicker/            /var/www/bms/public/datepicker/
+symlink ../public/js/                    /var/www/bms/public/js/
 
-copy ../bms/public/index.php /var/www/bms/public/index.php
+copy ../public/index.php /var/www/bms/public/index.php

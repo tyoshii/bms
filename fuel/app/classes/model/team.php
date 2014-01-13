@@ -21,4 +21,16 @@ class Model_Team extends \Orm\Model
 	);
 	protected static $_table_name = 'teams';
 
+  public static function getTeams()
+  {
+    $res = self::find('all', array('select' => array('id', 'name')));
+  
+    $return = array();
+    foreach ( $res as $row )
+    {
+      $return[$row['id']] = $row['name'];
+    }
+
+    return $return;
+  }
 }

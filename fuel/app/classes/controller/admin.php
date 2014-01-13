@@ -76,6 +76,42 @@ class Controller_Admin extends Controller_Base
     return Response::forge( $this->view );
   }
 
+  public function post_member()
+  {
+    $form = $this->_get_addmember_form();
+
+    $val = $form->validation();
+    if ( $val->run())
+    {
+      try {
+        $member = Model_Member::forge();
+        $member->name   = Input::post('name');
+        $member->team   = Input::post('team');
+        $member->number = Input::post('number');
+        $member->save();
+
+        Session::set_flash('info', '選手を登録しました。');
+        Response::redirect(Uri::current());
+      }
+      catch ( Exception $e )
+      {
+        Session::set_flash('error', $e->getMessage());
+      }
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    }
+
+    $form->repopulate();
+    
+    $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->users = Model_User::find('all');
+
+    return Response::forge($this->view);
+ 
+  }
+
   public function get_team()
   {
     $form = $this->_get_team_form();
@@ -196,9 +232,15 @@ class Controller_Admin extends Controller_Base
     $form->add('number', '', array('class' => 'form-control', 'placeholder' => 'number'))
       ->add_rule('required')
       ->add_rule('trim')
+      ->add_rule('valid_string', array('numeric'))
       ->add_rule('max_length', 8);
 
+    // option - チーム選択
+    $default = array( '' => '' );
+    $teams = Model_Team::getTeams();
 
+    $form->add('team', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => 'Select Team'))
+      ->add_rule('in_array', array_keys($teams));
 
     $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
 

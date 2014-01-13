@@ -145,7 +145,49 @@ class Controller_Admin extends Controller_Base
     }    
   }
 
-  static private function _get_league_form()
+  public function get_league()
+  {
+    $form = $this->_get_addleague_form();
+
+    $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->leagues = Model_League::find('all');
+
+    return Response::forge($this->view);
+  }
+
+  public function post_league()
+  {
+    $form = $this->_get_addleague_form();
+
+    $val = $form->validation();
+    if ( $val->run())
+    {
+      try {
+        $member = Model_League::forge();
+        $member->name   = Input::post('name');
+        $member->save();
+
+        Session::set_flash('info', '新規リーグを登録しました。');
+        Response::redirect(Uri::current());
+      }
+      catch ( Exception $e )
+      {
+        Session::set_flash('error', $e->getMessage());
+      }
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    }
+
+    $form->repopulate();
+    
+    $this->view->set_safe('form', $form->build(Uri::current()));
+    $this->view->leagues = Model_League::find('all');
+
+    return Response::forge($this->view);
+  }
+  static private function _get_addleague_form()
   {
     $form = Fieldset::forge('league', array(
       'form_attributes' => array(

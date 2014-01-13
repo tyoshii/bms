@@ -3,23 +3,20 @@
 <thead>
 <tr>
 <th>id</th>
-<th>ユーザー名</th>
-<th>メール</th>
-<th>権限グループ</th>
+<th>リーグ名</th>
+<th></th>
 </tr>
 </thead>
 
 <tbody>
-{% for user in users %}
+{% for league in leagues %}
 <tr>
-<td>{{ user.id }}</td>
-<td>{{ user.username }}</td>
-<td>{{ user.email }}</td>
-<td>{{ user.group }}</td>
+<td>{{ league.id }}</td>
+<td>{{ league.name }}</td>
 <td>
 <form method="POST">
 <input type="hidden" name="id" value="{{user.id}}">
-<input type="submit" class="btn btn-warning" onClick="return window.confirm('このユーザーを無効にしてよろしいですか？');" value="無効">
+<input type="submit" class="btn btn-warning" onClick="return window.confirm('このリーグを無効にしてよろしいですか？');" value="無効">
 </form>
 </td>
 </tr>

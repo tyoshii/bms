@@ -15,23 +15,10 @@
 
 <!-- Tab panes -->
 <div class="tab-content">
-  <div class="tab-pane fade in active" id="user">{% block user %}{% endblock %}</div>
+  <div class="tab-pane fade in active" id="user">{% include 'admin/user.twig' %}</div>
   <div class="tab-pane fade" id="member">{% block member %}{% endblock %}</div>
   <div class="tab-pane fade" id="team">{% include 'admin/team.twig' %}</div>
   <div class="tab-pane fade" id="league">{% block league %}{% endblock %}</div>
 </div>
 
 {% endblock %}
-
-
-{% block user %}
-
-<div class="row">
-  <div class="col-md-4">{% include "user/menu.twig" %}</div>
-  <div class="col-md-8">{% include "user/list.twig" %}</div>
-</div>
-
-{% endblock user %}
-
-
-

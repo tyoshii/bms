@@ -24,6 +24,7 @@
 
   </head>
   <body>
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -89,6 +90,20 @@
   </div><!-- /.navbar-collapse -->
 </nav>
 
+{% if get_flash('error') %}
+<div class="alert alert-danger alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error!</strong> {{ get_flash('error') }}
+</div>
+{% endif %}
+
+{% if get_flash('info') %}
+<div class="alert alert-info alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Information</strong> {{ get_flash('info') }}
+</div>
+
+{% endif %}
 <div class="container">
 {% block content %}{% endblock %}
 </div>

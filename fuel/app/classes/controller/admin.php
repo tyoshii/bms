@@ -26,7 +26,7 @@ class Controller_Admin extends Controller_Base
     $form = self::_get_adduser_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->list = Model_User::find('all');
+    $this->view->users = Model_User::find('all');
 
     return Response::forge( $this->view );
   }
@@ -35,7 +35,8 @@ class Controller_Admin extends Controller_Base
   {
     $form = self::_get_adduser_form();
 
-    if ( $form->validation()->run())
+    $val = $form->validation();
+    if ( $val->run())
     {
       try {
         Auth::create_user(
@@ -44,24 +45,35 @@ class Controller_Admin extends Controller_Base
           Input::post('mail')
         );
 
+        Session::set_flash('info', 'ユーザーを追加しました。');
         Response::redirect(Uri::create('admin/user'));
       }
       catch ( Exception $e )
       {
-        echo $e->getMessage();
+        Session::set_flash('error', $e->getMessage());
       }
     }
     else
     {
-      echo "signup failed";
+      Session::set_flash('error', $val->show_errors());
     }
 
     $form->repopulate();
     
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->list = Model_User::find('all');
+    $this->view->users = Model_User::find('all');
 
     return Response::forge($this->view);
+  }
+
+  public function get_member()
+  {
+    $form = $this->_get_addmember_form();
+
+    $this->view->set_safe('form', $form->build(Uri::current())); 
+    $this->view->members = Model_Member::find('all');
+
+    return Response::forge( $this->view );
   }
 
   public function get_team()
@@ -69,7 +81,7 @@ class Controller_Admin extends Controller_Base
     $form = $this->_get_team_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->set_safe('teams', Model_Team::find('all'));
+    $this->view->teams = Model_Team::find('all');
 
     return Response::forge($this->view);
   }
@@ -152,7 +164,9 @@ class Controller_Admin extends Controller_Base
     ));
 
     $form->add('mail', '', array('class' => 'form-control', 'placeholder' => 'Mail'))
-      ->add_rule('required');
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('valid_email');
 
     $form->add('username', '', array('class' => 'form-control', 'placeholder' => 'Account'))
       ->add_rule('required')
@@ -160,6 +174,31 @@ class Controller_Admin extends Controller_Base
 
     $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required');
+
+    $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
+
+    return $form;
+  }
+
+  static private function _get_addmember_form()
+  {
+    $form = Fieldset::forge('adduser', array(
+      'form_attributes' => array(
+        'class' => 'form',
+        'role'  => 'search',
+      ),
+    ));
+
+    $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'Name'))
+      ->add_rule('required')
+      ->add_rule('trim');
+
+    $form->add('number', '', array('class' => 'form-control', 'placeholder' => 'number'))
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('max_length', 8);
+
+
 
     $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
 

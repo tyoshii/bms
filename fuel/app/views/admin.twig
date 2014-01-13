@@ -6,7 +6,7 @@
 <h1>Admin <small>管理者権限をもっていろいろ操作するページ</small></h1>
 </div>
 
-<ul class="nav nav-tabs">
+<ul id="admin-tab" class="nav nav-pills">
   <li><a href="#user"   data-toggle="tab">利用ユーザー</a></li>
   <li><a href="#member" data-toggle="tab">選手管理</a></li>
   <li><a href="#team"   data-toggle="tab">チーム管理</a></li>
@@ -27,7 +27,11 @@
 {{ parent() }}
 <script>
 $(document).ready(function(){
+  // navvar active
   $('div#bms-navvar li.bms-navvar-admin').addClass('active');
+
+  // tab active
+  $(')
 });
 </script>
 {% endblock %}

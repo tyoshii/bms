@@ -42,7 +42,9 @@ class Controller_Admin extends Controller_Base
         Auth::create_user(
           Input::post('username'),
           Input::post('password'),
-          Input::post('mail')
+          Input::post('mail'),
+          1,
+          array( 'team' => Input::post('team') )
         );
 
         Session::set_flash('info', 'ユーザーを追加しました。');
@@ -252,6 +254,13 @@ class Controller_Admin extends Controller_Base
 
     $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required');
+    
+    // option - チーム選択
+    $default = array( '' => '' );
+    $teams = Model_Team::getTeams();
+
+    $form->add('team', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '担当チーム'))
+      ->add_rule('in_array', array_keys($teams));
 
     $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
 

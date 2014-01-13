@@ -2,6 +2,29 @@
 
 class Controller_Admin extends Controller_Base
 {
+  public function before()
+  {
+    parent::before(); 
+
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::create('/'));
+  }
+
+  public function get_team()
+  {
+    $form = $this->_get_team_form();
+
+    $view = View::forge('admin.twig');
+
+    $view->kind = Uri::segment(2);
+    $view->active = array( $view->kind => 'active' );
+
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->set_safe('teams', Model_Team::find('all'));
+
+    return Response::forge($view);
+  }
+
   public function post_team()
   {
     $form = self::_get_team_form(); 
@@ -20,10 +43,20 @@ class Controller_Admin extends Controller_Base
   {
     $view = View::forge('admin.twig');
 
-    $form = self::_get_team_form();
+    // 追加フォーム
+/*
+    $user_form = self::_getUserForm();
+    $memb_form = self::_getMemberForm();
+    $team_form = self::_getTeamForm();
+    $leag_form = self::_getLeagueForm();
 
-    $view->set_safe( 'form', $form->build(Uri::current()) );
-    $view->list =  Model_Team::find('all');
+    $view->set_safe( 'user_form', $user_form->build(Uri::current()) );
+    $view->set_safe( 'memb_form', $memb_form->build(Uri::current()) );
+    $view->set_safe( 'team_form', $team_form->build(Uri::current()) );
+    $view->set_safe( 'leag_form', $leag_form->build(Uri::current()) );
+*/
+
+    $view->list = Model_Team::find('all');
 
     return Response::forge($view);
   }

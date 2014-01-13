@@ -12,6 +12,7 @@ return array(
 				3 => '004_create_members',
 				4 => '005_create_leagues',
 				5 => '006_add_leagueinfo_to_teams',
+				6 => '007_delete_league_from_teams',
 			),
 		),
 		'module' => 

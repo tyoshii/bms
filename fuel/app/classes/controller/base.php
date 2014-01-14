@@ -6,7 +6,14 @@ class Controller_Base extends Controller
 
   public function before()
   {
-    $this->_login_form = self::_get_login_form();
+    if ( Uri::segment(1) === 'login' )
+    {
+      $this->_login_form = self::_get_login_form(array('form_class' => 'form'));
+    }
+    else
+    {
+      $this->_login_form = self::_get_login_form();
+    }
 
     if ( Auth::check() ) {
       return;
@@ -31,12 +38,15 @@ class Controller_Base extends Controller
     }
   }
 
-  static private function _get_login_form ()
+  static public function _get_login_form ($cond = array())
   {
+    $form_name  = isset($cond['form_name'])  ? $cond['form_name']  : 'login';
+    $form_class = isset($cond['form_class']) ? $cond['form_class'] : 'navbar-form navbar-right';
+
     // login form
-    $form = Fieldset::forge('login', array(
+    $form = Fieldset::forge($form_name, array(
       'form_attributes' => array(
-        'class' => 'navbar-form navbar-right',
+        'class' => $form_class,
         'role'  => 'search',
       ),
     ));

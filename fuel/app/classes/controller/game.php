@@ -2,6 +2,14 @@
 
 class Controller_Game extends Controller_Base
 {
+  public function before()
+  {
+    parent::before();
+
+    if ( ! Auth::check() )
+      Response::redirect(Uri::create('/login'));
+  }
+
   public function action_list()
   {
     $form = self::_get_addgame_form();

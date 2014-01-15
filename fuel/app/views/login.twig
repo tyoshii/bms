@@ -16,3 +16,15 @@
 </div>
 
 {% endblock content %}
+
+
+{% block js %}
+{{ parent() }}
+
+<script>
+$(document).ready(function() {
+$("form.form").find('input')[0].focus();
+});
+</script>
+
+{% endblock %}

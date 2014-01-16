@@ -7,7 +7,10 @@ class Controller_Game extends Controller_Base
     parent::before();
 
     if ( ! Auth::check() )
+    {
+      Session::set('redirect_to', Uri::current());
       Response::redirect(Uri::create('/login'));
+    }
   }
 
   public function action_list()

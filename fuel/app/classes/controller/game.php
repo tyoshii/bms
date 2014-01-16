@@ -47,21 +47,28 @@ class Controller_Game extends Controller_Base
         $game_status = 1;
       }
 
-      try {
-        $game = Model_Game::forge();
-        $game->date        = Input::post('date');
-        $game->team_top    = $top;
-        $game->team_bottom = $bottom;
-        $game->game_status = $game_status;
-        
-        $game->save();
-
-        Session::set_flash('info', '新規ゲームを追加しました');
-        Response::redirect(Uri::current());
-      }
-      catch ( Exception $e )
+      if ( $game_status === 0 && Auth::has_access('admin.admin') )
       {
-        Session::set_flash('error', $e->getMessage());
+        Session::set_flash('error', '自分のチームを選択してください');
+      }
+      else
+      {
+        try {
+          $game = Model_Game::forge();
+          $game->date        = Input::post('date');
+          $game->team_top    = $top;
+          $game->team_bottom = $bottom;
+          $game->game_status = $game_status;
+          
+          $game->save();
+  
+          Session::set_flash('info', '新規ゲームを追加しました');
+          Response::redirect(Uri::current());
+        }
+        catch ( Exception $e )
+        {
+          Session::set_flash('error', $e->getMessage());
+        }
       }
     }
     else

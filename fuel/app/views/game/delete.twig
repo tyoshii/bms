@@ -1,21 +1,20 @@
-{% extends "base.twig" %}
+{% extends "layout.twig" %}
+
+{% block li_game %}
+<li class="active">
+{% endblock %}
+
 
 {% block content %}
 
-<table class="table">
-<tr>
-<td>実施日：YYYY/MM/DD</td>
-</tr>
-<tr>
-<td>先攻：ヤフー</td>
-</tr>
-<tr>
-<td>後攻：ダブルクリック</td>
-</tr>
-</table>
-
-<form class="form">
-<input type="submit" class="btn btn-danger" value="削除">
-</form>
+<div class="container">
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6">
+{{ form }}
+</div>
+<div class="col-md-3"></div>
+</div>
+</div>
 
 {% endblock %}

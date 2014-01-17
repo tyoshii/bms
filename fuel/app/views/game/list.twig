@@ -15,12 +15,13 @@
 
 <div class="col-md-9">
 
-<table class="table">
+<table class="table table-hover">
 <thead>
 <tr>
     <th>実施日</th>
     <th>先攻</th>
     <th>後攻</th>
+    <th></th>
     <th></th>
 </tr>
 </thead>
@@ -33,9 +34,15 @@
 <td>{{ game.team_top }}</td>
 <td>{{ game.team_bottom }}</td>
 <td>
-  <form action="/game/edit">
-    <input type="hidden" value="{{game.id}}">
+  <form action="/game/edit" method="POST">
+    <input type="hidden" name="id" value="{{game.id}}">
     <input type="submit" class="btn btn-success" value="編集">
+  </form>
+</td>
+<td>
+  <form action="/game/delete" method="POST">
+    <input type="hidden" name="id" value="{{game.id}}">
+    <input type="submit" class="btn btn-warning" value="無効">
   </form>
 </td>
 </tr>

@@ -111,11 +111,51 @@ class Controller_Game extends Controller_Base
 
   public function post_delete()
   {
-    // validation
+    $id = Input::get('id');
+    $confirm = Input::get('confirm');
+    
+    $form = self::_get_deletegame_form($id);
 
-    // delete
+    if ( $confirm )
+    {
+      if ( $form->validation()->run() )
+      {
+        //delete
+      }
+      else
+      {
+        Session::flash_set('内部エラー');
+        Response::redirect('game/list');
+      }
+    }
 
-    Response::redirect(Uri::create('/game/list'));
+    $val = $form->validation();
+    
+    $view = View::forge('game/delete.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->game = Model_Game::find( Input::get('id') );
+
+    return Response::forge($view);
+  }
+
+  static private function _get_deletegame_form($id)
+  {
+    $form = Fieldset::forge('deletegame', array(
+      'form_attributes' => array(
+        'class' => 'form',
+        'role'  => 'search',
+      ),
+    ));
+
+    $form->add('id', '', array('type' => 'hidden', 'value' => $id))
+      ->add_rule('required');
+
+    $form->add('confirm', '', array('type' => 'hidden', 'value' => '1'))
+      ->add_rule('required');
+
+    $form->add('submit', '', array('type' => 'submit', 'value' => '無効', 'class' => 'btn btn-warning'));
+
+    return $form;
   }
 
   static private function _get_addgame_form()

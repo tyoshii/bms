@@ -1,8 +1,10 @@
 <?php
 return array(
-  '_root_' => 'top/index',
+  '_root_' => 'top/ndex',
   'login'  => 'top/login',
   'logout' => 'top/logout',
+
+  'user/(:segment)' => 'user/index/$1',
 
   'admin' => 'admin/index',
   'admin/user' => 'admin/user',

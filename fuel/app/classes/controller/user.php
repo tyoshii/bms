@@ -18,15 +18,58 @@ class Controller_User extends Controller_Base
     $form = self::_get_info_form();
 
     $view = View::forge('user.twig');
+    $view->active_info = 'active';
+    $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
   }
 
   public function action_password()
   {
-    $form = self::_get_info_form();
+    $form = self::_get_password_form();
 
     $view = View::forge('user.twig');
+    $view->active_password = 'active';
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
+  public function post_password()
+  {
+    $form = self::_get_password_form();
+    $val = $form->validation();
+
+    if ( $val->run() )
+    {
+      $p1 = Input::post('password1');
+      $p2 = Input::post('password2');
+
+      if ( $p1 !== $p2 )
+      {
+        Session::set_flash('error', '確認用パスワードが違います');
+        $form->repopulate();
+      }
+      else
+      {
+        $data = Auth::Instance()->get_user_array();
+        auth::change_password(Input::post('original'), $p1, $data['screen_name']);
+        Session::set_flash('info', 'パスワードを変更しました。再ログインしてください。');
+        Session::set('redirect_to', Uri::current());
+
+        Auth::logout();
+        Response::redirect(Uri::create('/login'));
+      }
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+      $form->repopulate();
+    }
+
+    $view = View::forge('user.twig');
+    $view->active_password = 'active';
+    $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
   }
@@ -39,6 +82,11 @@ class Controller_User extends Controller_Base
         'role'  => 'search',
       ),
     ));
+
+    $form->add('original', '今のパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
+      ->add_rule('required')
+      ->add_rule('min_length', 8)
+      ->add_rule('max_length', 250);
 
     $form->add('password1', '新しいパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required')

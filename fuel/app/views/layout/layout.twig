@@ -30,14 +30,12 @@
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
-<!--
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bms-navbar">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
--->
     <a class="navbar-brand" href="/"><strong>Baseball Management System</strong></a>
   </div>
 
@@ -76,7 +74,7 @@
 
     <ul class="nav navbar-nav navbar-right">
       {% if login == true %}
-        <li><a href="/user/{{screen_name}}">{{screen_name}}</a></li>
+        <li><a href="/user/info">{{screen_name}}</a></li>
         <li><a href="/logout">Logout</a></li>
       {% else %}
         {{ login_form }}

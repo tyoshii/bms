@@ -53,11 +53,12 @@ class Controller_Base extends Controller
 
     $form->add('username', '', array('maxlength' => 8, 'class' => 'form-control', 'placeholder' => 'Account'))
       ->add_rule('required')
-      ->add_rule('max_length', 8);
+      ->add_rule('max_length', 40);
 
     $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required')
-      ->add_rule('max_length', 8);
+      ->add_rule('min_length', 8)
+      ->add_rule('max_length', 250);
 
     $form->add('login', '', array('type' => 'submit', 'value' => 'Login', 'class' => 'btn btn-success'));
 

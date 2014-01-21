@@ -24,6 +24,39 @@ class Controller_User extends Controller_Base
     return Response::forge($view);
   }
 
+  public function post_info()
+  {
+    $form = self::_get_info_form();
+
+    $val = $form->validation();
+
+    if ( $val->run() )
+    {
+      $props = array(
+        'email' => Input::post('email'),
+      );
+      Auth::update_user($props, Auth::get_screen_name());
+
+      $info = Auth::get_profile_fields();
+      $info['dispname'] = Input::post('dispname');
+      Auth::update_user($info, Auth::get_screen_name());
+
+      Session::set_flash('info', 'ユーザー情報を更新しました');
+      Response::redirect(Uri::current());
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+      $form->repopulate();
+    }
+
+    $view = View::forge('user.twig');
+    $view->active_info = 'active';
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
   public function action_password()
   {
     $form = self::_get_password_form();
@@ -112,13 +145,28 @@ class Controller_User extends Controller_Base
       ),
     ));
 
-    $form->add('username', '', array('maxlength' => 8, 'class' => 'form-control', 'placeholder' => 'ユーザーID'))
+    $info = Auth::get_profile_fields();
+
+    $dispname = isset($info['dispname']) ? $info['dispname'] : Auth::get_screen_name();
+
+    $form->add('username', 'ユーザーID', array(
+      'value' => Auth::get_screen_name(),
+      'maxlength' => 8,
+      'class' => 'form-control',
+    ))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('dispname', '', array('maxlength' => 16, 'class' => 'form-control', 'placeholder' => '表示名'))
+    $form->add('dispname', '表示名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
+
+    $form->add('email', 'Eメール', array(
+      'value' => Auth::get_email(), 
+      'class' => 'form-control',
+    ))
+      ->add_rule('required')
+      ->add_rule('valid_email');
 
     $form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-success', 'value' => '更新'));
 

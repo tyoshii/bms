@@ -32,9 +32,13 @@ class Model_Game extends \Orm\Model
       'g.id',
       'g.date',
       'g.game_status',
+      'scores.tsum',
+      'scores.bsum',
       DB::expr('(select name from teams as t where t.id = g.team_top) as team_top'),
       DB::expr('(select name from teams as t where t.id = g.team_bottom) as team_bottom')
     )->from(array('games', 'g'));
+
+    $query->join('scores')->on('g.id', '=', 'scores.id');
   
     $query->where('game_status', '!=', 0);
 

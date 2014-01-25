@@ -20,6 +20,7 @@
 <tr>
     <th>実施日</th>
     <th>先攻</th>
+    <th>スコア</th>
     <th>後攻</th>
     <th></th>
     <th></th>
@@ -32,6 +33,7 @@
 <tr>
 <td>{{ game.date }}</td>
 <td>{{ game.team_top }}</td>
+<td><a href="/game/score">score</a></td>
 <td>{{ game.team_bottom }}</td>
 <td>
   <form action="/game/edit" method="POST">
@@ -40,10 +42,8 @@
   </form>
 </td>
 <td>
-  <form action="/game/delete" method="POST">
-    <input type="hidden" name="id" value="{{game.id}}">
-    <input type="submit" class="btn btn-warning" value="無効">
-  </form>
+  <input type="hidden" name="id" value="{{game.id}}">
+  <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
 </td>
 </tr>
 {% endfor %}
@@ -61,6 +61,26 @@
 {% block js %}
 {{ parent() }}
 <script>
+function changeGameStatus(id, status) {
+  if ( window.confirm("無効試合としてよいですか？") ) {
+    
+    $.ajax({
+      type: 'POST',
+      url: '/game/status',
+      data: {
+        id: id,
+        status: status
+      },
+      success: function() {
+        location.reload();
+      },
+      error: function() {
+        alert("失敗しました");
+      }
+    });
+  }
+}
+
 $(document).ready(function() {
   $('input.form-datepicker').each(function() {
     $(this).datepicker();

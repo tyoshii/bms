@@ -17,6 +17,7 @@ return array(
   'game/edit'   => 'game/edit',
   'game/delete' => 'game/delete',
   'game/list'   => 'game/list',
+  'game/status' => 'game/status',
 
 
   'score' => 'score/index',

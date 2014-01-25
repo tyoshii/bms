@@ -29,6 +29,7 @@ class Model_Game extends \Orm\Model
 
     $query = DB::select(
       array( 'g.id', 'id' ),
+      'g.id',
       'g.date',
       'g.game_status',
       DB::expr('(select name from teams as t where t.id = g.team_top) as team_top'),

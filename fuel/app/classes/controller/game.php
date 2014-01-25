@@ -13,6 +13,48 @@ class Controller_Game extends Controller_Base
     }
   }
 
+  public function action_score()
+  {
+    $id = Input::param('id');
+    if ( ! $id )
+    {
+      Response::redirect(Uri::create('/game/list'));
+    }
+
+    $score = Model_Score::find(Input::param('id'), array(
+      'related' => array('games'),
+    ));
+
+    if ( Input::post() )
+    {      
+      $form = Fieldset::forge('score');
+      $form->add_model($score);
+
+      $val = $form->validation();
+      if ( $val->run() )
+      {
+        $fields = $val->validated();
+        unset($fields['submit']);
+
+        $score = Model_Score::find($id);
+        $score->set($fields);
+        $score->save(); 
+
+        Response::redirect(Uri::create('/game/list'));
+      }
+      else {
+        Session::set_flash('error', $val->show_errors());
+      }
+    }
+
+    $view = View::forge('game/score.twig');
+    $view->score = $score;
+    $view->team_top    = Model_Team::find($score->games->team_top)->name;
+    $view->team_bottom = Model_Team::find($score->games->team_bottom)->name;
+
+    return Response::forge($view);
+  }
+
   public function action_list()
   {
     $form = self::_get_addgame_form();

@@ -2,9 +2,19 @@
 
 class Model_Score extends \Orm\Model
 {
-	protected static $_properties = array(
+  protected static $_properties = array(
 		'id',
-		't1',
+    't1' => array(
+      'data_type' => 'int',
+      'validation' => array(
+        'required',
+        'valid_string' => array('numeric'),
+      ),
+      'form' => array(
+        'class' => 'form-control',
+        'type' => 'text',
+      ),
+    ),
 		't2',
 		't3',
 		't4',
@@ -57,6 +67,14 @@ class Model_Score extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'scores';
+
+  protected static $_belongs_to = array('games' => array(
+    'model_to' => 'Model_Game',
+    'key_from' => 'id',
+    'key_to' => 'id',
+    'cascade_save' => true,
+    'cascade_delete' => false,
+  ));
 
   public static function createNewGame($id)
   {

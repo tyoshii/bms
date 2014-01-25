@@ -58,4 +58,21 @@ class Model_Score extends \Orm\Model
 	);
 	protected static $_table_name = 'scores';
 
+  public static function createNewGame($id)
+  {
+    $score = self::forge();
+    $score->id = $id;
+
+    foreach ( self::$_properties as $prop )
+    {
+      if ( in_array($prop, array('id', 'created_at', 'updated_at')) )
+      {
+        continue;
+      }
+
+      $score->$prop = 0;
+    }
+
+    return $score->save();
+  }
 }

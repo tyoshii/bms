@@ -35,14 +35,17 @@ class Model_Game extends \Orm\Model
       DB::expr('(select name from teams as t where t.id = g.team_top) as team_top'),
       DB::expr('(select name from teams as t where t.id = g.team_bottom) as team_bottom')
     )->from(array('games', 'g'));
+  
+    $query->where('game_status', '!=', 0);
 
     if ( ! Auth::has_access('admin.admin') )
     {
       $my_team = Model_User::getMyTeamId();
       $query->where('team_top', $my_team );
       $query->or_where('team_bottom', $my_team );
-      $query->order_by('date');
     }
+
+    $query->order_by('date', 'desc');
 
     return $query->execute()->as_array();
   }

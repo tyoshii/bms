@@ -73,9 +73,7 @@ class Controller_Game extends Controller_Base
           $game->game_status = $game_status;
           $game->save();
 
-          $score = Model_Score::forge();
-          $score->id($game->id);
-          $score->save();
+          Model_Score::createNewGame($game->id);
  
           Session::set_flash('info', '新規ゲームを追加しました');
           Response::redirect(Uri::current());

@@ -15,7 +15,7 @@ return array(
 
   'game/create' => 'game/create',
   'game/edit'   => 'game/edit',
-  'game/delete' => 'game/delete',
+  'game/score'  => 'game/score',
   'game/list'   => 'game/list',
   'game/status' => 'game/status',
 

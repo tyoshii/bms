@@ -24,6 +24,14 @@ class Model_Game extends \Orm\Model
 	);
 	protected static $_table_name = 'games';
 
+  protected static $_has_many = array('games' => array(
+    'model_to' => 'Model_Game',
+    'key_from' => 'id',
+    'key_to' => 'id',
+    'cascade_save' => true,
+    'cascade_delete' => false,
+  ));
+
   public static function getOwnGames()
   {
 

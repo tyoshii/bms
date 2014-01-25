@@ -19,7 +19,19 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge('game/list.twig');
     $view->set_safe('form', $form->build(Uri::current()));
-    $view->games = Model_Game::getOwnGames();
+    $games = Model_Game::getOwnGames();
+
+    // score
+    foreach ( $games as $game )
+    {
+      $score = Model_Score::find('all', array(
+        'where' => array(
+          array('id', $game['id']),
+        ),
+      ));
+    }
+
+    $view->games = $games;
     
     return Response::forge($view);
   } 
@@ -47,7 +59,7 @@ class Controller_Game extends Controller_Base
         $game_status = 1;
       }
 
-      if ( $game_status === 0 && Auth::has_access('admin.admin') )
+      if ( $game_status === 0 && ! Auth::has_access('admin.admin') )
       {
         Session::set_flash('error', '自分のチームを選択してください');
       }
@@ -59,9 +71,12 @@ class Controller_Game extends Controller_Base
           $game->team_top    = $top;
           $game->team_bottom = $bottom;
           $game->game_status = $game_status;
-          
           $game->save();
-  
+
+          $score = Model_Score::forge();
+          $score->id($game->id);
+          $score->save();
+ 
           Session::set_flash('info', '新規ゲームを追加しました');
           Response::redirect(Uri::current());
         }
@@ -102,41 +117,14 @@ class Controller_Game extends Controller_Base
 
   }
 
-	public function action_delete()
+	public function post_status()
 	{
-    // Fieldset::forge
+    $game = Model_Game::find(Input::post('id'));
+    $game->game_status = Input::post('status');
+    $game->save();
 
-    return Response::forge( View::forge('game/delete.twig') );
+    return "OK";
 	}
-
-  public function post_delete()
-  {
-    $id = Input::get('id');
-    $confirm = Input::get('confirm');
-    
-    $form = self::_get_deletegame_form($id);
-
-    if ( $confirm )
-    {
-      if ( $form->validation()->run() )
-      {
-        //delete
-      }
-      else
-      {
-        Session::flash_set('内部エラー');
-        Response::redirect('game/list');
-      }
-    }
-
-    $val = $form->validation();
-    
-    $view = View::forge('game/delete.twig');
-    $view->set_safe('form', $form->build(Uri::current()));
-    $view->game = Model_Game::find( Input::get('id') );
-
-    return Response::forge($view);
-  }
 
   static private function _get_deletegame_form($id)
   {

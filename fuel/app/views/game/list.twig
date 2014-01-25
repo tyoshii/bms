@@ -36,9 +36,9 @@
 <td><a href="/game/score?id={{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
 <td>{{ game.team_bottom }}</td>
 <td>
-  <form action="/game/edit" method="POST">
+  <form action="/game/edit" method="GET">
     <input type="hidden" name="id" value="{{game.id}}">
-    <input type="submit" class="btn btn-success" value="編集">
+    <input type="submit" class="btn btn-success" value="成績入力">
   </form>
 </td>
 <td>

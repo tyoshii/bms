@@ -63,16 +63,6 @@ class Controller_Game extends Controller_Base
     $view->set_safe('form', $form->build(Uri::current()));
     $games = Model_Game::getOwnGames();
 
-    // score
-    foreach ( $games as $game )
-    {
-      $score = Model_Score::find('all', array(
-        'where' => array(
-          array('id', $game['id']),
-        ),
-      ));
-    }
-
     $view->games = $games;
     
     return Response::forge($view);

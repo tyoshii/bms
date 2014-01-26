@@ -132,12 +132,42 @@ class Controller_Game extends Controller_Base
 
 	public function action_edit()
 	{
+    $json = array(
+      array(
+        'order' => 1,
+        'member_id' => 32,
+        'position' => array(1,2,3,4,5,'R',5),
+      ),
+      array(),
+      array(),
+      array(),
+      array(),
+      array(),
+      array(),
+    );
     // ゲームデータ表示
     // 権限のあるチームのみ表示
 
     // 複数権限もっている場合はタブで両方表示
 
     $view = View::forge('game/edit.twig');
+
+    $view->members = Model_Member::find('all', array(
+      'where' => array(
+        array('team', Input::get('team_id')),
+      ),
+    ));
+
+    $stamens = Model_Game::find('all', array(
+      'select' => array('starting_member'),
+      'where' => array(
+		    array('id', Input::get('game_id')),
+      ),
+    ));
+
+    // stamens to json
+
+    $view->stamens = $stamens;
 
     return Response::forge($view);
 	}

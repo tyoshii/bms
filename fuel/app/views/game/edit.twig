@@ -1,42 +1,68 @@
 {% extends "layout.twig" %}
 
-{% block content %}
 
+{% set name_select %}
+<select class="select2">
+<option>--------------------</option>
+{% for member in members %}
+<option>{{member.name}}</option>
+{% endfor %}
+</select>
+{% endset %}
+
+
+{% set position_select %}
+<select>
+<option>--</option>
+{% for position in range(1,9) %}
+<option>{{position}}</option>
+{% endfor %}
+<option>D</option>
+<option>H</option>
+<option>R</option>
+</select>
+{% endset %}
+
+
+{% block content %}
 
 <ul id="mytab" class="nav nav-tabs">
     <!-- hrefにdiv.tab-paneと一緒に指定するIDを -->
-    <li class="active"><a href="#team1" data-toggle="tab">チームあああ</a></li>
-    <li class=""><a href="#team2" data-toggle="tab">チームいいい</a></li>
+    <li class="active"><a href="#starting-member" data-toggle="tab">スタメン</a></li>
+    <li class=""><a href="#score" data-toggle="tab">成績</a></li>
 </ul>
 
 <div class="tab-content">
 
-<div class="tab-pane active" id="team1">
+<div class="tab-pane active" id="starting-member">
 
 <form class="form" action="#" method="POST">
 
 <table class="table">
 
 <tr>
-<th>打順</th>
-<th>名前</th>
-<th>ポジション</th>
-<th>ポジション</th>
-<th>ポジション</th>
-<th>ポジション</th>
-<th>ポジション</th>
-<th>ポジション</th>
+<th class="order">打順</th>
+<th class="name">名前</th>
+<th class="position">ポジション</th>
+<th class="position"></th>
+<th class="position"></th>
+<th class="position"></th>
+<th class="position"></th>
+<th class="position"></th>
 </tr>
 
+{% for stamen in stamens %}
+{% endfor %}
+
 <tr>
-<td>1</td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
+<td class="order">1</td>
+<td>{{name_select}}</td>
+<td>{{position_select}}</td>
+<td>{{position_select}}</td>
+<td>{{position_select}}</td>
+<td>{{position_select}}</td>
+<td>{{position_select}}</td>
+<td>{{position_select}}</td>
 </tr>
 
 </table>
@@ -47,7 +73,7 @@
 </div>
 
 
-<div class="tab-pane" id="team2">
+<div class="tab-pane" id="score">
 
 <form class="form" action="#" method="POST">
 
@@ -114,21 +140,14 @@
 {% block css %}
 {{ parent() }}
 <link href="/bootstrap_formhelpers/css/bootstrap-formhelpers.css" rel="stylesheet">
-
-<style>
-table th,
-table td {
-    width: 150px;
-}
-
-table td span {
-    width: 10px;
-}
-</style>
+<link href="/select2/select2.css" rel="stylesheet">
+<link href="/css/bms.css" rel="stylesheet">
 {% endblock %}
 
 {% block js %}
 {{ parent() }}
+<script src="/select2/select2.min.js"></script>
+
 <script>
 function add_bfh_number() {
     // add bfh-number
@@ -158,6 +177,7 @@ function delete_bfh_number() {
 }
 
 $(document).ready(function() {
+  $('.select2').select2();
 });
 
 </script>

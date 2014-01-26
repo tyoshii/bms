@@ -16,6 +16,7 @@ return array(
 				7 => '008_rename_field_group_to_group_id_in_users',
 				8 => '009_rename_field_group_id_to_group_in_users',
 				9 => '010_create_scores',
+				10 => '011_add_starting_member_to_games',
 			),
 		),
 		'module' => 

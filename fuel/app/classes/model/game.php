@@ -8,6 +8,7 @@ class Model_Game extends \Orm\Model
 		'team_top',
 		'team_bottom',
 		'game_status',
+		'starting_member',
 		'created_at',
 		'updated_at',
 	);

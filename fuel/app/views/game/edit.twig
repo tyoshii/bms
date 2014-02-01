@@ -52,10 +52,8 @@
 </tr>
 
 {% for stamen in stamens %}
-{% endfor %}
-
 <tr>
-<td class="order">1</td>
+<td class="order">{{stamen.order}}</td>
 <td>{{name_select}}</td>
 <td>{{position_select}}</td>
 <td>{{position_select}}</td>
@@ -64,6 +62,8 @@
 <td>{{position_select}}</td>
 <td>{{position_select}}</td>
 </tr>
+{% endfor %}
+
 
 </table>
 

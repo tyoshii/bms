@@ -98,15 +98,8 @@ class Controller_Game extends Controller_Base
       else
       {
         try {
-          $game = Model_Game::forge();
-          $game->date        = Input::post('date');
-          $game->team_top    = $top;
-          $game->team_bottom = $bottom;
-          $game->game_status = $game_status;
-          $game->save();
+          Model_Game::createNewGame($top, $bottom, $game_status);
 
-          Model_Score::createNewGame($game->id);
- 
           Session::set_flash('info', '新規ゲームを追加しました');
           Response::redirect(Uri::current());
         }
@@ -132,24 +125,6 @@ class Controller_Game extends Controller_Base
 
 	public function action_edit()
 	{
-    $json = array(
-      array(
-        'order' => 1,
-        'member_id' => 32,
-        'position' => array(1,2,3,4,5,'R',5),
-      ),
-      array(),
-      array(),
-      array(),
-      array(),
-      array(),
-      array(),
-    );
-    // ゲームデータ表示
-    // 権限のあるチームのみ表示
-
-    // 複数権限もっている場合はタブで両方表示
-
     $view = View::forge('game/edit.twig');
 
     $view->members = Model_Member::find('all', array(
@@ -158,16 +133,13 @@ class Controller_Game extends Controller_Base
       ),
     ));
 
-    $stamens = Model_Game::find('all', array(
-      'select' => array('starting_member'),
-      'where' => array(
-		    array('id', Input::get('game_id')),
-      ),
-    ));
+    $stamens = Model_Game::query()
+      ->select('starting_member')
+      ->where('id', Input::get('game_id'))
+      ->get_one()
+      ->starting_member;
 
-    // stamens to json
-
-    $view->stamens = $stamens;
+    $view->stamens = json_decode($stamens);
 
     return Response::forge($view);
 	}

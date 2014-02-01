@@ -451,16 +451,17 @@ class Model_Score extends \Orm\Model
     $score = self::forge();
     $score->id = $id;
 
-    foreach ( self::$_properties as $prop )
+    // default 0
+    foreach ( self::$_properties as $key => $val )
     {
-      if ( in_array($prop, array('id', 'created_at', 'updated_at')) )
+      if ( in_array($key, array('id', 'created_at', 'updated_at')) )
       {
         continue;
       }
 
-      $score->$prop = 0;
+      $score->$key = 0;
     }
 
-    return $score->save();
+    $score->save();
   }
 }

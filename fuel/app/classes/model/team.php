@@ -21,6 +21,16 @@ class Model_Team extends \Orm\Model
 	);
 	protected static $_table_name = 'teams';
 
+  protected static $_has_many = array(
+    'teams' => array(
+      'model_to' => 'Model_Member',
+      'key_from' => 'id',
+      'key_to' => 'team',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    )
+  );
+
   public static function getTeams()
   {
     $res = self::find('all', array('select' => array('id', 'name')));

@@ -33,6 +33,33 @@ class Model_Game extends \Orm\Model
     'cascade_delete' => false,
   ));
 
+  public static function createNewGame( $top, $bottom, $game_status )
+  {
+    $game = self::forge();
+
+    // meta
+    $game->date        = Input::post('date');
+    $game->team_top    = $top;
+    $game->team_bottom = $bottom;
+    $game->game_status = $game_status;
+
+    // stamen
+    $stamen = array();
+    for ( $i = 1; $i <= 9; $i++ )
+    {
+      $stamen[] = array(
+        'order'     => $i,
+        'member_id' => 0,
+        'position'  => array(0,0,0,0,0,0),
+      );
+    }
+    $game->starting_member = json_encode($stamen);
+    $game->save();
+
+    Model_Score::createNewGame($game->id);
+
+    return $game;
+  }
   public static function getOwnGames()
   {
 

@@ -23,4 +23,12 @@ class Model_Member extends \Orm\Model
 	);
 	protected static $_table_name = 'members';
 
+  protected static $_belongs_to = array(
+    'teams' => array(
+      'model_to' => 'Model_Team',
+      'key_from' => 'team',
+      'key_to' => 'id',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    ));
 }

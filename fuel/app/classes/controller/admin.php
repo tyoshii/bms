@@ -295,7 +295,7 @@ class Controller_Admin extends Controller_Base
     $form->add('team', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => 'Select Team'))
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
+    $form->add('submit', '', array('type' => 'submit', 'value' => '登録', 'class' => 'btn btn-success'));
 
     return $form;
   }

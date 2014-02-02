@@ -1,27 +1,36 @@
 {% extends "layout.twig" %}
 
 
-{% set name_select %}
-<select class="select2">
-<option>--------------------</option>
+{% macro name_select(members, id) %}
+<select class="stamen member_id select2">
+<option value="0">--------------------</option>
 {% for member in members %}
-<option>{{member.name}}</option>
+{% set selected = '' %}
+{% if member.id == id %}{% set selected = 'selected' %}
+{% endif %}
+<option value="{{member.id}}" {{selected}}>{{member.name}}</option>
 {% endfor %}
 </select>
-{% endset %}
+{% endmacro %}
 
 
-{% set position_select %}
-<select>
-<option>--</option>
-{% for position in range(1,9) %}
-<option>{{position}}</option>
+{% macro position_select(p) %}
+<select class="stamen position">
+<option value="0">--</option>
+{% for i in 1..9 %}
+{% if i == p %}{% set selected = 'selected' %}
+{% else %}{% set selected = '' %}
+{% endif %}  
+<option value="{{i}}" {{selected}}>{{i}}</option>
 {% endfor %}
-<option>D</option>
-<option>H</option>
-<option>R</option>
+{% for i in ['D','H','R'] %}
+{% if i == p %}{% set selected = 'selected' %}
+{% else %}{% set selected = '' %}
+{% endif %}  
+<option value="{{i}}" {{selected}}>{{i}}</option>
+{% endfor %}
 </select>
-{% endset %}
+{% endmacro %}
 
 
 {% block content %}
@@ -37,9 +46,8 @@
 
 <div class="tab-pane active" id="starting-member">
 
-<form class="form" action="#" method="POST">
 
-<table class="table">
+<table id="stamen" class="table">
 
 <tr>
 <th class="order">打順</th>
@@ -54,21 +62,20 @@
 
 {% for stamen in stamens %}
 <tr>
-<td class="order">{{stamen.order}}</td>
-<td>{{name_select}}</td>
-<td>{{position_select}}</td>
-<td>{{position_select}}</td>
-<td>{{position_select}}</td>
-<td>{{position_select}}</td>
-<td>{{position_select}}</td>
-<td>{{position_select}}</td>
+<td class="stamen order">{{stamen.order}}</td>
+<td class="member_id">{{_self.name_select(members, stamen.member_id)}}</td>
+{% for i in 0..5 %}
+<td>{{_self.position_select(stamen.position[i])}}</td>
+{% endfor %}
 </tr>
 {% endfor %}
 
 
 </table>
-
-<input type="submit" class="btn btn-success" value="登録">
+<form method="GET" action="#">
+<input type="hidden" value="{{game_id}}" name="game_id">
+<input type="hidden" value="{{team_id}}" name="team_id">
+<input type="submit" onClick="post_data();" class="btn btn-success" value="登録">
 </form>
 
 </div>
@@ -150,7 +157,7 @@
 {% block js %}
 {{ parent() }}
 <script src="/select2/select2.min.js"></script>
-
+<script src="/js/game/edit.js"></script>
 <script>
 function add_bfh_number() {
     // add bfh-number

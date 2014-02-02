@@ -125,37 +125,58 @@ class Controller_Game extends Controller_Base
 
 	public function action_edit()
 	{
+    // parameter check
     $team_id = Input::get('team_id');
     $game_id = Input::get('game_id');
 
     if ( ! $team_id or ! $game_id )
     {
-      Session::set('redirect_to', Uri::create('/game/edit'));
-      Response::redirect(Uri::create('/login'));
+      Response::redirect(Uri::create('/game/list'));
     }
 
     $view = View::forge('game/edit.twig');
 
+    // 所属選手
     $view->members = Model_Member::find('all', array(
       'where' => array(
         array('team', $team_id),
       ),
     ));
 
+    // starting_member
     $stamens = Model_Game::query()
       ->select('starting_member')
       ->where('id', $game_id)
       ->get_one()
       ->starting_member;
-
     $view->stamens = json_decode($stamens);
+
+    $view->game_id = $game_id;
+    $view->team_id = $team_id;
 
     return Response::forge($view);
 	}
 
   public function post_edit()
   {
+    // parameter check
+    $team_id = Input::post('team_id');
+    $game_id = Input::post('game_id');
 
+    if ( ! $team_id or ! $game_id )
+    {
+      return Response::forge('NG', 400);
+      # Response::redirect(Uri::create('/game/list'));
+    }
+
+    // stamen 登録
+    $stamen = Input::post('stamen');
+
+    $game = Model_Game::find($game_id);
+    $game->starting_member = json_encode($stamen); 
+    $game->save();
+
+    echo 'OK';
   }
 
 	public function post_status()

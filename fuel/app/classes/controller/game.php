@@ -125,17 +125,26 @@ class Controller_Game extends Controller_Base
 
 	public function action_edit()
 	{
+    $team_id = Input::get('team_id');
+    $game_id = Input::get('game_id');
+
+    if ( ! $team_id or ! $game_id )
+    {
+      Session::set('redirect_to', Uri::create('/game/edit'));
+      Response::redirect(Uri::create('/login'));
+    }
+
     $view = View::forge('game/edit.twig');
 
     $view->members = Model_Member::find('all', array(
       'where' => array(
-        array('team', Input::get('team_id')),
+        array('team', $team_id),
       ),
     ));
 
     $stamens = Model_Game::query()
       ->select('starting_member')
-      ->where('id', Input::get('game_id'))
+      ->where('id', $game_id)
       ->get_one()
       ->starting_member;
 

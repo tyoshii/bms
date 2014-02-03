@@ -77,11 +77,11 @@
 <td></td>
 </table>
 
-<form method="GET" action="#">
-<input type="hidden" value="{{game_id}}" name="game_id">
-<input type="hidden" value="{{team_id}}" name="team_id">
-<input type="submit" onClick="post_data();" class="btn btn-success" value="登録">
-</form>
+<div>
+<data id="game_id" style="display:none;">{{game_id}}</data>
+<data id="team_id" style="display:none;">{{team_id}}</data>
+<button onClick="post_data();" class="btn btn-success">登録</button>
+</div>
 
 
 {% endblock %}

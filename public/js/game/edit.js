@@ -40,7 +40,7 @@ function add_order(self, kind) {
 }
 
 function post_data() {
-  var $stamen = $("table#stamen .stamen");
+  var $stamen = $("table#stamen td.stamen");
   // console.log($stamen);
 
   // get post data
@@ -62,7 +62,7 @@ function post_data() {
       }
       else {
         // console.log('position - ' + $this.val());
-        if ( data[i].position === undefined ) {
+        if ( typeof data[i].position === undefined ) {
           data[i].position = [];
         }
         

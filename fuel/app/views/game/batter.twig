@@ -1,0 +1,15 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+{% import 'game-nav.twig' as nav %}
+{{ nav.navigation() }}
+
+table
+
+{% endblock content %}
+
+{% block js %}
+{{ parent() }}
+{% include 'game-js.twig' %}
+{% endblock %}

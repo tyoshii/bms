@@ -23,7 +23,6 @@
     <th>スコア</th>
     <th>後攻</th>
     <th></th>
-    <th></th>
 </tr>
 </thead>
 
@@ -34,18 +33,12 @@
 <td>{{ game.date }}</td>
 <td>
 <div>{{ game.team_top_name }}</div>
-<a href="/game/edit?game_id={{game.id}}&team_id={{game.team_top}}" class="btn btn-info btn-xs">成績入力</a>
+<a href="/game/edit/{{game.id}}/{{game.team_top}}/player" class="btn btn-info btn-xs">成績入力</a>
 </td>
 <td><a href="/game/score?id={{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
 <td>
 <div>{{ game.team_bottom_name }}</div>
-<a href="/game/edit?game_id={{game.id}}&team_id={{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
-</td>
-<td>
-  <form action="/game/edit" method="GET">
-    <input type="hidden" name="id" value="{{game.id}}">
-    <input type="submit" class="btn btn-success" value="成績入力">
-  </form>
+<a href="/game/edit/{{game.id}}/{{game.team_bottom}}/player" class="btn btn-info btn-xs">成績入力</a>
 </td>
 <td>
   <input type="hidden" name="id" value="{{game.id}}">

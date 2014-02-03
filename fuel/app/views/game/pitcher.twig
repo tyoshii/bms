@@ -1,0 +1,16 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+{% import 'game-nav.twig' as nav %}
+
+{{ nav.navigation('pitcher') }}
+
+table
+
+{% endblock content %}
+
+{% block js %}
+{{ parent() }}
+{% include 'game-js.twig' %}
+{% endblock %}

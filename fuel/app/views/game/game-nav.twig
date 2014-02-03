@@ -1,0 +1,22 @@
+{% macro navigation() %}
+
+{% set base = '/game/edit/' ~ uri_segment(3) ~ '/' ~ uri_segment(4) %}
+
+<ul class="nav nav-tabs">
+    <li {%if uri_segment(5)=='player'%}class="active"{%endif%}>
+      <a href="{{base}}/player">出場選手</a>
+    </li>
+    <li {%if uri_segment(5)=='pitcher'%}class="active"{%endif%}>
+      <a href="{{base}}/pitcher">投手成績</a>
+    </li>
+    <li {%if uri_segment(5)=="batter"%}class="active"{%endif%}>
+      <a href="{{base}}/batter">野手成績</a>
+    </li>
+
+    {# return game/list #}
+    <li class="navbar-right">
+      <a href="/game/list" class="btn btn-info btn-xs">試合一覧へ戻る</a>
+    </li>
+</ul>
+
+{% endmacro %}

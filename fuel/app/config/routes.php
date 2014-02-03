@@ -14,11 +14,14 @@ return array(
   'admin/league'  => 'admin/league',
 
   'game/create' => 'game/create',
-  'game/edit'   => 'game/edit',
   'game/score'  => 'game/score',
   'game/list'   => 'game/list',
   'game/status' => 'game/status',
 
+  'game/edit'                                  => 'game/edit',
+  'game/edit/(:segment)'                       => 'game/edit/$1',
+  'game/edit/(:segment)/(:segment)'            => 'game/edit/$1/$2',
+  'game/edit/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
 
   'score' => 'score/index',
 

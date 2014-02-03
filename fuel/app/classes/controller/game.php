@@ -123,18 +123,21 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-	public function action_edit()
+	public function action_edit($game_id = null, $team_id = null, $kind = '')
 	{
-    // parameter check
-    $team_id = Input::get('team_id');
-    $game_id = Input::get('game_id');
-
-    if ( ! $team_id or ! $game_id )
+    // error check
+    if ( ! is_int($game_id+0) or ! is_int($team_id+0) )
     {
+      Session::set_flash('error', '試合一覧に戻されました');
+      Response::redirect(Uri::create('/game/list'));
+    }
+    if ( ! in_array($kind, array('player', 'pitcher', 'batter')) )
+    {
+      Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game/list'));
     }
 
-    $view = View::forge('game/edit.twig');
+    $view = View::forge("game/{$kind}.twig");
 
     // 所属選手
     $view->members = Model_Member::find('all', array(
@@ -166,7 +169,6 @@ class Controller_Game extends Controller_Base
     if ( ! $team_id or ! $game_id )
     {
       return Response::forge('NG', 400);
-      # Response::redirect(Uri::create('/game/list'));
     }
 
     // stamen 登録

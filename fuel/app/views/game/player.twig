@@ -1,0 +1,101 @@
+{% extends "layout.twig" %}
+
+{% macro name_select(members, id) %}
+<select class="stamen member_id select2">
+<option value="0">--------------------</option>
+{% for member in members %}
+{% set selected = '' %}
+{% if member.id == id %}{% set selected = 'selected' %}
+{% endif %}
+<option value="{{member.id}}" {{selected}}>{{member.name}}</option>
+{% endfor %}
+</select>
+{% endmacro %}
+
+
+{% macro position_select(p) %}
+<select class="stamen position">
+<option value="0" selected>--</option>
+{% for i in 1..9 %}
+{% if i == p %}{% set selected = 'selected' %}
+{% else %}{% set selected = '' %}
+{% endif %}  
+<option value="{{i}}" {{selected}}>{{i}}</option>
+{% endfor %}
+{% for i in ['D','H','R'] %}
+{% if p != 0 and i == p %}{% set selected = 'selected' %}
+{% else %}{% set selected = '' %}
+{% endif %}  
+<option value="{{i}}" {{selected}}>{{i}}</option>
+{% endfor %}
+</select>
+{% endmacro %}
+
+
+{% block content %}
+
+{% import 'game-nav.twig' as nav %}
+{{ nav.navigation('player') }}
+
+<table id="stamen" class="table">
+
+<tr>
+<th class="change"></th>
+<th class="order">打順</th>
+<th class="name">名前</th>
+<th class="position">ポジション1</th>
+<th class="position">ポジション2</th>
+<th class="position">ポジション3</th>
+<th class="position">ポジション4</th>
+<th class="position">ポジション5</th>
+<th class="position">ポジション6</th>
+</tr>
+
+{% for stamen in stamens %}
+<tr class="stamen-original">
+<td>
+<button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
+</td>
+<td class="stamen order">{{- stamen.order -}}</td>
+<td class="member_id">{{_self.name_select(members, stamen.member_id)}}</td>
+{% for i in 0..5 %}
+<td class="position">{{_self.position_select(stamen.position[i])}}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+
+<tr>
+<td><button onClick="add_order(this, 'last');" class="btn btn-info btn-xs">追加</button>
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</table>
+
+<form method="GET" action="#">
+<input type="hidden" value="{{game_id}}" name="game_id">
+<input type="hidden" value="{{team_id}}" name="team_id">
+<input type="submit" onClick="post_data();" class="btn btn-success" value="登録">
+</form>
+
+
+{% endblock %}
+
+
+
+{% block css %}
+{{ parent() }}
+<link href="/bootstrap_formhelpers/css/bootstrap-formhelpers.css" rel="stylesheet">
+<link href="/select2/select2.css" rel="stylesheet">
+<link href="/css/bms.css" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+{% include 'game-js.twig' %}
+{% endblock %}

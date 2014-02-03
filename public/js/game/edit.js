@@ -75,28 +75,13 @@ function post_data() {
   });
   // console.log(data);
 
-  // get parameter
-  var params = location.href.split("?")[1].split("&");
-  var game_id, team_id;
-  for ( i = 0; i < params.length; i++ ) {
-    var kv = params[i].split("=");
-    if ( kv[0] === "game_id" ) {
-      game_id = kv[1];
-    }
-    else if ( kv[0] === "team_id" ) {
-      team_id = kv[1];
-    }
-  }
-  // console.log(game_id);
-  // console.log(team_id);
-
   // ajax
   $.ajax({
     url: '/game/edit',
     type: 'POST',
     data: {
-      game_id: game_id,
-      team_id: team_id,
+      game_id: $('data#game_id').text(),
+      team_id: $('data#team_id').text(),
       stamen: data
     },
     success: function(html) {

@@ -82,7 +82,7 @@ function post_data() {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      stamen: data
+      players: data
     },
     success: function(html) {
       alert("成績保存に成功");

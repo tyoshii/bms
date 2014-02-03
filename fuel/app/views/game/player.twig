@@ -51,15 +51,15 @@
 <th class="position">ポジション6</th>
 </tr>
 
-{% for stamen in stamens %}
+{% for player in players %}
 <tr class="stamen-original">
 <td>
 <button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
 </td>
-<td class="stamen order">{{- stamen.order -}}</td>
-<td class="member_id">{{_self.name_select(members, stamen.member_id)}}</td>
+<td class="stamen order">{{- player.order -}}</td>
+<td class="member_id">{{_self.name_select(members, player.member_id)}}</td>
 {% for i in 0..5 %}
-<td class="position">{{_self.position_select(stamen.position[i])}}</td>
+<td class="position">{{_self.position_select(player.position[i])}}</td>
 {% endfor %}
 </tr>
 {% endfor %}

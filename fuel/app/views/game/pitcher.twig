@@ -3,10 +3,40 @@
 {% block content %}
 
 {% import 'game-nav.twig' as nav %}
+{{ nav.navigation() }}
 
-{{ nav.navigation('pitcher') }}
+<table class="table">
+<thead>
+<tr>
+<th>名前</th>
+<th>投球回</th>
+<th>勝敗</th>
+<th>失点</th>
+</tr>
+</thead>
 
-table
+{% for pitcher in players %}
+{% set flag = false %}
+
+{% for i in pitcher.position %}
+{% if i == 1 %}{% set flag = true %}
+{% endif %}
+{% endfor %}
+
+{% if flag == true %}
+<tr>
+<td>{{pitcher.name}}</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+{% endif %}
+
+{% endfor %}
+
+</table>
+
+<button class="btn btn-success" onClick="alert('korekara');">登録</button>
 
 {% endblock content %}
 

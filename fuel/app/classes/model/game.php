@@ -8,7 +8,7 @@ class Model_Game extends \Orm\Model
 		'team_top',
 		'team_bottom',
 		'game_status',
-		'starting_member',
+		'players',
 		'created_at',
 		'updated_at',
 	);
@@ -53,7 +53,7 @@ class Model_Game extends \Orm\Model
         'position'  => array(0,0,0,0,0,0),
       );
     }
-    $game->starting_member = json_encode($stamen);
+    $game->players = json_encode($stamen);
     $game->save();
 
     Model_Score::createNewGame($game->id);

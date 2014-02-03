@@ -12,7 +12,7 @@ function add_order(self, kind) {
 
   // init order
   if ( kind === 'last' ) {
-    var last_order = $('tr.stamen:last td.order').text();
+    var last_order = $('tr.stamen-original:last td.order').text();
     $clone.find('td.order').text(++last_order);
   }
   else {

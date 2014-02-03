@@ -16,7 +16,7 @@
 
 {% macro position_select(p) %}
 <select class="stamen position">
-<option value="0">--</option>
+<option value="0" selected>--</option>
 {% for i in 1..9 %}
 {% if i == p %}{% set selected = 'selected' %}
 {% else %}{% set selected = '' %}
@@ -24,7 +24,7 @@
 <option value="{{i}}" {{selected}}>{{i}}</option>
 {% endfor %}
 {% for i in ['D','H','R'] %}
-{% if i == p %}{% set selected = 'selected' %}
+{% if p != 0 and i == p %}{% set selected = 'selected' %}
 {% else %}{% set selected = '' %}
 {% endif %}  
 <option value="{{i}}" {{selected}}>{{i}}</option>
@@ -63,13 +63,11 @@
 </tr>
 
 {% for stamen in stamens %}
-<tr class="stamen">
+<tr class="stamen-original">
 <td>
 <button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
 </td>
-<td class="stamen order">
-{{stamen.order}}
-</td>
+<td class="stamen order">{{- stamen.order -}}</td>
 <td class="member_id">{{_self.name_select(members, stamen.member_id)}}</td>
 {% for i in 0..5 %}
 <td class="position">{{_self.position_select(stamen.position[i])}}</td>
@@ -104,14 +102,12 @@
 
 <div class="tab-pane" id="fielder">
 
-<form class="form" action="#" method="POST">
 
 <table class="table">
 
 <tr>
 <th>打順</th>
 <th>名前</th>
-<th>ポジション</th>
 
 <th>内野ゴロ</th>
 <th>内野フライ</th>
@@ -133,10 +129,11 @@
 
 </tr>
 
+{% for fielder in stamens %}
+
 <tr>
-<td>4</td>
-<td><input type="text" class="form-control input-sm"></td>
-<td><input type="text" class="form-control input-sm"></td>
+<td>{{fielder.order}}</td>
+<td>{{fielder.name}}</td>
 <td><input type="text" class="form-control bfh-number input-sm"></td>
 <td><input type="text" class="form-control bfh-number input-sm"></td>
 <td><input type="text" class="form-control bfh-number input-sm"></td>
@@ -152,10 +149,14 @@
 <td><input type="text" class="form-control bfh-number input-sm"></td>
 <td><input type="text" class="form-control bfh-number input-sm"></td>
 </tr>
+{% endfor %}
 
 </table>
 
-<input type="submit" class="btn btn-success" value="登録">
+<form method="GET" action="#">
+<input type="hidden" value="{{game_id}}" name="game_id">
+<input type="hidden" value="{{team_id}}" name="team_id">
+<input type="submit" onClick="post_data();" class="btn btn-success" value="登録">
 </form>
 
 </div>

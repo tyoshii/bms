@@ -7,7 +7,7 @@ function add_order(self, kind) {
     $(this).select2('destroy');
   });
 
-  var $tr = $($('tr.stamen')[0]);
+  var $tr = $($('tr.stamen-original')[0]);
   var $clone = $tr.clone(true);
 
   // init order
@@ -40,7 +40,7 @@ function add_order(self, kind) {
 }
 
 function post_data() {
-  var $stamen = $("table#stamen td.stamen");
+  var $stamen = $("table#stamen .stamen");
   // console.log($stamen);
 
   // get post data
@@ -59,10 +59,13 @@ function post_data() {
       if ( $this.hasClass('member_id') ) {
         // console.log('member_id - ' + $this.val());
         data[i].member_id = $this.val();
+        if ( $this.val() != '0' ) {
+          data[i].name = $this.select2('data').text;
+        }
       }
       else {
         // console.log('position - ' + $this.val());
-        if ( typeof data[i].position === undefined ) {
+        if ( typeof data[i].position === 'undefined' ) {
           data[i].position = [];
         }
         

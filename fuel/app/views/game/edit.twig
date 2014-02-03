@@ -63,7 +63,7 @@
 </tr>
 
 {% for stamen in stamens %}
-<tr>
+<tr class="stamen">
 <td>
 <button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
 </td>
@@ -77,15 +77,27 @@
 </tr>
 {% endfor %}
 
-
+<tr>
+<td><button onClick="add_order(this, 'last');" class="btn btn-info btn-xs">追加</button>
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </table>
+
 <form method="GET" action="#">
 <input type="hidden" value="{{game_id}}" name="game_id">
 <input type="hidden" value="{{team_id}}" name="team_id">
 <input type="submit" onClick="post_data();" class="btn btn-success" value="登録">
 </form>
 
-</div>
+</div><!-- tab-pane#stamen -->
+
 
 <div class="tab-pane" id="pitcher">
 </div>

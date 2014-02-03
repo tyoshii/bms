@@ -1,4 +1,4 @@
-function add_order(self) {
+function add_order(self, kind) {
 
   // select2 destroy
   // コピーするために機能削除
@@ -7,18 +7,32 @@ function add_order(self) {
     $(this).select2('destroy');
   });
 
-  var $tr    = $(self).parent().parent();
+  var $tr = $($('tr.stamen')[0]);
   var $clone = $tr.clone(true);
 
-  // 入っている値を全部初期化
-  $clone.find('td.order').text('');
+  // init order
+  if ( kind === 'last' ) {
+    var last_order = $('tr.stamen:last td.order').text();
+    $clone.find('td.order').text(++last_order);
+  }
+  else {
+    $clone.find('td.order').text('');
+  }
+
+  // init selects
   $clone.find('select').each(function(){
     $(this).val(0);
   });
 
   // disp to fadeIn
   $clone.hide();
-  $clone.insertAfter($tr);
+  var $self = $(self).parent().parent();
+  if ( kind === 'last' ) {
+    $clone.insertBefore($self);
+  }
+  else {
+    $clone.insertAfter($self);
+  }
   $clone.fadeIn();
   
   // select2 available

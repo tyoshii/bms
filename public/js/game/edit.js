@@ -1,3 +1,30 @@
+function add_order(self) {
+
+  // select2 destroy
+  // コピーするために機能削除
+  // 生成後にもう一度有効にする
+  $('.select2').each(function(){
+    $(this).select2('destroy');
+  });
+
+  var $tr    = $(self).parent().parent();
+  var $clone = $tr.clone(true);
+
+  // 入っている値を全部初期化
+  $clone.find('td.order').text('');
+  $clone.find('select').each(function(){
+    $(this).val(0);
+  });
+
+  // disp to fadeIn
+  $clone.hide();
+  $clone.insertAfter($tr);
+  $clone.fadeIn();
+  
+  // select2 available
+  $('.select2').select2();
+}
+
 function post_data() {
   var $stamen = $("table#stamen .stamen");
   // console.log($stamen);

@@ -1,5 +1,25 @@
 {% extends "layout.twig" %}
 
+{% macro inning_fraction() %}
+<select class="inning fraction">
+{% for i in 0..3 %}
+<option value="{{i}}/3">{{i}}/3</option>
+{% endfor %}
+</select>
+{% endmacro %}
+
+{% macro result() %}
+<select class="result">
+<option value=""></option>
+<option value="win">勝</option>
+<option value="lose">負</option>
+<option value="save">セーブ</option>
+<option value="hold">ホールド</option>
+</select>
+{% endmacro %}
+
+
+
 {% block content %}
 
 {% import 'game-nav.twig' as nav %}
@@ -10,7 +30,9 @@
 <tr>
 <th>名前</th>
 <th>投球回</th>
+<th></th>
 <th>勝敗</th>
+<th>自責点</th>
 <th>失点</th>
 </tr>
 </thead>
@@ -26,9 +48,11 @@
 {% if flag == true %}
 <tr>
 <td>{{pitcher.name}}</td>
-<td></td>
-<td></td>
-<td></td>
+<td><input class="inning_int" type="number"></td>
+<td>{{_self.inning_fraction()}}</td>
+<td>{{_self.result()}}</td>
+<td><input class="earned_runs" type="number"></td>
+<td><input class="runs" type="number"></td>
 </tr>
 {% endif %}
 

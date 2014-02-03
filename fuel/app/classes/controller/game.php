@@ -146,13 +146,13 @@ class Controller_Game extends Controller_Base
       ),
     ));
 
-    // starting_member
-    $stamens = Model_Game::query()
-      ->select('starting_member')
+    // players
+    $players = Model_Game::query()
+      ->select('players')
       ->where('id', $game_id)
       ->get_one()
-      ->starting_member;
-    $view->stamens = json_decode($stamens);
+      ->players;
+    $view->players = json_decode($players);
 
     $view->game_id = $game_id;
     $view->team_id = $team_id;
@@ -172,10 +172,10 @@ class Controller_Game extends Controller_Base
     }
 
     // stamen 登録
-    $stamen = Input::post('stamen');
+    $players = Input::post('players');
 
     $game = Model_Game::find($game_id);
-    $game->starting_member = json_encode($stamen); 
+    $game->players = json_encode($players); 
     $game->save();
 
     echo 'OK';

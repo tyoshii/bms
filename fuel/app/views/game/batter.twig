@@ -5,7 +5,27 @@
 {% import 'game-nav.twig' as nav %}
 {{ nav.navigation() }}
 
-table
+<table class="table">
+<thead>
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>hogehoge</th>
+</thead>
+
+{% for batter in players %}
+<tr>
+<td>{{batter.order}}</td>
+<td>{{batter.name}}</td>
+<td></td>
+</tr>
+{% endfor %}
+
+
+</table>
+
+<button class="btn btn-success" onClick="alert('atode');">登録</button>
+
 
 {% endblock content %}
 

@@ -56,7 +56,7 @@
 <tr class="player-tr">
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
-{% if player.order == '' or loop.last %}
+{% if player.order == '' or ( player.order > 9 and loop.last ) %}
 <button onClick="delete_order(this, {{loop.last}});" class="btn btn-danger btn-xs delete-order">削除</button>
 {% endif %}
 </td>

@@ -6,6 +6,10 @@ function append_delete_button($tr) {
   if ( $change.find('button.delete-order').length > 0 ) {
     return false;
   }
+  // 追加先が９番だったらスキップ
+  if ( $tr.find('td.order').text() == 9 ) {
+    return false;
+  }
 
   $change.append(
     $('<button></button>')
@@ -124,6 +128,7 @@ function post_data() {
         data[i].name = $this.select2('data').text;
       }
     else if ( $this.hasClass('number') ) {
+      data[i].number = $this.text();
     }
     else {
       // console.log('position - ' + $this.val());

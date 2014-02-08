@@ -144,12 +144,12 @@ function post_data() {
       data[i].number = $this.text();
     }
     else {
-      // console.log('position - ' + $this.val());
+      // console.log('position - ' + $this.children('select').val());
       if ( typeof data[i].position === 'undefined' ) {
         data[i].position = [];
       }
       
-      data[i].position.push($this.val());
+      data[i].position.push($this.children('select').val());
     }
   });
   // console.log(data);

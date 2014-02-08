@@ -127,8 +127,7 @@ function post_pitcher() {
   
     var member_id = $name.children('data').text();
 
-    var temp = {};
-    temp[member_id] = {
+    data[member_id] = {
       name: $name.children('span').text(),
       number: $number.text(),
       inning_int: $inning.children('.inning_int').val(),
@@ -137,8 +136,6 @@ function post_pitcher() {
       earned_runs: $earned_runs.children('.earned-runs').val(),
       runs: $runs.children('.runs').val()
     };
-
-    data.push(temp);
   });
   // console.log(data);
   

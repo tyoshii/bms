@@ -1,21 +1,29 @@
 {% extends "layout.twig" %}
 
-{% macro inning_fraction() %}
+{% macro inning_fraction(default) %}
 <select class="inning fraction">
 <option value="0">--</option>
 {% for i in 0..3 %}
-<option value="{{i}}/3">{{i}}/3</option>
+{% set value = i ~ '/3' %}
+
+{% if value == default %}
+{% set selected = 'selected' %}
+{% else %}
+{% set selected = '' %}
+{% endif %}
+
+<option value="{{value}}" {{selected}}>{{i}}/3</option>
 {% endfor %}
 </select>
 {% endmacro %}
 
-{% macro result() %}
+{% macro result(default) %}
 <select class="result">
-<option value=""></option>
-<option value="win">勝</option>
-<option value="lose">負</option>
-<option value="save">セーブ</option>
-<option value="hold">ホールド</option>
+<option value="">--</option>
+<option value="win" {%if default == 'win'%}selected{%endif%}>勝</option>
+<option value="lose" {%if default == 'lose'%}selected{%endif%}>負</option>
+<option value="save" {%if default == 'save'%}selected{%endif%}>セーブ</option>
+<option value="hold" {%if default == 'hold'%}selected{%endif%}>ホールド</option>
 </select>
 {% endmacro %}
 
@@ -53,6 +61,9 @@
 {% endfor %}
 
 {% if flag == true %}
+
+{% set score = pitchers[player.member_id] %}
+
 <tr>
 <td class="name">
 <span>{{player.name}}</span>
@@ -62,12 +73,14 @@
 {# 投球回 #}
 {# 投球回 0/3 1/3 2/3 #}
 <td class="inning">
-<input class="inning_int" min="0" type="number">
-{{_self.inning_fraction()}}
+<input class="inning_int" min="0" type="number" value="{{score.inning_int|default(0)}}">
+{{_self.inning_fraction(score.inning_frac)}}
 </td>
-<td class="result">{{_self.result()}}</td>
-<td class="earned-runs"><input class="earned-runs" type="number" min="0"></td>
-<td class="runs"><input class="runs" type="number" min="0"></td>
+<td class="result">{{_self.result(score.result)}}</td>
+<td class="earned-runs">
+<input class="earned-runs" type="number" min="0" value="{{score.earned_runs|default(0)}}">
+</td>
+<td class="runs"><input class="runs" type="number" min="0" value="{{score.runs|default(0)}}"></td>
 </tr>
 {% endif %}
 

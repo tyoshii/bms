@@ -38,11 +38,16 @@
 </tr>
 </thead>
 
+{% set already = [] %}
+
 {% for pitcher in players %}
 {% set flag = false %}
 
 {% for i in pitcher.position %}
-{% if i == 1 %}{% set flag = true %}
+
+{% if i == 1 and pitcher.number not in already %}
+{% set flag = true %}
+{% set already = already|merge([pitcher.number]) %}
 {% endif %}
 {% endfor %}
 

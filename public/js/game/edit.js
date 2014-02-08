@@ -6,12 +6,41 @@ function get_dom_delete_order() {
 }
 
 function delete_order(self, last) {
-  $(self).parent().parent().remove();
+  var $tr = $(self).parent().parent();
+  
+  // 交代選手を全部削除
+  $tr.nextAll('tr.player-tr').each(function() {
+    var order = $(this).find('td.order');
+    if ( order.text() == '' ) {
+      $(this).remove();
+    }
+    else {
+      return false;
+    }
+  });
 
-  if ( last ) {
-    $td = $('.player-tr:last td.change'); 
-    $td.append(get_dom_delete_order());
-  }  
+  // ターゲットtrを削除
+  $tr.fadeOut('normal', function() {
+    $tr.remove();
+
+    // 最終打順だった場合は、削除した後に最終打順になる箇所に削除ボタンを付ける
+    if ( last ) {
+      var $last = $('.player-tr:last');
+    
+      // 交代で追加した行だったらスキップ
+      if ( $last.find('td.order').text() == '' ) {
+        $last.prevAll('.player-tr').each(function() {
+          if ( $(this).find('td.order').text() != '' ) {
+            $last = $(this);
+            return false;
+          }
+        });
+      }
+  
+      $last.find('td.change')
+           .append(get_dom_delete_order());
+    }
+  });
 }
 
 function add_order(self, kind) {

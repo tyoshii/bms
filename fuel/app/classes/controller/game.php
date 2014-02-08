@@ -183,7 +183,13 @@ class Controller_Game extends Controller_Base
       return Response::forge('NG', 400);
     }
 
-    print_r(Input::post('pitcher'));
+    $pitcher = Input::post('pitcher');
+
+    $game = Model_Game::find($game_id);
+    $game->pitchers = json_encode($pitcher); 
+    $game->save();
+
+    echo 'OK';
   }
 
   public function post_player()

@@ -21,6 +21,7 @@ return array(
 				12 => '013_rename_table_stamen_to_stamens',
 				13 => '014_drop_stamens',
 				14 => '015_rename_field_starting_member_to_players_in_games',
+				15 => '016_add_pitcher_to_games',
 			),
 		),
 		'module' => 

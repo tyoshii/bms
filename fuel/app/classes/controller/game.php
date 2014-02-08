@@ -147,8 +147,24 @@ class Controller_Game extends Controller_Base
     ));
 
     // players
-    $players = Model_Game::find_by_id($game_id)->players;
-    $view->players = json_decode($players);
+    $game = Model_Game::find_by_id($game_id);
+    $view->players = json_decode($game->player);
+
+    switch ( $kind )
+    {
+      case 'player':
+        break;
+
+      case 'pitcher':
+        $view->pitchers = json_decode($game->pitcher);
+        break;
+
+      case 'batter':
+        break;
+
+      default:
+        break;
+    }
 
     $view->game_id = $game_id;
     $view->team_id = $team_id;

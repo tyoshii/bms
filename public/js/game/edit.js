@@ -7,12 +7,12 @@ function add_order(self, kind) {
     $(this).select2('destroy');
   });
 
-  var $tr = $($('tr.stamen-original')[0]);
+  var $tr = $($('tr.player-tr')[0]);
   var $clone = $tr.clone(true);
 
   // init order
   if ( kind === 'last' ) {
-    var last_order = $('tr.stamen-original:last td.order').text();
+    var last_order = $('tr.player-tr:last td.order').text();
     $clone.find('td.order').text(++last_order);
   }
   else {
@@ -23,7 +23,6 @@ function add_order(self, kind) {
   $clone.find('select').each(function(){
     $(this).val(0);
   });
-
   // disp to fadeIn
   $clone.hide();
   var $self = $(self).parent().parent();
@@ -40,37 +39,38 @@ function add_order(self, kind) {
 }
 
 function post_data() {
-  var $stamen = $("table#stamen .stamen");
-  // console.log($stamen);
+  var $player = $("table#player td");
+  // console.log($player);
 
   // get post data
   var data = [];
   var i = -1;
-  $stamen.each(function(){
+  $player.each(function(){
 
     var $this = $(this);    
+    // console.log($this);
 
-    if ( $this.get(0).tagName === 'TD') {
+    if ( $this.hasClass('order') ) {
       // console.log('order - ' + $this.text());
       data.push( {order: $this.text()} );
       i++;
     }
+    else if ( $this.hasClass('member_id') ) {
+      // console.log('member_id - ' + $this.val());
+      data[i].member_id = $this.val();
+      if ( $this.val() != '0' ) {
+        data[i].name = $this.select2('data').text;
+      }
+    else if ( $this.hasClass('number') ) {
+    }
     else {
-      if ( $this.hasClass('member_id') ) {
-        // console.log('member_id - ' + $this.val());
-        data[i].member_id = $this.val();
-        if ( $this.val() != '0' ) {
-          data[i].name = $this.select2('data').text;
-        }
+      // console.log('position - ' + $this.val());
+      if ( typeof data[i].position === 'undefined' ) {
+        data[i].position = [];
       }
-      else {
-        // console.log('position - ' + $this.val());
-        if ( typeof data[i].position === 'undefined' ) {
-          data[i].position = [];
-        }
-        
-        data[i].position.push($this.val());
-      }
+      
+      data[i].position.push($this.val());
+    }
     }
   });
   // console.log(data);

@@ -1,7 +1,7 @@
 {% extends "layout.twig" %}
 
 {% macro name_select(members, id) %}
-<select class="stamen member_id select2">
+<select class="member_id select2">
 <option value="0">--------------------</option>
 {% for member in members %}
 {% set selected = '' %}
@@ -14,7 +14,7 @@
 
 
 {% macro position_select(p) %}
-<select class="stamen position">
+<select class="position">
 <option value="0" selected>--</option>
 {% for i in 1..9 %}
 {% if i == p %}{% set selected = 'selected' %}
@@ -37,12 +37,13 @@
 {% import 'game-nav.twig' as nav %}
 {{ nav.navigation('player') }}
 
-<table id="stamen" class="table">
+<table id="player" class="table">
 
 <tr>
 <th class="change"></th>
 <th class="order">打順</th>
 <th class="name">名前</th>
+<th class="number">＃</th>
 <th class="position">ポジション1</th>
 <th class="position">ポジション2</th>
 <th class="position">ポジション3</th>
@@ -52,12 +53,13 @@
 </tr>
 
 {% for player in players %}
-<tr class="stamen-original">
+<tr class="player-tr">
 <td>
 <button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
 </td>
-<td class="stamen order">{{- player.order -}}</td>
+<td class="order">{{- player.order -}}</td>
 <td class="member_id">{{_self.name_select(members, player.member_id)}}</td>
+<td class="number">{{ player.number }}</td>
 {% for i in 0..5 %}
 <td class="position">{{_self.position_select(player.position[i])}}</td>
 {% endfor %}

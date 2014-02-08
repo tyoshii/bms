@@ -147,8 +147,24 @@ class Controller_Game extends Controller_Base
     ));
 
     // players
-    $players = Model_Game::find_by_id($game_id)->players;
-    $view->players = json_decode($players);
+    $game = Model_Game::find_by_id($game_id);
+    $view->players = json_decode($game->players);
+
+    switch ( $kind )
+    {
+      case 'player':
+        break;
+
+      case 'pitcher':
+        $view->pitchers = json_decode($game->pitchers);
+        break;
+
+      case 'batter':
+        break;
+
+      default:
+        break;
+    }
 
     $view->game_id = $game_id;
     $view->team_id = $team_id;
@@ -156,7 +172,27 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
 	}
 
-  public function post_edit()
+  public function post_pitcher()
+  {
+    // parameter check
+    $team_id = Input::post('team_id');
+    $game_id = Input::post('game_id');
+
+    if ( ! $team_id or ! $game_id )
+    {
+      return Response::forge('NG', 400);
+    }
+
+    $pitcher = Input::post('pitcher');
+
+    $game = Model_Game::find($game_id);
+    $game->pitchers = json_encode($pitcher); 
+    $game->save();
+
+    echo 'OK';
+  }
+
+  public function post_player()
   {
     // parameter check
     $team_id = Input::post('team_id');

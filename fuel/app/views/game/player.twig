@@ -84,14 +84,12 @@
 
 {# 背番号データ #}
 {% for member in members %}
-<data id="number-{{member.id}}" class="number">{{member.number}}</data>
+<data id="number-{{member.id}}" class="disable">{{member.number}}</data>
 {% endfor %}
 
 {# 登録ボタン #}
 <div>
-<data id="game_id" style="display:none;">{{game_id}}</data>
-<data id="team_id" style="display:none;">{{team_id}}</data>
-<button onClick="post_data();" class="btn btn-success">登録</button>
+<button onClick="post_player();" class="btn btn-success">登録</button>
 </div>
 
 
@@ -103,7 +101,6 @@
 {{ parent() }}
 <link href="/bootstrap_formhelpers/css/bootstrap-formhelpers.css" rel="stylesheet">
 <link href="/select2/select2.css" rel="stylesheet">
-<link href="/css/bms.css" rel="stylesheet">
 {% endblock %}
 
 {% block js %}

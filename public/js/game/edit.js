@@ -112,7 +112,52 @@ function add_order(self, kind) {
   $('.select2').select2();
 }
 
-function post_data() {
+function post_pitcher() {
+  var $pitcher = $("table#pitcher tbody tr");
+  var data = [];
+
+  $pitcher.each( function() {
+    var $this = $(this);
+    var $name = $this.children("td.name"),
+        $number = $this.children("td.number"),
+        $inning = $this.children("td.inning"),
+        $result = $this.children("td.result"),
+        $earned_runs = $this.children("td.earned-runs"),
+        $runs = $this.children("td.runs");
+  
+    var member_id = $name.children('data').text();
+
+    data[member_id] = {
+      name: $name.children('span').text(),
+      number: $number.text(),
+      inning_int: $inning.children('.inning_int').val(),
+      inning_frac: $inning.children('.fraction').val(),
+      result: $result.children('.result').val(),
+      earned_runs: $earned_runs.children('.earned-runs').val(),
+      runs: $runs.children('.runs').val()
+    };
+  });
+  // console.log(data);
+  
+  // ajax
+  $.ajax({
+    url: '/game/score/pitcher',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      team_id: $('data#team_id').text(),
+      pitcher: data
+    },
+    success: function(html) {
+      alert("成績保存に成功");
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
+}
+
+function post_player() {
   var $player = $("table#player td");
   // console.log($player);
 
@@ -154,9 +199,9 @@ function post_data() {
   });
   // console.log(data);
 
-  // ajax
+  // jax
   $.ajax({
-    url: '/game/edit',
+    url: '/game/score/player',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),

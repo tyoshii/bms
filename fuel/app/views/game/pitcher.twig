@@ -29,7 +29,8 @@
 <table class="table">
 <thead>
 <tr>
-<th>名前</th>
+<th class="name">名前</th>
+<th class="number">＃</th>
 <th>投球回</th>
 <th>勝敗</th>
 <th>自責点</th>
@@ -48,12 +49,13 @@
 {% if flag == true %}
 <tr>
 <td>{{pitcher.name}}</td>
+<td>{{pitcher.number}}</td>
 <td>
-<input class="inning_int" size="20" min="0" type="number">
+<input class="inning_int" min="0" type="number">
 {{_self.inning_fraction()}}
 <td>{{_self.result()}}</td>
-<td><input class="earned_runs" type="number"></td>
-<td><input class="runs" type="number"></td>
+<td><input class="earned_runs" type="number" min="0"></td>
+<td><input class="runs" type="number" min="0"></td>
 </tr>
 {% endif %}
 

@@ -1,8 +1,18 @@
-function get_dom_delete_order() {
-  return $('<button></button>')
-          .attr('onClick', 'delete_order(this, 1);')
-          .addClass('btn btn-danger btn-xs')
-          .text('削除'); 
+function append_delete_button($tr) {
+
+  var $change = $tr.find('td.change')
+
+  // 既にあったらスキップ
+  if ( $change.find('button.delete-order').length > 0 ) {
+    return false;
+  }
+
+  $change.append(
+    $('<button></button>')
+        .attr('onClick', 'delete_order(this, 1);')
+        .addClass('btn btn-danger btn-xs delete-order')
+        .text('削除')
+  );
 }
 
 function delete_order(self, last) {
@@ -37,8 +47,7 @@ function delete_order(self, last) {
         });
       }
   
-      $last.find('td.change')
-           .append(get_dom_delete_order());
+      append_delete_button($last);
     }
   });
 }
@@ -57,8 +66,12 @@ function add_order(self, kind) {
 
   // init order
   if ( kind === 'last' ) {
+    var $last = $('.player-tr:last');
+    // 最後に追加するときは、打順をインクリメント
     var last_order = $('.player-tr:last td.order').text();
     $clone.find('td.order').text(++last_order);
+    // 元々最後だった行から削除ボタンを消す
+    $last.find('button.delete-order').remove();
   }
   else {
     $clone.find('td.order').text('');
@@ -68,6 +81,10 @@ function add_order(self, kind) {
   $clone.find('select').each(function(){
     $(this).val(0);
   });
+
+  // 削除ボタンを追加
+  append_delete_button($clone);
+
   // disp to fadeIn
   $clone.hide();
   var $self = $(self).parent().parent();

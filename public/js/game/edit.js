@@ -1,3 +1,11 @@
+function update_number(self) {
+  var $self = $(self);
+  var member_id = $self.val();
+  var number = $('data#number-' + member_id).text();
+
+  $self.parent().parent().children('td.number').text(number);
+}
+
 function append_delete_button($tr) {
 
   var $change = $tr.find('td.change')
@@ -116,18 +124,23 @@ function post_data() {
     var $this = $(this);    
     // console.log($this);
 
-    if ( $this.hasClass('order') ) {
+    if ( $this.hasClass('change') ) {
+
+    }
+    else if ( $this.hasClass('order') ) {
       // console.log('order - ' + $this.text());
       data.push( {order: $this.text()} );
       i++;
     }
     else if ( $this.hasClass('member_id') ) {
-      // console.log('member_id - ' + $this.val());
-      data[i].member_id = $this.val();
+      // console.log('member_id - ' + $this.children('select').('val());
+      data[i].member_id = $this.children('select').val();
       if ( $this.val() != '0' ) {
         data[i].name = $this.select2('data').text;
       }
+    }
     else if ( $this.hasClass('number') ) {
+      // console.log('number - ' + $this.text());
       data[i].number = $this.text();
     }
     else {
@@ -137,7 +150,6 @@ function post_data() {
       }
       
       data[i].position.push($this.val());
-    }
     }
   });
   // console.log(data);

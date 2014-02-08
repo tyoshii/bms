@@ -17,3 +17,7 @@ th.number {
 th.position {
   width: 100px;
 }
+
+data.number {
+  display: none;
+}

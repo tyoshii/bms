@@ -113,7 +113,46 @@ function add_order(self, kind) {
 }
 
 function post_pitcher() {
+  var $pitcher = $("table#pitcher tbody tr");
+  var data = [];
 
+  $pitcher.each( function() {
+    var $this = $(this);
+    var $name = $this.children("td.name"),
+        $number = $this.children("td.number"),
+        $inning = $this.children("td.inning"),
+        $result = $this.children("td.result"),
+        $earned_runs = $this.children("td.earned-runs"),
+        $runs = $this.children("td.runs");
+  
+    data.push({
+      name: $name.text(),
+      number: $number.text(),
+      inning_int: $inning.children('.inning_int').val(),
+      inning_frac: $inning.children('.fraction').val(),
+      result: $result.children('.result').val(),
+      earned_runs: $earned_runs.children('.earned-runs').val(),
+      runs: $runs.children('.runs').val()
+    });
+
+  });
+  
+  // ajax
+  $.ajax({
+    url: '/game/score/pitcher',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      team_id: $('data#team_id').text(),
+      pitcher: data
+    },
+    success: function(html) {
+      alert("成績保存に成功");
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
 }
 
 function post_player() {
@@ -158,9 +197,9 @@ function post_player() {
   });
   // console.log(data);
 
-  // ajax
+  // jax
   $.ajax({
-    url: '/game/edit',
+    url: '/game/score/player',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),

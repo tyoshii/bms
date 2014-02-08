@@ -43,7 +43,7 @@
 {% for pitcher in players %}
 {% set flag = false %}
 
-{% for i in pitcher.position %}
+{% for i in pitcher.position if flag == false %}
 
 {% if i == 1 and pitcher.number not in already %}
 {% set flag = true %}

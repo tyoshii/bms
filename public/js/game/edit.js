@@ -1,3 +1,19 @@
+function get_dom_delete_order() {
+  return $('<button></button>')
+          .attr('onClick', 'delete_order(this, 1);')
+          .addClass('btn btn-danger btn-xs')
+          .text('削除'); 
+}
+
+function delete_order(self, last) {
+  $(self).parent().parent().remove();
+
+  if ( last ) {
+    $td = $('.player-tr:last td.change'); 
+    $td.append(get_dom_delete_order());
+  }  
+}
+
 function add_order(self, kind) {
 
   // select2 destroy
@@ -7,12 +23,12 @@ function add_order(self, kind) {
     $(this).select2('destroy');
   });
 
-  var $tr = $($('tr.player-tr')[0]);
+  var $tr = $($('.player-tr')[0]);
   var $clone = $tr.clone(true);
 
   // init order
   if ( kind === 'last' ) {
-    var last_order = $('tr.player-tr:last td.order').text();
+    var last_order = $('.player-tr:last td.order').text();
     $clone.find('td.order').text(++last_order);
   }
   else {

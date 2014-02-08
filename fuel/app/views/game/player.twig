@@ -54,8 +54,11 @@
 
 {% for player in players %}
 <tr class="player-tr">
-<td>
+<td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs">交代</button>
+{% if player.order == '' or loop.last %}
+<button onClick="delete_order(this, {{loop.last}});" class="btn btn-danger btn-xs">削除</button>
+{% endif %}
 </td>
 <td class="order">{{- player.order -}}</td>
 <td class="member_id">{{_self.name_select(members, player.member_id)}}</td>

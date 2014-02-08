@@ -112,7 +112,11 @@ function add_order(self, kind) {
   $('.select2').select2();
 }
 
-function post_data() {
+function post_pitcher() {
+
+}
+
+function post_player() {
   var $player = $("table#player td");
   // console.log($player);
 

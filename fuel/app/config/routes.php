@@ -23,6 +23,9 @@ return array(
   'game/edit/(:segment)/(:segment)'            => 'game/edit/$1/$2',
   'game/edit/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
 
+  'game/score/player' => 'game/player',
+  'game/score/pitcher' => 'game/pitcher',
+
   'score' => 'score/index',
 
 //  '_root_'  => 'welcome/index',  // The default route

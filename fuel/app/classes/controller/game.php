@@ -172,7 +172,21 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
 	}
 
-  public function post_edit()
+  public function post_pitcher()
+  {
+    // parameter check
+    $team_id = Input::post('team_id');
+    $game_id = Input::post('game_id');
+
+    if ( ! $team_id or ! $game_id )
+    {
+      return Response::forge('NG', 400);
+    }
+
+    print_r(Input::post('pitcher'));
+  }
+
+  public function post_player()
   {
     // parameter check
     $team_id = Input::post('team_id');

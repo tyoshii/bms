@@ -18,6 +18,6 @@ th.position {
   width: 100px;
 }
 
-data.number {
+.disable {
   display: none;
 }

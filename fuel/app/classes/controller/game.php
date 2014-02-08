@@ -148,7 +148,7 @@ class Controller_Game extends Controller_Base
 
     // players
     $game = Model_Game::find_by_id($game_id);
-    $view->players = json_decode($game->player);
+    $view->players = json_decode($game->players);
 
     switch ( $kind )
     {
@@ -156,7 +156,7 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->pitchers = json_decode($game->pitcher);
+        $view->pitchers = json_decode($game->pitchers);
         break;
 
       case 'batter':

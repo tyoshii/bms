@@ -9,7 +9,7 @@ class Model_Game extends \Orm\Model
 		'team_bottom',
 		'game_status',
 		'players',
-		'pitcher',
+		'pitchers',
 		'created_at',
 		'updated_at',
 	);

@@ -125,17 +125,22 @@ function post_pitcher() {
         $earned_runs = $this.children("td.earned-runs"),
         $runs = $this.children("td.runs");
   
-    data.push({
-      name: $name.text(),
+    var member_id = $name.children('data').text();
+
+    var temp = {};
+    temp[member_id] = {
+      name: $name.children('span').text(),
       number: $number.text(),
       inning_int: $inning.children('.inning_int').val(),
       inning_frac: $inning.children('.fraction').val(),
       result: $result.children('.result').val(),
       earned_runs: $earned_runs.children('.earned-runs').val(),
       runs: $runs.children('.runs').val()
-    });
+    };
 
+    data.push(temp);
   });
+  // console.log(data);
   
   // ajax
   $.ajax({

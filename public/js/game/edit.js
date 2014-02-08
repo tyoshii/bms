@@ -136,7 +136,7 @@ function post_data() {
       // console.log('member_id - ' + $this.children('select').('val());
       data[i].member_id = $this.children('select').val();
       if ( $this.val() != '0' ) {
-        data[i].name = $this.select2('data').text;
+        data[i].name = $this.children('select').select2('data').text;
       }
     }
     else if ( $this.hasClass('number') ) {

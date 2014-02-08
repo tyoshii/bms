@@ -147,11 +147,7 @@ class Controller_Game extends Controller_Base
     ));
 
     // players
-    $players = Model_Game::query()
-      ->select('players')
-      ->where('id', $game_id)
-      ->get_one()
-      ->players;
+    $players = Model_Game::find_by_id($game_id)->players;
     $view->players = json_decode($players);
 
     $view->game_id = $game_id;

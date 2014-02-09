@@ -11,7 +11,10 @@
 <th class="order">打順</th>
 <th class="name">名前</th>
 <th class="number">＃</th>
-<th>hogehoge</th>
+<th class="name">エラー</th>
+<th class="name">盗塁</th>
+<th class="name">打点</th>
+<th>第一打席</th>
 </thead>
 
 {% for batter in players %}
@@ -19,7 +22,28 @@
 <td class="order">{{batter.order}}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
-<td></td>
+<td><input type="number"></td>
+<td><input type="number"></td>
+<td><input type="number"></td>
+<td>
+<select>
+<option>--</option>
+{% for i in 1..9 %}
+<option>{{i}}</option>
+{% endfor %}
+</select>
+<select>
+<option>--</option>
+<option>ゴロ</option>
+<option>ライナー</option>
+<option>フライ</option>
+</select>
+<select>
+<option>--</option>
+<option>凡打</option>
+<option>ヒット</option>
+<option>三塁打</option>
+</select></td>
 </tr>
 {% endfor %}
 

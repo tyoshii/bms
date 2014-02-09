@@ -8,15 +8,17 @@
 <table class="table">
 <thead>
 <tr>
-<th>打順</th>
-<th>名前</th>
+<th class="order">打順</th>
+<th class="name">名前</th>
+<th class="number">＃</th>
 <th>hogehoge</th>
 </thead>
 
 {% for batter in players %}
 <tr>
-<td>{{batter.order}}</td>
-<td>{{batter.name}}</td>
+<td class="order">{{batter.order}}</td>
+<td class="name">{{batter.name}}</td>
+<td class="number">{{batter.number}}</td>
 <td></td>
 </tr>
 {% endfor %}

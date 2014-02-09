@@ -13,6 +13,7 @@ RELEASE
     # git clone and update submodule
     $ git clone --recursive https://github.com:tyoshii/bms
     $ cd bms
+    $ git submodule init
     $ git submodule update
 
     # copy config file ( and edit )

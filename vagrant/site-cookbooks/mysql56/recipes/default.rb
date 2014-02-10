@@ -35,10 +35,10 @@ end
 
 # my.cnf
 template "my.cnf" do
-	path "/usr/my.cnf"
-	source "my.cnf.erb"
-	mode 0644
-	notifies :restart, 'service[mysql]'
+  path "/usr/my.cnf"
+  source "my.cnf.erb"
+  mode 0644
+  notifies :restart, 'service[mysql]'
 end
 
 # 初期パスワード設定

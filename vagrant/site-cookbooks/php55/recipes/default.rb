@@ -14,16 +14,16 @@ end
 
 # phpインストール
 %w{php php-devel php-mbstring php-mcrypt php-mysql php-phpunit-PHPUnit php-pecl-xdebug}.each do |p|
-	package p do
-		action :install
-		options "--enablerepo=remi --enablerepo=remi-php55"
-	end
+  package p do
+    action :install
+    options "--enablerepo=remi --enablerepo=remi-php55"
+  end
 end
 
 # php設定
 template "php.ini" do
-	path "/etc/php.ini"
-	source "php.ini.erb"
-	mode 0644
-	notifies :restart, 'service[httpd]'
+  path "/etc/php.ini"
+  source "php.ini.erb"
+  mode 0644
+  notifies :restart, 'service[httpd]'
 end

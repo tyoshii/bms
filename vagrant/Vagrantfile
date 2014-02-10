@@ -41,6 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   config.vm.synced_folder "../", "/vagrant", mount_options: ['dmode=777', 'fmode=666']
 
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -118,15 +119,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.omnibus.chef_version = :latest
   config.omnibus.chef_version = "11.10.0"
   config.vm.provision :chef_solo do |chef|
+    #chef.cookbooks_path = "./cookbooks/"
+    #chef.add_recipe "php55"
     chef.cookbooks_path = "./site-cookbooks"
     chef.add_recipe "base"
-    chef.add_recipe "mysql56"
+    #chef.add_recipe "mysql56"
     chef.add_recipe "php55"
+    chef.add_recipe "composer"
 
     chef.json = {
       httpd: {
         port: 80,
-        docroot: "/vagrant/app/webroot"
+        # docroot: "/vagrant/app/webroot"
+        docroot: "/var/www/html"
       },
       php: {
         timezone: "Asia/Tokyo"

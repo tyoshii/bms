@@ -24,6 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :forwarded_port, guest: 80, host: 8080
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -48,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   config.vm.provider :virtualbox do |vb|
     # Don't boot with headless mode
-    vb.gui = true
+    vb.gui = false
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -126,12 +127,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #chef.add_recipe "mysql56"
     chef.add_recipe "php55"
     chef.add_recipe "composer"
+    chef.add_recipe "fuelphp"
 
     chef.json = {
       httpd: {
         port: 80,
         # docroot: "/vagrant/app/webroot"
-        docroot: "/var/www/html"
+        docroot: "/var/www/html/public"
       },
       php: {
         timezone: "Asia/Tokyo"

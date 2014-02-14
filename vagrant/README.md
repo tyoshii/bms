@@ -3,16 +3,16 @@
 # start vagrant
 
 ```
-$ pwd
+% pwd
 /path/to//bms/vagrant
 
-$ vagrant init
+% vagrant init
 
-$ vagrant add cent64 http:<dropbox url>
+% vagrant add cent64_up https://www.dropbox.com/sm/create/Public/package.box
 
-$ vagrant up && vagrant provision
+% vagrant up && vagrant provision
 
-$ vagrant ssh
+% vagrant ssh
 ```
 
 

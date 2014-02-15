@@ -43,7 +43,7 @@ class Controller_Admin extends Controller_Base
           Input::post('username'),
           Input::post('password'),
           Input::post('mail'),
-          1,
+          Input::post('group'),
           array( 'team' => Input::post('team') )
         );
 
@@ -256,7 +256,14 @@ class Controller_Admin extends Controller_Base
 
     $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required');
-    
+
+    $role_ops = array(1 =>'normal', 50 => 'team', 100=>'admin');
+    $form->add('group', '',
+        array('class' => 'form-control', 'placeholder' => '権限グループ',
+              'type' => 'select', 'options'=>$role_ops, 'value' =>'true',
+      ))
+      ->add_rule('required');
+
     // option - チーム選択
     $default = array( '' => '' );
     $teams = Model_Team::getTeams();

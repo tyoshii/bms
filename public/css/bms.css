@@ -25,17 +25,24 @@ th.position {
   width: 100px;
 }
 
-th.error {
+td.daten {
   width: 70px;
 }
-th.steal {
+td.tokuten {
   width: 70px;
 }
-th.daten {
+td.steal {
   width: 70px;
 }
-th.daseki {
-  width: 300px;
+td.error {
+  width: 70px;
+}
+
+td.button {
+  text-align: right;
+}
+td.kind {
+  text-align: center;
 }
 
 .disable {

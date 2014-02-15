@@ -1,5 +1,5 @@
 function toggle_detail(id) {
-  $('td.detail-'+id).toggle();
+  $('tr.detail-'+id).toggle();
 }
 
 function update_number(self) {

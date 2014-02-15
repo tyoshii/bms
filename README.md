@@ -37,7 +37,7 @@ RELEASE
 
     # deploy only production ( mkdir/copy/symlink dir/file )
     $ cp deploy
-    $ sudo perl deploy.pl 
+    $ sudo perl deploy.pl
 
 CAUTION
 =======

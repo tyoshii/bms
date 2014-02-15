@@ -25,6 +25,19 @@ th.position {
   width: 100px;
 }
 
+th.error {
+  width: 70px;
+}
+th.steal {
+  width: 70px;
+}
+th.daten {
+  width: 70px;
+}
+th.daseki {
+  width: 300px;
+}
+
 .disable {
   display: none;
 }

@@ -11,10 +11,12 @@
 <th class="order">打順</th>
 <th class="name">名前</th>
 <th class="number">＃</th>
-<th class="name">エラー</th>
-<th class="name">盗塁</th>
-<th class="name">打点</th>
-<th>第一打席</th>
+<th class="error">エラー</th>
+<th class="steal">盗塁</th>
+<th class="daten">打点</th>
+<th class="daseki">第1打席</th>
+<th class="daseki">第2打席</th>
+<th class="daseki">第3打席</th>
 </thead>
 
 {% for batter in players %}
@@ -22,9 +24,9 @@
 <td class="order">{{batter.order}}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
-<td><input type="number"></td>
-<td><input type="number"></td>
-<td><input type="number"></td>
+<td><input type="number" class="form-control"></td>
+<td><input type="number" class="form-control"></td>
+<td><input type="number" class="form-control"></td>
 <td>
 <select>
 <option>--</option>

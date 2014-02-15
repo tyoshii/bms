@@ -15,14 +15,10 @@ function post_batter() {
     if ( $this.hasClass("detail") ) {
       var daseki_number = $this.children('td.daseki-number').text();
 
-      if ( typeof data[id].detail === 'undefined' ) {
-        data[id].detail = [];
-      }
-
       data[id].detail.push({
-        direction: $this.children('select.direction').val(), 
-        kind: $this.children('select.kind').val(), 
-        result: $this.children('select.result').val() 
+        direction: $this.find('select.direction').val(), 
+        kind: $this.find('select.kind').val(), 
+        result: $this.find('select.result').val() 
       });
     }
     else {
@@ -57,11 +53,14 @@ function post_batter() {
         seiseki[key] = val;
       }
 
-      data[id] = { seiseki: seiseki };
+      data[id] = {
+        seiseki: seiseki,
+        detail: [],
+      };
     }
     
   });
-  // console.log(data);
+  console.log(data);
 
   // ajax
   $.ajax({

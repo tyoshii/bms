@@ -16,3 +16,24 @@
 [submodule "fuel/packages/email"]
 	path = fuel/packages/email
 	url = git://github.com/fuel/email.git
+
+# vagrant
+#[submodule "vagrant/site-cookbook/php"]
+#	path = vagrant/site-cookbook/php
+#	url = git://github.com/opscode-cookbooks/php.git
+#[submodule "vagrant/site-cookbook/apache2"]
+#	path = vagrant/site-cookbook/apache2
+#	url = git://github.com/opscode-cookbooks/apache2.git
+#[submodule "vagrant/site-cookbook/build-essential"]
+#	path = vagrant/site-cookbook/build-essential
+#	url = git://github.com/opscode-cookbooks/build-essential.git
+#[submodule "vagrant/site-cookbook/mysql"]
+#	path = vagrant/site-cookbook/mysql
+#	url = git://github.com/opscode-cookbooks/mysql.git
+#[submodule "vagrant/site-cookbook/openssl"]
+#	path = vagrant/site-cookbook/openssl
+#	url = git@github.com:opscode-cookbooks/openssl.git
+#
+[submodule "vagrant/site-cookbooks/apache2"]
+	path = vagrant/site-cookbooks/apache2
+	url = git://github.com/opscode-cookbooks/apache2.git

@@ -124,7 +124,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #chef.add_recipe "php55"
     chef.cookbooks_path = "./site-cookbooks"
     chef.add_recipe "base"
-    #chef.add_recipe "apache2"
+    chef.add_recipe "mysql56"
     chef.add_recipe "php55"
     chef.add_recipe "composer"
     chef.add_recipe "fuelphp"

@@ -56,21 +56,22 @@
 <td class="error"><input type="number" class="form-control"></td>
 </tr>
 
-<tr class="disable detail-{{batter.member_id}}">
+<tr class="disable detail detail-{{batter.member_id}}">
 <th colspan="4"></th>
 <th colspan="3">方向</th>
 <th colspan="3">種類</th>
 <th colspan="3">結果</th>
+<th colspan="6"></th>
 </tr>
 
-<tr class="disable detail-{{batter.member_id}}">
+<tr class="disable detail detail-{{batter.member_id}}">
 
 <td class="button" colspan="2">
 <button class="btn btn-info btn-xs add" onClick="add_daseki(this, 1);">追加</button>
 <button class="btn btn-danger btn-xs delete disable">削除</button>
 </td>
 
-<td class="kind" colspan="2">第1打席</td>
+<th class="kind" colspan="2">第1打席</th>
 
 {# 方向 #}
 <td colspan="3">
@@ -101,6 +102,9 @@
 <option>三塁打</option>
 </select>
 </td>
+
+{# 残り #}
+<td colspan="6"></td>
 
 </tr>
 

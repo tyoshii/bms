@@ -36,7 +36,7 @@ function add_daseki(self, daseki) {
   $del.attr('onClick', 'delete_daseki(this, '+next_daseki+');');
 
   // 打席表示
-  $clone.find('td.kind').text('第' + next_daseki + '打席');
+  $clone.find('th.kind').text('第' + next_daseki + '打席');
   
   $clone.hide();
   $clone.insertAfter($tr);

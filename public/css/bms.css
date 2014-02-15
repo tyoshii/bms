@@ -44,6 +44,9 @@ td.button {
 td.kind {
   text-align: center;
 }
+tr.detail {
+  background-color: #F5F5F5;  
+}
 
 .disable {
   display: none;

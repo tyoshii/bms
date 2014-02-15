@@ -257,7 +257,14 @@ class Controller_Admin extends Controller_Base
     $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required');
 
-    $role_ops = array(1 =>'normal', 50 => 'team', 100=>'admin');
+    $groups = Config::get("simpleauth.groups");
+    $roles = array();
+    foreach ($groups as $k => $v) {
+        if ($k > 0) {
+            $roles[$k] = $v["name"];
+        }
+    }
+    $role_ops = $roles;
     $form->add('group', '',
         array('class' => 'form-control', 'placeholder' => '権限グループ',
               'type' => 'select', 'options'=>$role_ops, 'value' =>'true',

@@ -49,7 +49,7 @@ DATABASE
 
     $ mysqladmin create -u root -p bms
     $ php oil r migrate:current
-    
+
 ADMIN ACCOUNT
 =============
 
@@ -61,6 +61,17 @@ CAUTION
 
 check it:
     apache user
+
+PULL
+====
+
+    $ git checkout master
+    $ git remote add upstream git://github.com/tyoshii/bms.git
+    $ git fetch upstream
+    $ git merge upstream/master
+    $ git checkout your_branch
+    $ git merge master
+
 
 IGNORE FILES
 ============

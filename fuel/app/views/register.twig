@@ -1,0 +1,36 @@
+{% extends "layout/layout.twig" %}
+
+{% block content %}
+
+<h1>User Registration <small>新規アカウント作成</small></h1>
+<a href="/">Home</a> <i>{{ret_message}}</i>
+
+<form method="post">
+<table class="table">
+  <tr><td>
+    username
+  </td><td>
+    <input type="text" name="input_name" value="{{input_name}}" placeholder="yahootaro" required />
+  </td></tr>
+  <tr><td>
+    e-mail
+  </td><td>
+    <input type="text" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
+  </td></tr>
+  <tr><td>
+    password
+  </td><td>
+    <input type="password" name="input_password" placeholder="password" required />
+  </td></tr>
+  <tr><td>
+    <i>confirm password</i>
+  </td><td>
+    <input type="password" name="input_confirm_password" placeholder="confirm_password" required />
+  </td></tr>
+  <tr><td>
+    <input type="submit" value="submit" class="btn btn-success" />
+  </td></tr>
+</table>
+</form>
+
+{% endblock %}

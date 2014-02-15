@@ -1,3 +1,7 @@
+function toggle_detail(id) {
+  $('td.detail-'+id).toggle();
+}
+
 function update_number(self) {
   var $self = $(self);
   var member_id = $self.val();

@@ -14,9 +14,7 @@
 <th class="error">エラー</th>
 <th class="steal">盗塁</th>
 <th class="daten">打点</th>
-<th class="daseki">第1打席</th>
-<th class="daseki">第2打席</th>
-<th class="daseki">第3打席</th>
+<th class="daseki">打席</th>
 </thead>
 
 {% for batter in players %}
@@ -28,24 +26,39 @@
 <td><input type="number" class="form-control"></td>
 <td><input type="number" class="form-control"></td>
 <td>
+<button class="btn btn-info btn-sm" onclick="toggle_detail({{batter.member_id}});">詳細入力</button>
+</td>
+</tr>
+
+<tr>
+<td colspan="5" class="disable detail-{{batter.member_id}}">
+{% for i in 1..4 %}
+<h4>第{{i}}打席</h4>
+打球方向
 <select>
 <option>--</option>
 {% for i in 1..9 %}
 <option>{{i}}</option>
 {% endfor %}
 </select>
+打球の種類
 <select>
 <option>--</option>
 <option>ゴロ</option>
 <option>ライナー</option>
 <option>フライ</option>
 </select>
+結果
 <select>
 <option>--</option>
 <option>凡打</option>
 <option>ヒット</option>
 <option>三塁打</option>
-</select></td>
+</select>
+<br>
+
+{% endfor %}
+</td>
 </tr>
 {% endfor %}
 

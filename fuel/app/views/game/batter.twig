@@ -41,21 +41,25 @@
 打席詳細入力
 </button>
 </td>
-<td class="daseki"></td>
-<td class="dasuu"></td>
-<td class="anda"></td>
-<td class="niruida"></td>
-<td class="sanruida"></td>
-<td class="honruida"></td>
-<td class="sanshin"></td>
-<td class="yontama"></td>
-<td class="shikyuu"></td>
-<td class="gida"></td>
-<td class="gihi"></td>
-<td class="daten"><input type="number" class="form-control"></td>
-<td class="tokuten"><input type="number" class="form-control"></td>
-<td class="steal"><input type="number" class="form-control"></td>
-<td class="error"><input type="number" class="form-control"></td>
+
+{% set seiseki = batters[batter.member_id].seiseki %}
+{% set detail  = batters[batter.member_id].detail  %}
+
+<td class="daseki">{{seiseki.daseki}}</td>
+<td class="dasuu">{{seiseki.dasuu}}</td>
+<td class="anda">{{seiseki.anda}}</td>
+<td class="niruida">{{seiseki.niruida}}</td>
+<td class="sanruida">{{seiseki.sanruida}}</td>
+<td class="honruida">{{seiseki.honruida}}</td>
+<td class="sanshin">{{seiseki.sanshin}}</td>
+<td class="yontama">{{seiseki.yontama}}</td>
+<td class="shikyuu">{{seiseki.shikyuu}}</td>
+<td class="gida">{{seiseki.gida}}</td>
+<td class="gihi">{{seiseki.gihi}}</td>
+<td class="daten"><input type="number" class="form-control" value="{{seiseki.daten}}"></td>
+<td class="tokuten"><input type="number" class="form-control" value="{{seiseki.tokuten}}"></td>
+<td class="steal"><input type="number" class="form-control" value="{{seiseki.steal}}"></td>
+<td class="error"><input type="number" class="form-control" value="{{seiseki.error}}"></td>
 </tr>
 
 <tr class="disable detail detail-{{loop.index}}">
@@ -66,15 +70,29 @@
 <th colspan="6"></th>
 </tr>
 
-<tr class="result disable detail detail-{{loop.index}}">
+{% for d in detail %}
+
+<tr class="result disable detail detail-{{loop.parent.loop.index}}">
 
 <td class="member-id disable">{{batter.member_id}}</td>
 <td class="daseki-number disable">1</td>
 
 <td class="button" colspan="3">
-<button class="btn btn-info btn-xs add" onClick="add_daseki(this, 1);">追加</button>
-<button class="btn btn-danger btn-xs delete">削除</button>
+
+{% set disable = 'disable' %}
+{% if loop.last %}
+{% set disable = '' %}
+{% endif %}
+
+{% if loop.first %}
+<button class="{{disable}} btn btn-info btn-xs add" onClick="add_daseki(this, {{loop.index}});">追加</button>
+<button class="{{disable}} btn btn-danger btn-xs delete">削除</button>
+{% else %}
+<button class="{{disable}} btn btn-info btn-xs add" onClick="add_daseki(this, {{loop.index}});">追加</button>
+<button class="{{disable}} btn btn-danger btn-xs delete" onClick="delete_daseki(this, {{loop.index}});">削除</button>
+{% endif %}
 </td>
+
 
 <th class="daseki-number-text">第1打席</th>
 
@@ -83,7 +101,7 @@
 <select class="direction">
 <option value="0">--</option>
 {% for i in 1..9 %}
-<option>{{i}}</option>
+<option value="{{i}}" {%if i == d.direction%}selected{%endif%}>{{i}}</option>
 {% endfor %}
 </select>
 </td>
@@ -92,9 +110,9 @@
 <td colspan="3">
 <select class="kind">
 <option value="0">--</option>
-<option>ゴロ</option>
-<option>ライナー</option>
-<option>フライ</option>
+<option value="1" {%if 1 == d.kind%}selected{%endif%}>ゴロ</option>
+<option value="2" {%if 2 == d.kind%}selected{%endif%}>ライナー</option>
+<option value="3" {%if 3 == d.kind%}selected{%endif%}>フライ</option>
 </select>
 </td>
 
@@ -112,6 +130,8 @@
 <td colspan="6"></td>
 
 </tr>
+
+{% endfor %}
 
 
 {% endfor %}

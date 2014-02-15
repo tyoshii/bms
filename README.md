@@ -4,8 +4,8 @@ Baseball Management System
 REQUIRE
 =======
 
-php5.5
-
+php5.X
+mysql5.X
 
 RELEASE
 =======
@@ -38,6 +38,12 @@ RELEASE
     # deploy only production ( mkdir/copy/symlink dir/file )
     $ cp deploy
     $ sudo perl deploy.pl
+
+ADMIN ACCOUNT
+=============
+
+    $ php oil console
+    >>> Auth::create_user('admin', 'password', 'admin@yahoo.co.jp', 100);
 
 CAUTION
 =======

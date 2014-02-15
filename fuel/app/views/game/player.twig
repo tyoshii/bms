@@ -34,6 +34,12 @@
 
 {% block content %}
 
+
+<div class="game-header">
+  <h4>{{team_top}} vs {{team_bottom}}</h4>
+</div>
+
+
 {% import 'game-nav.twig' as nav %}
 {{ nav.navigation('player') }}
 

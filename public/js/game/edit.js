@@ -121,6 +121,11 @@ function add_daseki(self, daseki) {
   // 打席
   $clone.find('td.daseki-number').text(next_daseki);
   $clone.find('th.daseki-number-text').text('第' + next_daseki + '打席');
+
+  // select default
+  $clone.find('select').each(function(){
+    $(this).val(0);
+  });
   
   $clone.hide();
   $clone.insertAfter($tr);

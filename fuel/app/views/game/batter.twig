@@ -120,9 +120,9 @@
 <td colspan="3">
 <select class="result">
 <option value="0">--</option>
-<option>凡打</option>
-<option>ヒット</option>
-<option>三塁打</option>
+{% for res in results %}
+<option value="{{res.id}}" {%if res.id == d.result%}selected{%endif%}>{{res.result}}</option>
+{% endfor %}
 </select>
 </td>
 

@@ -56,14 +56,19 @@ class Controller_Admin extends Controller_Base
       }
     }
     elseif(Input::post("username")) {
-      $uname  = Input::post('username');
+      $uname = Input::post('username');
+      $current_user = Auth::get("username");
       try {
-          Auth::update_user(
-              array(
-                  'group' => -1,    // ユーザーを無効化
-              ),
-              $uname
-          );
+        if ($uname === $current_user) {
+            Session::set_flash('error', '自分自身のアカウントは無効にできません');
+            Response::redirect(Uri::create('admin/user'));
+        }
+        Auth::update_user(
+            array(
+                'group' => -1,    // ユーザーを無効化
+            ),
+            $uname
+        );
         Session::set_flash('info', $uname .' を無効にしました。');
         Response::redirect(Uri::create('admin/user'));
       }

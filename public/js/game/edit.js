@@ -1,8 +1,67 @@
 function post_batter() {
 
-  var data = {
-    'test': 'hoge',
-  };
+  var data = [];
+  var detail = [];
+
+  // tr parse / data push
+  $('tr.result').each(function() {
+    var $this = $(this);
+ 
+    var id = $this.children('td.member-id').text();
+    if ( id === '0' ) {
+      return true; //continue
+    }
+
+    if ( $this.hasClass("detail") ) {
+      var daseki_number = $this.children('td.daseki-number').text();
+
+      if ( typeof data[id].detail === 'undefined' ) {
+        data[id].detail = [];
+      }
+
+      data[id].detail.push({
+        direction: $this.children('select.direction').val(), 
+        kind: $this.children('select.kind').val(), 
+        result: $this.children('select.result').val() 
+      });
+    }
+    else {
+      var seiseki = {};
+
+      // td
+      var category1 = [
+        'daseki', 'dasuu',
+        'anda', 'niruida', 'sanruida', 'honruida',
+        'sanshin', 'yontama', 'shikyuu',
+        'gida', 'gihi'
+      ];
+      for ( var i in category1 ) {
+        var key = category1[i];
+        var val = $this.children('td.' + key).text();
+
+        if ( val == '' ) val = 0;
+
+        seiseki[key] = 0;
+      }
+
+      // input number
+      var category2 = [
+        'daten', 'tokuten', 'steal', 'error' 
+      ];
+      for ( var i in category2 ) {
+        var key = category2[i];
+        var val = $this.find('td.' + key + ' input').val();
+
+        if ( val == '' ) val = 0;
+
+        seiseki[key] = val;
+      }
+
+      data[id] = { seiseki: seiseki };
+    }
+    
+  });
+  // console.log(data);
 
   // ajax
   $.ajax({
@@ -60,8 +119,9 @@ function add_daseki(self, daseki) {
   $del.removeClass('disable');
   $del.attr('onClick', 'delete_daseki(this, '+next_daseki+');');
 
-  // 打席表示
-  $clone.find('th.kind').text('第' + next_daseki + '打席');
+  // 打席
+  $clone.find('td.daseki-number').text(next_daseki);
+  $clone.find('th.daseki-number-text').text('第' + next_daseki + '打席');
   
   $clone.hide();
   $clone.insertAfter($tr);

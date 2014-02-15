@@ -4,7 +4,7 @@ class Controller_Admin extends Controller_Base
 {
   public function before()
   {
-    parent::before(); 
+    parent::before();
 
     if ( ! Auth::has_access('admin.admin') )
       Response::redirect(Uri::create('/'));
@@ -61,7 +61,7 @@ class Controller_Admin extends Controller_Base
     }
 
     $form->repopulate();
-    
+
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->users = Model_User::find('all');
 
@@ -72,7 +72,7 @@ class Controller_Admin extends Controller_Base
   {
     $form = $this->_get_addmember_form();
 
-    $this->view->set_safe('form', $form->build(Uri::current())); 
+    $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->members = Model_Member::find('all', array(
       'related' => array('teams'),
     ));
@@ -108,12 +108,12 @@ class Controller_Admin extends Controller_Base
     }
 
     $form->repopulate();
-    
+
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->users = Model_User::find('all');
 
     return Response::forge($this->view);
- 
+
   }
 
   public function get_team()
@@ -128,7 +128,7 @@ class Controller_Admin extends Controller_Base
 
   public function post_team()
   {
-    $form = self::_get_team_form(); 
+    $form = self::_get_team_form();
 
     if ( $form->validation()->run() )
     {
@@ -141,12 +141,12 @@ class Controller_Admin extends Controller_Base
     else
     {
       $form->repopurate();
-      
+
       $this->view->set_safe('form', $form->build(Uri::current()));
       $this->view->set_safe('teams', Model_Team::find('all'));
 
       return Response::forge($this->view);
-    }    
+    }
   }
 
   public function get_league()
@@ -185,7 +185,7 @@ class Controller_Admin extends Controller_Base
     }
 
     $form->repopulate();
-    
+
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->leagues = Model_League::find('all');
 
@@ -199,7 +199,7 @@ class Controller_Admin extends Controller_Base
         'role'  => 'search',
       ),
     ));
-    
+
     $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'League Name'))
       ->add_rule('required')
       ->add_rule('max_length', 64);
@@ -218,11 +218,11 @@ class Controller_Admin extends Controller_Base
         'role'  => 'search',
       ),
     ));
-    
+
     $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'TeamName'))
       ->add_rule('required')
       ->add_rule('max_length', 64);
-    
+
     $leagues = Model_League::find(':all');
 
     if ( $leagues )

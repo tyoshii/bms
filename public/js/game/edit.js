@@ -1,3 +1,48 @@
+function delete_daseki(self, daseki) {
+  var $self = $(self);
+  var $tr   = $self.parent().parent();
+
+  // 1つ前の打席に追加削除を表示
+  var prev = $tr.prevAll('tr')[0];
+
+  $(prev).find('button').each(function(){
+    $(this).removeClass('disable');
+  });
+
+  // remove target
+  $tr.remove();
+}
+
+function add_daseki(self, daseki) {
+  var $self  = $(self);
+  var $tr    = $self.parent().parent();
+  var $clone = $tr.clone(true);
+
+  var next_daseki = daseki + 1;
+
+  // 元のdomから追加/削除を非表示
+  $tr.find('button').each(function(){
+    $(this).addClass('disable');
+  });
+
+  // clone dom
+  // add button / delete button
+  var $add = $clone.find('button.add');
+  $add.removeClass('disable');
+  $add.attr('onClick', 'add_daseki(this, '+next_daseki+');');
+
+  var $del = $clone.find('button.delete');
+  $del.removeClass('disable');
+  $del.attr('onClick', 'delete_daseki(this, '+next_daseki+');');
+
+  // 打席表示
+  $clone.find('td.kind').text('第' + next_daseki + '打席');
+  
+  $clone.hide();
+  $clone.insertAfter($tr);
+  $clone.fadeIn();
+}
+
 function toggle_detail(id) {
   $('tr.detail-'+id).toggle();
 }

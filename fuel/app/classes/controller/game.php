@@ -161,6 +161,7 @@ class Controller_Game extends Controller_Base
 
       case 'batter':
         $view->batters = json_decode($game->batters);
+        $view->results = Model_Batter_Result::find('all');
         break;
 
       default:

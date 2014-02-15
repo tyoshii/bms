@@ -169,8 +169,15 @@ class Controller_Game extends Controller_Base
     $view->game_id = $game_id;
     $view->team_id = $team_id;
 
+    // チーム名
+    $view->team_top = Model_Team::find($game->team_top)->name;
+    $view->team_bottom = Model_Team::find($game->team_bottom)->name;
+
+    // 試合日
+    $view->date = $game->date;
+
     return Response::forge($view);
-	}
+}
 
   public function post_pitcher()
   {

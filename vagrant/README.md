@@ -6,9 +6,9 @@
 % pwd
 /path/to//bms/vagrant
 
-% vagrant init
+% vagrant box add cent64_up https://github.com/2creatives/vagrant-centos/releases/download/v0.1.0/centos64-x86_64-20131030.box
 
-% vagrant add cent64_up https://www.dropbox.com/sm/create/Public/package.box
+% vagrant init
 
 % vagrant up && vagrant provision
 

@@ -4,8 +4,8 @@ Baseball Management System
 REQUIRE
 =======
 
-php5.X
-mysql5.X
+    php5.X
+    mysql5.X
 
 RELEASE
 =======
@@ -39,6 +39,16 @@ RELEASE
     $ cp deploy
     $ sudo perl deploy.pl
 
+COMPOSER UPDATE
+===============
+
+    $ php composer.phar update
+
+DATABASE
+========
+
+    $ php oil r migrate:current
+    
 ADMIN ACCOUNT
 =============
 

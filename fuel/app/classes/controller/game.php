@@ -160,6 +160,7 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'batter':
+        $view->batters = json_decode($game->batters);
         break;
 
       default:
@@ -190,7 +191,6 @@ class Controller_Game extends Controller_Base
     $game->save();
 
     echo 'OK';
-
   }
 
   public function post_pitcher()

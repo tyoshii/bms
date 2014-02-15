@@ -11,12 +11,22 @@
 <th class="order">打順</th>
 <th class="name">名前</th>
 <th class="number">＃</th>
+<th class="detail"></th>
 <th>打席数</th>
 <th>打数</th>
-<th class="error">エラー</th>
-<th class="steal">盗塁</th>
-<th class="daten">打点</th>
-<th class="daseki">打席</th>
+<th>安打</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+<th>三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>犠飛</th>
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+<th>エラー</th>
 </thead>
 
 {% for batter in players %}
@@ -24,47 +34,78 @@
 <td class="order">{{batter.order}}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
-<td><input type="number" class="form-control"></td>
-<td><input type="number" class="form-control"></td>
-<td><input type="number" class="form-control"></td>
-<td>
-<button class="btn btn-info btn-sm" onclick="toggle_detail({{batter.member_id}});">詳細入力</button>
+<td class="detail">
+<button class="btn btn-info btn-sm" onclick="toggle_detail({{batter.member_id}});">
+打席詳細入力
+</button>
 </td>
+<td class="daseki"></td>
+<td class="dasuu"></td>
+<td class="anda"></td>
+<td class="niruida"></td>
+<td class="sanruida"></td>
+<td class="honruida"></td>
+<td class="sanshin"></td>
+<td class="yontama"></td>
+<td class="shikyuu"></td>
+<td class="gida"></td>
+<td class="gihi"></td>
+<td class="daten"><input type="number" class="form-control"></td>
+<td class="tokuten"><input type="number" class="form-control"></td>
+<td class="steal"><input type="number" class="form-control"></td>
+<td class="error"><input type="number" class="form-control"></td>
 </tr>
 
-<tr>
-<td colspan="5" class="disable detail-{{batter.member_id}}">
-{% for i in 1..4 %}
-<h4>第{{i}}打席</h4>
-打球方向
+<tr class="disable detail-{{batter.member_id}}">
+<th colspan="4"></th>
+<th colspan="3">方向</th>
+<th colspan="3">種類</th>
+<th colspan="3">結果</th>
+</tr>
+
+<tr class="disable detail-{{batter.member_id}}">
+
+<td class="button" colspan="2">
+<button class="btn btn-info btn-xs">追加</button>
+<button class="btn btn-danger btn-xs disable">削除</button>
+</td>
+
+<td class="kind" colspan="2">第1打席</td>
+
+{# 方向 #}
+<td colspan="3">
 <select>
-<option>--</option>
+<option value="0">--</option>
 {% for i in 1..9 %}
 <option>{{i}}</option>
 {% endfor %}
 </select>
-打球の種類
+</td>
+
+{# 種類 #}
+<td colspan="3">
 <select>
 <option>--</option>
 <option>ゴロ</option>
 <option>ライナー</option>
 <option>フライ</option>
 </select>
-結果
+</td>
+
+{# 結果 #}
+<td colspan="3">
 <select>
 <option>--</option>
 <option>凡打</option>
 <option>ヒット</option>
 <option>三塁打</option>
 </select>
-<br>
-
-{% endfor %}
 </td>
+
 </tr>
+
+
 {% endfor %}
-
-
 </table>
 
 <button class="btn btn-success" onClick="alert('atode');">登録</button>

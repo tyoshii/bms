@@ -11,9 +11,9 @@ class Controller_Register extends Controller
     $input_mail			= Input::post('input_mail');
 
     if( isset($input_name) && isset($input_password) && isset($input_mail) && isset($input_confirm) ){
-      if($input_password === $input_confirm){
+      if($input_password === $input_confirm && strlen($input_password) >= 8 ){
         try{
-          $result =Auth::create_user(
+          $result = Auth::create_user(
               $input_name,
               $input_password,
               $input_mail,
@@ -27,7 +27,7 @@ class Controller_Register extends Controller
           $view->ret_message = "Create Account:$input_name Failed. " . $e->getMessage();
         }
       }else{
-        $view->ret_message = "Password is not matched. Please Retry.";
+        $view->ret_message = "Password is too short(from 8 to 250 characters) or not matched. Please Retry.";
       }
     }
     $view->input_name = $input_name;

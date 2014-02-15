@@ -174,10 +174,10 @@ class Controller_Game extends Controller_Base
     $view->team_top = Model_Team::find_by_id($view->team_top)->name;
     // 後攻チーム名
     $view->team_bottom = Model_Game::find_by_id($game_id)->team_bottom;
-	$view->team_bottom = Model_Team::find_by_id($view->team_bottom)->name;
+    $view->team_bottom = Model_Team::find_by_id($view->team_bottom)->name;
 
     return Response::forge($view);
-	}
+}
 
   public function post_pitcher()
   {

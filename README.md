@@ -42,7 +42,7 @@ RELEASE
 ADMIN ACCOUNT
 =============
 
-$ php oil console
+    $ php oil console
     >>> Auth::create_user('admin', 'password', 'admin@yahoo.co.jp', 100);
 
 CAUTION

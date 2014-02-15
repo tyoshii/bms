@@ -170,11 +170,14 @@ class Controller_Game extends Controller_Base
     $view->team_id = $team_id;
 
     // 先攻チーム名
-    $view->team_top = Model_Game::find_by_id($game_id)->team_top;
-    $view->team_top = Model_Team::find_by_id($view->team_top)->name;
+    $view->team_top = Model_Game::find($game_id)->team_top;
+    $view->team_top = Model_Team::find($view->team_top)->name;
     // 後攻チーム名
-    $view->team_bottom = Model_Game::find_by_id($game_id)->team_bottom;
-    $view->team_bottom = Model_Team::find_by_id($view->team_bottom)->name;
+    $view->team_bottom = Model_Game::find($game_id)->team_bottom;
+    $view->team_bottom = Model_Team::find($view->team_bottom)->name;
+
+    // 試合日
+    $view->date = Model_Game::find($game_id)->date;
 
     return Response::forge($view);
 }

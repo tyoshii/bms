@@ -1,3 +1,28 @@
+function post_batter() {
+
+  var data = {
+    'test': 'hoge',
+  };
+
+  // ajax
+  $.ajax({
+    url: '/game/score/batter',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      team_id: $('data#team_id').text(),
+      batter: data
+    },
+    success: function(html) {
+      alert("成績保存に成功");
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
+  
+}
+
 function delete_daseki(self, daseki) {
   var $self = $(self);
   var $tr   = $self.parent().parent();
@@ -248,7 +273,7 @@ function post_player() {
   });
   // console.log(data);
 
-  // jax
+  // ajax
   $.ajax({
     url: '/game/score/player',
     type: 'POST',
@@ -267,5 +292,4 @@ function post_player() {
 }
 
 $(document).ready(function(){
-  // post_data();
 });

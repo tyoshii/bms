@@ -10,6 +10,7 @@ class Model_Game extends \Orm\Model
 		'game_status',
 		'players',
 		'pitchers',
+		'batters',
 		'created_at',
 		'updated_at',
 	);

@@ -2,6 +2,8 @@
 
 return array(
   'mysql' => array(
-    'root' => 'password',
+    'development' => array(
+      'root' => 'password',
+    ),
   ),
 );

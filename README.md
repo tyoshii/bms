@@ -47,6 +47,7 @@ COMPOSER UPDATE
 DATABASE
 ========
 
+    $ mysqladmin create -u root -p bms
     $ php oil r migrate:current
     
 ADMIN ACCOUNT

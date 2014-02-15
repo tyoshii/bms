@@ -5,32 +5,32 @@
 <table class="table">
 <thead>
 <tr>
-<th>チーム</th>
+<th class="team">チーム</th>
 {% for i in range(1,9) %}
 <th>{{i}}</th>
 {% endfor %}
-<th>合計</th>
+<th class="sum">合計</th>
 </tr>
 </thead>
 
 <tbody>
 
 <tr>
-<td>{{team_top}}</td>
+<td class="team">{{team_top}}</td>
 {% for i in range(1,9) %}
 {% set k = 't' ~ i %}
 {% set v = score[k] %}
-<td><input type="text" class="form-control score tscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score tscore" value="{{v}}" name="{{k}}"></td>
 {% endfor %}
 <td class="tsum">{{score.tsum}}</td>
 </tr>
 
 <tr>
-<td>{{team_bottom}}</td>
+<td class="team">{{team_bottom}}</td>
 {% for i in range(1,9) %}
 {% set k = 'b' ~ i %}
 {% set v = score[k] %}
-<td><input type="text" class="form-control score bscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score bscore" value="{{v}}" name="{{k}}"></td>
 {% endfor %}
 <td class="bsum">{{score.bsum}}</td>
 </tr>
@@ -46,32 +46,32 @@
 <table class="table">
 <thead>
 <tr>
-<th>チーム</th>
+<th class="team">チーム</th>
 {% for i in range(10,18) %}
 <th>{{i}}</th>
 {% endfor %}
-<th>合計</th>
+<th class="sum">合計</th>
 </tr>
 </thead>
 
 <tbody>
 
 <tr>
-<td>{{team_top}}</td>
+<td class="team">{{team_top}}</td>
 {% for i in range(10,18) %}
 {% set k = 't' ~ i %}
 {% set v = score[k] %}
-<td><input type="text" class="form-control score tscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score tscore" value="{{v}}" name="{{k}}"></td>
 {% endfor %}
 <td class="tsum">{{score.tsum}}</td>
 </tr>
 
 <tr>
-<td>{{team_bottom}}</td>
+<td class="team">{{team_bottom}}</td>
 {% for i in range(10,18) %}
 {% set k = 'b' ~ i %}
 {% set v = score[k] %}
-<td><input type="text" class="form-control score bscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score bscore" value="{{v}}" name="{{k}}"></td>
 {% endfor %}
 <td class="bsum">{{score.bsum}}</td>
 </tr>

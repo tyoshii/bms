@@ -16,3 +16,7 @@ build
 /fuel/app/config/crypt.php
 nbproject/
 *.swp
+
+
+# Vagrant
+.vagrant

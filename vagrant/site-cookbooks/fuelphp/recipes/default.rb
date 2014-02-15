@@ -4,6 +4,14 @@ execute "add-apt-repository ppa:ondrej/php5" do
     user "root"
     not_if "which php"
 end
+#
+# virtualhost-bms.conf
+template "virtualhost-bms.conf" do
+  path "/etc/httpd/conf.d/virtualhost-bms.conf"
+  source "virtualhost-bms.conf.erb"
+  mode 0664
+  #notifies :restart, 'service[mysql]'
+end
 
 # setup the vhost
 #web_app "fuelphp" do

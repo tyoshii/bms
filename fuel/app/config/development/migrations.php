@@ -23,6 +23,11 @@ return array(
 				14 => '015_rename_field_starting_member_to_players_in_games',
 				15 => '016_add_pitcher_to_games',
 				16 => '017_rename_field_pitcher_to_pitchers_in_games',
+				17 => '018_add_batters_to_games',
+				18 => '019_create_batter_results',
+				19 => '020_add_order_to_batter_results',
+				20 => '021_add_category_id_to_batter_results',
+				21 => '022_add_category_to_batter_results',
 			),
 		),
 		'module' => 

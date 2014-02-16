@@ -4,11 +4,11 @@ return array(
   'login'  => 'top/login',
   'logout' => 'top/logout',
 
-  'user/info' => 'user/info',
+  'user/info'     => 'user/info',
   'user/password' => 'user/password',
 
-  'admin' => 'admin/index',
-  'admin/user' => 'admin/user',
+  'admin'         => 'admin/index',
+  'admin/user'    => 'admin/user',
   'admin/member'  => 'admin/member',
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
@@ -23,11 +23,13 @@ return array(
   'game/edit/(:segment)/(:segment)'            => 'game/edit/$1/$2',
   'game/edit/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
 
-  'game/score/player' => 'game/player',
-  'game/score/pitcher' => 'game/pitcher',
-  'game/score/batter' => 'game/batter',
+  'game/score/player'   => 'game/player',
+  'game/score/pitcher'  => 'game/pitcher',
+  'game/score/batter'   => 'game/batter',
 
-  'score' => 'score/index',
+  'score'               => 'score/record_team',
+  'score/record_self'   => 'score/record_self',
+#  'score/record_league' => 'score/record_league',
 
   'register' => 'register/index',
 

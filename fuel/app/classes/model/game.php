@@ -86,7 +86,7 @@ class Model_Game extends \Orm\Model
       $query->where('game_status', '!=', 0);
 
       $my_team = Model_User::getMyTeamId();
-      $query->where_opne();
+      $query->where_open();
       $query->where('team_top', $my_team );
       $query->or_where('team_bottom', $my_team );
       $query->where_close();

@@ -260,6 +260,9 @@ function post_pitcher() {
         $number = $this.children("td.number"),
         $inning = $this.children("td.inning"),
         $result = $this.children("td.result"),
+        $hianda = $this.children("td.hianda"),
+        $sanshin = $this.children("td.sanshin"),
+        $shishikyuu = $this.children("td.shishikyuu"),
         $earned_runs = $this.children("td.earned-runs"),
         $runs = $this.children("td.runs");
   
@@ -271,6 +274,9 @@ function post_pitcher() {
       inning_int: $inning.children('.inning_int').val(),
       inning_frac: $inning.children('.fraction').val(),
       result: $result.children('.result').val(),
+      hianda: $result.children('.hianda').val(),
+      sanshin: $result.children('.sanshin').val(),
+      shishikyuu: $result.children('.shishikyuu').val(),
       earned_runs: $earned_runs.children('.earned-runs').val(),
       runs: $runs.children('.runs').val()
     };

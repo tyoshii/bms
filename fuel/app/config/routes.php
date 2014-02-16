@@ -25,6 +25,7 @@ return array(
 
   'game/score/player' => 'game/player',
   'game/score/pitcher' => 'game/pitcher',
+  'game/score/batter' => 'game/batter',
 
   'score' => 'score/index',
 

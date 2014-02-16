@@ -25,6 +25,29 @@ th.position {
   width: 100px;
 }
 
+td.daten {
+  width: 70px;
+}
+td.tokuten {
+  width: 70px;
+}
+td.steal {
+  width: 70px;
+}
+td.error {
+  width: 70px;
+}
+
+td.button {
+  text-align: right;
+}
+td.daseki-number-text {
+  text-align: center;
+}
+tr.detail {
+  background-color: #F5F5F5;  
+}
+
 .disable {
   display: none;
 }

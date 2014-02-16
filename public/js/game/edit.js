@@ -1,3 +1,141 @@
+function post_batter() {
+
+  var data = [];
+  var detail = [];
+
+  // tr parse / data push
+  $('tr.result').each(function() {
+    var $this = $(this);
+ 
+    var id = $this.children('td.member-id').text();
+    if ( id === '0' ) {
+      return true; //continue
+    }
+
+    if ( $this.hasClass("detail") ) {
+      var daseki_number = $this.children('td.daseki-number').text();
+
+      data[id].detail.push({
+        direction: $this.find('select.direction').val(), 
+        kind: $this.find('select.kind').val(), 
+        result: $this.find('select.result').val() 
+      });
+    }
+    else {
+      var seiseki = {};
+
+      // td
+      var category1 = [
+        'daseki', 'dasuu',
+        'anda', 'niruida', 'sanruida', 'honruida',
+        'sanshin', 'yontama', 'shikyuu',
+        'gida', 'gihi'
+      ];
+      for ( var i in category1 ) {
+        var key = category1[i];
+        var val = $this.children('td.' + key).text();
+
+        if ( val == '' ) val = 0;
+
+        seiseki[key] = 0;
+      }
+
+      // input number
+      var category2 = [
+        'daten', 'tokuten', 'steal', 'error' 
+      ];
+      for ( var i in category2 ) {
+        var key = category2[i];
+        var val = $this.find('td.' + key + ' input').val();
+
+        if ( val == '' ) val = 0;
+
+        seiseki[key] = val;
+      }
+
+      data[id] = {
+        seiseki: seiseki,
+        detail: [],
+      };
+    }
+    
+  });
+  console.log(data);
+
+  // ajax
+  $.ajax({
+    url: '/game/score/batter',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      team_id: $('data#team_id').text(),
+      batter: data
+    },
+    success: function(html) {
+      alert("成績保存に成功");
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
+  
+}
+
+function delete_daseki(self, daseki) {
+  var $self = $(self);
+  var $tr   = $self.parent().parent();
+
+  // 1つ前の打席に追加削除を表示
+  var prev = $tr.prevAll('tr')[0];
+
+  $(prev).find('button').each(function(){
+    $(this).removeClass('disable');
+  });
+
+  // remove target
+  $tr.remove();
+}
+
+function add_daseki(self, daseki) {
+  var $self  = $(self);
+  var $tr    = $self.parent().parent();
+  var $clone = $tr.clone(true);
+
+  var next_daseki = daseki + 1;
+
+  // 元のdomから追加/削除を非表示
+  $tr.find('button').each(function(){
+    $(this).addClass('disable');
+  });
+
+  // clone dom
+  // add button / delete button
+  var $add = $clone.find('button.add');
+  $add.removeClass('disable');
+  $add.attr('onClick', 'add_daseki(this, '+next_daseki+');');
+
+  var $del = $clone.find('button.delete');
+  $del.removeClass('disable');
+  $del.attr('onClick', 'delete_daseki(this, '+next_daseki+');');
+
+  // 打席
+  $clone.find('td.daseki-number').text(next_daseki);
+  $clone.find('th.daseki-number-text').text('第' + next_daseki + '打席');
+
+  // select default
+  $clone.find('select').each(function(){
+    $(this).val(0);
+  });
+  
+  $clone.hide();
+  $clone.insertAfter($tr);
+  $clone.fadeIn();
+}
+
+function toggle_detail(id) {
+  $('tr.detail-'+id).toggle();
+}
+
 function update_number(self) {
   var $self = $(self);
   var member_id = $self.val();
@@ -199,7 +337,7 @@ function post_player() {
   });
   // console.log(data);
 
-  // jax
+  // ajax
   $.ajax({
     url: '/game/score/player',
     type: 'POST',

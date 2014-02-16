@@ -51,7 +51,7 @@ class Controller_Base extends Controller
       ),
     ));
 
-    $form->add('username', '', array('maxlength' => 8, 'class' => 'form-control', 'placeholder' => 'Account'))
+    $form->add('username', '', array('class' => 'form-control', 'placeholder' => 'Account'))
       ->add_rule('required')
       ->add_rule('max_length', 40);
 

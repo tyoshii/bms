@@ -90,6 +90,11 @@ class Controller_Game extends Controller_Base
         // 自分のチームの試合
         $game_status = 1;
       }
+      if ( Auth::has_access('admin.admin') )
+      {
+        // 管理者登録の試合
+        $game_status = 3;
+      }
 
       if ( $game_status === 0 && ! Auth::has_access('admin.admin') )
       {
@@ -160,6 +165,8 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'batter':
+        $view->batters = json_decode($game->batters);
+        $view->results = Model_Batter_Result::find('all');
         break;
 
       default:
@@ -178,6 +185,26 @@ class Controller_Game extends Controller_Base
 
     return Response::forge($view);
 }
+
+  public function post_batter()
+  {
+    // parameter check
+    $team_id = Input::post('team_id');
+    $game_id = Input::post('game_id');
+
+    if ( ! $team_id or ! $game_id )
+    {
+      return Response::forge('NG', 400);
+    }
+
+    $batter = Input::post('batter');
+
+    $game = Model_Game::find($game_id);
+    $game->batters = json_encode($batter); 
+    $game->save();
+
+    echo 'OK';
+  }
 
   public function post_pitcher()
   {

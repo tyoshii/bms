@@ -209,7 +209,7 @@ function post_player() {
       players: data
     },
     success: function(html) {
-      alert("成績保存に成功");
+      // alert("成績保存に成功");
     },
     error: function(html) {
       alert("成績保存でエラーが発生しました");
@@ -217,6 +217,18 @@ function post_player() {
   });
 }
 
+function autosave(kind) {
+  if ( kind === 'player' ) {
+    post_player();
+  } else if ( kind === 'pitcher' ) {
+    post_pitcher();
+  } else if ( kind === 'batter' ) {
+    post_batter();
+  }
+
+  setTimeout('autosave()', 30000);
+}
+
 $(document).ready(function(){
-  // post_data();
 });
+

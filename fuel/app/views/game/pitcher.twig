@@ -32,6 +32,7 @@
 {% block content %}
 
 {% import 'game-nav.twig' as nav %}
+{{ nav.header(date, team_top, team_bottom) }}
 {{ nav.navigation() }}
 
 <table id="pitcher" class="table">
@@ -96,4 +97,9 @@
 {% block js %}
 {{ parent() }}
 {% include 'game-js.twig' %}
+<script>
+$(document).ready(function() {
+    setTimeout("autosave('pitcher');", 30000);
+});
+</script>
 {% endblock %}

@@ -34,14 +34,9 @@
 
 {% block content %}
 
-
-<div class="game-header">
-  <h4>{{date}} {{team_top}} vs {{team_bottom}}</h4>
-</div>
-
-
 {% import 'game-nav.twig' as nav %}
-{{ nav.navigation('player') }}
+{{ nav.header(date, team_top, team_bottom) }}
+{{ nav.navigation() }}
 
 <table id="player" class="table">
 
@@ -112,4 +107,10 @@
 {% block js %}
 {{ parent() }}
 {% include 'game-js.twig' %}
+
+<script>
+$(document).ready(function() {
+    setTimeout("autosave('player');", 30000);
+});
+</script>
 {% endblock %}

@@ -48,6 +48,22 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
+table#pitcher th.inning {
+  text-align: center;
+}
+table#pitcher td.inning {
+  width: 80px;
+}
+table#pitcher td.result {
+  width: 80px;
+}
+table#pitcher td.earned-runs {
+  width: 80px;
+}
+table#pitcher td.runs {
+  width: 80px;
+}
+
 .disable {
   display: none;
 }

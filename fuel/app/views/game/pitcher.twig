@@ -1,7 +1,7 @@
 {% extends "layout.twig" %}
 
 {% macro inning_fraction(default) %}
-<select class="inning fraction">
+<select class="form-control inning fraction">
 <option value="0">--</option>
 {% for i in 0..3 %}
 {% set value = i ~ '/3' %}
@@ -18,12 +18,12 @@
 {% endmacro %}
 
 {% macro result(default) %}
-<select class="result">
+<select class="form-control result">
 <option value="">--</option>
 <option value="win" {%if default == 'win'%}selected{%endif%}>勝</option>
 <option value="lose" {%if default == 'lose'%}selected{%endif%}>負</option>
-<option value="save" {%if default == 'save'%}selected{%endif%}>セーブ</option>
-<option value="hold" {%if default == 'hold'%}selected{%endif%}>ホールド</option>
+<option value="save" {%if default == 'save'%}selected{%endif%}>Ｓ</option>
+<option value="hold" {%if default == 'hold'%}selected{%endif%}>Ｈ</option>
 </select>
 {% endmacro %}
 
@@ -39,7 +39,7 @@
 <tr>
 <th class="name">名前</th>
 <th class="number">＃</th>
-<th class="inning">投球回</th>
+<th class="inning" colspan="2">投球回</th>
 <th class="result">勝敗</th>
 <th class="earned-runs">自責点</th>
 <th class="runs">失点</th>
@@ -73,14 +73,18 @@
 {# 投球回 #}
 {# 投球回 0/3 1/3 2/3 #}
 <td class="inning">
-<input class="inning_int" min="0" type="number" value="{{score.inning_int|default(0)}}">
+<input class="inning_int form-control" min="0" type="number" value="{{score.inning_int|default(0)}}">
+</td>
+<td class="inning">
 {{_self.inning_fraction(score.inning_frac)}}
 </td>
 <td class="result">{{_self.result(score.result)}}</td>
 <td class="earned-runs">
-<input class="earned-runs" type="number" min="0" value="{{score.earned_runs|default(0)}}">
+<input class="form-control earned-runs" type="number" min="0" value="{{score.earned_runs|default(0)}}">
 </td>
-<td class="runs"><input class="runs" type="number" min="0" value="{{score.runs|default(0)}}"></td>
+<td class="runs">
+<input class="form-control runs" type="number" min="0" value="{{score.runs|default(0)}}">
+</td>
 </tr>
 {% endif %}
 

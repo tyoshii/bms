@@ -48,13 +48,28 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
-table#pitcher th.inning {
+table#pitcher th {
+  text-align: center;
+}
+table#pitcher td.name {
+  text-align: center;
+}
+table#pitcher td.number {
   text-align: center;
 }
 table#pitcher td.inning {
   width: 80px;
 }
 table#pitcher td.result {
+  width: 80px;
+}
+table#pitcher td.hianda {
+  width: 80px;
+}
+table#pitcher td.sanshin {
+  width: 80px;
+}
+table#pitcher td.shishikyuu {
   width: 80px;
 }
 table#pitcher td.earned-runs {

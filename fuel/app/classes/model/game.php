@@ -82,10 +82,10 @@ class Model_Game extends \Orm\Model
 
     $query->join('scores')->on('g.id', '=', 'scores.id');
   
+    $query->where('game_status', '!=', 0);
 
     if ( ! Auth::has_access('admin.admin') )
     {
-      $query->where('game_status', '!=', 0);
 
       $my_team = Model_User::getMyTeamId();
       $query->where_open();

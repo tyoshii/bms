@@ -57,6 +57,7 @@ class Model_Game extends \Orm\Model
     }
     $game->players = json_encode($stamen);
     $game->pitchers = '';
+    $game->batters  = '';
     $game->save();
 
     Model_Score::createNewGame($game->id);

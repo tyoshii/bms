@@ -56,10 +56,10 @@
 <td class="shikyuu">{{seiseki.shikyuu}}</td>
 <td class="gida">{{seiseki.gida}}</td>
 <td class="gihi">{{seiseki.gihi}}</td>
-<td class="daten"><input type="number" class="form-control" value="{{seiseki.daten}}"></td>
-<td class="tokuten"><input type="number" class="form-control" value="{{seiseki.tokuten}}"></td>
-<td class="steal"><input type="number" class="form-control" value="{{seiseki.steal}}"></td>
-<td class="error"><input type="number" class="form-control" value="{{seiseki.error}}"></td>
+<td class="daten"><input type="number" class="form-control" value="{{seiseki.daten}}" min="0"></td>
+<td class="tokuten"><input type="number" class="form-control" value="{{seiseki.tokuten}}" min="0"></td>
+<td class="steal"><input type="number" class="form-control" value="{{seiseki.steal}}" min="0"></td>
+<td class="error"><input type="number" class="form-control" value="{{seiseki.error}}" min="0"></td>
 </tr>
 
 <tr class="disable detail detail-{{loop.index}}">

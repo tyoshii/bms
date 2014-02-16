@@ -61,7 +61,7 @@
 {% for i in range(10,18) %}
 {% set k = 't' ~ i %}
 {% set v = score[k] %}
-<td><input type="number" class="form-control score tscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score tscore" value="{{v}}" min="0" name="{{k}}"></td>
 {% endfor %}
 <td class="tsum">{{score.tsum}}</td>
 </tr>
@@ -71,7 +71,7 @@
 {% for i in range(10,18) %}
 {% set k = 'b' ~ i %}
 {% set v = score[k] %}
-<td><input type="number" class="form-control score bscore" value="{{v}}" name="{{k}}"></td>
+<td><input type="number" class="form-control score bscore" value="{{v}}" min="0" name="{{k}}"></td>
 {% endfor %}
 <td class="bsum">{{score.bsum}}</td>
 </tr>

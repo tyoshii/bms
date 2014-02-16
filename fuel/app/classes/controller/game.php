@@ -90,6 +90,11 @@ class Controller_Game extends Controller_Base
         // 自分のチームの試合
         $game_status = 1;
       }
+      if ( Auth::has_access('admin.admin') )
+      {
+        // 管理者登録の試合
+        $game_status = 3;
+      }
 
       if ( $game_status === 0 && ! Auth::has_access('admin.admin') )
       {

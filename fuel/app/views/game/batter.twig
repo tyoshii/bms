@@ -70,12 +70,13 @@
 <th colspan="6"></th>
 </tr>
 
+{# 打席詳細の中身 #}
 {% import 'batter-detail-macro.twig' as detail_macro %}
 
 {# 打席情報がなければ #}
 {% if detail|length == 0 %}
 <tr class="result disable detail detail-{{loop.index}}">
-{{ detail_macro.meta(batter.member_id, 1) }}
+{{ detail_macro.meta(batter.member_id, 1, true) }}
 {{ detail_macro.direction(0) }}
 {{ detail_macro.kind(0) }}
 {{ detail_macro.result(results, 0) }}
@@ -85,7 +86,7 @@
   {# 打席情報があればループ #}
   {% for d in detail %}
   <tr class="result disable detail detail-{{loop.parent.loop.index}}">
-  {{ detail_macro.meta(batter.member_id, loop.index) }}
+  {{ detail_macro.meta(batter.member_id, loop.index, loop.last) }}
   {{ detail_macro.direction(d.direction) }}
   {{ detail_macro.kind(d.kind) }}
   {{ detail_macro.result(results, d.result) }}

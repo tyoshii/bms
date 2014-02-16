@@ -82,6 +82,10 @@ function post_batter() {
 }
 
 function delete_daseki(self, daseki) {
+  if ( daseki == 1 ) {
+    return true;
+  }
+
   var $self = $(self);
   var $tr   = $self.parent().parent();
 

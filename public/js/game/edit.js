@@ -60,7 +60,7 @@ function post_batter() {
     }
     
   });
-  console.log(data);
+  // console.log(data);
 
   // ajax
   $.ajax({
@@ -301,6 +301,8 @@ function post_player() {
 
   // get post data
   var data = [];
+  var already = {};
+  var exit = false;
   var i = -1;
   $player.each(function(){
 
@@ -317,7 +319,17 @@ function post_player() {
     }
     else if ( $this.hasClass('member_id') ) {
       // console.log('member_id - ' + $this.children('select').('val());
-      data[i].member_id = $this.children('select').val();
+      var member_id = $this.children('select').val();
+      data[i].member_id = member_id;
+
+      // 重複チェック
+      if ( member_id != '0' && already[member_id] == 1 ) {
+        if ( is_alert ) alert('同じ選手が登録されています');
+        exit = true;  
+        return false;
+      }
+      already[member_id] = 1;
+
       if ( $this.val() != '0' ) {
         data[i].name = $this.children('select').select2('data').text;
       }
@@ -336,6 +348,9 @@ function post_player() {
     }
   });
   // console.log(data);
+  // console.log(already);
+
+  if ( exit ) return false;
 
   // ajax
   $.ajax({

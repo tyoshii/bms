@@ -3,7 +3,7 @@
 <thead>
 <tr>
 
-<th>id</th>
+<th class="disable">id</th>
 <th>名前</th>
 <th>背番号</th>
 <th>所属チーム</th>
@@ -14,7 +14,7 @@
 <tbody>
 {% for member in members %}
 <tr>
-<td>{{ member.id }}</td>
+<td class="disable">{{ member.id }}</td>
 <td>{{ member.name }}</td>
 <td>{{ member.number }}</td>
 <td>{{ member.teams.name }}</td>

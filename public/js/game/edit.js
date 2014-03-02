@@ -38,9 +38,25 @@ function batter_result_update() {
 
     // 結果を拾ってくる
     result = $self.find('select.result :selected').text();
-    // console.log(result);
-    // console.log(result_map[result]);
+// console.log(result);
+// console.log(result_map[result]);
 
+    // 特定の結果の場合、種類と方向をグレーアウト
+    if ( result == '死球' ||
+         result == '四球' ||
+         result == '見逃し三振' ||
+         result == '空振り三振' ) {
+      $self.find('select.direction').attr("disabled", "disabled");
+      $self.find('select.direction').val(0);
+      $self.find('select.kind').attr("disabled", "disabled");
+      $self.find('select.kind').val(0);
+    }
+    else {
+      $self.find('select.direction').removeAttr("disabled");
+      $self.find('select.kind').removeAttr("disabled");
+    }
+
+    // seisekiの数字をインクリメント
     // mapにあるかどうかチェック
     if ( typeof result_map[result] !== 'undefined' )
     {

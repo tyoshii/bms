@@ -13,6 +13,76 @@ class Controller_User extends Controller_Base
     }
   }
 
+  public function action_team()
+  {
+    $form = self::_get_team_form();
+    
+    $view = View::forge('user.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
+    
+    return Response::forge($view);
+  }
+
+  public function post_team()
+  {
+    $form = self::_get_team_form();
+    $val = $form->validation();
+
+    if ( $val->run() )
+    {
+      $id    = Input::post('member_id');
+      $props = array(
+        'team'   => Input::post('team'),
+        'number' => Input::post('number'),
+        'name'   => Common::get_dispname(),
+      );
+
+      // idが送られてくれば更新
+      if ( $member = Model_Member::find($id) )
+      {
+        $member->set($props);
+        $member->save();
+        
+        Session::set_flash('info', '所属チームの更新が成功しました。');
+        Response::redirect(Uri::current());
+      }
+      else // idが無ければ新規登録
+      {
+        // かぶりチェック
+        if ( Model_Member::query()
+              ->where('team', $props['team'])
+              ->where('number', $props['number'])
+              ->get_one() )
+        {
+          Session::set_flash('error', 'その背番号はすでに使われています');
+        }
+        else
+        {
+          // 新規選手登録
+          $member = Model_Member::forge($props);
+          $member->save();
+          
+          // ユーザー情報にメンバーIDを登録
+          Common::update_user(array('member_id' => $member->id));
+        
+          Session::set_flash('info', '新たに所属チームに登録されました。');
+          Response::redirect(Uri::current());
+        }
+      }
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    }
+
+    $form->repopulate();
+
+    $view = View::forge('user.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
   public function action_info()
   {
     $form = self::_get_info_form();
@@ -31,14 +101,19 @@ class Controller_User extends Controller_Base
 
     if ( $val->run() )
     {
-      $props = array(
-        'email' => Input::post('email'),
-      );
-      Auth::update_user($props, Auth::get_screen_name());
+      // user情報更新
+      Common::update_user(array(
+        'email'    => Input::post('email'),
+        'dispname' => Input::post('dispname'),
+      ));
 
-      $info = Auth::get_profile_fields();
-      $info['dispname'] = Input::post('dispname');
-      Auth::update_user($info, Auth::get_screen_name());
+      // member情報更新
+      $member_id = Auth::get_profile_fields('member_id');
+      if ( $member = Model_Member::find($member_id) )
+      {
+        $member->name = Input::post('dispname');
+        $member->save();
+      }
 
       Session::set_flash('info', 'ユーザー情報を更新しました');
       Response::redirect(Uri::current());
@@ -101,6 +176,69 @@ class Controller_User extends Controller_Base
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
+  }
+
+  public function _get_team_form()
+  {
+    $form = Fieldset::forge('team', array(
+      'form_attributes' => array(
+        'class' => 'form',
+      ),
+    ));
+
+    // デフォルト
+    $team = '';
+    $number = '';
+
+    // member_idが既に登録されているかどうか
+    $member_id = Auth::get_profile_fields('member_id');
+    if ( $member_id )
+    {
+      // 既に登録されていれば、Modelから情報取得
+      if ( $member = Model_Member::find($member_id) )
+      {
+        $team   = $member->team;
+        $number = $member->number;
+      }
+
+      // member_id を type=hiddenでセット
+      $form->add('member_id', '', array(
+        'type' => 'hidden',
+        'value' => $member_id,
+      ))
+        ->add_rule('required')
+        ->add_rule('trim')
+        ->add_rule('valid_string', array('numeric'))
+        ->add_rule('match_value', array($member_id));
+    }
+
+    // 所属チーム
+    $default = array('' => '');
+    $teams = Model_Team::getTeams();
+
+    $form->add('team', '所属チーム', array(
+      'type' => 'select',
+      'options' => $default + $teams,
+      'value' => $team,
+      'class' => 'form-control chosen-select',
+      'data-placeholder' => 'Select Team',
+    ))
+      ->add_rule('in_array', array_keys($teams));
+
+    // 背番号
+    $form->add('number', '背番号', array(
+      'type' => 'number',
+      'value' => $number,
+      'class' => 'form-control',
+      'min' => '0',
+    ))
+      ->add_rule('trim')
+      ->add_rule('valid_string', array('numeric'))
+      ->add_rule('required');
+
+    $form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
+
+    return $form;
   }
 
   public function _get_password_form()
@@ -172,11 +310,11 @@ class Controller_User extends Controller_Base
       'disabled' => 'disabled',
     ));
 
-    $form->add('dispname', '表示名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
+    $form->add('dispname', '表示名/選手名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 
-    $form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-success', 'value' => '更新'));
+    $form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
 
     return $form;
   }

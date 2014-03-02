@@ -16,8 +16,12 @@ symlink ../public/assets/                /var/www/bms/public/assets/
 symlink ../public/twbootstrap/           /var/www/bms/public/twbootstrap/
 symlink ../public/bootstrap_formhelpers/ /var/www/bms/public/bootstrap_formhelpers/
 symlink ../public/chosen/                /var/www/bms/public/chosen/
+symlink ../public/select2/               /var/www/bms/public/select2/
+symlink ../public/jquery-ui/             /var/www/bms/public/jquery-ui/
 symlink ../public/datepicker/            /var/www/bms/public/datepicker/
 symlink ../public/js/                    /var/www/bms/public/js/
+symlink ../public/css/                   /var/www/bms/public/css/
+symlink ../public/favicon.ico            /var/www/bms/public/favicon.ico
 
 copy ../public/index.php /var/www/bms/public/index.php
 copy ../fuel/app/views/game/layout.twig /var/www/bms/fuel/app/views/game/layout.twig

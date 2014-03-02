@@ -86,7 +86,22 @@ class Dbinit
     array(
       'category_id' => 5,
       'category' => '四球',
+      'result' => '四球',
+    ),
+    array(
+      'category_id' => 5,
+      'category' => '四球',
       'result' => '死球',
+    ),
+    array(
+      'category_id' => 6,
+      'category' => 'その他',
+      'result' => '打撃妨害',
+    ),
+    array(
+      'category_id' => 6,
+      'category' => 'その他',
+      'result' => '守備妨害',
     ),
   );
 
@@ -101,8 +116,8 @@ class Dbinit
 		 **************************/
 
     $br = \Model_Batter_Result::find('all');
-    if ( count($br) )
-      $br->delete();
+    foreach ( $br as $b )
+      $b->delete();
 
     foreach ( self::$_results as $res )
     {

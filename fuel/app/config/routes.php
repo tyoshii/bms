@@ -10,6 +10,7 @@ return array(
   'admin'         => 'admin/index',
   'admin/user'    => 'admin/user',
   'admin/member'  => 'admin/member',
+  'admin/member/(:segment)'  => 'admin/memberinfo/$1',
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
 

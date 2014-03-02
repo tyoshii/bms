@@ -49,6 +49,7 @@ DATABASE
 
     $ mysqladmin create -u root -p bms
     $ php oil r migrate:current
+    $ php oil refine dbinit:batter_result
     
 ADMIN ACCOUNT
 =============

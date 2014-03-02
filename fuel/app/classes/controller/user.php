@@ -18,7 +18,6 @@ class Controller_User extends Controller_Base
     $form = self::_get_info_form();
 
     $view = View::forge('user.twig');
-    $view->active_info = 'active';
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
@@ -51,7 +50,6 @@ class Controller_User extends Controller_Base
     }
 
     $view = View::forge('user.twig');
-    $view->active_info = 'active';
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
@@ -62,7 +60,6 @@ class Controller_User extends Controller_Base
     $form = self::_get_password_form();
 
     $view = View::forge('user.twig');
-    $view->active_password = 'active';
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
@@ -101,7 +98,6 @@ class Controller_User extends Controller_Base
     }
 
     $view = View::forge('user.twig');
-    $view->active_password = 'active';
     $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);

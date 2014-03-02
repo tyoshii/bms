@@ -70,69 +70,31 @@
 <th colspan="6"></th>
 </tr>
 
-{% for d in detail %}
+{# 打席詳細の中身 #}
+{% import 'batter-detail-macro.twig' as detail_macro %}
 
-<tr class="result disable detail detail-{{loop.parent.loop.index}}">
-
-<td class="member-id disable">{{batter.member_id}}</td>
-<td class="daseki-number disable">1</td>
-
-<td class="button" colspan="3">
-
-{% set disable = 'disable' %}
-{% if loop.last %}
-{% set disable = '' %}
-{% endif %}
-
-{% if loop.first %}
-<button class="{{disable}} btn btn-info btn-xs add" onClick="add_daseki(this, {{loop.index}});">追加</button>
-<button class="{{disable}} btn btn-danger btn-xs delete">削除</button>
-{% else %}
-<button class="{{disable}} btn btn-info btn-xs add" onClick="add_daseki(this, {{loop.index}});">追加</button>
-<button class="{{disable}} btn btn-danger btn-xs delete" onClick="delete_daseki(this, {{loop.index}});">削除</button>
-{% endif %}
-</td>
-
-
-<th class="daseki-number-text">第1打席</th>
-
-{# 方向 #}
-<td colspan="3">
-<select class="direction">
-<option value="0">--</option>
-{% for i in 1..9 %}
-<option value="{{i}}" {%if i == d.direction%}selected{%endif%}>{{i}}</option>
-{% endfor %}
-</select>
-</td>
-
-{# 種類 #}
-<td colspan="3">
-<select class="kind">
-<option value="0">--</option>
-<option value="1" {%if 1 == d.kind%}selected{%endif%}>ゴロ</option>
-<option value="2" {%if 2 == d.kind%}selected{%endif%}>ライナー</option>
-<option value="3" {%if 3 == d.kind%}selected{%endif%}>フライ</option>
-</select>
-</td>
-
-{# 結果 #}
-<td colspan="3">
-<select class="result">
-<option value="0">--</option>
-{% for res in results %}
-<option value="{{res.id}}" {%if res.id == d.result%}selected{%endif%}>{{res.result}}</option>
-{% endfor %}
-</select>
-</td>
-
-{# 残り #}
+{# 打席情報がなければ #}
+{% if detail|length == 0 %}
+<tr class="result disable detail detail-{{loop.index}}">
+{{ detail_macro.meta(batter.member_id, 1, true) }}
+{{ detail_macro.direction(0) }}
+{{ detail_macro.kind(0) }}
+{{ detail_macro.result(results, 0) }}
 <td colspan="6"></td>
-
 </tr>
+{% else %}
+  {# 打席情報があればループ #}
+  {% for d in detail %}
+  <tr class="result disable detail detail-{{loop.parent.loop.index}}">
+  {{ detail_macro.meta(batter.member_id, loop.index, loop.last) }}
+  {{ detail_macro.direction(d.direction) }}
+  {{ detail_macro.kind(d.kind) }}
+  {{ detail_macro.result(results, d.result) }}
+  <td colspan="6"></td>
+  </tr>
+  {% endfor %}
 
-{% endfor %}
-
+{% endif %}
 
 {% endfor %}
 </table>

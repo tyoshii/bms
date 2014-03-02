@@ -116,8 +116,8 @@ class Dbinit
 		 **************************/
 
     $br = \Model_Batter_Result::find('all');
-    if ( count($br) )
-      $br->delete();
+    foreach ( $br as $b )
+      $b->delete();
 
     foreach ( self::$_results as $res )
     {

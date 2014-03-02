@@ -45,17 +45,17 @@ class Model_Game extends \Orm\Model
     $game->team_bottom = $bottom;
     $game->game_status = $game_status;
 
-    // stamen
-    $stamen = array();
+    // players
+    $players = array();
     for ( $i = 1; $i <= 9; $i++ )
     {
-      $stamen[] = array(
+      $players[] = array(
         'order'     => $i,
         'member_id' => 0,
         'position'  => array(0,0,0,0,0,0),
       );
     }
-    $game->players = json_encode($stamen);
+    $game->players = json_encode($players);
     $game->pitchers = '';
     $game->batters  = '';
     $game->save();

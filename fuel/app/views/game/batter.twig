@@ -37,11 +37,15 @@
 <td class="order">{{batter.order}}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
+{%if batter.number == '' %}
+<td class="detail"></td>
+{%else%}
 <td class="detail">
 <button class="btn btn-info btn-sm" onclick="toggle_detail({{loop.index}});">
 打席詳細入力
 </button>
 </td>
+{%endif%}
 
 {% set seiseki = batters[batter.member_id].seiseki %}
 {% set detail  = batters[batter.member_id].detail  %}

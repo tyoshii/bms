@@ -30,6 +30,13 @@ class Model_User extends \Orm\Model
 
   public static function getMyTeamId()
   {
-    return Auth::get_profile_fields('team');
+    $member_id = Auth::get_profile_fields('member_id');
+    
+    if ( $member = Model_Member::find($member_id) )
+    {
+      return $member->team;
+    }
+
+    return null;
   }
 }

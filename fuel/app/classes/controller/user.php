@@ -149,24 +149,36 @@ class Controller_User extends Controller_Base
 
     $dispname = isset($info['dispname']) ? $info['dispname'] : Auth::get_screen_name();
 
-    $form->add('username', 'ユーザーID', array(
+    $form->add('username', '', array(
       'value' => Auth::get_screen_name(),
-      'maxlength' => 8,
-      'class' => 'form-control',
+      'type' => 'hidden'
     ))
       ->add_rule('required')
-      ->add_rule('max_length', 8);
+      ->add_rule('match_value', array(Auth::get_screen_name()));
+
+    $form->add('email', '', array(
+      'value' => Auth::get_email(), 
+      'type' => 'hidden'
+    ))
+      ->add_rule('required')
+      ->add_rule('valid_email')
+      ->add_rule('match_value', array(Auth::get_email()));
+
+    $form->add('dummy-username', 'ユーザーID', array(
+      'value' => Auth::get_screen_name(),
+      'class' => 'form-control',
+      'disabled' => 'disabled',
+    ));
+
+    $form->add('dummy-email', 'Eメール', array(
+      'value' => Auth::get_email(), 
+      'class' => 'form-control',
+      'disabled' => 'disabled',
+    ));
 
     $form->add('dispname', '表示名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
-
-    $form->add('email', 'Eメール', array(
-      'value' => Auth::get_email(), 
-      'class' => 'form-control',
-    ))
-      ->add_rule('required')
-      ->add_rule('valid_email');
 
     $form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-success', 'value' => '更新'));
 

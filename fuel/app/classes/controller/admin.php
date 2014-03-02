@@ -43,8 +43,7 @@ class Controller_Admin extends Controller_Base
           Input::post('username'),
           Input::post('password'),
           Input::post('mail'),
-          Input::post('group'),
-          array( 'team' => Input::post('team') )
+          Input::post('group')
         );
 
         Session::set_flash('info', 'ユーザーを追加しました。');
@@ -86,6 +85,49 @@ class Controller_Admin extends Controller_Base
 
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->users = Model_User::find('all');
+
+    return Response::forge($this->view);
+  }
+
+  public function post_memberinfo($id)
+  {
+    $this->view->kind = 'memberinfo';
+    
+    $form = self::_get_memberinfo_form($id);
+    $val = $form->validation();
+
+    if ( $val->run() )
+    {
+      // memberテーブル更新
+      $member = Model_Member::find(Input::post('id'));
+      $member->team = Input::post('team');
+      $member->name = Input::post('name');
+      $member->number = Input::post('number');
+      $member->save();
+
+      // アカウントの紐付け
+      // Todo
+
+      Session::set_flash('info', '選手情報の更新に成功しました');
+      Response::redirect(Uri::current());
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    }
+
+    $form->repopulate();
+    $this->view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($this->view);
+  }
+
+  public function action_memberinfo($id)
+  {
+    $this->view->kind = 'memberinfo';
+
+    $form = self::_get_memberinfo_form($id);
+    $this->view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($this->view);
   }
@@ -215,6 +257,76 @@ class Controller_Admin extends Controller_Base
     return Response::forge($this->view);
   }
 
+  public static function _get_memberinfo_form($id)
+  {
+    $form = Fieldset::forge('memberinfo', array(
+      'form_attributes' => array(
+        'class' => 'form',
+      ),
+    ));
+
+    // 登録情報
+    $member = Model_Member::find($id);
+
+    // id
+    $form->add('id', '', array(
+      'type' => 'hidden',
+      'value' => $id,
+    ))
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('match_value', array($id))
+      ->add_rule('valid_string', array('numeric'));
+
+    // team
+    Common::add_team_select($form, $member->team);
+
+    // name
+    $form->add('name', '選手名', array(
+      'type' => 'text',
+      'value' => $member->name,
+      'class' => 'form-control',
+    ))
+      ->add_rule('required')
+      ->add_rule('trim');
+
+    // number
+    $form->add('number', '背番号', array(
+      'type' => 'number',
+      'value' => $member->number,
+      'class' => 'form-control',
+      'mim' => 0,
+    ))
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('valid_string', array('numeric'));
+
+    // 紐付けユーザー
+    $users = array();
+    foreach ( Model_User::query()->select('username')->get() as $user )
+    {
+      if ( $user->username !== 'admin' )
+        $users[$user->username] = $user->username;
+    }
+
+    $form->add('account', 'アカウント', array(
+      'type' => 'select',
+      'options' => array(''=>'') + $users,
+      'value'   => Model_User::getMyTeamId(),
+      'class' => 'form-control chosen-select',
+      'data-placeholder' => '紐付けアカウント',
+    ))
+      ->add_rule('in_array', array_keys(array(''=>'') + $users));
+
+    // submit
+    $form->add('submit', '', array(
+      'type' => 'submit',
+      'value' => '更新',
+      'class' => 'btn btn-success'));
+
+    return $form;
+  }
+
   static private function _get_addleague_form()
   {
     $form = Fieldset::forge('league', array(
@@ -294,13 +406,6 @@ class Controller_Admin extends Controller_Base
               'type' => 'select', 'options'=>$role_ops, 'value' =>'true',
       ))
       ->add_rule('required');
-
-    // option - チーム選択
-    $default = array( '' => '' );
-    $teams = Model_Team::getTeams();
-
-    $form->add('team', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '担当チーム'))
-      ->add_rule('in_array', array_keys($teams));
 
     $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
 

@@ -200,7 +200,18 @@ function add_daseki(self, daseki) {
 }
 
 function toggle_detail(id) {
-  $('tr.detail-'+id).toggle();
+
+  if ( id === 'all' ) {
+    if ( $("tr.detail-1").is(":hidden") ) {
+      $("tr.detail").show();
+    }
+    else {
+      $("tr.detail").hide();
+    }
+  }
+  else {
+    $('tr.detail-'+id).toggle();
+  }
 }
 
 function update_number(self) {

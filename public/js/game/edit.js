@@ -1,3 +1,80 @@
+$(document).ready(function(){
+  batter_result_update();
+});
+
+var result_map = {
+  //            打席,打数,安打,二塁,三塁,本塁,三振,四球,死球,犠打,犠飛
+  '凡打':       [  1,   1,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+  '単打':       [  1,   1,   1,   0,   0,   0,   0,   0,   0,   0,   0],
+  '二塁打':     [  1,   1,   0,   1,   0,   0,   0,   0,   0,   0,   0],
+  '三塁打':     [  1,   1,   0,   0,   1,   0,   0,   0,   0,   0,   0],
+  '本塁打':     [  1,   1,   0,   0,   0,   1,   0,   0,   0,   0,   0],
+  '犠打':       [  1,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0],
+  '犠飛':       [  1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1],
+  '見逃し三振': [  1,   1,   0,   0,   0,   0,   1,   0,   0,   0,   0],
+  '空振り三振': [  1,   1,   0,   0,   0,   0,   1,   0,   0,   0,   0],
+  '四球':       [  1,   0,   0,   0,   0,   0,   0,   1,   0,   0,   0],
+  '死球':       [  1,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0],
+  '打撃妨害':   [  1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
+  '守備妨害':   [  1,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0]
+}
+
+function batter_result_update() {
+  var order = 0;
+
+  $('tr.detail').each(function(){
+    $self = $(this); 
+
+    // resultクラスが含まれていないtrは打席詳細入力内のヘッダー
+    // よってヘッダーを迎えるたびに打順をインクリメントする。
+    // さらに、seisekiの数をリセット
+    if ( ! $self.hasClass('result') ) {
+      order++;
+
+      $('tr.result-'+order).find('.seiseki').each(function(){
+        $(this).text(0);
+      });
+    }
+
+    // 結果を拾ってくる
+    result = $self.find('select.result :selected').text();
+// console.log(result);
+// console.log(result_map[result]);
+
+    // 特定の結果の場合、種類と方向をグレーアウト
+    if ( result == '死球' ||
+         result == '四球' ||
+         result == '見逃し三振' ||
+         result == '空振り三振' ) {
+      $self.find('select.direction').attr("disabled", "disabled");
+      $self.find('select.direction').val(0);
+      $self.find('select.kind').attr("disabled", "disabled");
+      $self.find('select.kind').val(0);
+    }
+    else {
+      $self.find('select.direction').removeAttr("disabled");
+      $self.find('select.kind').removeAttr("disabled");
+    }
+
+    // seisekiの数字をインクリメント
+    // mapにあるかどうかチェック
+    if ( typeof result_map[result] !== 'undefined' )
+    {
+      var res = result_map[result];
+      var i = 0;
+
+      // その打順のseisekiにmapの数字を加算
+      $('tr.result-'+order).find('.seiseki').each(function(){
+        var temp = parseInt($(this).text()); 
+        temp += res[i];
+        $(this).text(temp);
+
+        i++;
+      });
+    } 
+  });
+}
+
 function post_batter(is_alert) {
 
   var data = [];
@@ -139,7 +216,18 @@ function add_daseki(self, daseki) {
 }
 
 function toggle_detail(id) {
-  $('tr.detail-'+id).toggle();
+
+  if ( id === 'all' ) {
+    if ( $("tr.detail-1").is(":hidden") ) {
+      $("tr.detail").show();
+    }
+    else {
+      $("tr.detail").hide();
+    }
+  }
+  else {
+    $('tr.detail-'+id).toggle();
+  }
 }
 
 function update_number(self) {
@@ -397,7 +485,3 @@ function autosave(kind) {
 
   setTimeout('autosave("'+kind+'")', 30000);
 }
-
-$(document).ready(function(){
-});
-

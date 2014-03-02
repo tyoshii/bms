@@ -3,8 +3,9 @@
 
 {% set menu %}
 <ul class="nav nav-stacked nav-pills">
-  <li class="{{active_info}}"><a href="/user/info">ユーザー情報</a></li>
-  <li class="{{active_password}}"><a href="/user/password">パスワード変更</a></li>
+  <li class="{%if uri_segment(2) == 'info'%}active{%endif%}"><a href="/user/info">ユーザー情報</a></li>
+  <li class="{%if uri_segment(2) == 'password'%}active{%endif%}"><a href="/user/password">パスワード変更</a></li>
+  <li class="{%if uri_segment(2) == 'team'%}active{%endif%}"><a href="/user/team">所属チーム</a></li>
 </ul>
 {% endset %}
 

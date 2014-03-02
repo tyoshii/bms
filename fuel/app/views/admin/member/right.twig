@@ -3,21 +3,25 @@
 <thead>
 <tr>
 
-<th>id</th>
+<th class="disable">id</th>
 <th>名前</th>
 <th>背番号</th>
 <th>所属チーム</th>
-<th></th>
+<th>設定</th>
+<th>削除</th>
 </tr>
 </thead>
 
 <tbody>
 {% for member in members %}
 <tr>
-<td>{{ member.id }}</td>
+<td class="disable">{{ member.id }}</td>
 <td>{{ member.name }}</td>
 <td>{{ member.number }}</td>
 <td>{{ member.teams.name }}</td>
+<td>
+<a href="/admin/member/{{member.id}}" class="btn btn-info">設定</a>
+</td>
 <td>
 <form method="DELETE">
 <input type="hidden" value="{{team.id}}">

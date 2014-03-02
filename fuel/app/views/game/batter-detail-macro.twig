@@ -20,7 +20,7 @@
 {# 結果 #}
 {% macro result(results, val) %}
 <td colspan="3">
-<select class="result">
+<select class="result" onChange="batter_result_update();">
 <option value="0">--</option>
 {% for res in results %}
 <option value="{{res.id}}" {%if res.id == val%}selected{%endif%}>{{res.result}}</option>

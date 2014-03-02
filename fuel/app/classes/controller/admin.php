@@ -97,6 +97,7 @@ class Controller_Admin extends Controller_Base
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->members = Model_Member::find('all', array(
       'related' => array('teams'),
+      'order_by' => 'number',
     ));
 
     return Response::forge( $this->view );

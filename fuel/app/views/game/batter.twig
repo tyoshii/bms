@@ -32,7 +32,7 @@
 </thead>
 
 {% for batter in players %}
-<tr class="result">
+<tr class="result result-{{loop.index}}">
 <td class="member-id disable">{{batter.member_id}}</td>
 <td class="order">{{batter.order}}</td>
 <td class="name">{{batter.name}}</td>
@@ -50,17 +50,18 @@
 {% set seiseki = batters[batter.member_id].seiseki %}
 {% set detail  = batters[batter.member_id].detail  %}
 
-<td class="daseki">{{seiseki.daseki}}</td>
-<td class="dasuu">{{seiseki.dasuu}}</td>
-<td class="anda">{{seiseki.anda}}</td>
-<td class="niruida">{{seiseki.niruida}}</td>
-<td class="sanruida">{{seiseki.sanruida}}</td>
-<td class="honruida">{{seiseki.honruida}}</td>
-<td class="sanshin">{{seiseki.sanshin}}</td>
-<td class="yontama">{{seiseki.yontama}}</td>
-<td class="shikyuu">{{seiseki.shikyuu}}</td>
-<td class="gida">{{seiseki.gida}}</td>
-<td class="gihi">{{seiseki.gihi}}</td>
+<td class="seiseki daseki">{{seiseki.daseki}}</td>
+<td class="seiseki dasuu">{{seiseki.dasuu}}</td>
+<td class="seiseki anda">{{seiseki.anda}}</td>
+<td class="seiseki niruida">{{seiseki.niruida}}</td>
+<td class="seiseki sanruida">{{seiseki.sanruida}}</td>
+<td class="seiseki honruida">{{seiseki.honruida}}</td>
+<td class="seiseki sanshin">{{seiseki.sanshin}}</td>
+<td class="seiseki yontama">{{seiseki.yontama}}</td>
+<td class="seiseki shikyuu">{{seiseki.shikyuu}}</td>
+<td class="seiseki gida">{{seiseki.gida}}</td>
+<td class="seiseki gihi">{{seiseki.gihi}}</td>
+
 <td class="daten"><input type="number" class="form-control" value="{{seiseki.daten}}" min="0"></td>
 <td class="tokuten"><input type="number" class="form-control" value="{{seiseki.tokuten}}" min="0"></td>
 <td class="steal"><input type="number" class="form-control" value="{{seiseki.steal}}" min="0"></td>

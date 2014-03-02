@@ -34,14 +34,9 @@
 
 {% block content %}
 
-
-<div class="game-header">
-  <h4>{{date}} {{team_top}} vs {{team_bottom}}</h4>
-</div>
-
-
 {% import 'game-nav.twig' as nav %}
-{{ nav.navigation('player') }}
+{{ nav.header(date, team_top, team_bottom) }}
+{{ nav.navigation() }}
 
 <table id="player" class="table">
 
@@ -95,7 +90,7 @@
 
 {# 登録ボタン #}
 <div>
-<button onClick="post_player();" class="btn btn-success">登録</button>
+<button onClick="post_player(true);" class="btn btn-success">登録</button>
 </div>
 
 
@@ -112,4 +107,10 @@
 {% block js %}
 {{ parent() }}
 {% include 'game-js.twig' %}
+
+<script>
+$(document).ready(function() {
+    setTimeout("autosave('player');", 30000);
+});
+</script>
 {% endblock %}

@@ -1,4 +1,4 @@
-function post_batter() {
+function post_batter(is_alert) {
 
   var data = [];
   var detail = [];
@@ -72,7 +72,9 @@ function post_batter() {
       batter: data
     },
     success: function(html) {
-      alert("成績保存に成功");
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
     },
     error: function(html) {
       alert("成績保存でエラーが発生しました");
@@ -254,7 +256,7 @@ function add_order(self, kind) {
   $('.select2').select2();
 }
 
-function post_pitcher() {
+function post_pitcher(is_alert) {
   var $pitcher = $("table#pitcher tbody tr");
   var data = [];
 
@@ -297,7 +299,9 @@ function post_pitcher() {
       pitcher: data
     },
     success: function(html) {
-      alert("成績保存に成功");
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
     },
     error: function(html) {
       alert("成績保存でエラーが発生しました");
@@ -305,7 +309,7 @@ function post_pitcher() {
   });
 }
 
-function post_player() {
+function post_player(is_alert) {
   var $player = $("table#player td");
   // console.log($player);
 
@@ -372,7 +376,9 @@ function post_player() {
       players: data
     },
     success: function(html) {
-      alert("成績保存に成功");
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
     },
     error: function(html) {
       alert("成績保存でエラーが発生しました");
@@ -380,5 +386,18 @@ function post_player() {
   });
 }
 
+function autosave(kind) {
+  if ( kind === 'player' ) {
+    post_player(false);
+  } else if ( kind === 'pitcher' ) {
+    post_pitcher(false);
+  } else if ( kind === 'batter' ) {
+    post_batter(false);
+  }
+
+  setTimeout('autosave("'+kind+'")', 30000);
+}
+
 $(document).ready(function(){
 });
+

@@ -1,3 +1,17 @@
+{% macro header(date, team_top, team_bottom) %}
+
+<h3>{{date}} {{team_top}}<small>先攻</small> vs {{team_bottom}}<small>後攻</small></h3>
+<h4>
+<p class="text-right">
+<small class="autosave text-success">
+<span>30秒ごとに自動保存を行います...</span>
+</small>
+</p>
+</h4>
+
+{% endmacro %}
+
+
 {% macro navigation() %}
 
 {% set base = '/game/edit/' ~ uri_segment(3) ~ '/' ~ uri_segment(4) %}

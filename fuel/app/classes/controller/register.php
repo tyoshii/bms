@@ -22,7 +22,11 @@ class Controller_Register extends Controller
           if($result === false){
             throw new Exception('Failed');
           }
-          $view->ret_message = "Create Account:$input_name Succeed."; 
+
+          // 成功した場合は、loginページへリダイレクト
+          Session::set_flash('info', 'アカウントの作成に成功しました。ログインしてください。');
+          Response::redirect(Uri::create('/login'));
+
         }catch(Exception $e){
           $view->ret_message = "Create Account:$input_name Failed. " . $e->getMessage();
         }

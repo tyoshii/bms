@@ -127,21 +127,31 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $team_id = null, $kind = '')
+  public function action_edit($game_id = null, $order = null, $kind = '')
   {
     // error check
-    if ( ! is_int($game_id+0) or ! is_int($team_id+0) )
+    if ( ! is_int($game_id+0) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game/list'));
+      Response::redirect(Uri::create('/game'));
+    }
+    if ( ! in_array($order, array('top', 'bottom')) )
+    {
+      Session::set_flash('error', '試合一覧に戻されました');
+      Response::redirect(Uri::create('/game'));
     }
     if ( ! in_array($kind, array('player', 'pitcher', 'batter')) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game/list'));
+      Response::redirect(Uri::create('/game'));
     }
 
     $view = View::forge("game/{$kind}.twig");
+
+    // 対象のチームID取得
+    $game = Model_Game::find($game_id);
+    $team_id = $order == 'top' ? $game->team_top
+                               : $game->team_bottom;
 
     // 所属選手
     $view->members = Model_Player::find('all', array(
@@ -178,8 +188,6 @@ class Controller_Game extends Controller_Base
 
     $view->game_id = $game_id;
     $view->team_id = $team_id;
-
-    $game = Model_Game::find($game_id);
 
     // チーム名
     $view->team_top = Model_Team::find($game->team_top)->name;

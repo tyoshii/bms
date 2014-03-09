@@ -75,6 +75,32 @@ function batter_result_update() {
   });
 }
 
+function post_other(is_alert) {
+
+  var data = { 
+    mip: $("select#mip").val()
+  };
+
+  // ajax
+  $.ajax({
+    url: '/api/game/updateOther',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      order:   $('data#order').text(),
+      other:   data
+    },
+    success: function(html) {
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
+}
+
 function post_batter(is_alert) {
 
   var data = [];

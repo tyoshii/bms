@@ -26,6 +26,9 @@
     <li {%if uri_segment(4)=="batter"%}class="active"{%endif%}>
       <a href="{{base}}/batter">野手成績</a>
     </li>
+    <li {%if uri_segment(4)=="other"%}class="active"{%endif%}>
+      <a href="{{base}}/other">その他</a>
+    </li>
 
     {# return game/list #}
     <li class="navbar-right">

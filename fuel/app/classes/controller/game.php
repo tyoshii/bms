@@ -152,8 +152,12 @@ class Controller_Game extends Controller_Base
     ));
 
     // players
-    $game = Model_Game::find_by_id($game_id);
-    $view->players = json_decode($game->players);
+    $stat = Model_Games_Stat::query()
+                        ->where('game_id', $game_id)
+                        ->where('team_id', $team_id)
+                        ->get_one();
+
+    $view->players = json_decode($stat->players);
 
     switch ( $kind )
     {
@@ -161,11 +165,11 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->pitchers = json_decode($game->pitchers);
+        $view->pitchers = json_decode($stat->pitchers);
         break;
 
       case 'batter':
-        $view->batters = json_decode($game->batters);
+        $view->batters = json_decode($stat->batters);
         $view->results = Model_Batter_Result::find('all');
         break;
 
@@ -175,6 +179,8 @@ class Controller_Game extends Controller_Base
 
     $view->game_id = $game_id;
     $view->team_id = $team_id;
+
+    $game = Model_Game::find($game_id);
 
     // チーム名
     $view->team_top = Model_Team::find($game->team_top)->name;
@@ -199,7 +205,11 @@ class Controller_Game extends Controller_Base
 
     $batter = Input::post('batter');
 
-    $game = Model_Game::find($game_id);
+    $game = Model_Games_Stat::query()
+              ->where('game_id', $game_id)
+              ->where('team_id', $team_id)
+              ->get_one();
+
     $game->batters = json_encode($batter); 
     $game->save();
 
@@ -219,7 +229,10 @@ class Controller_Game extends Controller_Base
 
     $pitcher = Input::post('pitcher');
 
-    $game = Model_Game::find($game_id);
+    $game = Model_Games_Stat::query()
+              ->where('game_id', $game_id)
+              ->where('team_id', $team_id)
+              ->get_one();
     $game->pitchers = json_encode($pitcher); 
     $game->save();
 
@@ -240,7 +253,11 @@ class Controller_Game extends Controller_Base
     // stamen 登録
     $players = Input::post('players');
 
-    $game = Model_Game::find($game_id);
+    $game = Model_Games_Stat::query()
+              ->where('game_id', $game_id)
+              ->where('team_id', $team_id)
+              ->get_one();
+
     $game->players = json_encode($players); 
     $game->save();
 

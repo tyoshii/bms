@@ -140,7 +140,7 @@ class Controller_Game extends Controller_Base
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
     }
-    if ( ! in_array($kind, array('player', 'pitcher', 'batter')) )
+    if ( ! in_array($kind, array('player','pitcher','batter','other')) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
@@ -182,6 +182,10 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::find('all');
         break;
 
+      case 'other':
+        $view->others = json_decode($stat->others);
+        break;
+
       default:
         break;
     }
@@ -197,26 +201,6 @@ class Controller_Game extends Controller_Base
     $view->date = $game->date;
 
     return Response::forge($view);
-  }
-
-  static private function _get_deletegame_form($id)
-  {
-    $form = Fieldset::forge('deletegame', array(
-      'form_attributes' => array(
-        'class' => 'form',
-        'role'  => 'search',
-      ),
-    ));
-
-    $form->add('id', '', array('type' => 'hidden', 'value' => $id))
-      ->add_rule('required');
-
-    $form->add('confirm', '', array('type' => 'hidden', 'value' => '1'))
-      ->add_rule('required');
-
-    $form->add('submit', '', array('type' => 'submit', 'value' => '無効', 'class' => 'btn btn-warning'));
-
-    return $form;
   }
 
   static private function _get_addgame_form()

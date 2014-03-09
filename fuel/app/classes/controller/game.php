@@ -21,7 +21,7 @@ class Controller_Game extends Controller_Base
       Response::redirect(Uri::create('/game/list'));
     }
 
-    $score = Model_Score::find(Input::param('id'), array(
+    $score = Model_Games_Runningscore::find(Input::param('id'), array(
       'related' => array('games'),
     ));
 
@@ -36,7 +36,7 @@ class Controller_Game extends Controller_Base
         $fields = $val->validated();
         unset($fields['submit']);
 
-        $score = Model_Score::find($id);
+        $score = Model_Games_Runningscore::find($id);
         $score->set($fields);
         $score->save(); 
 

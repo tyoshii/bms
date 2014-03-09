@@ -60,7 +60,7 @@ class Model_Game extends \Orm\Model
     $game->batters  = '';
     $game->save();
 
-    Model_Score::createNewGame($game->id);
+    Model_Games_Runningscore::createNewGame($game->id);
 
     return $game;
   }
@@ -74,13 +74,13 @@ class Model_Game extends \Orm\Model
       'g.game_status',
       'g.team_top',
       'g.team_bottom',
-      'scores.tsum',
-      'scores.bsum',
+      'games_runningscores.tsum',
+      'games_runningscores.bsum',
       DB::expr('(select name from teams as t where t.id = g.team_top) as team_top_name'),
       DB::expr('(select name from teams as t where t.id = g.team_bottom) as team_bottom_name')
     )->from(array('games', 'g'));
 
-    $query->join('scores')->on('g.id', '=', 'scores.id');
+    $query->join('games_runningscores')->on('g.id', '=', 'games_runningscores.id');
   
     $query->where('game_status', '!=', 0);
 

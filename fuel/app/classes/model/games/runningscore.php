@@ -1,6 +1,6 @@
 <?php
 
-class Model_Score extends \Orm\Model
+class Model_Games_Runningscore extends \Orm\Model
 {
   protected static $_properties = array(
 		'id',
@@ -436,7 +436,7 @@ class Model_Score extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'scores';
+	protected static $_table_name = 'games_runningscores';
 
   protected static $_belongs_to = array('games' => array(
     'model_to' => 'Model_Game',

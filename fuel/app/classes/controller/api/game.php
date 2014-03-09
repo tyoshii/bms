@@ -14,10 +14,10 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updatePlayer()
   {
     // parameter check
-    $team_id = Input::post('team_id');
+    $order = Input::post('order');
     $game_id = Input::post('game_id');
 
-    if ( ! $team_id or ! $game_id )
+    if ( ! $order or ! $game_id )
     {
       return Response::forge('NG', 400);
     }
@@ -27,7 +27,7 @@ class Controller_Api_Game extends Controller_Rest
 
     $game = Model_Games_Stat::query()
               ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
+              ->where('order', $order)
               ->get_one();
 
     $game->players = json_encode($players); 
@@ -39,10 +39,10 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updatePitcher()
   {
     // parameter check
-    $team_id = Input::post('team_id');
+    $order = Input::post('order');
     $game_id = Input::post('game_id');
 
-    if ( ! $team_id or ! $game_id )
+    if ( ! $order or ! $game_id )
     {
       return Response::forge('NG', 400);
     }
@@ -51,7 +51,7 @@ class Controller_Api_Game extends Controller_Rest
 
     $game = Model_Games_Stat::query()
               ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
+              ->where('order', $order)
               ->get_one();
     $game->pitchers = json_encode($pitcher); 
     $game->save();
@@ -62,10 +62,10 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updateBatter()
   {
     // parameter check
-    $team_id = Input::post('team_id');
+    $order = Input::post('order');
     $game_id = Input::post('game_id');
 
-    if ( ! $team_id or ! $game_id )
+    if ( ! $order or ! $game_id )
     {
       return Response::forge('NG', 400);
     }
@@ -74,7 +74,7 @@ class Controller_Api_Game extends Controller_Rest
 
     $game = Model_Games_Stat::query()
               ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
+              ->where('order', $order)
               ->get_one();
 
     $game->batters = json_encode($batter); 

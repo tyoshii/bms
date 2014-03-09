@@ -145,7 +145,7 @@ function post_batter(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       batter: data
     },
     success: function(html) {
@@ -383,7 +383,7 @@ function post_pitcher(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       pitcher: data
     },
     success: function(html) {
@@ -460,7 +460,7 @@ function post_player(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       players: data
     },
     success: function(html) {

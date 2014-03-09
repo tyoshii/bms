@@ -1,6 +1,6 @@
 <?php
 
-class Model_Member extends \Orm\Model
+class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
@@ -21,7 +21,7 @@ class Model_Member extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'members';
+	protected static $_table_name = 'players';
 
   protected static $_belongs_to = array(
     'teams' => array(

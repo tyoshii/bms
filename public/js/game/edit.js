@@ -141,7 +141,7 @@ function post_batter(is_alert) {
 
   // ajax
   $.ajax({
-    url: '/game/score/batter',
+    url: '/api/game/updateBatter',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
@@ -379,7 +379,7 @@ function post_pitcher(is_alert) {
   
   // ajax
   $.ajax({
-    url: '/game/score/pitcher',
+    url: '/api/game/updatePitcher',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
@@ -456,7 +456,7 @@ function post_player(is_alert) {
 
   // ajax
   $.ajax({
-    url: '/game/score/player',
+    url: '/api/game/updatePlayer',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),

@@ -13,15 +13,14 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_score()
+  public function action_score($game_id)
   {
-    $id = Input::param('id');
-    if ( ! $id )
+    if ( ! $game_id )
     {
       Response::redirect(Uri::create('/game/list'));
     }
 
-    $score = Model_Games_Runningscore::find(Input::param('id'), array(
+    $score = Model_Games_Runningscore::find($game_id, array(
       'related' => array('games'),
     ));
 
@@ -36,11 +35,11 @@ class Controller_Game extends Controller_Base
         $fields = $val->validated();
         unset($fields['submit']);
 
-        $score = Model_Games_Runningscore::find($id);
+        $score = Model_Games_Runningscore::find($game_id);
         $score->set($fields);
         $score->save(); 
 
-        Response::redirect(Uri::create('/game/list'));
+        Response::redirect(Uri::create('/game'));
       }
       else {
         Session::set_flash('error', $val->show_errors());
@@ -128,8 +127,8 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-	public function action_edit($game_id = null, $team_id = null, $kind = '')
-	{
+  public function action_edit($game_id = null, $team_id = null, $kind = '')
+  {
     // error check
     if ( ! is_int($game_id+0) or ! is_int($team_id+0) )
     {
@@ -190,88 +189,7 @@ class Controller_Game extends Controller_Base
     $view->date = $game->date;
 
     return Response::forge($view);
-}
-
-  public function post_batter()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $batter = Input::post('batter');
-
-    $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
-              ->get_one();
-
-    $game->batters = json_encode($batter); 
-    $game->save();
-
-    echo 'OK';
   }
-
-  public function post_pitcher()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $pitcher = Input::post('pitcher');
-
-    $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
-              ->get_one();
-    $game->pitchers = json_encode($pitcher); 
-    $game->save();
-
-    echo 'OK';
-  }
-
-  public function post_player()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    // stamen 登録
-    $players = Input::post('players');
-
-    $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
-              ->get_one();
-
-    $game->players = json_encode($players); 
-    $game->save();
-
-    echo 'OK';
-  }
-
-	public function post_status()
-	{
-    $game = Model_Game::find(Input::post('id'));
-    $game->game_status = Input::post('status');
-    $game->save();
-
-    return "OK";
-	}
 
   static private function _get_deletegame_form($id)
   {

@@ -61,9 +61,11 @@ class Model_Game extends \Orm\Model
     $game->save();
 
     Model_Games_Runningscore::createNewGame($game->id);
+    Model_Games_Stat::createNewGame($game->id, $team_top, $team_bottom);
 
     return $game;
   }
+
   public static function getOwnGames()
   {
 

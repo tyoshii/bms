@@ -30,6 +30,7 @@ return array(
 				21 => '022_add_category_to_batter_results',
 				22 => '023_rename_table_scores_to_games_runningsores',
 				23 => '025_rename_table_games_runningsores_to_games_runningscores',
+				24 => '026_rename_table_members_to_players',
 			),
 		),
 		'module' => 

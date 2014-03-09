@@ -99,7 +99,7 @@ class Controller_Admin extends Controller_Base
     if ( $val->run() )
     {
       // memberテーブル更新
-      $member = Model_Member::find(Input::post('id'));
+      $member = Model_Player::find(Input::post('id'));
       $member->team = Input::post('team');
       $member->name = Input::post('name');
       $member->number = Input::post('number');
@@ -137,7 +137,7 @@ class Controller_Admin extends Controller_Base
     $form = $this->_get_addmember_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->members = Model_Member::find('all', array(
+    $this->view->members = Model_Player::find('all', array(
       'related' => array('teams'),
       'order_by' => 'number',
     ));
@@ -153,7 +153,7 @@ class Controller_Admin extends Controller_Base
     if ( $val->run())
     {
       try {
-        $member = Model_Member::forge();
+        $member = Model_Player::forge();
         $member->name   = Input::post('name');
         $member->team   = Input::post('team');
         $member->number = Input::post('number');
@@ -266,7 +266,7 @@ class Controller_Admin extends Controller_Base
     ));
 
     // 登録情報
-    $member = Model_Member::find($id);
+    $member = Model_Player::find($id);
 
     // id
     $form->add('id', '', array(

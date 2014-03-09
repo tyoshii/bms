@@ -23,7 +23,7 @@ class Model_Team extends \Orm\Model
 
   protected static $_has_many = array(
     'teams' => array(
-      'model_to' => 'Model_Member',
+      'model_to' => 'Model_Player',
       'key_from' => 'id',
       'key_to' => 'team',
       'cascade_save' => true,

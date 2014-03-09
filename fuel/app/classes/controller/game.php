@@ -145,7 +145,7 @@ class Controller_Game extends Controller_Base
     $view = View::forge("game/{$kind}.twig");
 
     // 所属選手
-    $view->members = Model_Member::find('all', array(
+    $view->members = Model_Player::find('all', array(
       'where' => array(
         array('team', $team_id),
       ),

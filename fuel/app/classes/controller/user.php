@@ -32,16 +32,24 @@ class Controller_User extends Controller_Base
     {
       $id    = Input::post('member_id');
       $props = array(
-        'team'   => Input::post('team'),
-        'number' => Input::post('number'),
-        'name'   => Common::get_dispname(),
+        'team'     => Input::post('team'),
+        'number'   => Input::post('number'),
+        'name'     => Common::get_dispname(),
+        'username' => Auth::get_screen_name(),
       );
 
       // idが送られてくれば更新
-      if ( $member = Model_Player::find($id) )
+      if ( $player = Model_Player::find($id) )
       {
-        $member->set($props);
-        $member->save();
+        // player_idの書き換えチェック
+        if ( $player->username != Auth::get_screen_name() )
+        {
+          Session::set_flash('error', '不正な処理が行われました。');
+          Response::redirect();
+        }
+
+        $player->set($props);
+        $player->save();
         
         Session::set_flash('info', '所属チームの更新が成功しました。');
         Response::redirect(Uri::current());
@@ -58,13 +66,11 @@ class Controller_User extends Controller_Base
         }
         else
         {
+          // user_id 取得
           // 新規選手登録
-          $member = Model_Player::forge($props);
-          $member->save();
+          $player = Model_Player::forge($props);
+          $player->save();
           
-          // ユーザー情報にメンバーIDを登録
-          Common::update_user(array('member_id' => $member->id));
-        
           Session::set_flash('info', '新たに所属チームに登録されました。');
           Response::redirect(Uri::current());
         }
@@ -107,12 +113,11 @@ class Controller_User extends Controller_Base
         'dispname' => Input::post('dispname'),
       ));
 
-      // member情報更新
-      $member_id = Auth::get_profile_fields('member_id');
-      if ( $member = Model_Player::find($member_id) )
+      // player情報更新
+      if ( $player = Model_Player::find_by_username(Auth::get_screen_name()) )
       {
-        $member->name = Input::post('dispname');
-        $member->save();
+        $player->name = Input::post('dispname');
+        $player->save();
       }
 
       Session::set_flash('info', 'ユーザー情報を更新しました');
@@ -190,26 +195,23 @@ class Controller_User extends Controller_Base
     $team = '';
     $number = '';
 
-    // member_idが既に登録されているかどうか
-    $member_id = Auth::get_profile_fields('member_id');
-    if ( $member_id )
-    {
-      // 既に登録されていれば、Modelから情報取得
-      if ( $member = Model_Player::find($member_id) )
-      {
-        $team   = $member->team;
-        $number = $member->number;
-      }
+    // アカウントと選手が既に紐付けられているかどうか
+    $player = Model_Player::find_by_username(Auth::get_screen_name());
 
-      // member_id を type=hiddenでセット
+    if ( $player )
+    {
+      $team   = $player->team;
+      $number = $player->number;
+
+      // player_id を type=hiddenでセット
       $form->add('member_id', '', array(
         'type' => 'hidden',
-        'value' => $member_id,
+        'value' => $player->id,
       ))
         ->add_rule('required')
         ->add_rule('trim')
         ->add_rule('valid_string', array('numeric'))
-        ->add_rule('match_value', array($member_id));
+        ->add_rule('match_value', array($player->id));
     }
 
     // 所属チーム

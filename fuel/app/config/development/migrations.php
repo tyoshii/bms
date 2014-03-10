@@ -32,6 +32,9 @@ return array(
 				23 => '025_rename_table_games_runningsores_to_games_runningscores',
 				24 => '026_rename_table_members_to_players',
 				25 => '027_create_games_stats',
+				26 => '028_add_user_id_to_players',
+				27 => '029_rename_field_user_id_to_username_in_players',
+				28 => '030_rename_field_username_to_username_in_players',
 			),
 		),
 		'module' => 

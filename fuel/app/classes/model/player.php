@@ -7,6 +7,7 @@ class Model_Player extends \Orm\Model
 		'team',
 		'name',
 		'number',
+    'username',
 		'created_at',
 		'updated_at',
 	);

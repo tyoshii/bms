@@ -98,15 +98,13 @@ class Controller_Admin extends Controller_Base
 
     if ( $val->run() )
     {
-      // memberテーブル更新
-      $member = Model_Player::find(Input::post('id'));
-      $member->team = Input::post('team');
-      $member->name = Input::post('name');
-      $member->number = Input::post('number');
-      $member->save();
-
-      // アカウントの紐付け
-      // Todo
+      // playerテーブル更新
+      $player = Model_Player::find(Input::post('id'));
+      $player->team = Input::post('team');
+      $player->name = Input::post('name');
+      $player->number = Input::post('number');
+      $player->username = Input::post('username');
+      $player->save();
 
       Session::set_flash('info', '選手情報の更新に成功しました');
       Response::redirect(Uri::current());
@@ -153,11 +151,11 @@ class Controller_Admin extends Controller_Base
     if ( $val->run())
     {
       try {
-        $member = Model_Player::forge();
-        $member->name   = Input::post('name');
-        $member->team   = Input::post('team');
-        $member->number = Input::post('number');
-        $member->save();
+        $player = Model_Player::forge();
+        $player->name   = Input::post('name');
+        $player->team   = Input::post('team');
+        $player->number = Input::post('number');
+        $player->save();
 
         Session::set_flash('info', '選手を登録しました。');
         Response::redirect(Uri::current());
@@ -232,9 +230,9 @@ class Controller_Admin extends Controller_Base
     if ( $val->run())
     {
       try {
-        $member = Model_League::forge();
-        $member->name   = Input::post('name');
-        $member->save();
+        $league = Model_League::forge();
+        $league->name   = Input::post('name');
+        $league->save();
 
         Session::set_flash('info', '新規リーグを登録しました。');
         Response::redirect(Uri::current());
@@ -266,7 +264,7 @@ class Controller_Admin extends Controller_Base
     ));
 
     // 登録情報
-    $member = Model_Player::find($id);
+    $player = Model_Player::find($id);
 
     // id
     $form->add('id', '', array(
@@ -279,12 +277,12 @@ class Controller_Admin extends Controller_Base
       ->add_rule('valid_string', array('numeric'));
 
     // team
-    Common::add_team_select($form, $member->team);
+    Common::add_team_select($form, $player->team);
 
     // name
     $form->add('name', '選手名', array(
       'type' => 'text',
-      'value' => $member->name,
+      'value' => $player->name,
       'class' => 'form-control',
     ))
       ->add_rule('required')
@@ -293,7 +291,7 @@ class Controller_Admin extends Controller_Base
     // number
     $form->add('number', '背番号', array(
       'type' => 'number',
-      'value' => $member->number,
+      'value' => $player->number,
       'class' => 'form-control',
       'mim' => 0,
     ))
@@ -305,14 +303,19 @@ class Controller_Admin extends Controller_Base
     $users = array();
     foreach ( Model_User::query()->select('username')->get() as $user )
     {
+      // 既に登録済みだったら次へ
+      if ( $user->username != $player->username &&
+           Model_Player::find_by_username($user->username) )
+        continue;
+
       if ( $user->username !== 'admin' )
         $users[$user->username] = $user->username;
     }
 
-    $form->add('account', 'アカウント', array(
+    $form->add('username', '紐づけられているアカウント', array(
       'type' => 'select',
       'options' => array(''=>'') + $users,
-      'value'   => Model_User::getMyTeamId(),
+      'value'   => $player->username,
       'class' => 'form-control chosen-select',
       'data-placeholder' => '紐付けアカウント',
     ))

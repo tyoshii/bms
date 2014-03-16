@@ -14,17 +14,20 @@
 
 {% macro navigation() %}
 
-{% set base = '/game/edit/' ~ uri_segment(3) ~ '/' ~ uri_segment(4) %}
+{% set base = '/game/' ~ uri_segment(2) ~ '/' ~ uri_segment(3) %}
 
 <ul class="nav nav-tabs">
-    <li {%if uri_segment(5)=='player'%}class="active"{%endif%}>
+    <li {%if uri_segment(4)=='player'%}class="active"{%endif%}>
       <a href="{{base}}/player">出場選手</a>
     </li>
-    <li {%if uri_segment(5)=='pitcher'%}class="active"{%endif%}>
+    <li {%if uri_segment(4)=='pitcher'%}class="active"{%endif%}>
       <a href="{{base}}/pitcher">投手成績</a>
     </li>
-    <li {%if uri_segment(5)=="batter"%}class="active"{%endif%}>
+    <li {%if uri_segment(4)=="batter"%}class="active"{%endif%}>
       <a href="{{base}}/batter">野手成績</a>
+    </li>
+    <li {%if uri_segment(4)=="other"%}class="active"{%endif%}>
+      <a href="{{base}}/other">その他</a>
     </li>
 
     {# return game/list #}
@@ -33,7 +36,7 @@
     </li>
 </ul>
 
-<data id="game_id" class="disable">{{uri_segment(3)}}</data>
-<data id="team_id" class="disable">{{uri_segment(4)}}</data>
+<data id="game_id" class="disable">{{uri_segment(2)}}</data>
+<data id="order" class="disable">{{uri_segment(3)}}</data>
 
 {% endmacro %}

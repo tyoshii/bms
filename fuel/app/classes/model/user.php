@@ -32,7 +32,7 @@ class Model_User extends \Orm\Model
   {
     $member_id = Auth::get_profile_fields('member_id');
     
-    if ( $member = Model_Member::find($member_id) )
+    if ( $member = Model_Player::find($member_id) )
     {
       return $member->team;
     }

@@ -75,6 +75,32 @@ function batter_result_update() {
   });
 }
 
+function post_other(is_alert) {
+
+  var data = { 
+    mip: $("select#mip").val()
+  };
+
+  // ajax
+  $.ajax({
+    url: '/api/game/updateOther',
+    type: 'POST',
+    data: {
+      game_id: $('data#game_id').text(),
+      order:   $('data#order').text(),
+      other:   data
+    },
+    success: function(html) {
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
+    },
+    error: function(html) {
+      alert("成績保存でエラーが発生しました");
+    }, 
+  });
+}
+
 function post_batter(is_alert) {
 
   var data = [];
@@ -141,11 +167,11 @@ function post_batter(is_alert) {
 
   // ajax
   $.ajax({
-    url: '/game/score/batter',
+    url: '/api/game/updateBatter',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       batter: data
     },
     success: function(html) {
@@ -379,11 +405,11 @@ function post_pitcher(is_alert) {
   
   // ajax
   $.ajax({
-    url: '/game/score/pitcher',
+    url: '/api/game/updatePitcher',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       pitcher: data
     },
     success: function(html) {
@@ -456,11 +482,11 @@ function post_player(is_alert) {
 
   // ajax
   $.ajax({
-    url: '/game/score/player',
+    url: '/api/game/updatePlayer',
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      team_id: $('data#team_id').text(),
+      order: $('data#order').text(),
       players: data
     },
     success: function(html) {

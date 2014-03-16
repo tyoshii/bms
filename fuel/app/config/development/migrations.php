@@ -28,6 +28,10 @@ return array(
 				19 => '020_add_order_to_batter_results',
 				20 => '021_add_category_id_to_batter_results',
 				21 => '022_add_category_to_batter_results',
+				22 => '023_rename_table_scores_to_games_runningsores',
+				23 => '025_rename_table_games_runningsores_to_games_runningscores',
+				24 => '026_rename_table_members_to_players',
+				25 => '027_create_games_stats',
 			),
 		),
 		'module' => 

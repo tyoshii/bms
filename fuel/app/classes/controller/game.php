@@ -13,15 +13,14 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_score()
+  public function action_score($game_id)
   {
-    $id = Input::param('id');
-    if ( ! $id )
+    if ( ! $game_id )
     {
       Response::redirect(Uri::create('/game/list'));
     }
 
-    $score = Model_Score::find(Input::param('id'), array(
+    $score = Model_Games_Runningscore::find($game_id, array(
       'related' => array('games'),
     ));
 
@@ -36,11 +35,11 @@ class Controller_Game extends Controller_Base
         $fields = $val->validated();
         unset($fields['submit']);
 
-        $score = Model_Score::find($id);
+        $score = Model_Games_Runningscore::find($game_id);
         $score->set($fields);
         $score->save(); 
 
-        Response::redirect(Uri::create('/game/list'));
+        Response::redirect(Uri::create('/game'));
       }
       else {
         Session::set_flash('error', $val->show_errors());
@@ -128,32 +127,46 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-	public function action_edit($game_id = null, $team_id = null, $kind = '')
-	{
+  public function action_edit($game_id = null, $order = null, $kind = '')
+  {
     // error check
-    if ( ! is_int($game_id+0) or ! is_int($team_id+0) )
+    if ( ! is_int($game_id+0) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game/list'));
+      Response::redirect(Uri::create('/game'));
     }
-    if ( ! in_array($kind, array('player', 'pitcher', 'batter')) )
+    if ( ! in_array($order, array('top', 'bottom')) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game/list'));
+      Response::redirect(Uri::create('/game'));
+    }
+    if ( ! in_array($kind, array('player','pitcher','batter','other')) )
+    {
+      Session::set_flash('error', '試合一覧に戻されました');
+      Response::redirect(Uri::create('/game'));
     }
 
     $view = View::forge("game/{$kind}.twig");
 
+    // 対象のチームID取得
+    $game = Model_Game::find($game_id);
+    $team_id = $order == 'top' ? $game->team_top
+                               : $game->team_bottom;
+
     // 所属選手
-    $view->members = Model_Member::find('all', array(
+    $view->members = Model_Player::find('all', array(
       'where' => array(
         array('team', $team_id),
       ),
     ));
 
     // players
-    $game = Model_Game::find_by_id($game_id);
-    $view->players = json_decode($game->players);
+    $stat = Model_Games_Stat::query()
+                        ->where('game_id', $game_id)
+                        ->where('team_id', $team_id)
+                        ->get_one();
+
+    $view->players = json_decode($stat->players);
 
     switch ( $kind )
     {
@@ -161,12 +174,16 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->pitchers = json_decode($game->pitchers);
+        $view->pitchers = json_decode($stat->pitchers);
         break;
 
       case 'batter':
-        $view->batters = json_decode($game->batters);
+        $view->batters = json_decode($stat->batters);
         $view->results = Model_Batter_Result::find('all');
+        break;
+
+      case 'other':
+        $view->others = json_decode($stat->others);
         break;
 
       default:
@@ -184,96 +201,6 @@ class Controller_Game extends Controller_Base
     $view->date = $game->date;
 
     return Response::forge($view);
-}
-
-  public function post_batter()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $batter = Input::post('batter');
-
-    $game = Model_Game::find($game_id);
-    $game->batters = json_encode($batter); 
-    $game->save();
-
-    echo 'OK';
-  }
-
-  public function post_pitcher()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $pitcher = Input::post('pitcher');
-
-    $game = Model_Game::find($game_id);
-    $game->pitchers = json_encode($pitcher); 
-    $game->save();
-
-    echo 'OK';
-  }
-
-  public function post_player()
-  {
-    // parameter check
-    $team_id = Input::post('team_id');
-    $game_id = Input::post('game_id');
-
-    if ( ! $team_id or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    // stamen 登録
-    $players = Input::post('players');
-
-    $game = Model_Game::find($game_id);
-    $game->players = json_encode($players); 
-    $game->save();
-
-    echo 'OK';
-  }
-
-	public function post_status()
-	{
-    $game = Model_Game::find(Input::post('id'));
-    $game->game_status = Input::post('status');
-    $game->save();
-
-    return "OK";
-	}
-
-  static private function _get_deletegame_form($id)
-  {
-    $form = Fieldset::forge('deletegame', array(
-      'form_attributes' => array(
-        'class' => 'form',
-        'role'  => 'search',
-      ),
-    ));
-
-    $form->add('id', '', array('type' => 'hidden', 'value' => $id))
-      ->add_rule('required');
-
-    $form->add('confirm', '', array('type' => 'hidden', 'value' => '1'))
-      ->add_rule('required');
-
-    $form->add('submit', '', array('type' => 'submit', 'value' => '無効', 'class' => 'btn btn-warning'));
-
-    return $form;
   }
 
   static private function _get_addgame_form()

@@ -6,7 +6,7 @@ class Controller_Score extends Controller_Base
   {
     $view = View::forge('score/record_team.twig');
 
-    $score = Model_Score::find(Input::param('id'), array(
+    $score = Model_Games_Runningscore::find(Input::param('id'), array(
       'related' => array('games'),
     ));
  

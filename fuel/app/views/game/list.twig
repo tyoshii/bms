@@ -1,4 +1,4 @@
-{% extends "layout.twig" %}
+{% extends "layout/layout.twig" %}
 
 {% block li_game %}
 <li class="active">
@@ -33,12 +33,12 @@
 <td>{{ game.date }}</td>
 <td>
 <div>{{ game.team_top_name }}</div>
-<a href="/game/edit/{{game.id}}/{{game.team_top}}/player" class="btn btn-info btn-xs">成績入力</a>
+<a href="/game/{{game.id}}/top/player" class="btn btn-info btn-xs">成績入力</a>
 </td>
-<td><a href="/game/score?id={{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
+<td><a href="/game/{{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
 <td>
 <div>{{ game.team_bottom_name }}</div>
-<a href="/game/edit/{{game.id}}/{{game.team_bottom}}/player" class="btn btn-info btn-xs">成績入力</a>
+<a href="/game/{{game.id}}/bottom/player" class="btn btn-info btn-xs">成績入力</a>
 </td>
 <td>
   <input type="hidden" name="id" value="{{game.id}}">
@@ -65,7 +65,7 @@ function changeGameStatus(id, status) {
     
     $.ajax({
       type: 'POST',
-      url: '/game/status',
+      url: '/api/game/updateStatus',
       data: {
         id: id,
         status: status

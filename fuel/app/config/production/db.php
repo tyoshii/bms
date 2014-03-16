@@ -3,9 +3,14 @@
 return array(
 	'default' => array(
 		'connection'  => array(
-			'dsn'        => 'mysql:host=localhost;dbname=bms;port=3306',
+      'host'       => 'bm-s.info',
+      'port'       => '3306',
+			'dsn'        => 'mysql:host=bm-s.info;dbname=bms;port=3306',
 			'username'   => 'root',
-			'password'   => Config::get('password.mysql.development.root'),
+			'password'   => Config::get('password.mysql.production.root'),
+		),
+		'backup'  => array(
+			'username'   => 'bms_backup',
 		),
 	),
 );

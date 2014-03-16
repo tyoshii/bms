@@ -38,7 +38,7 @@ class Controller_User extends Controller_Base
       );
 
       // idが送られてくれば更新
-      if ( $member = Model_Member::find($id) )
+      if ( $member = Model_Player::find($id) )
       {
         $member->set($props);
         $member->save();
@@ -49,7 +49,7 @@ class Controller_User extends Controller_Base
       else // idが無ければ新規登録
       {
         // かぶりチェック
-        if ( Model_Member::query()
+        if ( Model_Player::query()
               ->where('team', $props['team'])
               ->where('number', $props['number'])
               ->get_one() )
@@ -59,7 +59,7 @@ class Controller_User extends Controller_Base
         else
         {
           // 新規選手登録
-          $member = Model_Member::forge($props);
+          $member = Model_Player::forge($props);
           $member->save();
           
           // ユーザー情報にメンバーIDを登録
@@ -109,7 +109,7 @@ class Controller_User extends Controller_Base
 
       // member情報更新
       $member_id = Auth::get_profile_fields('member_id');
-      if ( $member = Model_Member::find($member_id) )
+      if ( $member = Model_Player::find($member_id) )
       {
         $member->name = Input::post('dispname');
         $member->save();
@@ -195,7 +195,7 @@ class Controller_User extends Controller_Base
     if ( $member_id )
     {
       // 既に登録されていれば、Modelから情報取得
-      if ( $member = Model_Member::find($member_id) )
+      if ( $member = Model_Player::find($member_id) )
       {
         $team   = $member->team;
         $number = $member->number;

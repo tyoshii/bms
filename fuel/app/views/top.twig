@@ -4,7 +4,10 @@
 
 <h1>Hello <small>野球ばか</small></h1>
 
+{%if auth_check() == false %}
 アカウントがない場合は<a href="/register">Sign Up</a>
+{%endif%}
+
 {% endblock %}
 
 

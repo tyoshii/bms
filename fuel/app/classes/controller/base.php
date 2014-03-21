@@ -27,7 +27,8 @@ class Controller_Base extends Controller
         $auth = Auth::instance();
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
-          Response::redirect(Uri::current());
+          Session::set_flash('info', 'ログインに成功しました！こんにちわ');
+          Common::redirect(Uri::current());
         }
         else
         {

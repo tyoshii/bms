@@ -152,9 +152,10 @@ class Controller_Admin extends Controller_Base
     {
       try {
         $player = Model_Player::forge();
-        $player->name   = Input::post('name');
-        $player->team   = Input::post('team');
-        $player->number = Input::post('number');
+        $player->name     = Input::post('name');
+        $player->team     = Input::post('team');
+        $player->number   = Input::post('number');
+        $player->username = '';
         $player->save();
 
         Session::set_flash('info', '選手を登録しました。');

@@ -28,7 +28,7 @@ class Controller_Base extends Controller
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
           Session::set_flash('info', 'ログインに成功しました！こんにちわ');
-          Common::redirect(Uri::current());
+          Response::redirect(Uri::current());
         }
         else
         {

@@ -2,6 +2,15 @@
 
 class Common
 {
+  public static function redirect($uri)
+  {
+    $redirect_to = Session::get('redirect_to');
+    if ( ! $redirect_to )
+      $redirect_to = $uri ? $uri : Uri::current();
+
+    Response::redirect(Uri::create($redirect));
+  }
+
   public static function add_team_select($form, $default)
   {
     $teams = Model_Team::getTeams();

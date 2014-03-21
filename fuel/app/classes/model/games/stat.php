@@ -39,16 +39,18 @@ class Model_Games_Stat extends \Orm\Model
       );
     }
 
-    $stat = self::forge(array(
+    $props = array(
       'game_id'  => $game_id,
       'players'  => json_encode($default_players),
       'pitchers' => '',
       'batters'  => '',
       'others'   => '',
-    ));
+    );
 
     foreach ( array('top' => $top, 'bottom' => $bottom) as $order => $team_id )
     {
+      $stat = self::forge($props);
+
       $stat->order = $order;
       $stat->team_id = $team_id;
 

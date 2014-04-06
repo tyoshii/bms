@@ -16,14 +16,27 @@
 
 <tr>
 <th>MIP</th>
+
 <td class="MIP">
-<select id="mip" name="mip" class="select2">
+<label>2ポイント</label>
+<select id="mip2" name="mip" class="select2">
 <option value="0">--------------------</option>
 {% for member in members %}
-<option value="{{member.id}}" {%if others.mip == member.id%}selected{%endif%}>{{member.name}}</option>
+<option value="{{member.id}}" {%if others.mip2 == member.id%}selected{%endif%}>{{member.name}}</option>
 {%endfor%}
 </select>
 </td>
+
+<td class="MIP">
+<label>1ポイント</label>
+<select id="mip1" name="mip" class="select2">
+<option value="0">--------------------</option>
+{% for member in members %}
+<option value="{{member.id}}" {%if others.mip1 == member.id%}selected{%endif%}>{{member.name}}</option>
+{%endfor%}
+</select>
+</td>
+
 </tr>
 
 </tbody>

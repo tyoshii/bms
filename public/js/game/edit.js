@@ -78,8 +78,11 @@ function batter_result_update() {
 function post_other(is_alert) {
 
   var data = { 
-    mip: $("select#mip").val()
+    mip2: $("select#mip2").val(),
+    mip1: $("select#mip1").val()
   };
+
+console.log(data);
 
   // ajax
   $.ajax({

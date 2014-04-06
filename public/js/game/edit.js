@@ -501,6 +501,9 @@ function post_player(is_alert) {
 }
 
 function autosave(kind) {
+  // 自動保存機能を停止
+  return false;
+
   if ( kind === 'player' ) {
     post_player(false);
   } else if ( kind === 'pitcher' ) {

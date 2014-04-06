@@ -79,10 +79,11 @@ function post_other(is_alert) {
 
   var data = { 
     mip2: $("select#mip2").val(),
-    mip1: $("select#mip1").val()
+    mip1: $("select#mip1").val(),
+    place: $("input#place").val(),
+    memo: $("textarea#memo").val()
   };
-
-console.log(data);
+//console.log(data);
 
   // ajax
   $.ajax({

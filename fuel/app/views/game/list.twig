@@ -19,7 +19,21 @@
 
 <div class="col-md-9">
 
-<table class="table table-hover">
+<form class="form form-inline" onsubmit="return false;">
+<div class="form-group">
+<input id="search" class="form-control" type="text" placeholder="検索">
+</div>
+
+<div class="form-group">
+<div class="btn-group">
+<button type="button" class="btn btn-default" onClick="filter();">全試合</button>
+<button type="button" class="btn btn-default" onClick="filter();">MyTeam</button>
+</div>
+</div>
+
+</form>
+
+<table id="game-list" class="table table-hover">
 <thead>
 <tr>
     <th>実施日</th>
@@ -89,5 +103,22 @@ $(document).ready(function() {
     $(this).datepicker();
   });
 });
+
+// search
+$("#search").keyup(function(){
+
+  if ( ! $(this).val()) {
+    $("#game-list tbody tr").show();
+  }
+  else {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr:contains(" + this.value + ")").show();
+  }
+});
+
+// filter
+function filter() {
+}
+
 </script>
 {% endblock %}

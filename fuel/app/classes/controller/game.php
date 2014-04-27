@@ -32,11 +32,8 @@ class Controller_Game extends Controller_Base
       $val = $form->validation();
       if ( $val->run() )
       {
-        $fields = $val->validated();
-        unset($fields['submit']);
-
         $score = Model_Games_Runningscore::find($game_id);
-        $score->set($fields);
+        $score->set(Input::post());
         $score->save(); 
 
         Response::redirect(Uri::create('/game'));

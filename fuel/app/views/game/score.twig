@@ -1,104 +1,45 @@
 {% extends 'layout/layout.twig' %}
 
-{% set normal %}
-
-<table class="table">
-<thead>
-<tr>
-<th class="team">チーム</th>
-{% for i in range(1,9) %}
-<th>{{i}}</th>
-{% endfor %}
-<th class="sum">合計</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td class="team">{{team_top}}</td>
-{% for i in range(1,9) %}
-{% set k = 't' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="form-control score tscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="tsum">{{score.tsum}}</td>
-</tr>
-
-<tr>
-<td class="team">{{team_bottom}}</td>
-{% for i in range(1,9) %}
-{% set k = 'b' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="form-control score bscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="bsum">{{score.bsum}}</td>
-</tr>
-
-</tbody>
-</table>
-
-{% endset %}
-
-
-{% set overtime %}
-
-<table class="table">
-<thead>
-<tr>
-<th class="team">チーム</th>
-{% for i in range(10,18) %}
-<th>{{i}}</th>
-{% endfor %}
-<th class="sum">合計</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td class="team">{{team_top}}</td>
-{% for i in range(10,18) %}
-{% set k = 't' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="form-control score tscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="tsum">{{score.tsum}}</td>
-</tr>
-
-<tr>
-<td class="team">{{team_bottom}}</td>
-{% for i in range(10,18) %}
-{% set k = 'b' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="form-control score bscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="bsum">{{score.bsum}}</td>
-</tr>
-
-</tbody>
-</table>
-
-{% endset %}
-
-
 {% block content %}
 
 {{ form_open({'method':'post', 'enctype':'multipart/form-data'}) }}
 
-<!-- Nav tabs -->
-<ul class="nav nav-tabs">
-  <li><a href="#normal"   data-toggle="tab">規定の回数</a></li>
-  <li><a href="#overtime" data-toggle="tab">延長戦</a></li>
-</ul>
+<table id="score" class="table">
+<thead>
+<tr>
+<th class="team">チーム</th>
+{% for i in range(1,12) %}
+<th>{{i}}</th>
+{% endfor %}
+<th class="sum">合計</th>
+</tr>
+</thead>
 
-<!-- Tab panes -->
-<div class="tab-content">
-  <div class="tab-pane active" id="normal">{{normal}}</div>
-  <div class="tab-pane" id="overtime">{{overtime}}</div>
-</div>
+<tbody>
 
-<input type="hidden" name="id" value="{{score.id}}">
+<tr>
+<td class="team">{{team_top}}</td>
+{% for i in range(1,12) %}
+{% set k = 't' ~ i %}
+{% set v = score[k] %}
+<td><input type="number" class="score tscore" value="{{v}}" min="0" name="{{k}}"></td>
+{% endfor %}
+<td class="tsum">{{score.tsum}}</td>
+</tr>
+
+<tr>
+<td class="team">{{team_bottom}}</td>
+{% for i in range(1,12) %}
+{% set k = 'b' ~ i %}
+{% set v = score[k] %}
+<td><input type="number" class="score bscore" value="{{v}}" min="0" name="{{k}}"></td>
+{% endfor %}
+<td class="bsum">{{score.bsum}}</td>
+</tr>
+
+</tbody>
+</table>
+
 <input class="tsum" type="hidden" name="tsum" value="{{score.tsum}}">
 <input class="bsum" type="hidden" name="bsum" value="{{score.bsum}}">
 <input type="submit" class="btn btn-success" value="更新">

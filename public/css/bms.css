@@ -83,6 +83,10 @@ table#game-list tr.own {
   background-color: #FFFFCC;  
 }
 
+table#score input {
+  width: 40px;
+}
+
 .disable {
   display: none;
 }

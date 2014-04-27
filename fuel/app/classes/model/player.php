@@ -32,4 +32,12 @@ class Model_Player extends \Orm\Model
       'cascade_save' => true,
       'cascade_delete' => false,
     ));
+
+  public static function getMyTeamId()
+  {
+    if ( $res = self::find_by_username(Auth::get_screen_name()) )
+      return $res->team;
+      
+    return null;
+  }
 }

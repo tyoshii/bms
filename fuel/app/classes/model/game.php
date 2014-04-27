@@ -66,9 +66,8 @@ class Model_Game extends \Orm\Model
     return $game;
   }
 
-  public static function getOwnGames()
+  public static function getGames()
   {
-
     $query = DB::select(
       array( 'g.id', 'id' ),
       'g.id',
@@ -85,19 +84,27 @@ class Model_Game extends \Orm\Model
     $query->join('games_runningscores')->on('g.id', '=', 'games_runningscores.id');
   
     $query->where('game_status', '!=', 0);
+    $query->order_by('date', 'desc');
+    
+    $result = $query->execute()->as_array();
 
-    if ( ! Auth::has_access('admin.admin') )
+    // ログインしている場合、自分のチームの試合にflag
+    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
     {
-
-      $my_team = Model_User::getMyTeamId();
-      $query->where_open();
-      $query->where('team_top', $my_team );
-      $query->or_where('team_bottom', $my_team );
-      $query->where_close();
+      foreach ( $result as $index => $res )
+      {
+        if ( $res['team_top']    == $team_id ||
+             $res['team_bottom'] == $team_id )
+        {
+          $result[$index]['own'] = 1;
+        }
+        else
+        {
+          $result[$index]['own'] = 0;
+        }
+      }
     }
 
-    $query->order_by('date', 'desc');
-
-    return $query->execute()->as_array();
+    return $result;
   }
 }

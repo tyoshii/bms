@@ -26,8 +26,8 @@
 
 <div class="form-group">
 <div class="btn-group">
-<button type="button" class="btn btn-default" onClick="filter();">全試合</button>
-<button type="button" class="btn btn-default" onClick="filter();">MyTeam</button>
+<button type="button" class="btn btn-default" onClick="filter('all');">全試合</button>
+<button type="button" class="btn btn-default" onClick="filter('own');">MyTeam</button>
 </div>
 </div>
 
@@ -47,7 +47,7 @@
 <tbody>
 
 {% for game in games %}
-<tr>
+<tr class="{%if game.own == 1%}own{%endif%}">
 <td>{{ game.date }}</td>
 <td>
 <div>{{ game.team_top_name }}</div>
@@ -117,7 +117,14 @@ $("#search").keyup(function(){
 });
 
 // filter
-function filter() {
+function filter(type) {
+  if ( type === 'all' ) {
+    $("#game-list tbody tr").show();
+  }
+  else if ( type === 'own' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr.own").show();
+  }
 }
 
 </script>

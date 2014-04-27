@@ -60,7 +60,7 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge('game/list.twig');
     $view->set_safe('form', $form->build(Uri::current()));
-    $games = Model_Game::getOwnGames();
+    $games = Model_Game::getGames();
 
     $view->games = $games;
     
@@ -76,7 +76,7 @@ class Controller_Game extends Controller_Base
     {
       $top     = Input::post('top');
       $bottom  = Input::post('bottom');
-      $my_team = Model_User::getMyTeamId();
+      $my_team = Model_Player::getMyTeamId();
 
       $game_status = 0;
       if ( $top === $my_team AND $bottom === $my_team )
@@ -122,7 +122,7 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge('game/list.twig');
     $view->set_safe('form', $form->build(Uri::current()));
-    $view->games = Model_Game::getOwnGames();
+    $view->games = Model_Game::getGames();
     
     return Response::forge($view);
   }

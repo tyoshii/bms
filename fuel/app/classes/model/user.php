@@ -26,17 +26,4 @@ class Model_User extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'users';
-
-
-  public static function getMyTeamId()
-  {
-    $member_id = Auth::get_profile_fields('member_id');
-    
-    if ( $member = Model_Player::find($member_id) )
-    {
-      return $member->team;
-    }
-
-    return null;
-  }
 }

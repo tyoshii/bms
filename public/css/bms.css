@@ -79,6 +79,10 @@ table#pitcher td.runs {
   width: 80px;
 }
 
+table#game-list tr.own {
+  background-color: #FFFFCC;  
+}
+
 .disable {
   display: none;
 }

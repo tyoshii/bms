@@ -17,6 +17,9 @@
 {% set base = '/game/' ~ uri_segment(2) ~ '/' ~ uri_segment(3) %}
 
 <ul class="nav nav-tabs">
+    <li {%if uri_segment(4)=='score'%}class="active"{%endif%}>
+      <a href="{{base}}/score">スコア</a>
+    </li>
     <li {%if uri_segment(4)=='player'%}class="active"{%endif%}>
       <a href="{{base}}/player">出場選手</a>
     </li>

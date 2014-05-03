@@ -5,12 +5,20 @@ class Controller_Api_Game extends Controller_Rest
   public function before()
   {
     parent::before();
+  }
 
+  // game_id/team_id
+  private static function _getIds()
+  {
     $val = Validation::forge();
     $val->add('game_id')->add_rule('required');
     $val->add('team_id')->add_rule('required');
 
-    $this->validation = $val;
+    if ( ! $val->run() ) {
+      throw new Exception();
+    }
+
+    return $val->validated();
   }
 
   public function post_updateStatus()
@@ -42,12 +50,7 @@ class Controller_Api_Game extends Controller_Rest
   // 出場選手
   public function post_updatePlayer()
   {
-    if ( ! $this->validation->run() )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $ids = $this->validation->validated();
+    $ids = self::_getIds();
 
     // stamen 登録(old type/json)
     $players = Input::post('players');
@@ -83,12 +86,7 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updatePitcher()
   {
-    if ( ! $this->validation->run() )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $ids = $this->validation->validated();
+    $ids = self::_getIds();
 
     // insert
     $pitcher = Input::post('pitcher');
@@ -104,12 +102,7 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateBatter()
   {
-    if ( ! $this->validation->run() )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $ids = $this->validation->validated();
+    $ids = self::_getIds();
 
     // insert
     $batter = Input::post('batter');
@@ -126,12 +119,7 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateOther()
   {
-    if ( ! $this->validation->run() )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    $ids = $this->validation->validated();
+    $ids = self::_getIds();
 
     // insert
     $other = Input::post('other');

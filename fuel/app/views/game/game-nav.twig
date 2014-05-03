@@ -12,25 +12,23 @@
 {% endmacro %}
 
 
-{% macro navigation() %}
-
-{% set base = '/game/' ~ uri_segment(2) ~ '/' ~ uri_segment(3) %}
+{% macro navigation(game_id, team_id) %}
 
 <ul class="nav nav-tabs">
-    <li {%if uri_segment(4)=='score'%}class="active"{%endif%}>
-      <a href="{{base}}/score">スコア</a>
+    <li {%if uri_segment(3)=='score'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/score/{{team_id}}">スコア</a>
     </li>
-    <li {%if uri_segment(4)=='player'%}class="active"{%endif%}>
-      <a href="{{base}}/player">出場選手</a>
+    <li {%if uri_segment(3)=='player'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/player/{{team_id}}">出場選手</a>
     </li>
-    <li {%if uri_segment(4)=='pitcher'%}class="active"{%endif%}>
-      <a href="{{base}}/pitcher">投手成績</a>
+    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/pitcher/{{team_id}}">投手成績</a>
     </li>
-    <li {%if uri_segment(4)=="batter"%}class="active"{%endif%}>
-      <a href="{{base}}/batter">野手成績</a>
+    <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/batter/{{team_id}}">野手成績</a>
     </li>
-    <li {%if uri_segment(4)=="other"%}class="active"{%endif%}>
-      <a href="{{base}}/other">その他</a>
+    <li {%if uri_segment(3)=="other"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/other/{{team_id}}">その他</a>
     </li>
 
     {# return game/list #}
@@ -39,7 +37,7 @@
     </li>
 </ul>
 
-<data id="game_id" class="disable">{{uri_segment(2)}}</data>
-<data id="order" class="disable">{{uri_segment(3)}}</data>
+<data id="game_id" class="disable">{{game_id}}</data>
+<data id="team_id" class="disable">{{team_id}}</data>
 
 {% endmacro %}

@@ -42,21 +42,18 @@ class Controller_Api_Game extends Controller_Rest
   // 出場選手
   public function post_updatePlayer()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
-
-    if ( ! $order or ! $game_id )
+    if ( ! $this->validation->run() )
     {
       return Response::forge('NG', 400);
     }
+
+    $ids = $this->validation->validated();
 
     // stamen 登録(old type/json)
     $players = Input::post('players');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
+              ->where(array($ids))
               ->get_one();
 
     $game->players = json_encode($players); 
@@ -86,20 +83,18 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updatePitcher()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
-
-    if ( ! $order or ! $game_id )
+    if ( ! $this->validation->run() )
     {
       return Response::forge('NG', 400);
     }
 
+    $ids = $this->validation->validated();
+
+    // insert
     $pitcher = Input::post('pitcher');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
+              ->where(array($ids))
               ->get_one();
     $game->pitchers = json_encode($pitcher); 
     $game->save();

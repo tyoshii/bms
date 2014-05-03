@@ -35,6 +35,12 @@ return array(
 				26 => '028_add_user_id_to_players',
 				27 => '029_rename_field_user_id_to_username_in_players',
 				28 => '030_rename_field_username_to_username_in_players',
+				29 => '031_create_score_meta',
+				30 => '032_create_stats_hittings',
+				31 => '033_create_stats_fieldings',
+				32 => '034_create_stats_pitchings',
+				33 => '035_rename_table_score_meta_to_stats_meta',
+				34 => '036_create_stats_hittingdetails',
 			),
 		),
 		'module' => 

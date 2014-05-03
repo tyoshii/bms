@@ -75,6 +75,46 @@ function batter_result_update() {
   });
 }
 
+function _num(val) {
+  return Number(val) || 0;
+}
+
+function post_score(is_alert) {
+  var data = {
+    game_id: $('data#game_id').text()
+  };
+
+  // each score
+  for ( var i = 1; i <= 12; i++ ) {
+    var t_key = 't' + i;
+    var b_key = 'b' + i;
+
+    data[t_key] = _num( $('[name=' + t_key + ']').val() );
+    data[b_key] = _num( $('[name=' + b_key + ']').val() );
+  }
+
+  // sum
+  data['tsum'] = _num( $("td.tsum").text() );
+  data['bsum'] = _num( $("td.bsum").text() );
+
+//console.log(data);
+  
+  // ajax
+  $.ajax({
+    url: '/api/game/updateScore',
+    type: 'POST',
+    data: data,
+    success: function(html) {
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
+    },
+    error: function(html) {
+      alert("スコア保存でエラーが発生しました");
+    }, 
+  });
+}
+
 function post_other(is_alert) {
 
   var data = { 

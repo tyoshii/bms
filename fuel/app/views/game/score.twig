@@ -2,7 +2,9 @@
 
 {% block content %}
 
-{{ form_open({'method':'post', 'enctype':'multipart/form-data'}) }}
+{% import 'game-nav.twig' as nav %}
+{{ nav.header(date, team_top, team_bottom) }}
+{{ nav.navigation() }}
 
 <table id="score" class="table">
 <thead>
@@ -40,16 +42,14 @@
 </tbody>
 </table>
 
-<input class="tsum" type="hidden" name="tsum" value="{{score.tsum}}">
-<input class="bsum" type="hidden" name="bsum" value="{{score.bsum}}">
-<input type="submit" class="btn btn-success" value="更新">
-{{ form_close() }}
+<button class="btn btn-success" onClick="post_score(true);">登録</button>
 
 {% endblock content %}
 
 
 {% block js %}
 {{parent()}}
+{% include 'game-js.twig' %}
 
 <script>
 

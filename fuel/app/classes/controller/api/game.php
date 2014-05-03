@@ -11,6 +11,23 @@ class Controller_Api_Game extends Controller_Rest
     return "OK";
   }
 
+  public function post_updateScore()
+  {
+    $form = Fieldset::forge('score');
+    $form->add_model(Model_Games_Runningscore::forge());
+
+    $val = $form->validation();
+
+    if ( ! $val->run() )
+      return Response::forge('NG', 400);
+  
+    $score = Model_Games_Runningscore::find( Input::post('game_id') );
+    $score->set(Input::post());
+    $score->save();
+
+    echo 'OK';
+  }
+
   public function post_updatePlayer()
   {
     // parameter check

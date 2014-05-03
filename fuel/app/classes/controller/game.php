@@ -13,44 +13,6 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_score($game_id)
-  {
-    if ( ! $game_id )
-    {
-      Response::redirect(Uri::create('/game/list'));
-    }
-
-    $score = Model_Games_Runningscore::find($game_id, array(
-      'related' => array('games'),
-    ));
-
-    if ( Input::post() )
-    {      
-      $form = Fieldset::forge('score');
-      $form->add_model($score);
-
-      $val = $form->validation();
-      if ( $val->run() )
-      {
-        $score = Model_Games_Runningscore::find($game_id);
-        $score->set(Input::post());
-        $score->save(); 
-
-        Response::redirect(Uri::create('/game'));
-      }
-      else {
-        Session::set_flash('error', $val->show_errors());
-      }
-    }
-
-    $view = View::forge('game/score.twig');
-    $view->score = $score;
-    $view->team_top    = Model_Team::find($score->games->team_top)->name;
-    $view->team_bottom = Model_Team::find($score->games->team_bottom)->name;
-
-    return Response::forge($view);
-  }
-
   public function action_list()
   {
     $form = self::_get_addgame_form();
@@ -137,7 +99,7 @@ class Controller_Game extends Controller_Base
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
     }
-    if ( ! in_array($kind, array('player','pitcher','batter','other')) )
+    if ( ! in_array($kind, array('score', 'player','pitcher','batter','other')) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
@@ -167,6 +129,12 @@ class Controller_Game extends Controller_Base
 
     switch ( $kind )
     {
+      case 'score':
+        $view->score = Model_Games_Runningscore::find($game_id, array(
+          'related' => array('games'),
+        ));
+        break;
+
       case 'player':
         break;
 

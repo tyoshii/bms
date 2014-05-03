@@ -494,6 +494,9 @@ function post_player(is_alert) {
       var member_id = $this.children('select').val();
       data[i].member_id = member_id;
 
+      // - TODO 将来的には player_id に置換したい。
+      data[i].player_id = member_id;
+
       // 重複チェック
       if ( member_id != '0' && already[member_id] == 1 ) {
         if ( is_alert ) alert('同じ選手が登録されています');

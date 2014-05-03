@@ -215,7 +215,7 @@ function post_batter(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order: $('data#order').text(),
+      team_id: $('data#team_id').text(),
       batter: data
     },
     success: function(html) {

@@ -109,21 +109,19 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateBatter()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
-
-    if ( ! $order or ! $game_id )
+    if ( ! $this->validation->run() )
     {
       return Response::forge('NG', 400);
     }
 
+    $ids = $this->validation->validated();
+
+    // insert
     $batter = Input::post('batter');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
-              ->get_one();
+            ->where(array($ids))
+            ->get_one();
 
     $game->batters = json_encode($batter); 
     $game->save();
@@ -139,15 +137,13 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     $ids = $this->validation->validated();
-    $game_id = $ids['game_id'];
-    $team_id = $ids['team_id'];
 
     // insert
     $other = Input::post('other');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('team_id', $team_id)
+              ->where('game_id', $ids['game_id'])
+              ->where('team_id', $ids['team_id'])
               ->get_one();
 
     $game->others = json_encode($other); 

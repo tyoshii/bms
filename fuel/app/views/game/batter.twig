@@ -4,7 +4,7 @@
 
 {% import 'game-nav.twig' as nav %}
 {{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation() }}
+{{ nav.navigation(game_id, team_id) }}
 
 <table id="batter" class="table">
 <thead>

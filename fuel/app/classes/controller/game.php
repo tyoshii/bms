@@ -86,15 +86,10 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $order = null, $kind = '')
+  public function action_edit($game_id = null, $team_id = null, $kind = '')
   {
     // error check
-    if ( ! is_int($game_id+0) )
-    {
-      Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game'));
-    }
-    if ( ! in_array($order, array('top', 'bottom')) )
+    if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
@@ -109,8 +104,6 @@ class Controller_Game extends Controller_Base
 
     // 対象のチームID取得
     $game = Model_Game::find($game_id);
-    $team_id = $order == 'top' ? $game->team_top
-                               : $game->team_bottom;
 
     // 所属選手
     $view->members = Model_Player::find('all', array(
@@ -157,6 +150,7 @@ class Controller_Game extends Controller_Base
         break;
     }
 
+    // ID
     $view->game_id = $game_id;
     $view->team_id = $team_id;
 

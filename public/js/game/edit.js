@@ -131,7 +131,7 @@ function post_other(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order:   $('data#order').text(),
+      team_id: $('data#team_id').text(),
       other:   data
     },
     success: function(html) {

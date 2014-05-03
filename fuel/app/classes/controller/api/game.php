@@ -28,6 +28,7 @@ class Controller_Api_Game extends Controller_Rest
     echo 'OK';
   }
 
+  // 出場選手
   public function post_updatePlayer()
   {
     // parameter check
@@ -39,7 +40,7 @@ class Controller_Api_Game extends Controller_Rest
       return Response::forge('NG', 400);
     }
 
-    // stamen 登録
+    // stamen 登録(old type/json)
     $players = Input::post('players');
 
     $game = Model_Games_Stat::query()
@@ -49,6 +50,25 @@ class Controller_Api_Game extends Controller_Rest
 
     $game->players = json_encode($players); 
     $game->save();
+
+    // stats_meta登録
+    foreach ( $players as $player )
+    {
+      $meta = Model_Stats_Meta::query()
+                ->where('game_id', $game_id)
+                ->where('player_id', $player['player_id'])
+                ->get_one()
+              ?:
+              Model_Stats_Meta::forge(array(
+                'game_id' => $game_id,
+                'player_id' => $player['player_id'],
+              ));
+
+      $meta->order    = $player['order'] ?: 0;
+      $meta->position = implode(',', $player['position']);
+    
+      $meta->save();
+    }
 
     echo 'OK';
   }

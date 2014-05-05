@@ -86,7 +86,7 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $team_id = null, $kind = '')
+  public function action_edit($game_id = null, $kind = '', $team_id = null)
   {
     // error check
     if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
@@ -102,8 +102,9 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge("game/{$kind}.twig");
 
-    // 対象のチームID取得
-    $game = Model_Game::find($game_id);
+    // team_idが空の時は、ログイン中のチームIDを
+    if ( ! $team_id )
+      $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
     $view->members = Model_Player::find('all', array(
@@ -153,6 +154,9 @@ class Controller_Game extends Controller_Base
     // ID
     $view->game_id = $game_id;
     $view->team_id = $team_id;
+
+    // 試合情報
+    $game = Model_Game::find($game_id);
 
     // チーム名
     $view->team_top = Model_Team::find($game->team_top)->name;

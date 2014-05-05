@@ -16,8 +16,8 @@ return array(
 
   'game'                                  => 'game/list',
   'game/(:segment)'                       => 'game/summary/$1',
-  'game/(:segment)/(:segment)'            => 'game/edit/$1/player/$2',
-  'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$3/$2',
+  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2',
+  'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
   
   'api/game/(:segment)'  => 'api/game/$1',
 

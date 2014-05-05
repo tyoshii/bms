@@ -6,13 +6,7 @@
 {% for i in 0..3 %}
 {% set value = i ~ '/3' %}
 
-{% if value == default %}
-{% set selected = 'selected' %}
-{% else %}
-{% set selected = '' %}
-{% endif %}
-
-<option value="{{value}}" {{selected}}>{{i}}/3</option>
+<option value="{{value}}" {%if value==default%}selected{%endif%}>{{i}}/3</option>
 {% endfor %}
 </select>
 {% endmacro %}

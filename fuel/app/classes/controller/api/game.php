@@ -66,12 +66,12 @@ class Controller_Api_Game extends Controller_Rest
     foreach ( $players as $player )
     {
       $meta = Model_Stats_Meta::query()
-                ->where('game_id', $game_id)
+                ->where('game_id', $ids['game_id'])
                 ->where('player_id', $player['player_id'])
                 ->get_one()
               ?:
               Model_Stats_Meta::forge(array(
-                'game_id' => $game_id,
+                'game_id' => $ids['game_id'],
                 'player_id' => $player['player_id'],
               ));
 

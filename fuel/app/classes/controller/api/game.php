@@ -147,6 +147,85 @@ class Controller_Api_Game extends Controller_Rest
     $game->batters = json_encode($batter); 
     $game->save();
 
+    // satasへの登録
+    foreach ( $batter as $player_id => $bat )
+    {
+      if ( ! $bat )
+        continue;
+
+      // hittingsへのinsert
+      $hit = Model_Stats_Hitting::query()->where(array(
+               'game_id' => $ids['game_id'],
+               'player_id' => $player_id,
+             ))->get_one()
+             ?:
+             Model_Stats_Hitting::forge(array(
+               'game_id' => $ids['game_id'],
+               'player_id' => $player_id,
+             ));
+
+      $hit->set(array(
+        'TPA' => $bat['seiseki']['daseki'],
+        'AB'  => $bat['seiseki']['dasuu'],
+        'H'   => $bat['seiseki']['anda'],
+        '2B'  => $bat['seiseki']['niruida'],
+        '3B'  => $bat['seiseki']['sanruida'],
+        'HR'  => $bat['seiseki']['honruida'],
+        'SO'  => $bat['seiseki']['sanshin'],
+        'BB'  => $bat['seiseki']['yontama'],
+        'HBP' => $bat['seiseki']['shikyuu'],
+        'SAC' => $bat['seiseki']['gida'],
+        'SF'  => $bat['seiseki']['gihi'],
+        'RBI' => $bat['seiseki']['daten'],
+        'R'   => $bat['seiseki']['tokuten'],
+        'SB'  => $bat['seiseki']['steal'],
+      ));
+
+      $hit->save();
+
+      // fieldingsへのinsert
+      $field = Model_Stats_Fielding::query()->where(array(
+                 'game_id' => $ids['game_id'],
+                 'player_id' => $player_id,
+               ))->get_one()
+               ?:
+               Model_Stats_Fielding::forge(array(
+                 'game_id' => $ids['game_id'],
+                 'player_id' => $player_id,
+               ));
+
+      $field->set(array(
+        'E' => $bat['seiseki']['error'],
+      ));
+
+      $field->save();
+
+      // hittingdetailsへのinsert
+      foreach ( $bat['detail'] as $bat_times => $data )
+      {
+        $detail = Model_Stats_Hittingdetail::query()->where(array(
+                    'game_id'   => $ids['game_id'],
+                    'player_id' => $player_id,
+                    'bat_times' => $bat_times + 1,
+                  ))->get_one()
+                  ?:
+                  Model_Stats_Hittingdetail::forge(array(
+                    'game_id'   => $ids['game_id'],
+                    'player_id' => $player_id,
+                    'bat_times' => $bat_times + 1,
+                  ));
+
+        $detail->set(array(
+          'direction' => $data['direction'],
+          'kind'      => $data['kind'],
+          'result_id' => $data['result'],
+        ));
+
+        $detail->save();
+      }
+
+    } 
+
     echo 'OK';
   }
 

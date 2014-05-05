@@ -62,7 +62,7 @@ class Controller_Api_Game extends Controller_Rest
     $game->players = json_encode($players); 
     $game->save();
 
-    // stats_meta登録
+    // stats_metaへの登録
     foreach ( $players as $player )
     {
       $meta = Model_Stats_Meta::query()
@@ -96,6 +96,39 @@ class Controller_Api_Game extends Controller_Rest
               ->get_one();
     $game->pitchers = json_encode($pitcher); 
     $game->save();
+
+    // stats_pitchingsへのinsert
+    foreach ( $pitcher as $player_id => $pitch )
+    {
+      if ( ! $pitch )
+        continue;
+
+      $p = Model_Stats_Pitching::query()->where(array(
+             'game_id'   => $ids['game_id'],
+             'player_id' => $player_id,
+           ))->get_one()
+           ?:
+           Model_Stats_Pitching::forge(array(
+             'game_id'   => $ids['game_id'],
+             'player_id' => $player_id,
+           ));
+
+      $p->set(array(
+        'W'   => $pitch['result'] == 'win'  ?  1 : 0,
+        'L'   => $pitch['result'] == 'lose' ?  1 : 0,
+        'HLD' => $pitch['result'] == 'hold' ?  1 : 0,
+        'SV'  => $pitch['result'] == 'save' ?  1 : 0,
+        'IP'  => $pitch['inning_int'] + $pitch['inning_frac'],
+        'H'   => $pitch['hianda'],
+        'SO'  => $pitch['sanshin'],
+        'BB'  => $pitch['shishikyuu'],
+        'HB'  => 0,
+        'ER'  => $pitch['earned_runs'],
+        'R'   => $pitch['runs']
+      ));
+
+      $p->save();
+    }
 
     echo 'OK';
   }

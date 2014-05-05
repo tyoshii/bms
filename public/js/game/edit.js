@@ -184,7 +184,7 @@ function post_batter(is_alert) {
 
         if ( val == '' ) val = 0;
 
-        seiseki[key] = 0;
+        seiseki[key] = val;
       }
 
       // input number

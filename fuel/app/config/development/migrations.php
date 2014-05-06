@@ -42,6 +42,7 @@ return array(
 				33 => '035_rename_table_score_meta_to_stats_meta',
 				34 => '036_create_stats_hittingdetails',
 				35 => '037_add_team_id_to_stats_meta',
+				36 => '038_add_disp_order_to_stats_meta',
 			),
 		),
 		'module' => 

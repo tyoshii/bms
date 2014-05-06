@@ -41,6 +41,7 @@ return array(
 				32 => '034_create_stats_pitchings',
 				33 => '035_rename_table_score_meta_to_stats_meta',
 				34 => '036_create_stats_hittingdetails',
+				35 => '037_add_team_id_to_stats_meta',
 			),
 		),
 		'module' => 

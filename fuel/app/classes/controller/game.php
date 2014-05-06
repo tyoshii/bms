@@ -120,11 +120,8 @@ class Controller_Game extends Controller_Base
     $view->players = json_decode($stat->players);
 
     // meta
-    // - TODO playersと入れ替えた
-    $view->metum = Model_Stats_Meta::query()->where(array(
-                     'game_id' => $game_id,
-                     'team_id' => $team_id,
-                   ))->order_by('disp_order')->get(); 
+    // - TODO playersと入れ替えたい
+    $view->metum = Model_Stats_Meta::getStarter($game_id, $team_id);
 
     switch ( $kind )
     {

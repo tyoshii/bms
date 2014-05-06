@@ -40,6 +40,7 @@
 
 <table id="player" class="table">
 
+<thead>
 <tr>
 <th class="change"></th>
 <th class="order">打順</th>
@@ -52,7 +53,9 @@
 <th class="position">ポジション5</th>
 <th class="position">ポジション6</th>
 </tr>
+</thead>
 
+<tbody>
 {% for player in players %}
 <tr class="player-tr">
 <td class="change">
@@ -81,6 +84,8 @@
 <td></td>
 <td></td>
 <td></td>
+
+</tbody>
 </table>
 
 {# 背番号データ #}

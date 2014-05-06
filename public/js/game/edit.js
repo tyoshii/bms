@@ -467,6 +467,33 @@ function post_pitcher(is_alert) {
   });
 }
 
+function post_player2(is_alert) {
+  
+  var data = [];
+
+  $("table#player tbody tr.player-tr").each(function() {
+    $this = $(this);
+
+    var position = [];
+    $this.find('td.position').each(function() {
+      position.push($(this).children('select').val());
+    });
+
+    var temp = {
+      player_id: $this.find('td.member_id').children('select').val(),
+      member_id: $this.find('td.member_id').children('select').val(),
+      order:     $this.find('td.order').text(),
+      position:  position,
+    };
+    // console.log(temp);
+
+    data.push(temp); 
+  });
+  // console.log(data);
+
+  return data;
+}
+
 function post_player(is_alert) {
   var $player = $("table#player td");
   // console.log($player);
@@ -524,6 +551,9 @@ function post_player(is_alert) {
   });
   // console.log(data);
   // console.log(already);
+  
+  // 将来的にこちらからとる
+  // var data = post_player2();
 
   if ( exit ) return false;
 

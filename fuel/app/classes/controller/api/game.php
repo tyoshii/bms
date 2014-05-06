@@ -63,20 +63,19 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_metaへの登録
-    foreach ( $players as $player )
+    foreach ( $players as $disp_order => $player )
     {
-      $meta = Model_Stats_Meta::query()
-                ->where('game_id', $ids['game_id'])
-                ->where('player_id', $player['player_id'])
-                ->get_one()
+      $meta = Model_Stats_Meta::query()->where($ids + array(
+                'player_id' => $player['player_id'],
+              ))->get_one()
               ?:
-              Model_Stats_Meta::forge(array(
-                'game_id' => $ids['game_id'],
+              Model_Stats_Meta::forge($ids + array(
                 'player_id' => $player['player_id'],
               ));
 
-      $meta->order    = $player['order'] ?: 0;
-      $meta->position = implode(',', $player['position']);
+      $meta->disp_order = $disp_order;
+      $meta->order      = $player['order'] ?: 0;
+      $meta->position   = implode(',', $player['position']);
     
       $meta->save();
     }

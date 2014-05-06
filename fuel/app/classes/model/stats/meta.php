@@ -4,10 +4,12 @@ class Model_Stats_Meta extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'player_id',
 		'game_id',
+    'team_id',
+		'player_id',
 		'order',
 		'position',
+    'disp_order',
 		'created_at',
 		'updated_at',
 	);

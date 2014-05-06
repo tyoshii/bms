@@ -66,16 +66,16 @@ class Controller_Api_Game extends Controller_Rest
     foreach ( $players as $disp_order => $player )
     {
       $meta = Model_Stats_Meta::query()->where($ids + array(
-                'player_id' => $player['player_id'],
+                'disp_order' => $disp_order,
               ))->get_one()
               ?:
               Model_Stats_Meta::forge($ids + array(
-                'player_id' => $player['player_id'],
+                'disp_order' => $disp_order,
               ));
 
-      $meta->disp_order = $disp_order;
-      $meta->order      = $player['order'] ?: 0;
-      $meta->position   = implode(',', $player['position']);
+      $meta->player_id = $player['player_id'];
+      $meta->order     = $player['order'] ?: 0;
+      $meta->position  = implode(',', $player['position']);
     
       $meta->save();
     }

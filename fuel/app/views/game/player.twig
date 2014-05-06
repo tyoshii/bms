@@ -56,24 +56,20 @@
 </thead>
 
 <tbody>
-{% for player in metum %}
+{% for meta in metum %}
 <tr class="player-tr">
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
-{% if player.order == 0 or ( player.order > 9 and loop.last ) %}
+{% if meta.order == 0 or ( meta.order > 9 and loop.last ) %}
 <button onClick="delete_order(this, '{{loop.last}}');" class="btn btn-danger btn-xs delete-order">削除</button>
 {% endif %}
 </td>
-<td class="order">{{- player.order -}}</td>
-<td class="member_id">{{_self.name_select(members, player.player_id)}}</td>
-<td class="number">{{ player.number }}</td>
-{% for pos in player.position|split(',')%}
+<td class="order">{{- meta.order -}}</td>
+<td class="member_id">{{_self.name_select(members, meta.player_id)}}</td>
+<td class="number">{{ meta.number }}</td>
+{% for pos in meta.position|split(',')%}
 <td class="position">{{_self.position_select(pos)}}</td>
 {%endfor%}
-{% for i in 0..5 %}
-{#<td class="position">{{_self.position_select(player.position[i])}}</td>
-#}
-{% endfor %}
 </tr>
 {% endfor %}
 

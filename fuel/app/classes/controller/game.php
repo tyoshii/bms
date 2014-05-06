@@ -107,11 +107,9 @@ class Controller_Game extends Controller_Base
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
-    $view->members = Model_Player::find('all', array(
-      'where' => array(
-        array('team', $team_id),
-      ),
-    ));
+    $view->members = Model_Player::query()
+                      ->where('team', $team_id)
+                      ->get();
 
     // players
     $stat = Model_Games_Stat::query()

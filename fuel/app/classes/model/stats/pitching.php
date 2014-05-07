@@ -11,6 +11,7 @@ class Model_Stats_Pitching extends \Orm\Model
 		'HLD',
 		'SV',
 		'IP',
+		'IP_frac',
 		'H',
 		'SO',
 		'BB',
@@ -32,5 +33,4 @@ class Model_Stats_Pitching extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'stats_pitchings';
-
 }

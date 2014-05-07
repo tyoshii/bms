@@ -136,6 +136,7 @@ class Controller_Game extends Controller_Base
 
       case 'pitcher':
         $view->pitchers = json_decode($stat->pitchers);
+        $view->stats_pitchings = Model_Stats_Meta::getPitchingStats($game_id, $team_id);
         break;
 
       case 'batter':

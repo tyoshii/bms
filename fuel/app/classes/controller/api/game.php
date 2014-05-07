@@ -112,12 +112,14 @@ class Controller_Api_Game extends Controller_Rest
              'player_id' => $player_id,
            ));
 
+      // - TODO 変数名の直しと、四球/死球を分ける
       $p->set(array(
         'W'   => $pitch['result'] == 'win'  ?  1 : 0,
         'L'   => $pitch['result'] == 'lose' ?  1 : 0,
         'HLD' => $pitch['result'] == 'hold' ?  1 : 0,
         'SV'  => $pitch['result'] == 'save' ?  1 : 0,
-        'IP'  => $pitch['inning_int'] + $pitch['inning_frac'],
+        'IP'  => $pitch['inning_int'],
+        'IP_frac' => $pitch['inning_frac'],
         'H'   => $pitch['hianda'],
         'SO'  => $pitch['sanshin'],
         'BB'  => $pitch['shishikyuu'],

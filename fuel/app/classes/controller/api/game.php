@@ -52,7 +52,7 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // stamen 登録(old type/json)
+    // json登録(old)
     $players = Input::post('players');
 
     $game = Model_Games_Stat::query()
@@ -63,22 +63,7 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_metaへの登録
-    foreach ( $players as $disp_order => $player )
-    {
-      $meta = Model_Stats_Meta::query()->where($ids + array(
-                'disp_order' => $disp_order,
-              ))->get_one()
-              ?:
-              Model_Stats_Meta::forge($ids + array(
-                'disp_order' => $disp_order,
-              ));
-
-      $meta->player_id = $player['player_id'];
-      $meta->order     = $player['order'] ?: 0;
-      $meta->position  = implode(',', $player['position']);
-    
-      $meta->save();
-    }
+    Model_Stats_Meta::registPlayer($ids, $players);
 
     echo 'OK';
   }

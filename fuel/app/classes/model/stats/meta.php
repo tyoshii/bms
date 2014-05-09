@@ -59,4 +59,35 @@ class Model_Stats_Meta extends \Orm\Model
 
     return $query->execute()->as_array();
   }
+
+  public static function registPlayer($ids, $players)
+  {
+    DB::start_transaction();
+
+    try {
+
+      // clean data
+      DB::delete(self::$_table_name)
+        ->where($ids)
+        ->execute();
+
+      // regist new data
+      foreach ( $players as $disp_order => $player )
+      {
+        $meta = self::forge($ids + array(
+          'disp_order' => $disp_order,
+          'player_id'  => $player['player_id'],
+          'order'      => $player['order'] ?: 0,
+          'position'   => implode(',', $player['position']),
+        ));
+
+        $meta->save();
+      }
+
+      DB::commit_transaction();
+    } catch ( Exception $e ) {
+      DB::rollback_transaction();
+      throw new Exception();
+    }
+  }
 }

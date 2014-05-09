@@ -62,7 +62,7 @@ class Model_Stats_Pitching extends \Orm\Model
           'BB'        => $stat['shishikyuu'],
           'HB'        => 0,
           'ER'        => $stat['earned_runs'],
-          'R'         => $stat['runs']          
+          'R'         => $stat['runs'],
         ));
 
         $pitch->save();
@@ -71,7 +71,7 @@ class Model_Stats_Pitching extends \Orm\Model
       DB::commit_transaction();
     } catch ( Exception $e ) {
       DB::rollback_transaction();
-      throw new Exception();
+      throw new Exception($e->getMessage());
     } 
   }
 }

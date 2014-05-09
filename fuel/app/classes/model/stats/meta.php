@@ -74,9 +74,7 @@ class Model_Stats_Meta extends \Orm\Model
     try {
 
       // clean data
-      DB::delete(self::$_table_name)
-        ->where($ids)
-        ->execute();
+      Common::db_clean(self::$_table_name, $ids);
 
       // regist new data
       foreach ( $players as $disp_order => $player )

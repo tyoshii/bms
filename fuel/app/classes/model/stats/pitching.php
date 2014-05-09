@@ -42,9 +42,7 @@ class Model_Stats_Pitching extends \Orm\Model
     try {
 
       // clean data
-      DB::delete(self::$_table_name)
-        ->where($ids)
-        ->execute();
+      Common::db_clean(self::$_table_name, $ids);
 
       // regist new data
       foreach ( $stats as $player_id => $stat )

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  batter_result_update();
+//  batter_result_update();
 });
 
 var result_map = {
@@ -155,6 +155,7 @@ function post_batter(is_alert) {
     var $this = $(this);
  
     var id = $this.children('td.member-id').text();
+
     if ( id === '0' ) {
       return true; //continue
     }

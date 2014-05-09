@@ -141,9 +141,13 @@ class Controller_Game extends Controller_Base
 
       case 'batter':
         $view->batters = json_decode($stat->batters);
-        $view->results = Model_Batter_Result::find('all', array(
-            'order_by' => array('category_id'),
-        ));
+        $view->results = Model_Batter_Result::query()
+                          ->order_by('category_id')
+                          ->get();
+
+        $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
+        $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
+        $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');
         break;
 
       case 'other':

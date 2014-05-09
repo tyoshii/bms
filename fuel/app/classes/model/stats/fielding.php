@@ -22,5 +22,4 @@ class Model_Stats_Fielding extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'stats_fieldings';
-
 }

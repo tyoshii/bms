@@ -45,6 +45,9 @@ return array(
 				36 => '038_add_disp_order_to_stats_meta',
 				37 => '039_add_ip_frac_to_stats_pitchings',
 				38 => '040_add_team_id_to_stats_pitchings',
+				39 => '041_add_team_id_to_stats_fieldings',
+				40 => '042_add_team_id_to_stats_hittings',
+				41 => '043_add_team_id_to_stats_hittingdetails',
 			),
 		),
 		'module' => 

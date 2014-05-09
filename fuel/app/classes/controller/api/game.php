@@ -102,6 +102,8 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
+    Model_Stats_Hitting::regist($ids, $batter);
+/*
     foreach ( $batter as $player_id => $bat )
     {
       if ( ! $bat )
@@ -179,6 +181,7 @@ class Controller_Api_Game extends Controller_Rest
       }
 
     } 
+*/
 
     echo 'OK';
   }

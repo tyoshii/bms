@@ -86,7 +86,7 @@ class Model_Stats_Hitting extends \Orm\Model
           {
             $detail = Model_Stats_Hittingdetail::forge($ids + array(
               'player_id' => $player_id,
-              'bat_times' => $bat_times,
+              'bat_times' => $bat_times + 1,
               'direction' => $data['direction'],
               'kind'      => $data['kind'],
               'result_id' => $data['result'],

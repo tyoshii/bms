@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  batter_result_update();
+//  batter_result_update();
 });
 
 var result_map = {
@@ -75,6 +75,46 @@ function batter_result_update() {
   });
 }
 
+function _num(val) {
+  return Number(val) || 0;
+}
+
+function post_score(is_alert) {
+  var data = {
+    game_id: $('data#game_id').text()
+  };
+
+  // each score
+  for ( var i = 1; i <= 12; i++ ) {
+    var t_key = 't' + i;
+    var b_key = 'b' + i;
+
+    data[t_key] = _num( $('[name=' + t_key + ']').val() );
+    data[b_key] = _num( $('[name=' + b_key + ']').val() );
+  }
+
+  // sum
+  data['tsum'] = _num( $("td.tsum").text() );
+  data['bsum'] = _num( $("td.bsum").text() );
+
+//console.log(data);
+  
+  // ajax
+  $.ajax({
+    url: '/api/game/updateScore',
+    type: 'POST',
+    data: data,
+    success: function(html) {
+      if ( is_alert === true ) {
+        alert("成績保存に成功");
+      }
+    },
+    error: function(html) {
+      alert("スコア保存でエラーが発生しました");
+    }, 
+  });
+}
+
 function post_other(is_alert) {
 
   var data = { 
@@ -91,7 +131,7 @@ function post_other(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order:   $('data#order').text(),
+      team_id: $('data#team_id').text(),
       other:   data
     },
     success: function(html) {
@@ -115,6 +155,7 @@ function post_batter(is_alert) {
     var $this = $(this);
  
     var id = $this.children('td.member-id').text();
+
     if ( id === '0' ) {
       return true; //continue
     }
@@ -144,7 +185,7 @@ function post_batter(is_alert) {
 
         if ( val == '' ) val = 0;
 
-        seiseki[key] = 0;
+        seiseki[key] = val;
       }
 
       // input number
@@ -175,7 +216,7 @@ function post_batter(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order: $('data#order').text(),
+      team_id: $('data#team_id').text(),
       batter: data
     },
     success: function(html) {
@@ -413,7 +454,7 @@ function post_pitcher(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order: $('data#order').text(),
+      team_id: $('data#team_id').text(),
       pitcher: data
     },
     success: function(html) {
@@ -425,6 +466,33 @@ function post_pitcher(is_alert) {
       alert("成績保存でエラーが発生しました");
     }, 
   });
+}
+
+function post_player2(is_alert) {
+  
+  var data = [];
+
+  $("table#player tbody tr.player-tr").each(function() {
+    $this = $(this);
+
+    var position = [];
+    $this.find('td.position').each(function() {
+      position.push($(this).children('select').val());
+    });
+
+    var temp = {
+      player_id: $this.find('td.member_id').children('select').val(),
+      member_id: $this.find('td.member_id').children('select').val(),
+      order:     $this.find('td.order').text(),
+      position:  position,
+    };
+    // console.log(temp);
+
+    data.push(temp); 
+  });
+  // console.log(data);
+
+  return data;
 }
 
 function post_player(is_alert) {
@@ -454,6 +522,9 @@ function post_player(is_alert) {
       var member_id = $this.children('select').val();
       data[i].member_id = member_id;
 
+      // - TODO 将来的には player_id に置換したい。
+      data[i].player_id = member_id;
+
       // 重複チェック
       if ( member_id != '0' && already[member_id] == 1 ) {
         if ( is_alert ) alert('同じ選手が登録されています');
@@ -481,6 +552,9 @@ function post_player(is_alert) {
   });
   // console.log(data);
   // console.log(already);
+  
+  // 将来的にこちらからとる
+  // var data = post_player2();
 
   if ( exit ) return false;
 
@@ -490,7 +564,7 @@ function post_player(is_alert) {
     type: 'POST',
     data: {
       game_id: $('data#game_id').text(),
-      order: $('data#order').text(),
+      team_id: $('data#team_id').text(),
       players: data
     },
     success: function(html) {

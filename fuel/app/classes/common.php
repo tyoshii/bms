@@ -2,6 +2,23 @@
 
 class Common
 {
+  public static function db_clean( $table, $where )
+  {
+    $query = DB::delete($table);
+
+    if ( $where )
+      $query->where($where);
+
+    $query->execute(); 
+  }
+
+  public static function debug($v)
+  {
+    echo "<pre>";
+    print_r($v);
+    exit;
+  }
+
   public static function redirect($uri)
   {
     $redirect_to = Session::get('redirect_to');

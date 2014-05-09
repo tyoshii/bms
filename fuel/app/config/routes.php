@@ -15,8 +15,8 @@ return array(
   'admin/league'  => 'admin/league',
 
   'game'                                  => 'game/list',
-  'game/(:segment)'                       => 'game/score/$1',
-  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2/player',
+  'game/(:segment)'                       => 'game/summary/$1',
+  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2',
   'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
   
   'api/game/(:segment)'  => 'api/game/$1',

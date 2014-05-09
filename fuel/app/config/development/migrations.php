@@ -48,6 +48,9 @@ return array(
 				39 => '041_add_team_id_to_stats_fieldings',
 				40 => '042_add_team_id_to_stats_hittings',
 				41 => '043_add_team_id_to_stats_hittingdetails',
+				42 => '044_delete_players_from_games',
+				43 => '045_delete_pitchers_from_games',
+				44 => '046_delete_batters_from_games',
 			),
 		),
 		'module' => 

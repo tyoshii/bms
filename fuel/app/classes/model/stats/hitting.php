@@ -106,7 +106,6 @@ class Model_Stats_Hitting extends \Orm\Model
       DB::commit_transaction();
     } catch ( Exception $e ) {
       DB::rollback_transaction();
-error_log($e);
       throw new Exception();
     }
   }

@@ -81,6 +81,8 @@ class Model_Stats_Meta extends \Orm\Model
       // regist new data
       foreach ( $players as $disp_order => $player )
       {
+        if ( ! $player ) continue;
+
         $meta = self::forge($ids + array(
           'disp_order' => $disp_order,
           'player_id'  => $player['player_id'],

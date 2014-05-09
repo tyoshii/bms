@@ -42,6 +42,10 @@ class Model_Stats_Meta extends \Orm\Model
     return $query->execute()->as_array();
   }
 
+  // - TODO metaから取るのおかしいので修正する
+  // Starter情報はコントローラー側で持っているので
+  // 野手成績と同様のロジックとする。
+  // （player_idをキーとして配列を返して、twigにplayerとstatsの２つを渡す
   public static function getPitchingStats( $game_id, $team_id )
   {
     $query = DB::select()->from(array(self::$_table_name, 'meta'));

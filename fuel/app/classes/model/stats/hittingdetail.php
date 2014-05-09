@@ -6,6 +6,7 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 		'id',
 		'player_id',
 		'game_id',
+		'team_id',
 		'bat_times',
 		'direction',
 		'kind',
@@ -25,6 +26,11 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'stats_hittingdetails';
+
+  public static function clean($where)
+  {
+    Common::db_clean(self::$_table_name, $where);
+  }
 
   public static function getStats($game_id)
   {

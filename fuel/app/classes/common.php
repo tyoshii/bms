@@ -2,6 +2,16 @@
 
 class Common
 {
+  public static function db_clean( $table, $where )
+  {
+    $query = DB::delete($table);
+
+    if ( $where )
+      $query->where($where);
+
+    $query->execute(); 
+  }
+
   public static function debug($v)
   {
     echo "<pre>";

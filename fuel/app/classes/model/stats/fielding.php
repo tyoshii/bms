@@ -6,6 +6,7 @@ class Model_Stats_Fielding extends \Orm\Model
 		'id',
 		'player_id',
 		'game_id',
+		'team_id',
 		'E',
 		'created_at',
 		'updated_at',
@@ -22,4 +23,9 @@ class Model_Stats_Fielding extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'stats_fieldings';
+
+  public static function clean($where)
+  {
+    Common::db_clean(self::$_table_name, $where);
+  }
 }

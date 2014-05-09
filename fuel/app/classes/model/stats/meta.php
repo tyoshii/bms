@@ -47,7 +47,10 @@ class Model_Stats_Meta extends \Orm\Model
     $query = DB::select()->from(array(self::$_table_name, 'meta'));
 
     $query->join('players', 'LEFT')->on('meta.player_id', '=', 'players.id');
-    $query->join('stats_pitchings', 'LEFT')->on('meta.player_id', '=', 'stats_pitchings.player_id');
+    $query->join('stats_pitchings', 'LEFT')
+          ->on('meta.player_id', '=', 'stats_pitchings.player_id')
+          ->on('meta.game_id',   '=', 'stats_pitchings.game_id')
+          ->on('meta.team_id',   '=', 'stats_pitchings.team_id');
 
     $query->where(array(
       'meta.game_id' => $game_id,

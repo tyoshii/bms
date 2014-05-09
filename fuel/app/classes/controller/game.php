@@ -13,44 +13,6 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_score($game_id)
-  {
-    if ( ! $game_id )
-    {
-      Response::redirect(Uri::create('/game/list'));
-    }
-
-    $score = Model_Games_Runningscore::find($game_id, array(
-      'related' => array('games'),
-    ));
-
-    if ( Input::post() )
-    {      
-      $form = Fieldset::forge('score');
-      $form->add_model($score);
-
-      $val = $form->validation();
-      if ( $val->run() )
-      {
-        $score = Model_Games_Runningscore::find($game_id);
-        $score->set(Input::post());
-        $score->save(); 
-
-        Response::redirect(Uri::create('/game'));
-      }
-      else {
-        Session::set_flash('error', $val->show_errors());
-      }
-    }
-
-    $view = View::forge('game/score.twig');
-    $view->score = $score;
-    $view->team_top    = Model_Team::find($score->games->team_top)->name;
-    $view->team_bottom = Model_Team::find($score->games->team_bottom)->name;
-
-    return Response::forge($view);
-  }
-
   public function action_list()
   {
     $form = self::_get_addgame_form();
@@ -124,20 +86,15 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $order = null, $kind = '')
+  public function action_edit($game_id = null, $kind = '', $team_id = null)
   {
     // error check
-    if ( ! is_int($game_id+0) )
+    if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
     }
-    if ( ! in_array($order, array('top', 'bottom')) )
-    {
-      Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game'));
-    }
-    if ( ! in_array($kind, array('player','pitcher','batter','other')) )
+    if ( ! in_array($kind, array('score', 'player','pitcher','batter','other')) )
     {
       Session::set_flash('error', '試合一覧に戻されました');
       Response::redirect(Uri::create('/game'));
@@ -145,17 +102,14 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge("game/{$kind}.twig");
 
-    // 対象のチームID取得
-    $game = Model_Game::find($game_id);
-    $team_id = $order == 'top' ? $game->team_top
-                               : $game->team_bottom;
+    // team_idが空の時は、ログイン中のチームIDを
+    if ( ! $team_id )
+      $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
-    $view->members = Model_Player::find('all', array(
-      'where' => array(
-        array('team', $team_id),
-      ),
-    ));
+    $view->members = Model_Player::query()
+                      ->where('team', $team_id)
+                      ->get();
 
     // players
     $stat = Model_Games_Stat::query()
@@ -165,18 +119,35 @@ class Controller_Game extends Controller_Base
 
     $view->players = json_decode($stat->players);
 
+    // meta
+    // - TODO playersと入れ替えたい
+    $view->metum = Model_Stats_Meta::getStarter($game_id, $team_id);
+
     switch ( $kind )
     {
+      case 'score':
+        $view->score = Model_Games_Runningscore::find($game_id, array(
+          'related' => array('games'),
+        ));
+        break;
+
       case 'player':
         break;
 
       case 'pitcher':
         $view->pitchers = json_decode($stat->pitchers);
+        $view->stats_pitchings = Model_Stats_Meta::getPitchingStats($game_id, $team_id);
         break;
 
       case 'batter':
         $view->batters = json_decode($stat->batters);
-        $view->results = Model_Batter_Result::find('all');
+        $view->results = Model_Batter_Result::query()
+                          ->order_by('category_id')
+                          ->get();
+
+        $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
+        $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
+        $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');
         break;
 
       case 'other':
@@ -187,8 +158,12 @@ class Controller_Game extends Controller_Base
         break;
     }
 
+    // ID
     $view->game_id = $game_id;
     $view->team_id = $team_id;
+
+    // 試合情報
+    $game = Model_Game::find($game_id);
 
     // チーム名
     $view->team_top = Model_Team::find($game->team_top)->name;

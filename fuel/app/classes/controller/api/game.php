@@ -2,6 +2,25 @@
 
 class Controller_Api_Game extends Controller_Rest
 {
+  public function before()
+  {
+    parent::before();
+  }
+
+  // game_id/team_id
+  private static function _getIds()
+  {
+    $val = Validation::forge();
+    $val->add('game_id')->add_rule('required');
+    $val->add('team_id')->add_rule('required');
+
+    if ( ! $val->run() ) {
+      throw new Exception();
+    }
+
+    return $val->validated();
+  }
+
   public function post_updateStatus()
   {
     $game = Model_Game::find(Input::post('id'));
@@ -11,93 +30,93 @@ class Controller_Api_Game extends Controller_Rest
     return "OK";
   }
 
+  public function post_updateScore()
+  {
+    $form = Fieldset::forge('score');
+    $form->add_model(Model_Games_Runningscore::forge());
+
+    $val = $form->validation();
+
+    if ( ! $val->run() )
+      return Response::forge('NG', 400);
+  
+    $score = Model_Games_Runningscore::find( Input::post('game_id') );
+    $score->set(Input::post());
+    $score->save();
+
+    echo 'OK';
+  }
+
+  // 出場選手
   public function post_updatePlayer()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
+    $ids = self::_getIds();
 
-    if ( ! $order or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
-    // stamen 登録
+    // json登録(old)
     $players = Input::post('players');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
+              ->where(array($ids))
               ->get_one();
 
     $game->players = json_encode($players); 
     $game->save();
+
+    // stats_metaへの登録
+    Model_Stats_Meta::registPlayer($ids, $players);
 
     echo 'OK';
   }
 
   public function post_updatePitcher()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
+    $ids = self::_getIds();
 
-    if ( ! $order or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
+    // insert
     $pitcher = Input::post('pitcher');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
+              ->where(array($ids))
               ->get_one();
     $game->pitchers = json_encode($pitcher); 
     $game->save();
+
+    // stats_pitchingsへのinsert
+    Model_Stats_Pitching::registStats($ids, $pitcher);
 
     echo 'OK';
   }
 
   public function post_updateBatter()
   {
-    // parameter check
-    $order = Input::post('order');
-    $game_id = Input::post('game_id');
+    $ids = self::_getIds();
 
-    if ( ! $order or ! $game_id )
-    {
-      return Response::forge('NG', 400);
-    }
-
+    // insert
     $batter = Input::post('batter');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
-              ->get_one();
+            ->where(array($ids))
+            ->get_one();
 
     $game->batters = json_encode($batter); 
     $game->save();
+
+    // satasへの登録
+    Model_Stats_Hitting::regist($ids, $batter);
 
     echo 'OK';
   }
 
   public function post_updateOther()
   {
-    // parameter check
-    $order   = Input::post('order');
-    $game_id = Input::post('game_id');
-
-    if ( ! $order or ! $game_id )
-      return Response::forge('NG', 400);
+    $ids = self::_getIds();
 
     // insert
     $other = Input::post('other');
 
     $game = Model_Games_Stat::query()
-              ->where('game_id', $game_id)
-              ->where('order', $order)
+              ->where('game_id', $ids['game_id'])
+              ->where('team_id', $ids['team_id'])
               ->get_one();
 
     $game->others = json_encode($other); 

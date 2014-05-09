@@ -135,16 +135,16 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->pitchers = json_decode($stat->pitchers);
         $view->stats_pitchings = Model_Stats_Meta::getPitchingStats($game_id, $team_id);
         break;
 
       case 'batter':
-        $view->batters = json_decode($stat->batters);
+        // 打席結果一覧
         $view->results = Model_Batter_Result::query()
                           ->order_by('category_id')
                           ->get();
 
+        // 成績
         $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
         $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
         $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');

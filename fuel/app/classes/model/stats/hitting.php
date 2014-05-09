@@ -35,5 +35,4 @@ class Model_Stats_Hitting extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'stats_hittings';
-
 }

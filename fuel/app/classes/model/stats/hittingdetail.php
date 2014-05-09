@@ -26,4 +26,21 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 	);
 	protected static $_table_name = 'stats_hittingdetails';
 
+  public static function getStats($game_id)
+  {
+    $result = Model_Stat::getStats(self::$_table_name, $game_id);
+
+    $stats = array();
+    foreach ( $result as $res )
+    {
+      $key = $res['player_id'];
+
+      if ( ! array_key_exists($key, $stats) )
+        $stats[$key] = array();
+
+      array_push($stats[$key], $res);
+    }
+
+    return $stats;
+  }
 }

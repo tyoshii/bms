@@ -51,6 +51,9 @@ return array(
 				42 => '044_delete_players_from_games',
 				43 => '045_delete_pitchers_from_games',
 				44 => '046_delete_batters_from_games',
+				45 => '047_rename_table_stats_meta_to_stats_players',
+				46 => '048_add_team_top_name_to_games',
+				47 => '049_add_team_bottom_name_to_games',
 			),
 		),
 		'module' => 

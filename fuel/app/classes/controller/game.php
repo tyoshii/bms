@@ -6,7 +6,8 @@ class Controller_Game extends Controller_Base
   {
     parent::before();
 
-    if ( ! Auth::check() )
+    $action = Request::main()->action;
+    if ( $action === 'edit' && ! Auth::check() )
     {
       Session::set('redirect_to', Uri::current(), '', Input::get());
       Response::redirect(Uri::create('/login'));
@@ -15,13 +16,12 @@ class Controller_Game extends Controller_Base
 
   public function action_list()
   {
-    $form = self::_get_addgame_form();
-
     $view = View::forge('game/list.twig');
-    $view->set_safe('form', $form->build(Uri::current()));
-    $games = Model_Game::getGames();
 
-    $view->games = $games;
+    $form = self::_get_addgame_form();
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    $view->games = Model_Game::getGames();
     
     return Response::forge($view);
   } 
@@ -31,44 +31,14 @@ class Controller_Game extends Controller_Base
     $form = self::_get_addgame_form();
 
     $val = $form->validation();
-    if ($val->run())
+    if ( $val->run() )
     {
-      $top     = Input::post('top');
-      $bottom  = Input::post('bottom');
-      $my_team = Model_Player::getMyTeamId();
-
-      $game_status = 0;
-      if ( $top === $my_team AND $bottom === $my_team )
+      if ( self::_addgame_myvalidation() )
       {
-        // 紅白戦
-        $game_status = 2;
-      }
-      if ( $top === $my_team OR $bottom === $my_team )
-      {
-        // 自分のチームの試合
-        $game_status = 1;
-      }
-      if ( Auth::has_access('admin.admin') )
-      {
-        // 管理者登録の試合
-        $game_status = 3;
-      }
-
-      if ( $game_status === 0 && ! Auth::has_access('admin.admin') )
-      {
-        Session::set_flash('error', '自分のチームを選択してください');
-      }
-      else
-      {
-        try {
-          Model_Game::createNewGame($top, $bottom, $game_status);
-
+        if ( Model_Game::createNewGame(Input::post()) )
+        {
           Session::set_flash('info', '新規ゲームを追加しました');
           Response::redirect(Uri::current());
-        }
-        catch ( Exception $e )
-        {
-          Session::set_flash('error', $e->getMessage());
         }
       }
     }
@@ -102,26 +72,15 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge("game/{$kind}.twig");
 
-    // team_idが空の時は、ログイン中のチームIDを
+    // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
-    $view->members = Model_Player::query()
-                      ->where('team', $team_id)
-                      ->get();
+    $view->members = Model_Player::getMembers($team_id);
 
     // players
-    $stat = Model_Games_Stat::query()
-                        ->where('game_id', $game_id)
-                        ->where('team_id', $team_id)
-                        ->get_one();
-
-    $view->players = json_decode($stat->players);
-
-    // meta
-    // - TODO playersと入れ替えたい
-    $view->metum = Model_Stats_Meta::getStarter($game_id, $team_id);
+    $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
     switch ( $kind )
     {
@@ -135,14 +94,16 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->stats_pitchings = Model_Stats_Meta::getPitchingStats($game_id, $team_id);
+        // ピッチャーだけにフィルター
+        $view->metum = self::_filter_only_pitcher($view->metum);
+
+        // 成績
+        $view->stats = Model_Stat::getStats('stats_pitchings', $game_id, 'player_id');
         break;
 
       case 'batter':
         // 打席結果一覧
-        $view->results = Model_Batter_Result::query()
-                          ->order_by('category_id')
-                          ->get();
+        $view->results = Model_Batter_Result::getAll();
 
         // 成績
         $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
@@ -151,6 +112,11 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'other':
+        $stat = Model_Games_Stat::query()
+                        ->where('game_id', $game_id)
+                        ->where('team_id', $team_id)
+                        ->get_one();
+
         $view->others = json_decode($stat->others);
         break;
 
@@ -166,8 +132,8 @@ class Controller_Game extends Controller_Base
     $game = Model_Game::find($game_id);
 
     // チーム名
-    $view->team_top = Model_Team::find($game->team_top)->name;
-    $view->team_bottom = Model_Team::find($game->team_bottom)->name;
+    $view->team_top    = $game->team_top_name;
+    $view->team_bottom = $game->team_bottom_name;
 
     // 試合日
     $view->date = $game->date;
@@ -184,22 +150,108 @@ class Controller_Game extends Controller_Base
       ),
     ));
 
-    $form->add('date', '', array('class' => 'form-control form-datepicker', 'placeholder' => '試合実施日', 'data-date-format' => 'yyyy-mm-dd'))
+    // 試合実施日
+    $form->add('date', '試合実施日', array(
+      'class'            => 'form-control form-datepicker',
+      'placeholder'      => '試合実施日',
+      'data-date-format' => 'yyyy-mm-dd',
+    ))
       ->add_rule('required')
       ->add_rule('trim');
 
-    // option - チーム選択
-    $default = array( '' => '' );
-    $teams = Model_Team::getTeams();
+    // チーム選択
+    $teams = array('' => '') + Model_Team::getTeams();
 
-    $form->add('top', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '先攻'))
+    $attrs = array(
+      'type'    => 'select',
+      'options' => $teams,
+      'class'   => 'form-control chosen-select',
+    );
+
+    // - 先攻
+    $form->add('top', '先攻', $attrs + array(
+      'value'            => Model_Player::getMyTeamId(), // デフォルトで自分のチーム
+      'data-placeholder' => 'チームを選択',
+    ))
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('bottom', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '後攻'))
+    $form->add('top_name', '', array(
+      'type' => 'text',
+      'class' => 'form_control',
+      'placeholder' => 'or 直接入力',
+    ))
+      ->add_rule('max_length', 100);
+
+    // - 後攻
+    $form->add('bottom', '後攻', $attrs + array(
+      'data-placeholder' => 'チームを選択',
+    ))
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('addgame', '', array('type' => 'submit', 'value' => '追加', 'class' => 'btn btn-success'));
+    $form->add('bottom_name', '', array(
+      'type' => 'text',
+      'class' => 'form_control',
+      'placeholder' => 'or 直接入力',
+    ))
+      ->add_rule('max_length', 100);
+
+    // 先行後攻の入れ替え
+/*
+    $form->add_before('change', '', array(
+      'type'    => 'button',
+      'class'   => 'btn btn-success btn-xs',
+      'value'   => "<span class='glyphicon glyphicon-sort'></span>",
+      'onClick' => 'change_topbottom();',
+    ), array(), 'bottom');
+*/
+
+    // submit
+    $form->add('addgame', '', array(
+      'type'  => 'submit',
+      'value' => '追加',
+      'class' => 'btn btn-success',
+    ));
 
     return $form;
+  }
+  
+  // - TODO validationクラスへ独自validationを追加するのが本当は綺麗
+  private static function _addgame_myvalidation()
+  {
+    // 入力チェック
+    if ( ( ! Input::post('top')    && ! Input::post('top_name')    ) ||
+         ( ! Input::post('bottom') && ! Input::post('bottom_name') ) )
+    {
+      Session::set_flash('error', 'リストからチームを選択するか直接入力してください。');
+      return false;
+    }
+
+    // 自分の試合かどうか
+    if ( ! Auth::has_access('admin.admin') )
+    {
+      $team_id = Model_Player::getMyTeamId();
+
+      if ( Input::post('top') != $team_id && Input::post('bottom') != $team_id )
+      {
+        Session::set_flash('error', '自チームの試合のみ登録できます。');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static function _filter_only_pitcher($players)
+  {
+    $res = array();
+    foreach ( $players as $index => $player )
+    {
+      if ( strpos($player['position'], '1') !== false )
+      {
+        $res[$index] = $player;
+      }
+    }
+
+    return $res;
   }
 }

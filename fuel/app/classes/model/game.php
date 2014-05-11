@@ -5,7 +5,7 @@ class Model_Game extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'date',
-		'team_top' => array( 'default' => 0 ),
+		'team_top',
 		'team_top_name',
 		'team_bottom',
 		'team_bottom_name',
@@ -39,14 +39,17 @@ class Model_Game extends \Orm\Model
     try {
       DB::start_transaction();
 
+      // チーム名
+      $team_top_name    = $data['top_name'] ?: Model_Team::find($data['top'])->name;
+      $team_bottom_name = $data['bottom_name'] ?: Model_Team::find($data['bottom'])->name;
       // games insert
       $game = self::forge(array(
         'date'             => $data['date'],
         'game_status'      => 1,
-        'team_top'         => $data['top_name']    ? 0 : $data['top'],
-        'team_top_name'    => $data['top_name']    ?: '',
-        'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
-        'team_bottom_name' => $data['bottom_name'] ?: '',
+        'team_top'         => $data['top'] ?: 0,
+        'team_top_name'    => $team_top_name,
+        'team_bottom'      => $data['bottom'] ?: 0,
+        'team_bottom_name' => $team_bottom_name,
       ));
   
       $game->save();
@@ -66,22 +69,16 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
+  public static function getGameInfo()
+  {
+
+  }
+
   public static function getGames()
   {
-    $query = DB::select(
-      array( 'g.id', 'id' ),
-      'g.id',
-      'g.date',
-      'g.game_status',
-      'g.team_top',
-      'g.team_bottom',
-      'games_runningscores.tsum',
-      'games_runningscores.bsum',
-      DB::expr('(select name from teams as t where t.id = g.team_top) as team_top_name'),
-      DB::expr('(select name from teams as t where t.id = g.team_bottom) as team_bottom_name')
-    )->from(array('games', 'g'));
+    $query = DB::select()->from(self::$_table_name);
 
-    $query->join('games_runningscores')->on('g.id', '=', 'games_runningscores.id');
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
   
     $query->where('game_status', '!=', 0);
     $query->order_by('date', 'desc');

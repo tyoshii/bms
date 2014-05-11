@@ -40,4 +40,11 @@ class Model_Player extends \Orm\Model
       
     return null;
   }
+
+  public static function getMembers($team_id)
+  {
+    return DB::select()->from(self::$_table_name)
+                       ->where('team', $team_id)
+                       ->execute()->as_array();
+  }
 }

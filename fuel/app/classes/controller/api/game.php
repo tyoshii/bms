@@ -63,7 +63,7 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_metaへの登録
-    Model_Stats_Meta::registPlayer($ids, $players);
+    Model_Stats_Player::registPlayer($ids, $players);
 
     echo 'OK';
   }

@@ -6,7 +6,9 @@ class Model_Game extends \Orm\Model
 		'id',
 		'date',
 		'team_top',
+		'team_top_name',
 		'team_bottom',
+		'team_bottom_name',
 		'game_status',
 		'created_at',
 		'updated_at',
@@ -32,53 +34,56 @@ class Model_Game extends \Orm\Model
     'cascade_delete' => false,
   ));
 
-  public static function createNewGame( $top, $bottom, $game_status )
+  public static function createNewGame($data)
   {
-    $game = self::forge();
+    try {
+      DB::start_transaction();
 
-    // meta
-    $game->date        = Input::post('date');
-    $game->team_top    = $top;
-    $game->team_bottom = $bottom;
-    $game->game_status = $game_status;
+      // チーム名
+      $team_top_name    = $data['top_name'] ?: Model_Team::find($data['top'])->name;
+      $team_bottom_name = $data['bottom_name'] ?: Model_Team::find($data['bottom'])->name;
+      // games insert
+      $game = self::forge(array(
+        'date'             => $data['date'],
+        'game_status'      => 1,
+        'team_top'         => $data['top'] ?: 0,
+        'team_top_name'    => $team_top_name,
+        'team_bottom'      => $data['bottom'] ?: 0,
+        'team_bottom_name' => $team_bottom_name,
+      ));
+  
+      $game->save();
+  
+      // other table default value
+      Model_Games_Runningscore::createNewGame($game->id);
+      Model_Stats_Player::createNewGame($game->id, $data['top']);
+      Model_Stats_Player::createNewGame($game->id, $data['bottom']);
 
-    // players
-    $players = array();
-    for ( $i = 1; $i <= 9; $i++ )
-    {
-      $players[] = array(
-        'order'     => $i,
-        'member_id' => 0,
-        'position'  => array(0,0,0,0,0,0),
-      );
+      // json data のデフォルト値
+      // - TODO なくしたい
+      Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
+  
+      DB::commit_transaction();
+
+    } catch ( Exception $e ) {
+      DB::rollback_transaction();
+      Session::set_flash('error', '内部処理エラー:'.$e->getMessage() );
+      return false;
     }
-    $game->players = json_encode($players);
-    $game->pitchers = '';
-    $game->batters  = '';
-    $game->save();
 
-    Model_Games_Runningscore::createNewGame($game->id);
-    Model_Games_Stat::createNewGame($game->id, $top, $bottom);
+    return true;
+  }
 
-    return $game;
+  public static function getGameInfo()
+  {
+
   }
 
   public static function getGames()
   {
-    $query = DB::select(
-      array( 'g.id', 'id' ),
-      'g.id',
-      'g.date',
-      'g.game_status',
-      'g.team_top',
-      'g.team_bottom',
-      'games_runningscores.tsum',
-      'games_runningscores.bsum',
-      DB::expr('(select name from teams as t where t.id = g.team_top) as team_top_name'),
-      DB::expr('(select name from teams as t where t.id = g.team_bottom) as team_bottom_name')
-    )->from(array('games', 'g'));
+    $query = DB::select()->from(self::$_table_name);
 
-    $query->join('games_runningscores')->on('g.id', '=', 'games_runningscores.id');
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
   
     $query->where('game_status', '!=', 0);
     $query->order_by('date', 'desc');

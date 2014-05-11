@@ -1,5 +1,5 @@
 $(document).ready(function(){
-//  batter_result_update();
+  batter_result_update();
 });
 
 var result_map = {
@@ -248,6 +248,9 @@ function delete_daseki(self, daseki) {
 
   // remove target
   $tr.remove();
+
+  // 打席結果の削除なので、updateをかける
+  batter_result_update();
 }
 
 function add_daseki(self, daseki) {
@@ -379,13 +382,17 @@ function add_order(self, kind) {
   var $tr = $($('.player-tr')[0]);
   var $clone = $tr.clone(true);
 
+  // init number
+  $clone.find('td.number').text('');
+
   // init order
   if ( kind === 'last' ) {
-    var $last = $('.player-tr:last');
     // 最後に追加するときは、打順をインクリメント
     var last_order = $('.player-tr:last td.order').text();
     $clone.find('td.order').text(++last_order);
+
     // 元々最後だった行から削除ボタンを消す
+    var $last = $('.player-tr:last');
     $last.find('button.delete-order').remove();
   }
   else {
@@ -431,9 +438,9 @@ function post_pitcher(is_alert) {
         $earned_runs = $this.children("td.earned-runs"),
         $runs = $this.children("td.runs");
   
-    var member_id = $name.children('data').text();
+    var player_id = $name.children('data').text();
 
-    data[member_id] = {
+    data[player_id] = {
       name: $name.children('span').text(),
       number: $number.text(),
       inning_int: $inning.children('.inning_int').val(),

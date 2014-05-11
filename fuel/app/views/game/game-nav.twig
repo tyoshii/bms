@@ -4,6 +4,7 @@
 <h4>
 <p class="text-right">
 <small class="autosave text-success">
+<!-- 自動保存は相性がよくなかったので消した -->
 <span class="disable">30秒ごとに自動保存を行います...</span>
 </small>
 </p>
@@ -31,9 +32,10 @@
       <a href="/game/{{game_id}}/other/{{team_id}}">その他</a>
     </li>
 
-    {# return game/list #}
-    <li class="navbar-right">
-      <a href="/game" class="btn btn-info btn-xs">試合一覧へ戻る</a>
+    <li>&nbsp;</li>
+
+    <li>
+      <a href="/game">試合一覧へ戻る</a>
     </li>
 </ul>
 

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-//  batter_result_update();
+  batter_result_update();
 });
 
 var result_map = {

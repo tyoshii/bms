@@ -174,7 +174,8 @@ class Controller_Game extends Controller_Base
       'type' => 'text',
       'class' => 'form_control',
       'placeholder' => 'or 直接入力',
-    ));
+    ))
+      ->add_rule('max_length', 100);
 
     // - 後攻
     $form->add('bottom', '後攻', $attrs + array(
@@ -186,7 +187,8 @@ class Controller_Game extends Controller_Base
       'type' => 'text',
       'class' => 'form_control',
       'placeholder' => 'or 直接入力',
-    ));
+    ))
+      ->add_rule('max_length', 100);
 
     // 先行後攻の入れ替え
 /*

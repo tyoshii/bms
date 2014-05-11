@@ -42,19 +42,6 @@ class Model_Game extends \Orm\Model
     $game->team_bottom = $bottom;
     $game->game_status = $game_status;
 
-    // players
-    $players = array();
-    for ( $i = 1; $i <= 9; $i++ )
-    {
-      $players[] = array(
-        'order'     => $i,
-        'member_id' => 0,
-        'position'  => array(0,0,0,0,0,0),
-      );
-    }
-    $game->players = json_encode($players);
-    $game->pitchers = '';
-    $game->batters  = '';
     $game->save();
 
     Model_Games_Runningscore::createNewGame($game->id);

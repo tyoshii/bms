@@ -117,9 +117,8 @@ class Controller_Game extends Controller_Base
 
     $view->players = json_decode($stat->players);
 
-    // meta
-    // - TODO playersと入れ替えたい
-    $view->metum = Model_Stats_Meta::getStarter($game_id, $team_id);
+    // players
+    $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
     switch ( $kind )
     {
@@ -133,7 +132,7 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->stats_pitchings = Model_Stats_Meta::getPitchingStats($game_id, $team_id);
+        $view->stats_pitchings = Model_Stats_Player::getPitchingStats($game_id, $team_id);
         break;
 
       case 'batter':

@@ -110,14 +110,6 @@ class Controller_Game extends Controller_Base
     $view->members = Model_Player::getMembers($team_id);
 
     // players
-    $stat = Model_Games_Stat::query()
-                        ->where('game_id', $game_id)
-                        ->where('team_id', $team_id)
-                        ->get_one();
-
-    $view->players = json_decode($stat->players);
-
-    // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
     switch ( $kind )
@@ -146,6 +138,11 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'other':
+        $stat = Model_Games_Stat::query()
+                        ->where('game_id', $game_id)
+                        ->where('team_id', $team_id)
+                        ->get_one();
+
         $view->others = json_decode($stat->others);
         break;
 

@@ -248,6 +248,9 @@ function delete_daseki(self, daseki) {
 
   // remove target
   $tr.remove();
+
+  // 打席結果の削除なので、updateをかける
+  batter_result_update();
 }
 
 function add_daseki(self, daseki) {

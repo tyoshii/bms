@@ -47,21 +47,7 @@
 {% set already = [] %}
 
 {% for player in stats_pitchings %}
-{#
-{% set flag = false %}
 
-{% for i in player.position if flag == false %}
-
-{% if i == 1 and player.number not in already %}
-{% set flag = true %}
-{% set already = already|merge([player.number]) %}
-{% endif %}
-{% endfor %}
-
-{% if flag == true %}
-
-{% set score = pitchers[player.member_id] %}
-#}
 <tr>
 <td class="name">
 <span>{{player.name}}</span>

@@ -102,14 +102,12 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge("game/{$kind}.twig");
 
-    // team_idが空の時は、ログイン中のチームIDを
+    // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
-    $view->members = Model_Player::query()
-                      ->where('team', $team_id)
-                      ->get();
+    $view->members = Model_Player::getMembers($team_id);
 
     // players
     $stat = Model_Games_Stat::query()
@@ -140,9 +138,7 @@ class Controller_Game extends Controller_Base
 
       case 'batter':
         // 打席結果一覧
-        $view->results = Model_Batter_Result::query()
-                          ->order_by('category_id')
-                          ->get();
+        $view->results = Model_Batter_Result::getAll();
 
         // 成績
         $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');

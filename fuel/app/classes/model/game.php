@@ -58,6 +58,10 @@ class Model_Game extends \Orm\Model
       Model_Games_Runningscore::createNewGame($game->id);
       Model_Stats_Player::createNewGame($game->id, $data['top']);
       Model_Stats_Player::createNewGame($game->id, $data['bottom']);
+
+      // json data のデフォルト値
+      // - TODO なくしたい
+      Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
   
       DB::commit_transaction();
 

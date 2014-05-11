@@ -67,9 +67,29 @@ class Model_Stats_Player extends \Orm\Model
     return $query->execute()->as_array();
   }
 
+  public static function createNewGame($game_id, $team_id)
+  {
+    if ( ! $team_id ) return false;
+
+    $ids = array(
+      'game_id' => $game_id,
+      'team_id' => $team_id,
+    );
+
+    $default = array(
+      array(
+        'player_id' => 0,
+        'order'     => 1,
+        'position'  => array(0,0,0,0,0,0),
+      )
+    );
+
+    self::registPlayer( $ids, $default );
+  }
+
   public static function registPlayer($ids, $players)
   {
-    DB::start_transaction();
+    MyDB::begin();
 
     try {
 
@@ -91,10 +111,11 @@ class Model_Stats_Player extends \Orm\Model
         $player->save();
       }
 
-      DB::commit_transaction();
+      MyDB::commit();
+
     } catch ( Exception $e ) {
-      DB::rollback_transaction();
-      throw new Exception();
+      MyDB::rollback();
+      throw new Exception($e->getMessage());
     }
   }
 }

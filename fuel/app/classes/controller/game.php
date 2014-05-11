@@ -30,39 +30,14 @@ class Controller_Game extends Controller_Base
     $form = self::_get_addgame_form();
 
     $val = $form->validation();
-    if ($val->run())
+    if ( $val->run() )
     {
-      $top     = Input::post('top');
-      $bottom  = Input::post('bottom');
-      $my_team = Model_Player::getMyTeamId();
-
-      $game_status = 0;
-      if ( $top === $my_team OR $bottom === $my_team )
+      if ( self::_addgame_myvalidation() )
       {
-        // 自分のチームの試合
-        $game_status = 1;
-      }
-      if ( Auth::has_access('admin.admin') )
-      {
-        // 管理者登録の試合
-        $game_status = 3;
-      }
-
-      if ( $game_status === 0 && ! Auth::has_access('admin.admin') )
-      {
-        Session::set_flash('error', '自分のチームを選択してください');
-      }
-      else
-      {
-        try {
-          Model_Game::createNewGame($top, $bottom, $game_status);
-
+        if ( Model_Game::createNewGame(Input::post()) )
+        {
           Session::set_flash('info', '新規ゲームを追加しました');
           Response::redirect(Uri::current());
-        }
-        catch ( Exception $e )
-        {
-          Session::set_flash('error', $e->getMessage());
         }
       }
     }
@@ -170,22 +145,93 @@ class Controller_Game extends Controller_Base
       ),
     ));
 
-    $form->add('date', '', array('class' => 'form-control form-datepicker', 'placeholder' => '試合実施日', 'data-date-format' => 'yyyy-mm-dd'))
+    // 試合実施日
+    $form->add('date', '試合実施日', array(
+      'class'            => 'form-control form-datepicker',
+      'placeholder'      => '試合実施日',
+      'data-date-format' => 'yyyy-mm-dd',
+    ))
       ->add_rule('required')
       ->add_rule('trim');
 
-    // option - チーム選択
-    $default = array( '' => '' );
-    $teams = Model_Team::getTeams();
+    // チーム選択
+    $teams = array('' => '') + Model_Team::getTeams();
 
-    $form->add('top', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '先攻'))
+    $attrs = array(
+      'type'    => 'select',
+      'options' => $teams,
+      'class'   => 'form-control chosen-select',
+    );
+
+    // - 先攻
+    $form->add('top', '先攻', $attrs + array(
+      'value'            => Model_Player::getMyTeamId(), // デフォルトで自分のチーム
+      'data-placeholder' => 'チームを選択',
+    ))
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('bottom', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => '後攻'))
+    $form->add('top_name', '', array(
+      'type' => 'text',
+      'class' => 'form_control',
+      'placeholder' => 'or 直接入力',
+    ));
+
+    // - 後攻
+    $form->add('bottom', '後攻', $attrs + array(
+      'data-placeholder' => 'チームを選択',
+    ))
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('addgame', '', array('type' => 'submit', 'value' => '追加', 'class' => 'btn btn-success'));
+    $form->add('bottom_name', '', array(
+      'type' => 'text',
+      'class' => 'form_control',
+      'placeholder' => 'or 直接入力',
+    ));
+
+    // 先行後攻の入れ替え
+/*
+    $form->add_before('change', '', array(
+      'type'    => 'button',
+      'class'   => 'btn btn-success btn-xs',
+      'value'   => "<span class='glyphicon glyphicon-sort'></span>",
+      'onClick' => 'change_topbottom();',
+    ), array(), 'bottom');
+*/
+
+    // submit
+    $form->add('addgame', '', array(
+      'type'  => 'submit',
+      'value' => '追加',
+      'class' => 'btn btn-success',
+    ));
 
     return $form;
   }
+  
+  // - TODO validationクラスへ独自validationを追加するのが本当は綺麗
+  private static function _addgame_myvalidation()
+  {
+    // 入力チェック
+    if ( ( ! Input::post('top')    && ! Input::post('top_name')    ) ||
+         ( ! Input::post('bottom') && ! Input::post('bottom_name') ) )
+    {
+      Session::set_flash('error', 'リストからチームを選択するか直接入力してください。');
+      return false;
+    }
+
+    // 自分の試合かどうか
+    if ( ! Auth::has_access('admin.admin') )
+    {
+      $team_id = Model_Player::getMyTeamId();
+
+      if ( Input::post('top') != $team_id && Input::post('bottom') != $team_id )
+      {
+        Session::set_flash('error', '自チームの試合のみ登録できます。');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
 }

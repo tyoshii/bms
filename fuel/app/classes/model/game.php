@@ -5,8 +5,10 @@ class Model_Game extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'date',
-		'team_top',
+		'team_top' => array( 'default' => 0 ),
+		'team_top_name',
 		'team_bottom',
+		'team_bottom_name',
 		'game_status',
 		'created_at',
 		'updated_at',
@@ -32,22 +34,36 @@ class Model_Game extends \Orm\Model
     'cascade_delete' => false,
   ));
 
-  public static function createNewGame( $top, $bottom, $game_status )
+  public static function createNewGame($data)
   {
-    $game = self::forge();
+    try {
+      DB::start_transaction();
 
-    // meta
-    $game->date        = Input::post('date');
-    $game->team_top    = $top;
-    $game->team_bottom = $bottom;
-    $game->game_status = $game_status;
+      // games insert
+      $game = self::forge(array(
+        'date'             => $data['date'],
+        'game_status'      => 1,
+        'team_top'         => $data['top_name']    ? 0 : $data['top'],
+        'team_top_name'    => $data['top_name']    ?: '',
+        'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
+        'team_bottom_name' => $data['bottom_name'] ?: '',
+      ));
+  
+      $game->save();
+  
+      // other table default value
+      Model_Games_Runningscore::createNewGame($game->id);
+      Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
+  
+      DB::commit_transaction();
 
-    $game->save();
+    } catch ( Exception $e ) {
+      DB::rollback_transaction();
+      Session::set_flash('error', '内部処理エラー:'.$e->getMessage() );
+      return false;
+    }
 
-    Model_Games_Runningscore::createNewGame($game->id);
-    Model_Games_Stat::createNewGame($game->id, $top, $bottom);
-
-    return $game;
+    return true;
   }
 
   public static function getGames()

@@ -1,5 +1,8 @@
-{% macro header(date, team_top, team_bottom) %}
+{% extends 'layout/layout.twig' %}
 
+{% block content %}
+
+{# 試合概要 #}
 <h3>{{date}} {{team_top}}<small>先攻</small> vs {{team_bottom}}<small>後攻</small></h3>
 <h4>
 <p class="text-right">
@@ -10,11 +13,7 @@
 </p>
 </h4>
 
-{% endmacro %}
-
-
-{% macro navigation(game_id, team_id) %}
-
+{# tab メニュー #}
 <ul class="nav nav-tabs">
     <li {%if uri_segment(3)=='score'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/score/{{team_id}}">スコア</a>
@@ -39,7 +38,25 @@
     </li>
 </ul>
 
+{# データ保存の際にjsから取得しやすいように #}
 <data id="game_id" class="disable">{{game_id}}</data>
 <data id="team_id" class="disable">{{team_id}}</data>
 
-{% endmacro %}
+{%endblock%}
+
+
+{%block js%}
+
+{{ parent() }}
+
+<script src="/js/game/edit.js"></script>
+<script src="/select2/select2.min.js"></script>
+<script>
+
+$(document).ready(function() {
+  $('.select2').select2();
+});
+
+</script>
+
+{%endblock%}

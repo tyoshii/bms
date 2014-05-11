@@ -6,7 +6,8 @@ class Controller_Game extends Controller_Base
   {
     parent::before();
 
-    if ( ! Auth::check() )
+    $action = Request::main()->action;
+    if ( $action === 'edit' && ! Auth::check() )
     {
       Session::set('redirect_to', Uri::current(), '', Input::get());
       Response::redirect(Uri::create('/login'));

@@ -1,4 +1,4 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% macro inning_fraction(default) %}
 <select class="form-control inning fraction">
@@ -25,9 +25,8 @@
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation(game_id, team_id) }}
+{# header #}
+{{ parent() }}
 
 <table id="pitcher" class="table">
 <thead>
@@ -119,8 +118,9 @@
 {% endblock content %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
+
 <script>
 $(document).ready(function() {
     setTimeout("autosave('pitcher');", 30000);

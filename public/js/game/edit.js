@@ -431,9 +431,9 @@ function post_pitcher(is_alert) {
         $earned_runs = $this.children("td.earned-runs"),
         $runs = $this.children("td.runs");
   
-    var member_id = $name.children('data').text();
+    var player_id = $name.children('data').text();
 
-    data[member_id] = {
+    data[player_id] = {
       name: $name.children('span').text(),
       number: $number.text(),
       inning_int: $inning.children('.inning_int').val(),

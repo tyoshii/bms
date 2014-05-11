@@ -76,13 +76,15 @@ class Model_Stats_Player extends \Orm\Model
       'team_id' => $team_id,
     );
 
-    $default = array(
-      array(
+    $default = array();
+    for ( $i = 1; $i < 10; $i++ )
+    {
+      $default[] = array(
         'player_id' => 0,
-        'order'     => 1,
+        'order'     => $i,
         'position'  => array(0,0,0,0,0,0),
-      )
-    );
+      );
+    }
 
     self::registPlayer( $ids, $default );
   }

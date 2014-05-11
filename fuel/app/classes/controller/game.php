@@ -15,13 +15,12 @@ class Controller_Game extends Controller_Base
 
   public function action_list()
   {
-    $form = self::_get_addgame_form();
-
     $view = View::forge('game/list.twig');
-    $view->set_safe('form', $form->build(Uri::current()));
-    $games = Model_Game::getGames();
 
-    $view->games = $games;
+    $form = self::_get_addgame_form();
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    $view->games = Model_Game::getGames();
     
     return Response::forge($view);
   } 
@@ -38,11 +37,6 @@ class Controller_Game extends Controller_Base
       $my_team = Model_Player::getMyTeamId();
 
       $game_status = 0;
-      if ( $top === $my_team AND $bottom === $my_team )
-      {
-        // 紅白戦
-        $game_status = 2;
-      }
       if ( $top === $my_team OR $bottom === $my_team )
       {
         // 自分のチームの試合

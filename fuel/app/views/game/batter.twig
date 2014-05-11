@@ -1,10 +1,9 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation(game_id, team_id) }}
+{# header #}
+{{ parent() }}
 
 <table id="batter" class="table">
 <thead>
@@ -114,8 +113,9 @@
 {% endblock content %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
+
 <script>
 $(document).ready(function() {
     setTimeout("autosave('batter');", 30000);

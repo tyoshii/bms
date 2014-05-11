@@ -1,10 +1,9 @@
-{% extends 'layout/layout.twig' %}
+{% extends 'layout/game/edit.twig' %}
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation(game_id, team_id) }}
+{# header #}
+{{ parent() }}
 
 <table id="score" class="table">
 <thead>
@@ -48,8 +47,8 @@
 
 
 {% block js %}
+
 {{parent()}}
-{% include 'game-js.twig' %}
 
 <script>
 

@@ -1,4 +1,4 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% macro name_select(members, id) %}
 <select class="member_id select2" onChange="update_number(this);">
@@ -34,9 +34,8 @@
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation(game_id, team_id) }}
+{# header #}
+{{ parent() }}
 
 <table id="player" class="table">
 
@@ -110,8 +109,8 @@
 {% endblock %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
 
 <script>
 $(document).ready(function() {

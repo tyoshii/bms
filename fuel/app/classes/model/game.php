@@ -56,7 +56,8 @@ class Model_Game extends \Orm\Model
   
       // other table default value
       Model_Games_Runningscore::createNewGame($game->id);
-      Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
+      Model_Stats_Player::createNewGame($game->id, $data['top']);
+      Model_Stats_Player::createNewGame($game->id, $data['bottom']);
   
       DB::commit_transaction();
 

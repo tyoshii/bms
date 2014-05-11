@@ -52,7 +52,7 @@ class Json2mysql
           }
 
           // regist
-          \Model_Stats_Meta::registPlayer($ids, $players);
+          \Model_Stats_Player::registPlayer($ids, $players);
         }    
 
         // pitchers

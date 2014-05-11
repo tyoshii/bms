@@ -49,6 +49,8 @@ class Model_Games_Stat extends \Orm\Model
 
     foreach ( array('top' => $top, 'bottom' => $bottom) as $order => $team_id )
     {
+      if ( ! $team_id or $team_id == 0 ) continue;
+
       $stat = self::forge($props);
 
       $stat->order = $order;

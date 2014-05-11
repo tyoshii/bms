@@ -76,8 +76,13 @@
 
 
 {% block js %}
+
 {{ parent() }}
+
 <script>
+function change_topbottom() {
+}
+
 function changeGameStatus(id, status) {
   if ( window.confirm("無効試合としてよいですか？") ) {
     

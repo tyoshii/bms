@@ -93,7 +93,11 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'pitcher':
-        $view->stats_pitchings = Model_Stats_Player::getPitchingStats($game_id, $team_id);
+        // ピッチャーだけにフィルター
+        $view->metum = self::_filter_only_pitcher($view->metum);
+
+        // 成績
+        $view->stats = Model_Stat::getStats('stats_pitchings', $game_id, 'player_id');
         break;
 
       case 'batter':
@@ -236,4 +240,17 @@ class Controller_Game extends Controller_Base
     return true;
   }
 
+  private static function _filter_only_pitcher($players)
+  {
+    $res = array();
+    foreach ( $players as $index => $player )
+    {
+      if ( strpos($player['position'], '1') !== false )
+      {
+        $res[$index] = $player;
+      }
+    }
+
+    return $res;
+  }
 }

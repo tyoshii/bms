@@ -46,7 +46,9 @@
 
 {% set already = [] %}
 
-{% for player in stats_pitchings %}
+{% for player in metum %}
+
+{%set stat = stats[player.player_id]%}
 
 <tr>
 <td class="name">
@@ -56,41 +58,41 @@
 <td class="number">{{player.number}}</td>
 
 {# 勝敗 #}
-<td class="result">{{_self.result(player)}}</td>
+<td class="result">{{_self.result(stat)}}</td>
 
 {# 投球回 #}
 <td class="inning">
-<input class="inning_int form-control" min="0" type="number" value="{{player.IP|default(0)}}">
+<input class="inning_int form-control" min="0" type="number" value="{{stat.IP|default(0)}}">
 </td>
 
 {# 投球回 0/3 1/3 2/3 #}
 <td class="inning">
-{{_self.inning_fraction(player.IP_frac)}}
+{{_self.inning_fraction(stat.IP_frac)}}
 </td>
 
 {# 被安打 #}
 <td class="hianda">
-<input class="form-control hianda" type="number" min="0" value="{{player.H|default(0)}}">
+<input class="form-control hianda" type="number" min="0" value="{{stat.H|default(0)}}">
 </td>
 
 {# 奪三振 #}
 <td class="sanshin">
-<input class="form-control sanshin" type="number" min="0" value="{{player.SO|default(0)}}">
+<input class="form-control sanshin" type="number" min="0" value="{{stat.SO|default(0)}}">
 </td>
 
 {# 与四死球 #}
 <td class="shishikyuu">
-<input class="form-control shishikyuu" type="number" min="0" value="{{player.BB|default(0)}}">
+<input class="form-control shishikyuu" type="number" min="0" value="{{stat.BB|default(0)}}">
 </td>
 
 {# 自責点 #}
 <td class="earned-runs">
-<input class="form-control earned-runs" type="number" min="0" value="{{player.ER|default(0)}}">
+<input class="form-control earned-runs" type="number" min="0" value="{{stat.ER|default(0)}}">
 </td>
 
 {# 失点 #}
 <td class="runs">
-<input class="form-control runs" type="number" min="0" value="{{player.R|default(0)}}">
+<input class="form-control runs" type="number" min="0" value="{{stat.R|default(0)}}">
 </td>
 </tr>
 

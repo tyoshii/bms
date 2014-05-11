@@ -42,31 +42,6 @@ class Model_Stats_Player extends \Orm\Model
     return $query->execute()->as_array();
   }
 
-  // - TODO playerから取るのおかしいので修正する
-  // Starter情報はコントローラー側で持っているので
-  // 野手成績と同様のロジックとする。
-  // （player_idをキーとして配列を返して、twigにplayerとstatsの２つを渡す
-  public static function getPitchingStats( $game_id, $team_id )
-  {
-    $query = DB::select()->from(array(self::$_table_name, 'player'));
-
-    $query->join('players', 'LEFT')->on('player.player_id', '=', 'players.id');
-    $query->join('stats_pitchings', 'LEFT')
-          ->on('player.player_id', '=', 'stats_pitchings.player_id')
-          ->on('player.game_id',   '=', 'stats_pitchings.game_id')
-          ->on('player.team_id',   '=', 'stats_pitchings.team_id');
-
-    $query->where(array(
-      'player.game_id' => $game_id,
-      'player.team_id' => $team_id,
-    ));
-    $query->where('player.position', 'LIKE', '%1%');
-
-    $query->order_by('player.disp_order');
-
-    return $query->execute()->as_array();
-  }
-
   public static function createNewGame($game_id, $team_id)
   {
     if ( ! $team_id ) return false;

@@ -127,8 +127,8 @@ class Controller_Game extends Controller_Base
     $game = Model_Game::find($game_id);
 
     // チーム名
-    $view->team_top = Model_Team::find($game->team_top)->name;
-    $view->team_bottom = Model_Team::find($game->team_bottom)->name;
+    $view->team_top    = $game->team_top_name;
+    $view->team_bottom = $game->team_bottom_name;
 
     // 試合日
     $view->date = $game->date;

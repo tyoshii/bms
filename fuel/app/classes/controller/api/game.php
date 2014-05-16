@@ -129,6 +129,10 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateOther()
   {
+    // 権限チェック
+    if ( ! Auth::has_access('admin.admin') )
+      return Response::forge('編集する権限がありません', 403);
+
     $ids = self::_getIds();
 
     // insert

@@ -91,7 +91,7 @@ class Model_Stats_Pitching extends \Orm\Model
 
   public static function replaceAll($ids, $stats)
   {
-    DB::start_transaction();
+    Mydb::begin();
 
     try {
 
@@ -103,28 +103,14 @@ class Model_Stats_Pitching extends \Orm\Model
       {
         if ( ! $stat ) continue;
 
-        $pitch = self::forge($ids + array(
-          'player_id' => $player_id,
-          'W'         => $stat['result'] == 'win'  ?  1 : 0,
-          'L'         => $stat['result'] == 'lose' ?  1 : 0,
-          'HLD'       => $stat['result'] == 'hold' ?  1 : 0,
-          'SV'        => $stat['result'] == 'save' ?  1 : 0,
-          'IP'        => $stat['inning_int'],
-          'IP_frac'   => $stat['inning_frac'],
-          'H'         => $stat['hianda'],
-          'SO'        => $stat['sanshin'],
-          'BB'        => $stat['shishikyuu'],
-          'HB'        => 0,
-          'ER'        => $stat['earned_runs'],
-          'R'         => $stat['runs'],
-        ));
-
+        $props = self::_get_insert_props($stat);
+        $pitch = self::forge($ids + $props + array('player_id' => $player_id));
         $pitch->save();
       }
 
-      DB::commit_transaction();
+      Mydb::commit();
     } catch ( Exception $e ) {
-      DB::rollback_transaction();
+      Mydb::rollback();
       throw new Exception($e->getMessage());
     } 
   }

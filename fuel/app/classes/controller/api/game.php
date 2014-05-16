@@ -76,7 +76,8 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert
+    // insert (json形式
+    // - TODO いつか消す
     $pitcher = Input::post('pitcher');
 
     $game = Model_Games_Stat::query()
@@ -86,7 +87,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_pitchingsへのinsert
-    Model_Stats_Pitching::registStats($ids, $pitcher);
+    if ( Auth::has_access('admin.admin') )
+    {
+      Model_Stats_Pitching::replaceAll($ids, $pitcher);
+    }
+    else
+    {
+      Model_Stats_Pitching::regist($ids, $pitcher);
+    }
 
     echo 'OK';
   }

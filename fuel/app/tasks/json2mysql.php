@@ -80,7 +80,7 @@ class Json2mysql
           }
 
           // regist
-          \Model_Stats_Pitching::registStats($ids, $stats);
+          \Model_Stats_Pitching::replaceAll($ids, $stats);
         }
 
         // batters

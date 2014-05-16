@@ -244,9 +244,17 @@ class Controller_Game extends Controller_Base
 
   private static function _filter_only_pitcher($players)
   {
+    $myid = Model_Player::getMyPlayerId(); 
+
     $res = array();
     foreach ( $players as $index => $player )
     {
+      // 権限を持っていない場合は自分の成績のみupdate可能
+      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      {
+        continue;
+      }
+
       if ( strpos($player['position'], '1') !== false )
       {
         $res[$index] = $player;

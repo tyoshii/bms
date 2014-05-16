@@ -42,6 +42,26 @@ class Model_Stats_Hitting extends \Orm\Model
     Common::db_clean(self::$_table_name, $where);
   }
 
+  private static function _get_insert_props($stat)
+  {
+    return array(
+          'TPA' => $stat['seiseki']['daseki'],
+          'AB'  => $stat['seiseki']['dasuu'],
+          'H'   => $stat['seiseki']['anda'],
+          '2B'  => $stat['seiseki']['niruida'],
+          '3B'  => $stat['seiseki']['sanruida'],
+          'HR'  => $stat['seiseki']['honruida'],
+          'SO'  => $stat['seiseki']['sanshin'],
+          'BB'  => $stat['seiseki']['yontama'],
+          'HBP' => $stat['seiseki']['shikyuu'],
+          'SAC' => $stat['seiseki']['gida'],
+          'SF'  => $stat['seiseki']['gihi'],
+          'RBI' => $stat['seiseki']['daten'],
+          'R'   => $stat['seiseki']['tokuten'],
+          'SB'  => $stat['seiseki']['steal'],
+    );
+  }
+
   public static function regist($ids, $stats)
   {
     Mydb::begin();
@@ -62,24 +82,9 @@ class Model_Stats_Hitting extends \Orm\Model
         if ( ! $hit )
           self::forge($ids + array('player_id' => $player_id));
 
-        // set props
-        $hit->set(array(
-          'TPA' => $stat['seiseki']['daseki'],
-          'AB'  => $stat['seiseki']['dasuu'],
-          'H'   => $stat['seiseki']['anda'],
-          '2B'  => $stat['seiseki']['niruida'],
-          '3B'  => $stat['seiseki']['sanruida'],
-          'HR'  => $stat['seiseki']['honruida'],
-          'SO'  => $stat['seiseki']['sanshin'],
-          'BB'  => $stat['seiseki']['yontama'],
-          'HBP' => $stat['seiseki']['shikyuu'],
-          'SAC' => $stat['seiseki']['gida'],
-          'SF'  => $stat['seiseki']['gihi'],
-          'RBI' => $stat['seiseki']['daten'],
-          'R'   => $stat['seiseki']['tokuten'],
-          'SB'  => $stat['seiseki']['steal'],
-        ));
-
+        // set props => save
+        $props = self::_get_insert_props($stat);
+        $hit->set($props);
         $hit->save();
 
         // hittingdetails
@@ -131,7 +136,7 @@ class Model_Stats_Hitting extends \Orm\Model
 
   public static function replaceAll($ids, $stats)
   {
-    DB::start_transaction(); 
+    Mydb::begin();
 
     try {
 
@@ -146,24 +151,8 @@ class Model_Stats_Hitting extends \Orm\Model
         if ( ! $stat ) continue;
 
         // hittings
-        $hit = self::forge($ids + array(
-          'player_id' => $player_id,
-          'TPA' => $stat['seiseki']['daseki'],
-          'AB'  => $stat['seiseki']['dasuu'],
-          'H'   => $stat['seiseki']['anda'],
-          '2B'  => $stat['seiseki']['niruida'],
-          '3B'  => $stat['seiseki']['sanruida'],
-          'HR'  => $stat['seiseki']['honruida'],
-          'SO'  => $stat['seiseki']['sanshin'],
-          'BB'  => $stat['seiseki']['yontama'],
-          'HBP' => $stat['seiseki']['shikyuu'],
-          'SAC' => $stat['seiseki']['gida'],
-          'SF'  => $stat['seiseki']['gihi'],
-          'RBI' => $stat['seiseki']['daten'],
-          'R'   => $stat['seiseki']['tokuten'],
-          'SB'  => $stat['seiseki']['steal'],
-        ));
-
+        $props = self::_get_insert_props($stat);
+        $hit = self::forge($ids + $props + array('player_id' => $player_id));
         $hit->save();
 
         // hittingdetails
@@ -190,9 +179,9 @@ class Model_Stats_Hitting extends \Orm\Model
         $field->save();
       }
 
-      DB::commit_transaction();
+      Mydb::commit();
     } catch ( Exception $e ) {
-      DB::rollback_transaction();
+      Mydb::rollback();
       throw new Exception();
     }
   }

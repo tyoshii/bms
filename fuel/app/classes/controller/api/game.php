@@ -103,7 +103,8 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert
+    // insert (json形式
+    // - TODO いつか消す
     $batter = Input::post('batter');
 
     $game = Model_Games_Stat::query()
@@ -114,7 +115,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
-    Model_Stats_Hitting::regist($ids, $batter);
+    if ( Auth::has_access('admin.admin') )
+    {
+      Model_Stats_Hitting::replaceAll($ids, $batter);
+    }
+    else
+    {
+      Model_Stats_Hitting::regist($ids, $batter);
+    }
 
     echo 'OK';
   }

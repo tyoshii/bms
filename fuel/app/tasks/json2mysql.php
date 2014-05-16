@@ -87,7 +87,7 @@ class Json2mysql
         if ( $stats = json_decode($result['batters'], true) )
         {
           // regist
-          \Model_Stats_Hitting::regist($ids, $stats);
+          \Model_Stats_Hitting::replaceAll($ids, $stats);
         }
       }
     }

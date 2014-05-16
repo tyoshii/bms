@@ -105,6 +105,10 @@ class Controller_Game extends Controller_Base
         // 打席結果一覧
         $view->results = Model_Batter_Result::getAll();
 
+        // ログイン中ユーザのデータだけにフィルタ
+        if ( ! Auth::has_access('admin.admin') )
+          $view->metum = self::_filter_only_loginuser($view->metum);
+
         // 成績
         $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
         $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
@@ -240,6 +244,20 @@ class Controller_Game extends Controller_Base
     }
 
     return true;
+  }
+
+  private static function _filter_only_loginuser($players)
+  {
+    $myid = Model_Player::getMyPlayerId(); 
+
+    $res = array();
+    foreach ( $players as $player )
+    {
+      if ( $player['player_id'] === $myid )
+        $res[] = $player;
+    }
+
+    return $res;
   }
 
   private static function _filter_only_pitcher($players)

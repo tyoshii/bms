@@ -125,8 +125,9 @@ class Controller_Game extends Controller_Base
     }
 
     // ID
-    $view->game_id = $game_id;
-    $view->team_id = $team_id;
+    $view->game_id   = $game_id;
+    $view->team_id   = $team_id;
+    $view->team_name = Model_Team::find($team_id)->name;
 
     // 試合情報
     $game = Model_Game::find($game_id);

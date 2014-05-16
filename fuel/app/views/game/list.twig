@@ -79,8 +79,10 @@
 
 {# 無効 #}
 <td>
+{%if auth_has_access('admin.admin') %}
   <input type="hidden" name="id" value="{{game.id}}">
   <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
+{%endif%}
 </td>
 </tr>
 {% endfor %}

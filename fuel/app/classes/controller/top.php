@@ -2,6 +2,11 @@
 
 class Controller_Top extends Controller_Base
 {
+  public function action_test()
+  {
+    return Response::forge(View::forge('test.twig'));
+  }
+
 	public function action_index()
 	{
     $view = View::forge('top.twig');

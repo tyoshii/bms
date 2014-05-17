@@ -1,5 +1,7 @@
 <?php
 return array(
+  'test'   => 'top/test',
+
   '_root_' => 'top/index',
   'login'  => 'top/login',
   'logout' => 'top/logout',

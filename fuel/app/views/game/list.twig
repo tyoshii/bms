@@ -40,7 +40,8 @@
     <th>先攻</th>
     <th>スコア</th>
     <th>後攻</th>
-    <th></th>
+    <th>成績入力</th>
+    <th>無効</th>
 </tr>
 </thead>
 
@@ -49,18 +50,39 @@
 {% for game in games %}
 <tr class="{%if game.own == 1%}own{%endif%}">
 <td>{{ game.date }}</td>
+
+{# 先攻 #}
 <td>
 <div>{{ game.team_top_name }}</div>
+{%if game.team_top != 0 and auth_has_access('admin.admin') %}
 <a href="/game/{{game.id}}/player/{{game.team_top}}" class="btn btn-info btn-xs">成績入力</a>
+{%endif%}
 </td>
+
+{# 得点 #}
 <td><a href="/game/{{game.id}}/score">{{game.tsum}} - {{game.bsum}}</a></td>
+
+{# 後攻 #}
 <td>
 <div>{{ game.team_bottom_name }}</div>
+{%if game.team_bottom != 0 and auth_has_access('admin.admin') %}
 <a href="/game/{{game.id}}/player/{{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
+{%endif%}
 </td>
+
+{# 成績入力#}
 <td>
+{%if game.own == 1%}
+<a href="/game/{{game.id}}/player/" class="btn btn-info">成績入力</a>
+{%endif%}
+</td>
+
+{# 無効 #}
+<td>
+{%if auth_has_access('admin.admin') %}
   <input type="hidden" name="id" value="{{game.id}}">
   <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
+{%endif%}
 </td>
 </tr>
 {% endfor %}

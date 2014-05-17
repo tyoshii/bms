@@ -70,7 +70,8 @@ class Controller_User extends Controller_Base
         {
           // user_id 取得
           // 新規選手登録
-          $player = Model_Player::forge($props);
+          $player = $already ?: Model_Player::forge();
+          $player->set($props);
           $player->save();
           
           Session::set_flash('info', '新たに所属チームに登録されました。');

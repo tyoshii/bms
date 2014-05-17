@@ -57,10 +57,12 @@ class Controller_User extends Controller_Base
       else // idが無ければ新規登録
       {
         // かぶりチェック
-        if ( Model_Player::query()
-              ->where('team', $props['team'])
-              ->where('number', $props['number'])
-              ->get_one() )
+        $already = Model_Player::query()
+          ->where('team', $props['team'])
+          ->where('number', $props['number'])
+          ->get_one();
+
+        if ( $already && $already->username )
         {
           Session::set_flash('error', 'その背番号はすでに使われています');
         }

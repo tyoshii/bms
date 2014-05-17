@@ -1,6 +1,6 @@
 <?php
 
-class MyDB
+class Mydb
 {
   private static $_already = false;
 

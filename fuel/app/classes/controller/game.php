@@ -105,6 +105,10 @@ class Controller_Game extends Controller_Base
         // 打席結果一覧
         $view->results = Model_Batter_Result::getAll();
 
+        // ログイン中ユーザのデータだけにフィルタ
+        if ( ! Auth::has_access('admin.admin') )
+          $view->metum = self::_filter_only_loginuser($view->metum);
+
         // 成績
         $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
         $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
@@ -125,8 +129,9 @@ class Controller_Game extends Controller_Base
     }
 
     // ID
-    $view->game_id = $game_id;
-    $view->team_id = $team_id;
+    $view->game_id   = $game_id;
+    $view->team_id   = $team_id;
+    $view->team_name = Model_Team::find($team_id)->name;
 
     // 試合情報
     $game = Model_Game::find($game_id);
@@ -241,11 +246,33 @@ class Controller_Game extends Controller_Base
     return true;
   }
 
+  private static function _filter_only_loginuser($players)
+  {
+    $myid = Model_Player::getMyPlayerId(); 
+
+    $res = array();
+    foreach ( $players as $player )
+    {
+      if ( $player['player_id'] === $myid )
+        $res[] = $player;
+    }
+
+    return $res;
+  }
+
   private static function _filter_only_pitcher($players)
   {
+    $myid = Model_Player::getMyPlayerId(); 
+
     $res = array();
     foreach ( $players as $index => $player )
     {
+      // 権限を持っていない場合は自分の成績のみupdate可能
+      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      {
+        continue;
+      }
+
       if ( strpos($player['position'], '1') !== false )
       {
         $res[$index] = $player;

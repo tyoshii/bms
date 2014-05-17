@@ -66,7 +66,7 @@ class Model_Stats_Player extends \Orm\Model
 
   public static function registPlayer($ids, $players)
   {
-    MyDB::begin();
+    Mydb::begin();
 
     try {
 
@@ -88,10 +88,10 @@ class Model_Stats_Player extends \Orm\Model
         $player->save();
       }
 
-      MyDB::commit();
+      Mydb::commit();
 
     } catch ( Exception $e ) {
-      MyDB::rollback();
+      Mydb::rollback();
       throw new Exception($e->getMessage());
     }
   }

@@ -139,8 +139,13 @@ function post_other(is_alert) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("成績保存でエラーが発生しました");
+      }
     }, 
   });
 }
@@ -579,8 +584,13 @@ function post_player(is_alert) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("成績保存でエラーが発生しました");
+      }
     }, 
   });
 }

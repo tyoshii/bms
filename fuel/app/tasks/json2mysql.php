@@ -80,14 +80,14 @@ class Json2mysql
           }
 
           // regist
-          \Model_Stats_Pitching::registStats($ids, $stats);
+          \Model_Stats_Pitching::replaceAll($ids, $stats);
         }
 
         // batters
         if ( $stats = json_decode($result['batters'], true) )
         {
           // regist
-          \Model_Stats_Hitting::regist($ids, $stats);
+          \Model_Stats_Hitting::replaceAll($ids, $stats);
         }
       }
     }

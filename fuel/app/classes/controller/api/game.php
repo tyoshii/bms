@@ -50,6 +50,10 @@ class Controller_Api_Game extends Controller_Rest
   // 出場選手
   public function post_updatePlayer()
   {
+    // 権限チェック
+    if ( ! Auth::has_access('admin.admin') )
+      return Response::forge('出場選手を編集する権限がありません', 403);
+
     $ids = self::_getIds();
 
     // json登録(old)
@@ -72,7 +76,8 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert
+    // insert (json形式
+    // - TODO いつか消す
     $pitcher = Input::post('pitcher');
 
     $game = Model_Games_Stat::query()
@@ -82,7 +87,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_pitchingsへのinsert
-    Model_Stats_Pitching::registStats($ids, $pitcher);
+    if ( Auth::has_access('admin.admin') )
+    {
+      Model_Stats_Pitching::replaceAll($ids, $pitcher);
+    }
+    else
+    {
+      Model_Stats_Pitching::regist($ids, $pitcher);
+    }
 
     echo 'OK';
   }
@@ -91,7 +103,8 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert
+    // insert (json形式
+    // - TODO いつか消す
     $batter = Input::post('batter');
 
     $game = Model_Games_Stat::query()
@@ -102,13 +115,24 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
-    Model_Stats_Hitting::regist($ids, $batter);
+    if ( Auth::has_access('admin.admin') )
+    {
+      Model_Stats_Hitting::replaceAll($ids, $batter);
+    }
+    else
+    {
+      Model_Stats_Hitting::regist($ids, $batter);
+    }
 
     echo 'OK';
   }
 
   public function post_updateOther()
   {
+    // 権限チェック
+    if ( ! Auth::has_access('admin.admin') )
+      return Response::forge('編集する権限がありません', 403);
+
     $ids = self::_getIds();
 
     // insert

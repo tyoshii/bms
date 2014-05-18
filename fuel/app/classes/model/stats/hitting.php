@@ -80,7 +80,7 @@ class Model_Stats_Hitting extends \Orm\Model
           'player_id' => $player_id,
         ))->get_one();
         if ( ! $hit )
-          self::forge($ids + array('player_id' => $player_id));
+          $hit = self::forge($ids + array('player_id' => $player_id));
 
         // set props => save
         $props = self::_get_insert_props($stat);

@@ -9,11 +9,15 @@
 <div class="row">
 
 <div class="col-md-3">
-{%if auth_check()%}
+{%if has_access('admin.admin')%}
 <h3>新規ゲーム追加</h3>
 {{ form }}
 {%else%}
+{%if auth_check()%}
+新規ゲームを追加できる権限をもっていません。
+{%else%}
 新規ゲームを追加する場合はログインしてください。
+{%endif%}
 {%endif%}
 </div>
 

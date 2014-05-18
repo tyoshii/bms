@@ -10,26 +10,34 @@
 
 <form method="post">
 <table class="table table-hover">
-  <tr><td>
-    account
-  </td><td>
-    <input type="text" name="input_name" value="{{input_name}}" placeholder="yahootaro" required />
-  </td></tr>
-  <tr><td>
-    e-mail
-  </td><td>
-    <input type="email" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
-  </td></tr>
-  <tr><td>
-    password
-  </td><td>
-    <input type="password" name="input_password" placeholder="password" required />
-  </td></tr>
-  <tr><td>
-    <i>confirm password</i>
-  </td><td>
-    <input type="password" name="input_confirm_password" placeholder="confirm_password" required />
-  </td></tr>
+
+<tr>
+<td>アカウント<small>（50文字以内</small></td>
+<td>
+  <input type="text" name="input_name" value="{{input_name}}" placeholder="yahootaro" required />
+</td>
+</tr>
+
+<tr>
+<td>メールアドレス</td>
+<td>
+  <input type="email" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
+</td>
+</tr>
+
+<tr>
+<td>パスワード<small>(8文字以上250文字以下)</small></td>
+<td>
+  <input type="password" name="input_password" placeholder="password" required />
+</td>
+</tr>
+
+<tr>
+<td>確認用パスワード</td>
+<td>
+  <input type="password" name="input_confirm_password" placeholder="confirm_password" required />
+</td>
+</tr>
 
 </table>
 

@@ -2,20 +2,23 @@
 
 {% block content %}
 
-<h1>User Registration <small>新規アカウント作成</small></h1>
-<a href="/">Home</a> <i>{{ret_message}}</i>
+<h1>新規アカウント作成</h1>
+
+<ul>
+<li>全て半角英数で記述してください。</li>
+</ul>
 
 <form method="post">
-<table class="table">
+<table class="table table-hover">
   <tr><td>
-    username
+    account
   </td><td>
     <input type="text" name="input_name" value="{{input_name}}" placeholder="yahootaro" required />
   </td></tr>
   <tr><td>
     e-mail
   </td><td>
-    <input type="text" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
+    <input type="email" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
   </td></tr>
   <tr><td>
     password
@@ -27,10 +30,10 @@
   </td><td>
     <input type="password" name="input_confirm_password" placeholder="confirm_password" required />
   </td></tr>
-  <tr><td>
-    <input type="submit" value="submit" class="btn btn-success" />
-  </td></tr>
+
 </table>
+
+<input type="submit" value="submit" class="btn btn-success" />
 </form>
 
 {% endblock %}

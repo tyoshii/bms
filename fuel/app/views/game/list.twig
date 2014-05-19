@@ -9,7 +9,7 @@
 <div class="row">
 
 <div class="col-md-3">
-{%if has_access('admin.admin')%}
+{%if auth_has_access('admin.admin')%}
 <h3>新規ゲーム追加</h3>
 {{ form }}
 {%else%}
@@ -45,7 +45,9 @@
     <th>スコア</th>
     <th>後攻</th>
     <th>成績入力</th>
+{%if auth_has_access('admin.admin')%}
     <th>無効</th>
+{%endif%}
 </tr>
 </thead>
 
@@ -82,12 +84,12 @@
 </td>
 
 {# 無効 #}
-<td>
 {%if auth_has_access('admin.admin') %}
+<td>
   <input type="hidden" name="id" value="{{game.id}}">
   <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
-{%endif%}
 </td>
+{%endif%}
 </tr>
 {% endfor %}
 

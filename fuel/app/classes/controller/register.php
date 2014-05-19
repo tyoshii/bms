@@ -13,8 +13,16 @@ class Controller_Register extends Controller
     if ( Input::post() && $val->run() )
     {
       try {
+        // already check
+        if ( Model_User::find_by_username(Input::post('username')) ) 
+          throw new Exception('そのユーザー名は既に存在します。');
+             
+        if ( Model_User::find_by_email(Input::post('email')) )
+          throw new Exception('そのメールアドレスは既に登録済みです。');
+ 
+        // user create
         $result = Auth::create_user(
-          Input::post('account'),
+          Input::post('username'),
           Input::post('password'),
           Input::post('email')
         );
@@ -26,8 +34,10 @@ class Controller_Register extends Controller
         Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
         Response::redirect(Uri::create('/login'));
   
+      } catch ( SimpleUserUpdateException $e ) {
+        Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
       } catch ( Exception $e ) {
-        Session::set_flash('error', 'アカウントの作成に失敗しました');
+        Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
       }
     }
     else

@@ -49,14 +49,3 @@
 
 
 {% endblock %}
-
-
-{% block js %}
-{{ parent() }}
-<script>
-$(document).ready(function(){
-  $('div#bms-navbar li.bms-navbar-top').addClass('active');
-});
-</script>
-
-{% endblock %}

@@ -90,3 +90,6 @@ table#score input {
 .disable {
   display: none;
 }
+.red {
+  color: red;
+}

@@ -4,71 +4,104 @@ class Controller_Register extends Controller
 {
   public function action_index()
   {
-    return Response::forge(View::forge('register.twig'));
-  }
-
-  public function post_index()
-  {
     $view = View::forge('register.twig');
 
-    $input_name			= Input::post('input_name');
-    $input_mail			= Input::post('input_mail');
-    $input_password = Input::post('input_password');
-    $input_confirm  = Input::post('input_confirm_password');
-    
-    $view->input_name = $input_name;
-    $view->input_mail = $input_mail;
+    $form = self::_get_register_form();
 
-    // post data define check
-    if ( ! isset($input_name)     or
-         ! isset($input_mail)     or
-         ! isset($input_password) or
-         ! isset($input_confirm) )
+    $val = $form->validation();
+
+    if ( Input::post() && $val->run() )
     {
-      Session::set_flash('error', '入力必須項目に値がありません');
-      return Response::forge( $view );
+      try {
+        $result = Auth::create_user(
+          Input::post('account'),
+          Input::post('password'),
+          Input::post('email')
+        );
+            
+        if ( $result === false )
+          throw new Exception('Internal Error');
+  
+        // 成功した場合は、loginページへリダイレクト
+        Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
+        Response::redirect(Uri::create('/login'));
+  
+      } catch ( Exception $e ) {
+        Session::set_flash('error', 'アカウントの作成に失敗しました');
+      }
     }
-
-    // username
-    if ( strlen($input_name) > 50 )
+    else
     {
-      Session::set_flash('error', 'アカウントは50文字以下です。');
-      return Response::forge( $view );
+      Session::set_flash('error', $val->show_errors());
     }
 
-    // password confirm
-    if ( $input_password !== $input_confirm )
-    {
-      Session::set_flash('error', 'パスワードと確認用パスワードが等しくありません。');
-      return Response::forge( $view );
-    }
+    $form->repopulate();
+    $view->set_safe('form', $form->build(Uri::current()) );
 
-    // password length
-    if ( strlen($input_password) < 8 or strlen($input_password) > 250 )
-    {
-      Session::set_flash('error', 'パスワードは8文字以上,250文字以下で設定してください。');
-      return Response::forge( $view );
-    }
-      
-    try {
-      $result = Auth::create_user(
-        $input_name,
-        $input_password,
-        $input_mail,
-        1
-      );
-          
-      if ( $result === false )
-        throw new Exception('Internal Error');
-
-      // 成功した場合は、loginページへリダイレクト
-      Session::set_flash('info', 'アカウントの作成に成功しました。ログインしてください。');
-      Response::redirect(Uri::create('/login'));
-
-    } catch ( Exception $e ) {
-      Session::set_flash('error', 'アカウントの作成に失敗しました');
-    }
-
-    return Response::forge( $view );
+    return Response::forge($view);
   }
+
+  public function _get_register_form()
+  {
+    $form = Fieldset::forge('register', array(
+      'form_attributes' => array(
+        'class' => 'form form-horizontal',
+        'role'  => 'form',
+      ),
+    ));
+
+    // 必須の表示
+    $form->set_config('required_mark', '<span class="red">*</span>');
+
+    $form->add('username', 'ユーザー名', array(
+      'type'  => 'text',
+      'class' => 'form-control',
+      'description' => '半角英数 / 50字以内',
+    ), array())
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('valid_string', array('alpha', 'numeric'))
+      ->add_rule('max_length', 50);
+
+    $form->add('password', 'パスワード', array(
+      'type' => 'password',
+      'class' => 'form-control',
+      'description' => '半角英数と「. , ! ? : ;」が使用可能 / 8字以上 / 250字以内',
+    ), array())
+      ->add_rule('required')
+      ->add_rule('min_length', 8)
+      ->add_rule('max_length', 250)
+      ->add_rule('valid_string', array('alpha', 'numeric', 'punctuation'))
+      ->add_rule('match_field', 'confirm');
+
+    $form->add('confirm', '確認用パスワード', array(
+      'type' => 'password',
+      'class' => 'form-control',
+    ), array())
+      ->add_rule('required');
+
+    $form->add('name', '名前', array(
+      'type' => 'text',
+      'class' => 'form form-control',
+      'description' => '60字以内',
+    ), array())
+      ->add_rule('required')
+      ->add_rule('max_length', 64);
+
+    $form->add('email', 'メールアドレス', array(
+      'type' => 'email',
+      'class' => 'form-control',
+    ), array())
+      ->add_rule('required')
+      ->add_rule('valid_email');
+
+    $form->add('submit', '', array(
+      'type' => 'submit',
+      'class' => 'btn btn-success',
+      'value' => '登録',
+    ), array());
+
+    return $form;
+  }
+
 }

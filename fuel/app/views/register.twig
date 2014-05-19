@@ -2,46 +2,13 @@
 
 {% block content %}
 
-<h1>新規アカウント作成</h1>
-
-<ul>
-<li>全て半角英数で記述してください。</li>
-</ul>
-
-<form method="post">
-<table class="table table-hover">
-
-<tr>
-<td>アカウント<small>（50文字以内</small></td>
-<td>
-  <input type="text" name="input_name" value="{{input_name}}" placeholder="yahootaro" required />
-</td>
-</tr>
-
-<tr>
-<td>メールアドレス</td>
-<td>
-  <input type="email" name="input_mail" value="{{input_mail}}" placeholder="yahootaro@yahoo.co.jp" required />
-</td>
-</tr>
-
-<tr>
-<td>パスワード<small>(8文字以上250文字以下)</small></td>
-<td>
-  <input type="password" name="input_password" placeholder="password" required />
-</td>
-</tr>
-
-<tr>
-<td>確認用パスワード</td>
-<td>
-  <input type="password" name="input_confirm_password" placeholder="confirm_password" required />
-</td>
-</tr>
-
-</table>
-
-<input type="submit" value="submit" class="btn btn-success" />
-</form>
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-8">
+<h1>新規ユーザ登録</h1>
+{{form}}
+</div>
+<div class="col-md-2"></div>
+</div>
 
 {% endblock %}

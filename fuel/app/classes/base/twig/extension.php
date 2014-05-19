@@ -10,7 +10,7 @@ class Base_Twig_Extension extends Twig_Extension
   {
     return array(
       'login' => Auth::check(),
-      'screen_name' => Auth::get_screen_name(),
+      'screen_name' => Common::get_dispname(),
     );
   }
 

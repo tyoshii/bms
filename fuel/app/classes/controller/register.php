@@ -24,7 +24,9 @@ class Controller_Register extends Controller
         $result = Auth::create_user(
           Input::post('username'),
           Input::post('password'),
-          Input::post('email')
+          Input::post('email'),
+          1,
+          array('dispname' => Input::post('name'))
         );
             
         if ( $result === false )

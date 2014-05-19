@@ -286,8 +286,6 @@ class Controller_User extends Controller_Base
 
     $info = Auth::get_profile_fields();
 
-    $dispname = isset($info['dispname']) ? $info['dispname'] : Auth::get_screen_name();
-
     $form->add('username', '', array(
       'value' => Auth::get_screen_name(),
       'type' => 'hidden'
@@ -315,7 +313,7 @@ class Controller_User extends Controller_Base
       'disabled' => 'disabled',
     ));
 
-    $form->add('dispname', '表示名/選手名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
+    $form->add('dispname', '表示名/選手名', array('value' => Common::get_dispname(), 'maxlength' => 16, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 

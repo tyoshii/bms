@@ -14,16 +14,11 @@
 <select class="position">
 <option value="0" selected>--</option>
 {% for i in 1..9 %}
-{% if i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
+
 {% for i in ['D','H','R'] %}
-{% if p != 0 and i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
 </select>
 {% endmacro %}

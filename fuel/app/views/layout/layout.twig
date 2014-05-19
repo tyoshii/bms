@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" size="16x16">
+    <link rel="apple-touch-icon" href="/favicon.ico">
 
     {% block css %}
     <link href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
@@ -87,7 +88,7 @@
 
     <ul class="nav navbar-nav navbar-right">
       {% if login == true %}
-        <li><a href="/user/info">{{screen_name}}</a></li>
+        <li><a href="/user/info"><img src="/favicon.ico" height="24" width="24">&nbsp;{{screen_name}}</a></li>
         <li><a href="/logout">Logout</a></li>
       {% endif %}
     </ul>

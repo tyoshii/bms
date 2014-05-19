@@ -23,12 +23,10 @@ class Controller_Base extends Controller
           Session::set_flash('info', 'ログインに成功しました！こんにちわ');
           Response::redirect(Uri::current());
         }
-        else
-        {
-          Session::set_flash('error', 'ログインに失敗しました');
-          $this->_login_form->repopulate();
-        }
       }
+          
+      Session::set_flash('error', 'ログインに失敗しました');
+      $this->_login_form->repopulate();
     }
   }
 

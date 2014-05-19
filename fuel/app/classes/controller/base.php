@@ -51,9 +51,9 @@ class Controller_Base extends Controller
     $form_class = isset($cond['form_class']) ? $cond['form_class'] : 'navbar-form navbar-right';
 
     // login form
-    $form = Fieldset::forge($form_name, array(
+    $form = Fieldset::forge('login', array(
       'form_attributes' => array(
-        'class' => $form_class,
+        'class' => 'form',
         'role'  => 'search',
       ),
     ));

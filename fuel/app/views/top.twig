@@ -4,23 +4,25 @@
 
 <h1>Hello <small>野球ばか</small></h1>
 
-{# ログインしてない場合はこちら #}
-{%if auth_check() == false %}
-<ul>
-<li><a href="/login">ログイン</a>してください。</li>
-<li>アカウントがない場合は<a href="/register">こちら</a></li>
-</ul>
-
-{%else%}
-<hr>
-
 <div class="row">
+<div class="col-md-6">
+<h3>BMS - Baseball Management System</h3>
+<pre>
+草野球の試合における成績管理ができるシステムです。
 
-{# 最近の試合情報 #}
-<div class="col-md-4">
+所属選手一人ひとりがアカウントを持つことが出来ます。
+今まではチーム代表の方がスコア入力を全て担当していたと思いますが、
+自分の成績を各自で入力することが可能となっています。
+</pre>
+</div>
+
+<div class="col-md-6">
+
+{# ログインしてない場合はこちら #}
+{%if auth_check() %}
 
 {%if no_belong_team%}
-所属しているチームがありません。
+<h3>所属しているチームがありません</h3>
 <a href="/user/team">所属チームを設定しましょう！</a>
 {%else%}
 
@@ -36,6 +38,23 @@
 </table>
 
 {%endif%}{#if no_belong_team#}
+
+{%else%}
+
+<h3>ログイン</h3>
+{{login_form}}
+<ul>
+<li><a href="/register">新規ユーザー登録はこちら</a></li>
+</ul>
+
+</div>
+</div>
+
+<div class="row">
+
+{# 最近の試合情報 #}
+<div class="col-md-4">
+
 
 </div>
 

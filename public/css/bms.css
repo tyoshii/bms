@@ -108,6 +108,13 @@ table#score input {
   width: 40px;
 }
 
+table#batter td.daten input,
+table#batter td.tokuten input,
+table#batter td.steal input,
+table#batter td.error input {
+  width: 40px;
+}
+
 .disable {
   display: none;
 }

@@ -1,0 +1,49 @@
+{# variable #}
+{%if team == 'top' %}
+  {%set players = player_top%}
+  {%set stats   = pitching_top%}
+{%else%}
+  {%set players = player_bottom%}
+  {%set stats   = pitching_bottom%}
+{%endif%}
+
+<h3>投手成績</h3>
+
+<table class="table table-hover batter">
+<tr>
+<th>名前</th>
+<th>＃</th>
+<th>勝敗</th>
+<th>投球回</th>
+<th>被安打</th>
+<th>奪三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>自責点</th>
+<th>失点</th>
+</tr>
+
+{%for player in players if stats[player.player_id] %}
+
+<tr>
+<td>{{player.name}}</td>
+<td>{{player.number}}</td>
+<td>
+{%if stats[player.player_id]['W']   == 1%}勝{%endif%}
+{%if stats[player.player_id]['L']   == 1%}負{%endif%}
+{%if stats[player.player_id]['HLD'] == 1%}ホールド{%endif%}
+{%if stats[player.player_id]['SV']  == 1%}セーブ{%endif%}
+</td>
+<td>
+{{ stats[player.player_id]['IP'] }} {{stats[player.player_id]['IP_frac']}}
+</td>
+<td>{{stats[player.player_id]['H']}}</td>
+<td>{{stats[player.player_id]['SO']}}</td>
+<td>{{stats[player.player_id]['BB']}}</td>
+<td>{{stats[player.player_id]['HB']}}</td>
+<td>{{stats[player.player_id]['ER']}}</td>
+<td>{{stats[player.player_id]['R']}}</td>
+</tr>
+{%endfor%}
+</table>
+

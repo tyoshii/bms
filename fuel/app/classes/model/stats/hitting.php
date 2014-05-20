@@ -42,6 +42,14 @@ class Model_Stats_Hitting extends \Orm\Model
     Common::db_clean(self::$_table_name, $where);
   }
 
+  public static function get_stats($game_id, $team_id)
+  {
+    return DB::select()->from(self::$_table_name)
+            ->where('game_id', $game_id)
+            ->where('team_id', $team_id)
+            ->execute()->as_array('player_id'); 
+  }
+
   private static function _get_insert_props($stat)
   {
     return array(
@@ -80,7 +88,7 @@ class Model_Stats_Hitting extends \Orm\Model
           'player_id' => $player_id,
         ))->get_one();
         if ( ! $hit )
-          self::forge($ids + array('player_id' => $player_id));
+          $hit = self::forge($ids + array('player_id' => $player_id));
 
         // set props => save
         $props = self::_get_insert_props($stat);

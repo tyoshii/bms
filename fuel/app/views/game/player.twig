@@ -4,10 +4,7 @@
 <select class="member_id select2" onChange="update_number(this);">
 <option value="0">--------------------</option>
 {% for member in members %}
-{% set selected = '' %}
-{% if member.id == id %}{% set selected = 'selected' %}
-{% endif %}
-<option value="{{member.id}}" {{selected}}>{{member.name}}</option>
+<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
 {% endfor %}
 </select>
 {% endmacro %}
@@ -17,16 +14,11 @@
 <select class="position">
 <option value="0" selected>--</option>
 {% for i in 1..9 %}
-{% if i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
+
 {% for i in ['D','H','R'] %}
-{% if p != 0 and i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
 </select>
 {% endmacro %}

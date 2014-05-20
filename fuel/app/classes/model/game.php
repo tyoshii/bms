@@ -74,9 +74,13 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
-  public static function getGameInfo()
+  public static function getGameInfo($game_id)
   {
+    $query = self::_getGamesQuery();
 
+    $query->where('games.id', $game_id);
+
+    return $query->execute()->as_array();
   }
 
   public static function getGames()

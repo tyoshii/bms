@@ -44,6 +44,7 @@
     <th>先攻</th>
     <th>スコア</th>
     <th>後攻</th>
+    <th>試合概要</th>
     <th>成績入力</th>
 {%if auth_has_access('admin.admin')%}
     <th>無効</th>
@@ -74,6 +75,11 @@
 {%if game.team_bottom != 0 and auth_has_access('admin.admin') %}
 <a href="/game/{{game.id}}/player/{{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
 {%endif%}
+</td>
+
+{# 試合概要 #}
+<td>
+<a href="/game/{{game.id}}" class="btn btn-info">概要</a>
 </td>
 
 {# 成績入力#}

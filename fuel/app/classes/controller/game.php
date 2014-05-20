@@ -14,6 +14,27 @@ class Controller_Game extends Controller_Base
     }
   }
 
+  public function action_summary($game_id)
+  {
+    $view = View::forge('game/summary.twig');
+
+    $info = Model_Game::find($game_id);
+
+    $view->info  = $info;
+    $view->score = Model_Games_Runningscore::find($game_id);
+
+    $view->player_top    = Model_Stats_Player::getStarter($game_id, $info['team_top']); 
+    $view->player_bottom = Model_Stats_Player::getStarter($game_id, $info['team_bottom']); 
+
+    $view->hitting_top    = Model_Stats_Hitting::get_stats($game_id, $info['team_top']);
+    $view->hitting_bottom = Model_Stats_Hitting::get_stats($game_id, $info['team_bottom']);
+
+    $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
+    $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+
+    return Response::forge($view);
+  }
+
   public function action_list()
   {
     $view = View::forge('game/list.twig');

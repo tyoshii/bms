@@ -418,31 +418,50 @@ class Controller_Admin extends Controller_Base
 
   static private function _get_addmember_form()
   {
-    $form = Fieldset::forge('adduser', array(
+    $form = Fieldset::forge('regist_player', array(
       'form_attributes' => array(
         'class' => 'form',
-        'role'  => 'search',
+        'role'  => 'regist',
       ),
     ));
 
-    $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'Name'))
+    $form->add('name', '名前', array(
+      'class' => 'form-control',
+      'placeholder' => 'Name',
+      'description' => '60文字以内',
+    ))
       ->add_rule('required')
+      ->add_rule('max_length', 60)
       ->add_rule('trim');
 
-    $form->add('number', '', array('class' => 'form-control', 'placeholder' => 'number'))
+    $form->add('number', '背番号', array(
+      'class' => 'form-control',
+      'placeholder' => 'number',
+      'description' => '数字のみ / 3桁まで',
+    ))
       ->add_rule('required')
       ->add_rule('trim')
       ->add_rule('valid_string', array('numeric'))
-      ->add_rule('max_length', 8);
+      ->add_rule('max_length', 3);
 
     // option - チーム選択
     $default = array( '' => '' );
     $teams = Model_Team::getTeams();
 
-    $form->add('team', '', array('options' => $default+$teams, 'type' => 'select', 'class' => 'form-control chosen-select', 'data-placeholder' => 'Select Team'))
+    $form->add('team', '所属チーム', array(
+      'options' => $default+$teams,
+      'type' => 'select',
+      'class' => 'form-control chosen-select',
+      'data-placeholder' => 'Select Team',
+    ))
+      ->add_rule('required')
       ->add_rule('in_array', array_keys($teams));
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => '登録', 'class' => 'btn btn-success'));
+    $form->add('submit', '', array(
+      'type' => 'submit',
+      'value' => '登録',
+      'class' => 'btn btn-success',
+    ));
 
     return $form;
   }

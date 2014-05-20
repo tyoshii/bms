@@ -9,11 +9,15 @@
 <div class="row">
 
 <div class="col-md-3">
-{%if auth_check()%}
+{%if auth_has_access('admin.admin')%}
 <h3>新規ゲーム追加</h3>
 {{ form }}
 {%else%}
+{%if auth_check()%}
+新規ゲームを追加できる権限をもっていません。
+{%else%}
 新規ゲームを追加する場合はログインしてください。
+{%endif%}
 {%endif%}
 </div>
 
@@ -40,8 +44,11 @@
     <th>先攻</th>
     <th>スコア</th>
     <th>後攻</th>
+    <th>試合概要</th>
     <th>成績入力</th>
+{%if auth_has_access('admin.admin')%}
     <th>無効</th>
+{%endif%}
 </tr>
 </thead>
 
@@ -70,6 +77,11 @@
 {%endif%}
 </td>
 
+{# 試合概要 #}
+<td>
+<a href="/game/{{game.id}}" class="btn btn-info">概要</a>
+</td>
+
 {# 成績入力#}
 <td>
 {%if game.own == 1%}
@@ -78,12 +90,12 @@
 </td>
 
 {# 無効 #}
-<td>
 {%if auth_has_access('admin.admin') %}
+<td>
   <input type="hidden" name="id" value="{{game.id}}">
   <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
-{%endif%}
 </td>
+{%endif%}
 </tr>
 {% endfor %}
 

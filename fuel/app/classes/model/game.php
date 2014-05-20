@@ -74,20 +74,18 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
-  public static function getGameInfo()
+  public static function getGameInfo($game_id)
   {
+    $query = self::_getGamesQuery();
 
+    $query->where('games.id', $game_id);
+
+    return $query->execute()->as_array();
   }
 
   public static function getGames()
   {
-    $query = DB::select()->from(self::$_table_name);
-
-    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
-  
-    $query->where('game_status', '!=', 0);
-    $query->order_by('date', 'desc');
-    
+    $query  = self::_getGamesQuery();
     $result = $query->execute()->as_array();
 
     // ログインしている場合、自分のチームの試合にflag
@@ -109,4 +107,36 @@ class Model_Game extends \Orm\Model
 
     return $result;
   }
+
+  public static function getGamesOnlyMyTeam()
+  {
+    $result = array();
+
+    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+    {
+      $query  = self::_getGamesQuery();
+
+      $query->where_open();
+      $query->or_where('team_top', $team_id);
+      $query->or_where('team_bottom', $team_id);
+      $query->where_close();
+
+      $result = $query->execute()->as_array();
+    }
+
+    return $result;
+  }
+
+  private static function _getGamesQuery()
+  {
+    $query = DB::select()->from(self::$_table_name);
+
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
+  
+    $query->where('game_status', '!=', 0);
+    $query->order_by('date', 'desc');
+    
+    return $query;
+  }
+
 }

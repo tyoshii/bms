@@ -10,8 +10,6 @@ class Controller_Score extends Controller_Base
       'related' => array('games'),
     ));
  
-    var_dump($score);
-    
     return Response::forge( $view );
   }
   public function action_record_self()

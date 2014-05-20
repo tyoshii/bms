@@ -1,0 +1,90 @@
+{% extends 'layout/layout.twig' %}
+
+
+{% block content %}
+
+<h3>試合スコア</h3>
+
+<table class="table score">
+
+<tr>
+<th>チーム</th>
+{%for i in range(1,12)%}
+<th>{{i}}</th>
+{%endfor%}
+<th>合計</th>
+</tr>
+
+<tr>
+<td>{{info.team_top_name}}</td>
+{%for i in range(1,12)%}
+<td>{{score['t'~i]}}</td>
+{%endfor%}
+<td>{{score.tsum}}</td>
+</tr>
+
+<tr>
+<td>{{info.team_bottom_name}}</td>
+{%for i in range(1,12)%}
+<td>{{score['b'~i]}}</td>
+{%endfor%}
+<td>{{score.bsum}}</td>
+</tr>
+
+</table>
+
+{# stats #}
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#stats-top" data-toggle="tab">{{info.team_top_name}}</a></li>
+  <li><a href="#stats-bottom" data-toggle="tab">{{info.team_bottom_name}}</a></li>
+</ul>
+
+<div class="tab-content">
+
+{# 先攻チーム #}
+<div class="tab-pane active" id="stats-top">
+
+{# no-data #}
+{%if player_top|length == 0%}
+  <div class="alert alert-warning">
+  成績が入力されていません。
+  {%if info.team_top == 0 %}
+  チーム登録がされていないチームです。
+  {%endif%}
+  </div>
+
+{%else%}
+
+{% include 'summary/stats/hitting.twig' with {'team':'top'} %}
+{% include 'summary/stats/pitching.twig' with {'team':'top'} %}
+
+{%endif%}
+
+</div>{# div.tab-pane #}
+
+
+{# 後攻チーム #}
+<div class="tab-pane" id="stats-bottom">
+
+{# no-data #}
+{%if player_bottom|length == 0%}
+  <div class="alert alert-warning">
+  成績が入力されていません。
+  {%if info.team_bottom == 0 %}
+  チーム登録がされていないチームです。
+  {%endif%}
+  </div>
+
+{%else%}
+
+{% include 'summary/stats/hitting.twig' with {'team':'bottom'} %}
+{% include 'summary/stats/pitching.twig' with {'team':'bottom'} %}
+
+{%endif%}
+
+</div>{# div.tab-pane #}
+
+</div>{# div.tab-content #}
+
+{% endblock content %}

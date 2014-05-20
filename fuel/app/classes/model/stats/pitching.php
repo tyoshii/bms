@@ -35,6 +35,13 @@ class Model_Stats_Pitching extends \Orm\Model
 	);
 	protected static $_table_name = 'stats_pitchings';
 
+  public static function get_stats($game_id, $team_id)
+  {
+    return DB::select()->from(self::$_table_name)
+            ->where('game_id', $game_id)
+            ->where('team_id', $team_id)
+            ->execute()->as_array('player_id'); 
+  }
   private static function _get_insert_props($stat)
   {
     return array(

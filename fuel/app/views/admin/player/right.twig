@@ -12,14 +12,14 @@
 </thead>
 
 <tbody>
-{% for member in members %}
+{% for player in players %}
 <tr>
-<td>{{ member.id }}</td>
-<td>{{ member.name }}</td>
-<td>{{ member.number }}</td>
-<td>{{ member.teams.name }}</td>
+<td>{{ player.id }}</td>
+<td>{{ player.name }}</td>
+<td>{{ player.number }}</td>
+<td>{{ player.teams.name }}</td>
 <td>
-<a href="/admin/member/{{member.id}}" class="btn btn-info">変更</a>
+<a href="/admin/player/{{player.id}}" class="btn btn-info">変更</a>
 </td>
 <td>
 <form method="DELETE">

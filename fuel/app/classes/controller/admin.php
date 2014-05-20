@@ -21,7 +21,7 @@ class Controller_Admin extends Controller_Base
     return Response::forge( View::forge('admin.twig') );
   }
 
-  public function get_user()
+  public function action_user()
   {
     $form = self::_get_adduser_form();
 
@@ -89,25 +89,25 @@ class Controller_Admin extends Controller_Base
     return Response::forge($this->view);
   }
 
-  public function post_memberinfo($id)
+  public function post_playerinfo($id)
   {
-    $this->view->kind = 'memberinfo';
+    $this->view->kind = 'playerinfo';
     
-    $form = self::_get_memberinfo_form($id);
+    $form = self::_get_playerinfo_form($id);
     $val = $form->validation();
 
     if ( $val->run() )
     {
       // playerテーブル更新
       $player = Model_Player::find(Input::post('id'));
-      $player->team = Input::post('team');
-      $player->name = Input::post('name');
-      $player->number = Input::post('number');
+      $player->team     = Input::post('team');
+      $player->name     = Input::post('name');
+      $player->number   = Input::post('number');
       $player->username = Input::post('username');
       $player->save();
 
       Session::set_flash('info', '選手情報の更新に成功しました');
-      Response::redirect(Uri::current());
+      Response::redirect(Uri::create('admin/player'));
     }
     else
     {
@@ -120,22 +120,22 @@ class Controller_Admin extends Controller_Base
     return Response::forge($this->view);
   }
 
-  public function action_memberinfo($id)
+  public function action_playerinfo($id)
   {
-    $this->view->kind = 'memberinfo';
+    $this->view->kind = 'playerinfo';
 
-    $form = self::_get_memberinfo_form($id);
+    $form = self::_get_playerinfo_form($id);
     $this->view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($this->view);
   }
 
-  public function get_member()
+  public function action_player()
   {
     $form = $this->_get_regist_player_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->members = Model_Player::find('all', array(
+    $this->view->players = Model_Player::find('all', array(
       'related' => array('teams'),
       'order_by' => 'id',
     ));
@@ -143,7 +143,7 @@ class Controller_Admin extends Controller_Base
     return Response::forge( $this->view );
   }
 
-  public function post_member()
+  public function post_player()
   {
     $form = $this->_get_regist_player_form();
 
@@ -180,7 +180,7 @@ class Controller_Admin extends Controller_Base
 
   }
 
-  public function get_team()
+  public function action_team()
   {
     $form = $this->_get_team_form();
 
@@ -213,7 +213,7 @@ class Controller_Admin extends Controller_Base
     }
   }
 
-  public function get_league()
+  public function action_league()
   {
     $form = $this->_get_addleague_form();
 
@@ -256,19 +256,21 @@ class Controller_Admin extends Controller_Base
     return Response::forge($this->view);
   }
 
-  public static function _get_memberinfo_form($id)
+  public static function _get_playerinfo_form($id)
   {
-    $form = Fieldset::forge('memberinfo', array(
-      'form_attributes' => array(
-        'class' => 'form',
-      ),
-    ));
+    $self = Model_Player::find($id);
 
-    // 登録情報
-    $player = Model_Player::find($id);
+    $form = self::_get_regist_player_form();
+
+    // default value
+    $form->field('name')->set_value($self->name);
+    $form->field('number')->set_value($self->number);
+    $form->field('team')->set_value($self->team);
+    $form->field('username')->set_value($self->username);
+    $form->field('submit')->set_value('更新');
 
     // id
-    $form->add('id', '', array(
+    $form->add('id', 'プレイヤーID', array(
       'type' => 'hidden',
       'value' => $id,
     ))
@@ -276,57 +278,6 @@ class Controller_Admin extends Controller_Base
       ->add_rule('trim')
       ->add_rule('match_value', array($id))
       ->add_rule('valid_string', array('numeric'));
-
-    // team
-    Common::add_team_select($form, $player->team);
-
-    // name
-    $form->add('name', '選手名', array(
-      'type' => 'text',
-      'value' => $player->name,
-      'class' => 'form-control',
-    ))
-      ->add_rule('required')
-      ->add_rule('trim');
-
-    // number
-    $form->add('number', '背番号', array(
-      'type' => 'number',
-      'value' => $player->number,
-      'class' => 'form-control',
-      'mim' => 0,
-    ))
-      ->add_rule('required')
-      ->add_rule('trim')
-      ->add_rule('valid_string', array('numeric'));
-
-    // 紐付けユーザー
-    $users = array();
-    foreach ( Model_User::query()->select('username')->get() as $user )
-    {
-      // 既に登録済みだったら次へ
-      if ( $user->username != $player->username &&
-           Model_Player::find_by_username($user->username) )
-        continue;
-
-      if ( $user->username !== 'admin' )
-        $users[$user->username] = $user->username;
-    }
-
-    $form->add('username', '紐づけられているアカウント', array(
-      'type' => 'select',
-      'options' => array(''=>'') + $users,
-      'value'   => $player->username,
-      'class' => 'form-control chosen-select',
-      'data-placeholder' => '紐付けアカウント',
-    ))
-      ->add_rule('in_array', array_keys(array(''=>'') + $users));
-
-    // submit
-    $form->add('submit', '', array(
-      'type' => 'submit',
-      'value' => '更新',
-      'class' => 'btn btn-success'));
 
     return $form;
   }
@@ -425,7 +376,7 @@ class Controller_Admin extends Controller_Base
       ),
     ));
 
-    $form->add('name', '名前', array(
+    $form->add('name', '選手名', array(
       'class' => 'form-control',
       'placeholder' => 'Name',
       'description' => '60文字以内',
@@ -438,6 +389,7 @@ class Controller_Admin extends Controller_Base
       'class' => 'form-control',
       'placeholder' => 'number',
       'description' => '数字のみ / 3桁まで',
+      'min' => 0,
     ))
       ->add_rule('required')
       ->add_rule('trim')
@@ -456,6 +408,17 @@ class Controller_Admin extends Controller_Base
     ))
       ->add_rule('required')
       ->add_rule('in_array', array_keys($teams));
+    
+    // 紐付けユーザー
+    $users = array(''=>'') + Model_User::get_noregist_player_user();
+
+    $form->add('username', '紐づけられているユーザー', array(
+      'type' => 'select',
+      'options' => $users,
+      'class' => 'form-control chosen-select',
+      'data-placeholder' => '紐付けユーザー',
+    ))
+      ->add_rule('in_array', array_keys($users));
 
     $form->add('submit', '', array(
       'type' => 'submit',

@@ -26,4 +26,17 @@ class Model_User extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'users';
+
+  public static function get_noregist_player_user()
+  {
+    $users = DB::select('u.username')
+              ->from(array(self::$_table_name, 'u'))
+                ->join(array('players', 'p'), 'LEFT')
+                ->on('u.username', '=', 'p.username')
+              ->where('p.username', null)
+              ->where('u.username', '!=', 'admin')
+              ->execute()->as_array('username');
+
+    return array_keys($users);
+  }
 }

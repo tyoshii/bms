@@ -69,6 +69,9 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
+table#pitcher input {
+  width: 60px;
+}
 table#pitcher th {
   text-align: center;
 }

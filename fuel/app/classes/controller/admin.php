@@ -132,12 +132,12 @@ class Controller_Admin extends Controller_Base
 
   public function get_member()
   {
-    $form = $this->_get_addmember_form();
+    $form = $this->_get_regist_player_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
     $this->view->members = Model_Player::find('all', array(
       'related' => array('teams'),
-      'order_by' => 'number',
+      'order_by' => 'id',
     ));
 
     return Response::forge( $this->view );
@@ -145,7 +145,7 @@ class Controller_Admin extends Controller_Base
 
   public function post_member()
   {
-    $form = $this->_get_addmember_form();
+    $form = $this->_get_regist_player_form();
 
     $val = $form->validation();
     if ( $val->run())
@@ -416,7 +416,7 @@ class Controller_Admin extends Controller_Base
     return $form;
   }
 
-  static private function _get_addmember_form()
+  static private function _get_regist_player_form()
   {
     $form = Fieldset::forge('regist_player', array(
       'form_attributes' => array(

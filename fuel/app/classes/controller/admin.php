@@ -194,7 +194,9 @@ class Controller_Admin extends Controller_Base
   {
     $form = self::_get_team_form();
 
-    if ( $form->validation()->run() )
+    $val  = $form->validation();
+
+    if ( $val->run() )
     {
       $team = Model_Team::forge();
       $team->name = Input::post('name');
@@ -204,7 +206,8 @@ class Controller_Admin extends Controller_Base
     }
     else
     {
-      $form->repopurate();
+      Session::set_flash('error', $val->show_errors());
+      $form->repopulate();
 
       $this->view->set_safe('form', $form->build(Uri::current()));
       $this->view->set_safe('teams', Model_Team::find('all'));
@@ -303,26 +306,26 @@ class Controller_Admin extends Controller_Base
 
   static private function _get_team_form()
   {
-    $form = Fieldset::forge('team', array(
+    $form = Fieldset::forge('regist_team', array(
       'form_attributes' => array(
         'class' => 'form',
-        'role'  => 'search',
+        'role'  => 'regist',
       ),
     ));
 
-    $form->add('name', '', array('class' => 'form-control', 'placeholder' => 'TeamName'))
+    $form->add('name', 'チーム名', array(
+      'class' => 'form-control',
+      'placeholder' => 'TeamName',
+      'description' => '60文字以内',
+    ))
       ->add_rule('required')
-      ->add_rule('max_length', 64);
+      ->add_rule('max_length', 60);
 
-    $leagues = Model_League::find(':all');
-
-    if ( $leagues )
-    {
-      $form->add('league', '', array('class' => 'form-control', 'options' => $leagues, 'type' => 'select'))
-        ->add_rule('in_array', $leagues);
-    }
-
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'Add Team', 'class' => 'btn btn-success'));
+    $form->add('submit', '', array(
+      'type' => 'submit',
+      'value' => '登録',
+      'class' => 'btn btn-success',
+    ));
 
     return $form;
   }

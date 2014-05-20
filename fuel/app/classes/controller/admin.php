@@ -192,10 +192,25 @@ class Controller_Admin extends Controller_Base
 
   public function post_team()
   {
+    // delete
+    if ( Input::post('id') )
+    {
+      try {
+
+        $team = Model_Team::find(Input::post('id'));
+        $team->delete();
+
+        Session::set_flash('info', 'チームを削除しました。');
+        Response::redirect(Uri::current());
+
+      } catch ( Exception $e ) {
+        throw new Exception($e->getMessage());
+      }
+    }
+
     $form = self::_get_team_form();
 
     $val  = $form->validation();
-
     if ( $val->run() )
     {
       $team = Model_Team::forge();

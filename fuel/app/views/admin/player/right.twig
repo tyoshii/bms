@@ -6,6 +6,7 @@
 <th>名前</th>
 <th>背番号</th>
 <th>所属チーム</th>
+<th>ユーザー名</th>
 <th>変更</th>
 <th>削除</th>
 </tr>
@@ -18,6 +19,7 @@
 <td>{{ player.name }}</td>
 <td>{{ player.number }}</td>
 <td>{{ player.teams.name }}</td>
+<td>{{ player.username }}</td>
 <td>
 <a href="/admin/player/{{player.id}}" class="btn btn-info">変更</a>
 </td>

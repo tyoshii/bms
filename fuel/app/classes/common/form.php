@@ -86,6 +86,7 @@ class Common_Form
       'value' => $value,
     ), array())
       ->add_rule('required')
+      ->add_rule('max_length', 250)
       ->add_rule('valid_email');
 
     return $this;

@@ -54,7 +54,25 @@ require APPPATH.'bootstrap.php';
 // Generate the request, execute it and send the output.
 try
 {
-	$response = Request::forge()->execute()->response();
+  // maintenance mode
+  \Config::load('maintenance', 'm');
+  if ( \Config::get('m.mode') === 'on' )
+  {
+    if ( Auth::has_access('admin.admin') )
+    {
+      echo "現在、メンテナンスモードです";
+	    $response = Request::forge()->execute()->response();
+    }
+    else
+    {
+      \Request::reset_request(true);
+      $response = Response::forge(View::forge('maintenance.twig'));
+    }
+  }
+  else
+  {
+	  $response = Request::forge()->execute()->response();
+  }
 }
 catch (HttpNotFoundException $e)
 {

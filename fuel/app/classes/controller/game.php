@@ -186,7 +186,7 @@ class Controller_Game extends Controller_Base
       ->add_rule('trim');
 
     // チーム選択
-    $teams = array('' => '') + Model_Team::getTeams();
+    $teams = array('' => '') + Model_Team::get_teams_key_value();
 
     $attrs = array(
       'type'    => 'select',

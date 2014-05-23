@@ -35,12 +35,10 @@ class Controller_Top extends Controller_Base
   public function action_login()
   {
     if ( Auth::check() )
-    {
-      $redirect_to = Session::get('redirect_to', Uri::create('/'));
-      Session::delete('redirect_to');
+      Response::redirect('/');
 
-      Response::redirect($redirect_to);
-    }
+    if ( Input::get('url') )
+      Session::set('redirect_to', Input::get('url'));
 
     $view = View::forge('login.twig');  
     $view->set_safe('form', $this->_login_form->build(Uri::current()));

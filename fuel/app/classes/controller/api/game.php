@@ -32,6 +32,10 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateScore()
   {
+    // 権限チェック
+    if ( ! Auth::has_access('game.editall') )
+      return Response::forge('出場選手を編集する権限がありません', 403);
+
     $form = Fieldset::forge('score');
     $form->add_model(Model_Games_Runningscore::forge());
 
@@ -51,7 +55,7 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updatePlayer()
   {
     // 権限チェック
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('game.editall') )
       return Response::forge('出場選手を編集する権限がありません', 403);
 
     $ids = self::_getIds();
@@ -130,7 +134,7 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updateOther()
   {
     // 権限チェック
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('game.editall') )
       return Response::forge('編集する権限がありません', 403);
 
     $ids = self::_getIds();

@@ -9,14 +9,14 @@
 <div class="row">
 
 <div class="col-md-3">
-{%if auth_has_access('admin.admin')%}
+{%if auth_has_access('game.create')%}
 <h3>新規ゲーム追加</h3>
 {{ form }}
 {%else%}
 {%if auth_check()%}
 新規ゲームを追加できる権限をもっていません。
 {%else%}
-新規ゲームを追加する場合はログインしてください。
+新規ゲームを追加する場合は<a href="/login?url=/game">ログイン</a>してください。
 {%endif%}
 {%endif%}
 </div>
@@ -32,6 +32,8 @@
 <div class="btn-group">
 <button type="button" class="btn btn-default" onClick="filter('all');">全試合</button>
 <button type="button" class="btn btn-default" onClick="filter('own');">MyTeam</button>
+<button type="button" class="btn btn-default" onClick="filter('win');">勝ち</button>
+<button type="button" class="btn btn-default" onClick="filter('lose');">負け</button>
 </div>
 </div>
 
@@ -55,7 +57,7 @@
 <tbody>
 
 {% for game in games %}
-<tr class="{%if game.own == 1%}own{%endif%}">
+<tr class="{%if game.own != '0'%}own{%endif%} {{game.result}}">
 <td>{{ game.date }}</td>
 
 {# 先攻 #}
@@ -67,7 +69,7 @@
 </td>
 
 {# 得点 #}
-<td><a href="/game/{{game.id}}/score">{{game.tsum}} - {{game.bsum}}</a></td>
+<td><a href="/game/{{game.id}}/score">{{game.top_result}} {{game.tsum}} - {{game.bsum}} {{game.bottom_result}}</a></td>
 
 {# 後攻 #}
 <td>
@@ -84,7 +86,7 @@
 
 {# 成績入力#}
 <td>
-{%if game.own == 1%}
+{%if game.own != '0'%}
 <a href="/game/{{game.id}}/player/" class="btn btn-info">成績入力</a>
 {%endif%}
 </td>
@@ -163,6 +165,14 @@ function filter(type) {
   else if ( type === 'own' ) {
     $("#game-list tbody tr").hide();
     $("#game-list tbody tr.own").show();
+  }
+  else if ( type === 'win' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr.win").show();
+  }
+  else if ( type === 'lose' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr.lose").show();
   }
 }
 

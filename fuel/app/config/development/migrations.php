@@ -54,6 +54,7 @@ return array(
 				45 => '047_rename_table_stats_meta_to_stats_players',
 				46 => '048_add_team_top_name_to_games',
 				47 => '049_add_team_bottom_name_to_games',
+				48 => '050_rename_field_number_to_number_in_players',
 			),
 		),
 		'module' => 

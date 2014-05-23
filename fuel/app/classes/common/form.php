@@ -68,12 +68,46 @@ class Common_Form
   {
     $this->form->add('name', '名前', array(
       'type' => 'text',
-      'class' => 'form form-control',
+      'class' => 'form-control',
       'value' => $value,
       'description' => '60字以内',
     ), array())
       ->add_rule('required')
+      ->add_rule('trim')
       ->add_rule('max_length', 60);
+
+    return $this;
+  }
+
+  public function number($value = '')
+  {
+    $this->form->add('number', '背番号', array(
+      'type' => 'text',
+      'class' => 'form-control',
+      'value' => $value,
+      'description' => '数字のみ / 3桁まで',
+      'min' => 0,
+    ))
+      ->add_rule('required')
+      ->add_rule('trim')
+      ->add_rule('valid_string', array('numeric'))
+      ->add_rule('max_length', 3);
+
+    return $this;
+  }
+
+  public function team($value = '')
+  {
+    $teams = Model_Team::get_teams_key_value();
+
+    $this->form->add('team', '所属チーム', array(
+      'type' => 'select',
+      'options' => array(''=>'') + $teams,
+      'value' => $value,
+      'class' => 'form-control chosen-select',
+    ))
+      ->add_rule('required')
+      ->add_rule('in_array', array_keys($teams));
 
     return $this;
   }

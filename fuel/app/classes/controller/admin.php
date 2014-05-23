@@ -140,9 +140,9 @@ class Controller_Admin extends Controller_Base
       try {
         $player = Model_Player::forge();
         $player->name     = Input::post('name');
-        $player->team     = Input::post('team');
         $player->number   = Input::post('number');
-        $player->username = '';
+        $player->team     = Input::post('team');
+        $player->username = Input::post('username');
         $player->save();
 
         Session::set_flash('info', '選手を登録しました。');
@@ -264,15 +264,15 @@ class Controller_Admin extends Controller_Base
 
   public static function _get_playerinfo_form($id)
   {
-    $self = Model_Player::find($id);
+    $player = Model_Player::find($id);
 
     $form = self::_get_regist_player_form();
 
     // default value
-    $form->field('name')->set_value($self->name);
-    $form->field('number')->set_value($self->number);
-    $form->field('team')->set_value($self->team);
-    $form->field('username')->set_value($self->username);
+    $form->field('name')->set_value($player->name);
+    $form->field('number')->set_value($player->number);
+    $form->field('team')->set_value($player->team);
+    $form->field('username')->set_value($player->username);
     $form->field('submit')->set_value('更新');
 
     // id
@@ -399,62 +399,27 @@ class Controller_Admin extends Controller_Base
 
   static private function _get_regist_player_form()
   {
-    $form = Fieldset::forge('regist_player', array(
-      'form_attributes' => array(
-        'class' => 'form',
-        'role'  => 'regist',
-      ),
-    ));
+    $form = Common_Form::forge('regist_player');
 
-    $form->add('name', '選手名', array(
-      'class' => 'form-control',
-      'placeholder' => 'Name',
-      'description' => '60文字以内',
-    ))
-      ->add_rule('required')
-      ->add_rule('max_length', 60)
-      ->add_rule('trim');
+    $form->name()
+         ->number()
+         ->team()
+         ->submit('登録');
 
-    $form->add('number', '背番号', array(
-      'class' => 'form-control',
-      'placeholder' => 'number',
-      'description' => '数字のみ / 3桁まで',
-      'min' => 0,
-    ))
-      ->add_rule('required')
-      ->add_rule('trim')
-      ->add_rule('valid_string', array('numeric'))
-      ->add_rule('max_length', 3);
+    $form = $form->form;
 
-    // option - チーム選択
-    $default = array( '' => '' );
-    $teams = Model_Team::get_teams_key_value();
-
-    $form->add('team', '所属チーム', array(
-      'options' => $default+$teams,
-      'type' => 'select',
-      'class' => 'form-control chosen-select',
-      'data-placeholder' => 'Select Team',
-    ))
-      ->add_rule('required')
-      ->add_rule('in_array', array_keys($teams));
-    
     // 紐付けユーザー
     $users = array(''=>'') + Model_User::get_noregist_player_user();
 
-    $form->add('username', '紐づけられているユーザー', array(
+    $form->add_before('username', '紐づけるユーザー名', array(
       'type' => 'select',
       'options' => $users,
       'class' => 'form-control chosen-select',
-      'data-placeholder' => '紐付けユーザー',
-    ))
+    ), array(), 'submit')
       ->add_rule('in_array', array_keys($users));
 
-    $form->add('submit', '', array(
-      'type' => 'submit',
-      'value' => '登録',
-      'class' => 'btn btn-success',
-    ));
+    // required
+    $form->set_config('required_mark', '<span class="red">*</span>');
 
     return $form;
   }

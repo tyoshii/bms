@@ -10,7 +10,7 @@ class Controller_Deploy extends Controller
     if ( $data['ref'] === 'refs/heads/test' )
     {
         `cd /home/tyoshii/git/tyoshii/bms/`;
-        `git co master`;
+        `git checkout master`;
         `git pull origin mater`;
     }
   }

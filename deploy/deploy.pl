@@ -7,8 +7,11 @@ use File::Copy qw( copy );
 use File::Spec;
 use File::Path;
 
-my $list = 'bms.list';
+# option
+my $force = $ARGV[0] eq 'force';
 
+# file list
+my $list = 'bms.list';
 my @files = `cat $list`;
 
 my $hash;
@@ -50,10 +53,6 @@ for my $hash_sym ( @{$hash->{'symlink'}} ) {
     my $dest = $hash_sym->{'dest'};
     my $orig = $hash_sym->{'orig'};
 
-#    if ( -f $dest || -l $dest || -d $dest ) {
-#        `rm -irf $dest`;
-#    }
-
     if ( -d $orig ) {
 
         # mkdir
@@ -87,10 +86,6 @@ for my $hash_copy ( @{$hash->{'copy'}} ) {
     my $dest = $hash_copy->{'dest'};
     my $orig = $hash_copy->{'orig'};
 
-#    if ( -f $dest || -l $dest || -d $dest ) {
-#        `rm -irf $dest`;
-#    }
-
     _copy($orig, $dest)
 }
 
@@ -99,8 +94,10 @@ sub _copy {
     my $dest = shift;
 
     if ( -f $dest || -d $dest ) {
-        print "delete dest file for copy\n";
-        `rm -i $dest`;
+        if ( ! $force ) {
+            print "delete dest file for copy\n";
+            `rm -i $dest`;
+        }
     }
 
     if ( copy $orig, $dest ) {

@@ -21,62 +21,49 @@ class Controller_Admin extends Controller_Base
     return Response::forge( View::forge('admin.twig') );
   }
 
-  public function action_user()
+  public function action_user($id = null)
   {
-    $form = self::_get_adduser_form();
+    $form = $this->_get_user_form($id);
 
+    // view set
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->users = Model_User::find('all');
 
     return Response::forge( $this->view );
   }
 
-  public function post_user()
+  public function post_user($id = null)
   {
-    $form = self::_get_adduser_form();
+    $form = $this->_get_user_form($id);
 
     $val = $form->validation();
-    if ( $val->run())
+    if ( $val->run() )
     {
-      try {
-        Auth::create_user(
-          Input::post('username'),
-          Input::post('password'),
-          Input::post('mail'),
-          Input::post('group')
-        );
-
-        Session::set_flash('info', 'ユーザーを追加しました。');
-        Response::redirect(Uri::create('admin/user'));
-      }
-      catch ( Exception $e )
+      if ( Input::post('submit') == '登録' )
       {
-        Session::set_flash('error', $e->getMessage());
-      }
-    }
-    elseif(Input::post("username")) {
-      $uname = Input::post('username');
-      $current_user = Auth::get("username");
-      try {
-        if ($uname === $current_user) {
-            Session::set_flash('error', '自分自身のアカウントは無効にできません');
-            Response::redirect(Uri::create('admin/user'));
+        if ( Model_User::regist() )
+        {
+          Session::set_flash('info', 'ユーザーを追加しました。');
+          Response::redirect(Uri::create('admin/user'));
         }
-        Auth::update_user(
-            array(
-                'group' => -1,    // ユーザーを無効化
-            ),
-            $uname
-        );
-        Session::set_flash('info', $uname .' を無効にしました。');
-        Response::redirect(Uri::create('admin/user'));
       }
-      catch ( Exception $e )
+      else if ( Input::post('submit') == '更新' )
       {
-        Session::set_flash('error', $e->getMessage());
+        if ( Model_User::updates() )
+        {
+          Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
+      }
+      else
+      {
+        if ( Model_User::disable() )
+        {
+          Session::set_flash('info', Input::post('username').'を無効にしました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
       }
     }
-    else
+    else // ! $val->run()
     {
       Session::set_flash('error', $val->show_errors());
     }
@@ -345,42 +332,66 @@ class Controller_Admin extends Controller_Base
     return $form;
   }
 
-  static private function _get_adduser_form()
+  private function _get_user_form($id = null)
   {
-    $form = Fieldset::forge('adduser', array(
+    if ( $id )
+    {
+      $this->view->kind = 'updateuser';
+      $form = self::_get_user_update_form($id);
+    }
+    else
+    {
+      $this->view->users = Model_User::find('all');
+      $form = self::_get_user_regist_form();
+    }
+
+    // 必須項目のHTML変更
+    $form->set_config('required_mark', '<span class="red">*</span>');
+
+    return $form;
+  }
+
+  private static function _get_user_regist_form()
+  {
+    $form = Common_Form::forge('regist_user', array(
       'form_attributes' => array(
-        'class' => 'form',
-        'role'  => 'search',
-      ),
+        'class' => 'form'
+      )
     ));
 
-    $form->add('mail', '', array('class' => 'form-control', 'placeholder' => 'Mail'))
-      ->add_rule('required')
-      ->add_rule('trim')
-      ->add_rule('valid_email');
+    // 項目
+    $form->username()
+         ->password()
+         ->confirm()
+         ->email()
+         ->name()
+         ->group()
+         ->submit('登録');
 
-    $form->add('username', '', array('class' => 'form-control', 'placeholder' => 'Account'))
-      ->add_rule('required')
-      ->add_rule('max_length', 8);
+    return $form->form; 
+  }
 
-    $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
-      ->add_rule('required');
+  static private function _get_user_update_form($id = '')
+  {
+    $form = Common_Form::forge('regist_user');
 
-    $groups = Config::get("simpleauth.groups");
-    $roles = array();
-    foreach ($groups as $k => $v) {
-        if ($k > 0) {
-            $roles[$k] = $v["name"];
-        }
-    }
-    $role_ops = $roles;
-    $form->add('group', '',
-        array('class' => 'form-control', 'placeholder' => '権限グループ',
-              'type' => 'select', 'options'=>$role_ops, 'value' =>'true',
-      ))
-      ->add_rule('required');
+    // user info
+    $info = Model_User::find($id) ?: Model_User::forge();
 
-    $form->add('submit', '', array('type' => 'submit', 'value' => 'Sign Up', 'class' => 'btn btn-success'));
+    // 項目
+    $name = Model_Player::get_name_by_username($info->username);
+    $form->username($info->username)
+         ->email($info->email)
+         ->name($name)
+         ->group($info->group)
+         ->submit('更新');
+
+    $form = $form->form;
+
+    // username / email は変更不可
+    $form->field('username')->set_attribute(array('readonly' => 'readonly'));
+    $form->field('email')->set_attribute(array('readonly' => 'readonly'));
+    $form->field('name')->set_attribute(array('readonly' => 'readonly'));
 
     return $form;
   }

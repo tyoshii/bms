@@ -98,7 +98,7 @@ class Controller_Game extends Controller_Base
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
-    $view->members = Model_Player::getMembers($team_id);
+    $view->members = Model_Player::get_players($team_id);
 
     // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);

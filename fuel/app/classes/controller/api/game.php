@@ -32,6 +32,10 @@ class Controller_Api_Game extends Controller_Rest
 
   public function post_updateScore()
   {
+    // 権限チェック
+    if ( ! Auth::has_access('game.editall') )
+      return Response::forge('出場選手を編集する権限がありません', 403);
+
     $form = Fieldset::forge('score');
     $form->add_model(Model_Games_Runningscore::forge());
 

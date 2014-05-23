@@ -1,7 +1,5 @@
 <?php
 return array(
-  'test'   => 'top/test',
-
   '_root_' => 'top/index',
   'login'  => 'top/login',
   'logout' => 'top/logout',
@@ -23,14 +21,13 @@ return array(
   'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
   
   'api/game/(:segment)'  => 'api/game/$1',
+  'api/deploy'           => 'api/deploy/index',
 
   'score'               => 'score/record_team',
   'score/record_self'   => 'score/record_self',
 #  'score/record_league' => 'score/record_league',
 
   'register' => 'register/index',
-
-  'deploy' => 'deploy/index',
 
 //  '_root_'  => 'welcome/index',  // The default route
   '_404_'   => 'welcome/404',    // The main 404 route

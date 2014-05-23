@@ -109,8 +109,13 @@ function post_score(is_alert) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("スコア保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("スコア保存でエラーが発生しました");
+      }
     }, 
   });
 }

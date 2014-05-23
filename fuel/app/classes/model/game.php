@@ -88,21 +88,46 @@ class Model_Game extends \Orm\Model
     $query  = self::_getGamesQuery();
     $result = $query->execute()->as_array();
 
-    // ログインしている場合、自分のチームの試合にflag
-    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+    // add value
+    foreach ( $result as $index => $res )
     {
-      foreach ( $result as $index => $res )
+      // ログインしている場合、自分のチームの試合にflag
+      $result[$index]['own'] = 0;
+      if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
       {
-        if ( $res['team_top']    == $team_id ||
-             $res['team_bottom'] == $team_id )
+        if ( $res['team_top'] == $team_id ) 
         {
-          $result[$index]['own'] = 1;
+          $result[$index]['own'] = 'top';
         }
-        else
+        else if ( $res['team_bottom'] == $team_id )
         {
-          $result[$index]['own'] = 0;
+          $result[$index]['own'] = 'bottom';
         }
       }
+      
+      // 試合結果を配列に付与
+      if ( $res['tsum'] > $res['bsum'] )
+      {
+        $result[$index]['top_result'] = '○';
+        $result[$index]['bottom_result'] = '●';
+          
+        $result[$index]['result'] = $result[$index]['own'] === 'top' ? 'win' : 'lose';
+      }
+      else if ( $res['tsum'] < $res['bsum'] )
+      {
+        $result[$index]['top_result'] = '●';
+        $result[$index]['bottom_result'] = '○';
+
+        $result[$index]['result'] = $result[$index]['own'] === 'top' ? 'lose' : 'win';
+      }
+      else
+      {
+        $result[$index]['top_result'] = '△';
+        $result[$index]['bottom_result'] = '△';
+
+        $result[$index]['result'] = 'even';
+      }
+
     }
 
     return $result;

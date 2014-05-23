@@ -33,7 +33,7 @@
 {# ログインしてない場合はこちら #}
 {%if auth_check() %}
 
-{%if no_belong_team%}
+{%if no_belong_team and not auth_has_access('admin.admin')%}
 <h3>所属しているチームがありません</h3>
 <a href="/user/team">所属チームを設定しましょう！</a>
 {%else%}

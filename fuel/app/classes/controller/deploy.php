@@ -9,7 +9,7 @@ class Controller_Deploy extends Controller
     echo $data['ref'];
     if ( $data['ref'] === 'refs/heads/test' )
     {
-        `cd /home/tyoshii/git/tyoshii/bms/`;
+        chdir("/home/tyoshii/git/tyoshii/bms/");
         `git checkout master`;
         `git pull origin mater`;
     }

@@ -44,9 +44,9 @@
 まだ試合がありません
 {%else%}
 
-<table class="table">
+<table class="table games">
 {%for game in games%}
-<tr>
+<tr gameid="{{game.id}}">
 <td>{{game.team_top_name}}</td>
 <td>{{game.tsum}} - {{game.bsum}}</td>
 <td>{{game.team_bottom_name}}</td>
@@ -68,5 +68,10 @@
 
 {%endif%}
 
+{% endblock content %}
 
+
+{% block js%}
+{{ parent() }}
+<script type="text/javascript" src="/js/top.js"></script>
 {% endblock %}

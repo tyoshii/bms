@@ -11,7 +11,7 @@ class Controller_Deploy extends Controller
     {
         chdir("/home/tyoshii/git/tyoshii/bms/");
         `git checkout master`;
-        `git pull origin mater`;
+        `git pull origin master`;
     }
   }
 }

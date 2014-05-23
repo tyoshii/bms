@@ -219,7 +219,7 @@ class Controller_User extends Controller_Base
 
     // 所属チーム
     $default = array('' => '');
-    $teams = Model_Team::getTeams();
+    $teams = Model_Team::get_teams_key_value();
 
     $form->add('team', '所属チーム', array(
       'type' => 'select',

@@ -30,7 +30,7 @@ class Common
 
   public static function add_team_select($form, $default)
   {
-    $teams = Model_Team::getTeams();
+    $teams = Model_Team::get_teams_key_value();
 
     $form->add('team', '所属チーム', array(
       'type' => 'select',

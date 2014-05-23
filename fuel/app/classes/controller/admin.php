@@ -172,22 +172,23 @@ class Controller_Admin extends Controller_Base
     $form = $this->_get_team_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->teams = Model_Team::find('all');
+    $this->view->teams = Model_Team::get_teams();
 
     return Response::forge($this->view);
   }
 
   public function post_team()
   {
-    // delete
+    // bann
     if ( Input::post('id') )
     {
       try {
 
         $team = Model_Team::find(Input::post('id'));
-        $team->delete();
+        $team->status = -1;
+        $team->save();
 
-        Session::set_flash('info', 'チームを削除しました。');
+        Session::set_flash('info', 'チームステータスを無効にしました。');
         Response::redirect(Uri::current());
 
       } catch ( Exception $e ) {
@@ -427,7 +428,7 @@ class Controller_Admin extends Controller_Base
 
     // option - チーム選択
     $default = array( '' => '' );
-    $teams = Model_Team::getTeams();
+    $teams = Model_Team::get_teams_key_value();
 
     $form->add('team', '所属チーム', array(
       'options' => $default+$teams,

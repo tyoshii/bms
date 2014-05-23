@@ -88,6 +88,9 @@ return array(
      */
     'roles' => array(
         'admin' => true,
+        'moderator' => array(
+          'game' => array('create'),
+        ),
         /**
          * Examples
          * ---

@@ -57,6 +57,7 @@ return array(
 				48 => '050_rename_field_number_to_number_in_players',
 				49 => '051_add_statsu_to_teams',
 				50 => '052_rename_field_statsu_to_status_in_teams',
+				51 => '053_add_status_to_players',
 			),
 		),
 		'module' => 

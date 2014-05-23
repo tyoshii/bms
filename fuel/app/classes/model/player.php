@@ -8,6 +8,9 @@ class Model_Player extends \Orm\Model
 		'name',
 		'number',
     'username',
+    'status' => array(
+      'default' => 1,
+    ),
 		'created_at',
 		'updated_at',
 	);
@@ -60,10 +63,73 @@ class Model_Player extends \Orm\Model
     return null;
   }
 
-  public static function getMembers($team_id)
+  public static function get_players($team_id = null)
   {
-    return DB::select()->from(self::$_table_name)
-                       ->where('team', $team_id)
-                       ->execute()->as_array();
+    $query = DB::select('p.*', 'teams.name')
+              ->from(array(self::$_table_name, 'p'))
+              ->join('teams', 'LEFT')->on('p.team', '=', 'teams.id')
+              ->where('p.status', '!=', -1) 
+              ->order_by('p.id');
+
+    if ( $team_id )
+      $query->where('p.team', $team_id);
+
+    return $query->execute()->as_array();
+  }
+
+  public static function regist($props, $id = null)
+  {
+    try {
+      $player = $id ? self::find($id) : self::forge();
+
+      // 既に登録されたusernameかチェック
+      if ( $props['username'] and 
+           $props['username'] !== $player->username and
+           self::find_by_username($props['username']) )
+      {
+        throw new Exception('そのユーザーは既に他の選手に紐づいています');
+      }
+
+      // 背番号のダブリをチェック
+      if ( $props['number'] !== $player->number )
+      {
+        if ( self::query()
+              ->where('team', $props['team'])
+              ->where('number', $props['number'])
+              ->get_one() )
+        {
+          throw new Exception('その背番号は既に使われています');
+        }
+      }
+  
+      // 登録/更新
+      $player->set($props);
+      $player->save();
+
+      return true;
+
+    } catch ( Exception $e ) {
+      Session::set_flash('error', $e->getMessage());
+      return false;
+    }
+  }
+
+  public static function disable($id)
+  {
+    try {
+      $player = self::find($id);
+  
+      $player->number   = '';
+      $player->username = '';
+      $player->status   = -1;
+  
+      $player->save();
+
+      return true;
+    
+    } catch ( Exception $e ) {
+      Session::set_flash('error', $e->getMessage());
+      return false;
+    }
   }
 }

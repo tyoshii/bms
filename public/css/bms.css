@@ -81,25 +81,28 @@ table#pitcher td.name {
 table#pitcher td.number {
   text-align: center;
 }
-table#pitcher td.inning {
+table#pitcher td.IP {
   width: 80px;
 }
 table#pitcher td.result {
   width: 80px;
 }
-table#pitcher td.hianda {
+table#pitcher td.H {
   width: 80px;
 }
-table#pitcher td.sanshin {
+table#pitcher td.SO {
   width: 80px;
 }
-table#pitcher td.shishikyuu {
+table#pitcher td.BB {
   width: 80px;
 }
-table#pitcher td.earned-runs {
+table#pitcher td.HB {
   width: 80px;
 }
-table#pitcher td.runs {
+table#pitcher td.ER {
+  width: 80px;
+}
+table#pitcher td.R {
   width: 80px;
 }
 

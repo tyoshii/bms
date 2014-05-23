@@ -7,7 +7,7 @@ class Controller_Deploy extends Controller
     $data = json_decode(Input::post('payload'), true);
 
     echo $data['ref']."\n";
-    if ( $data['ref'] === 'refs/heads/test' )
+    if ( $data['ref'] === 'refs/heads/master' )
     {
         // git-pull
         chdir("/home/tyoshii/git/tyoshii/bms/");

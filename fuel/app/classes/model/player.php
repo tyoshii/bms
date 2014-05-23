@@ -65,7 +65,7 @@ class Model_Player extends \Orm\Model
 
   public static function get_players($team_id = null)
   {
-    $query = DB::select('p.*', 'teams.name')
+    $query = DB::select('p.*', array('teams.name', 'teamname'))
               ->from(array(self::$_table_name, 'p'))
               ->join('teams', 'LEFT')->on('p.team', '=', 'teams.id')
               ->where('p.status', '!=', -1) 

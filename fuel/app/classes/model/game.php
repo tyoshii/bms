@@ -88,10 +88,27 @@ class Model_Game extends \Orm\Model
     $query  = self::_getGamesQuery();
     $result = $query->execute()->as_array();
 
-    // ログインしている場合、自分のチームの試合にflag
-    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+    foreach ( $result as $index => $res )
     {
-      foreach ( $result as $index => $res )
+      // 試合結果を配列に付与
+      if ( $res['tsum'] > $res['bsum'] )
+      {
+        $result[$index]['top_result'] = '○';
+        $result[$index]['bottom_result'] = '●';
+      }
+      else if ( $res['tsum'] < $res['bsum'] )
+      {
+        $result[$index]['top_result'] = '●';
+        $result[$index]['bottom_result'] = '○';
+      }
+      else
+      {
+        $result[$index]['top_result'] = '△';
+        $result[$index]['bottom_result'] = '△';
+      }
+
+      // ログインしている場合、自分のチームの試合にflag
+      if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
       {
         if ( $res['team_top']    == $team_id ||
              $res['team_bottom'] == $team_id )

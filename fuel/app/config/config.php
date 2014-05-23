@@ -301,6 +301,7 @@ return array(
 		 */
 		'config'  => array(
       'password' => true,
+        'simpleauth' => true, 
     ),
 
 		/**

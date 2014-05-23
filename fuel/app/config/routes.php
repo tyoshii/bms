@@ -10,9 +10,10 @@ return array(
   'user/password' => 'user/password',
 
   'admin'         => 'admin/index',
-  'admin/user'    => 'admin/user',
-  'admin/member'  => 'admin/member',
-  'admin/member/(:segment)'  => 'admin/memberinfo/$1',
+  'admin/user'            => 'admin/user',
+  'admin/user/(:segment)' => 'admin/user/$1',
+  'admin/player'  => 'admin/player',
+  'admin/player/(:segment)'  => 'admin/playerinfo/$1',
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
 
@@ -28,6 +29,8 @@ return array(
 #  'score/record_league' => 'score/record_league',
 
   'register' => 'register/index',
+
+  'deploy' => 'deploy/index',
 
 //  '_root_'  => 'welcome/index',  // The default route
   '_404_'   => 'welcome/404',    // The main 404 route

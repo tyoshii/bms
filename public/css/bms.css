@@ -118,6 +118,10 @@ table#batter td.error input {
   width: 40px;
 }
 
+table.games td {
+  cursor: pointer;
+}
+
 .disable {
   display: none;
 }

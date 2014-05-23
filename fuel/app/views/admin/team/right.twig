@@ -1,10 +1,10 @@
-<table class="table">
+<table class="table table-hover">
 
 <thead>
 <tr>
-
 <th>id</th>
 <th>チーム名</th>
+<th></th>
 </tr>
 </thead>
 
@@ -14,11 +14,13 @@
 <td>{{ team.id }}</td>
 <td>{{ team.name }}</td>
 <td>
-<form method="DELETE">
-<input type="hidden" value="{{team.id}}">
+<form method="POST">
+<input type="hidden" name='id' value="{{team.id}}">
 <input type="submit" class="btn btn-danger" value="削除">
 </form>
 </td>
 </tr>
 {% endfor %}
 </tbody>
+
+</table>

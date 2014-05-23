@@ -33,6 +33,17 @@ class Model_Player extends \Orm\Model
       'cascade_delete' => false,
     ));
 
+  public static function get_name_by_username($username = null)
+  {
+    if ( ! $username )
+      return null;
+
+    if ( $player = self::find_by_username($username) )
+      return $player->name;
+
+    return null;
+  }
+
   public static function getMyPlayerID()
   {
     if ( $res = self::find_by_username(Auth::get_screen_name()) )

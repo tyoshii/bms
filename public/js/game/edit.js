@@ -438,29 +438,32 @@ function post_pitcher(is_alert) {
 
   $pitcher.each( function() {
     var $this = $(this);
-    var $name = $this.children("td.name"),
-        $number = $this.children("td.number"),
-        $inning = $this.children("td.inning"),
-        $result = $this.children("td.result"),
-        $hianda = $this.children("td.hianda"),
-        $sanshin = $this.children("td.sanshin"),
-        $shishikyuu = $this.children("td.shishikyuu"),
-        $earned_runs = $this.children("td.earned-runs"),
-        $runs = $this.children("td.runs");
+    var $name    = $this.children("td.name"),
+        $number  = $this.children("td.number"),
+        $result  = $this.children("td.result"),
+        $IP      = $this.children("td.IP"),
+        $IP_frac = $this.children("td.IP_frac"),
+        $H       = $this.children("td.H"),
+        $SO      = $this.children("td.SO"),
+        $BB      = $this.children("td.BB"),
+        $HB      = $this.children("td.HB"),
+        $ER      = $this.children("td.ER"),
+        $R       = $this.children("td.R");
   
     var player_id = $name.children('data').text();
 
     data[player_id] = {
-      name: $name.children('span').text(),
-      number: $number.text(),
-      inning_int: $inning.children('.inning_int').val(),
-      inning_frac: $inning.children('.fraction').val(),
-      result: $result.children('.result').val(),
-      hianda: $hianda.children('.hianda').val(),
-      sanshin: $sanshin.children('.sanshin').val(),
-      shishikyuu: $shishikyuu.children('.shishikyuu').val(),
-      earned_runs: $earned_runs.children('.earned-runs').val(),
-      runs: $runs.children('.runs').val()
+      name    : $name.children('span').text(),
+      number  : $number.text(),
+      result  : $result.children('.result').val(),
+      IP      : $IP.children('.IP').val(),
+      IP_frac : $IP_frac.children('.IP_frac').val(),
+      H       : $H.children('.H').val(),
+      SO      : $SO.children('.SO').val(),
+      BB      : $BB.children('.BB').val(),
+      HB      : $HB.children('.HB').val(),
+      ER      : $ER.children('.ER').val(),
+      R       : $R.children('.R').val()
     };
   });
   // console.log(data);

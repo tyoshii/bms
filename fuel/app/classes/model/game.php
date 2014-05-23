@@ -92,6 +92,7 @@ class Model_Game extends \Orm\Model
     foreach ( $result as $index => $res )
     {
       // ログインしている場合、自分のチームの試合にflag
+      $result[$index]['own'] = 0;
       if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
       {
         if ( $res['team_top'] == $team_id ) 
@@ -101,10 +102,6 @@ class Model_Game extends \Orm\Model
         else if ( $res['team_bottom'] == $team_id )
         {
           $result[$index]['own'] = 'bottom';
-        }
-        else
-        {
-          $result[$index]['own'] = 0;
         }
       }
       

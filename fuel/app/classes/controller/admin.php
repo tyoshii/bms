@@ -85,16 +85,18 @@ class Controller_Admin extends Controller_Base
 
     if ( $val->run() )
     {
-      // playerテーブル更新
-      $player = Model_Player::find(Input::post('id'));
-      $player->team     = Input::post('team');
-      $player->name     = Input::post('name');
-      $player->number   = Input::post('number');
-      $player->username = Input::post('username');
-      $player->save();
+      $props = array(
+        'name'     => Input::post('name'),
+        'number'   => Input::post('number'),
+        'team'     => Input::post('team'),
+        'username' => Input::post('username'),
+      );
 
-      Session::set_flash('info', '選手情報の更新に成功しました');
-      Response::redirect(Uri::create('admin/player'));
+      if ( Model_Player::regist($props, Input::post('id')) )
+      {
+        Session::set_flash('info', '選手情報の更新に成功しました');
+        Response::redirect(Uri::create('admin/player'));
+      }
     }
     else
     {
@@ -122,35 +124,40 @@ class Controller_Admin extends Controller_Base
     $form = $this->_get_regist_player_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->players = Model_Player::find('all', array(
-      'related' => array('teams'),
-      'order_by' => 'id',
-    ));
+    $this->view->players = Model_Player::get_players();
 
     return Response::forge( $this->view );
   }
 
   public function post_player()
   {
+    // 無効
+    if ( Input::post('id') )
+    {
+      if ( Model_Player::disable(Input::post('id')) )
+      {
+        Session::set_flash('info', '選手の無効化に成功しました');
+      } 
+ 
+      Response::redirect(Uri::current()); 
+    }
+
     $form = $this->_get_regist_player_form();
 
     $val = $form->validation();
     if ( $val->run())
     {
-      try {
-        $player = Model_Player::forge();
-        $player->name     = Input::post('name');
-        $player->number   = Input::post('number');
-        $player->team     = Input::post('team');
-        $player->username = Input::post('username');
-        $player->save();
+      $props = array(
+        'name'     => Input::post('name'),
+        'number'   => Input::post('number'),
+        'team'     => Input::post('team'),
+        'username' => Input::post('username'),
+      );
 
-        Session::set_flash('info', '選手を登録しました。');
-        Response::redirect(Uri::current());
-      }
-      catch ( Exception $e )
+      if ( Model_Player::regist($props) )
       {
-        Session::set_flash('error', $e->getMessage());
+        Session::set_flash('info', '新しく選手を登録しました。');
+        Response::redirect(Uri::current());
       }
     }
     else
@@ -161,10 +168,9 @@ class Controller_Admin extends Controller_Base
     $form->repopulate();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->users = Model_User::find('all');
+    $this->view->players = Model_Player::get_players();
 
     return Response::forge($this->view);
-
   }
 
   public function action_team()
@@ -409,7 +415,7 @@ class Controller_Admin extends Controller_Base
     $form = $form->form;
 
     // 紐付けユーザー
-    $users = array(''=>'') + Model_User::get_noregist_player_user();
+    $users = array(''=>'') + Model_User::get_username_list();
 
     $form->add_before('username', '紐づけるユーザー名', array(
       'type' => 'select',

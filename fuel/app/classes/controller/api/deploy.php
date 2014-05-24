@@ -9,8 +9,13 @@ class Controller_Api_Deploy extends Controller
     echo $data['ref']."\n";
     if ( $data['ref'] === 'refs/heads/master' )
     {
-        // git-pull
+      try {
         chdir("/home/tyoshii/git/tyoshii/bms/");
+
+        // service out
+        `/usr/bin/env php oil r service:out`;
+
+        // git-pull
         `git checkout master`;
         `git pull origin master`;
 
@@ -21,7 +26,19 @@ class Controller_Api_Deploy extends Controller
         chdir("/home/tyoshii/git/tyoshii/bms/deploy/");
         `/usr/bin/env perl deploy.pl force`;
 
+        // service in
+        chdir("/home/tyoshii/git/tyoshii/bms/");
+        `/usr/bin/env php oil r service:in`;
+
         echo "DEPLOY DONE";
+      
+      } catch (Exception $e) {
+        echo $e->getMessage();
+
+        // service in
+        chdir("/home/tyoshii/git/tyoshii/bms/");
+        `/usr/bin/env php oil r service:in`;
+      }
     }
   }
 }

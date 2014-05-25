@@ -59,7 +59,7 @@
 <tbody>
 
 {% for game in games %}
-<tr class="{%if game.own != '0'%}own{%endif%} {{game.result}}">
+<tr class="{%if game.own %}own{%endif%} {{game.result}}">
 <td>{{ game.date }}</td>
 
 {# 先攻 #}
@@ -88,13 +88,13 @@
 
 {# 成績入力#}
 <td>
-{%if game.own != '0'%}
+{%if game.own%}
 <a href="/game/{{game.id}}/player/" class="btn btn-info">成績入力</a>
 {%endif%}
 </td>
 
 {# ステータス #}
-{%if auth_has_access('game.status') and game.own != '0'%}
+{%if auth_has_access('game.status') and game.own%}
 <td>
 <select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}});">
 <option value="0" {%if game.status == 0%}selected{%endif%}>試合登録完了</option>

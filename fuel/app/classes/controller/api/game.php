@@ -7,26 +7,59 @@ class Controller_Api_Game extends Controller_Rest
     parent::before();
   }
 
-  // game_id/team_id
+  // get post data ( and validation )
   private static function _getIds()
   {
     $val = Validation::forge();
-    $val->add('game_id')->add_rule('required');
-    $val->add('team_id')->add_rule('required');
+    $val->add('game_id', 'game_id')->add_rule('required');
+    $val->add('team_id', 'team_id')->add_rule('required');
 
     if ( ! $val->run() ) {
-      throw new Exception();
+      throw new Exception($val->show_errors());
     }
 
-    return $val->validated();
+    $ids = $val->validated();
+
+    // check acl if no admin
+    if ( ! Auth::has_access('admin.admin') )
+    {
+      // has Moderators ?
+      if ( ! Auth::member('50') )
+      {
+        throw new Exception('権限がありません');
+      }
+
+      // Moderatorsだとして、自分のチームの試合ですか？
+      if ( $ids['team_id'] !== Model_Player::getMyTeamId() )
+      {
+        throw new Exception('権限がありません');
+      } 
+    }
+
+    // check game status
+    $action = Request::main()->action;
+    $status = Model_Game::get_game_status($ids['game_id'], $ids['team_id']);
+    if ( $action !== 'updateStatus' and $status == 2 )
+    {
+      throw new Exception('既に成績入力を完了している試合です'); 
+    }
+
+    return $ids;
   }
 
   public function post_updateStatus()
   {
-    $game = Model_Game::find(Input::post('id'));
-    $game->game_status = Input::post('status');
-    $game->save();
+    $ids = self::_getIds();
 
+    $ret = Model_Game::update_status(
+      $ids['game_id'],
+      $ids['team_id'],
+      Input::post('status')
+    );
+
+    if ( ! $ret )
+      throw new Exception('ステータスのアップデートに失敗しました');
+  
     return "OK";
   }
 
@@ -72,6 +105,9 @@ class Controller_Api_Game extends Controller_Rest
 
     // stats_metaへの登録
     Model_Stats_Player::registPlayer($ids, $players);
+
+    // status update
+    Model_Game::update_status_minimum($ids['game_id'], 1);
 
     echo 'OK';
   }
@@ -152,5 +188,4 @@ class Controller_Api_Game extends Controller_Rest
 
     echo 'OK';
   }
-
 }

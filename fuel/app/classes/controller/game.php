@@ -42,7 +42,8 @@ class Controller_Game extends Controller_Base
     $form = self::_get_addgame_form();
     $view->set_safe('form', $form->build(Uri::current()));
 
-    $view->games = Model_Game::getGames();
+    $view->games   = Model_Game::getGames();
+    $view->team_id = Model_Player::getMyTeamId() ?: 0;
     
     return Response::forge($view);
   } 

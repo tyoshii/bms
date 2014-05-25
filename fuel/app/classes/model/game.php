@@ -9,7 +9,15 @@ class Model_Game extends \Orm\Model
 		'team_top_name',
 		'team_bottom',
 		'team_bottom_name',
-		'game_status',
+		'game_status' => array(
+      'default' => 0,
+    ),
+    'top_status' => array(
+      'default' => 1,
+    ),
+    'bottom_status' => array(
+      'default' => 1,
+    ),
 		'created_at',
 		'updated_at',
 	);
@@ -45,7 +53,6 @@ class Model_Game extends \Orm\Model
       // games insert
       $game = self::forge(array(
         'date'             => $data['date'],
-        'game_status'      => 1,
         'team_top'         => $data['top'] ?: 0,
         'team_top_name'    => $team_top_name,
         'team_bottom'      => $data['bottom'] ?: 0,
@@ -92,16 +99,26 @@ class Model_Game extends \Orm\Model
     foreach ( $result as $index => $res )
     {
       // ログインしている場合、自分のチームの試合にflag
-      $result[$index]['own'] = 0;
-      if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+      // - 加えて、game.statusをセット
+      $result[$index]['own'] = false;
+
+      if ( Auth::has_access('admin.admin') )
+      {
+        $result[$index]['own']    = 'admin';
+        $result[$index]['status'] = $result[$index]['game_status'];
+      }
+
+      if ( $team_id = Model_Player::getMyTeamId() )
       {
         if ( $res['team_top'] == $team_id ) 
         {
-          $result[$index]['own'] = 'top';
+          $result[$index]['own']    = 'top';
+          $result[$index]['status'] = $result[$index]['top_status'];
         }
         else if ( $res['team_bottom'] == $team_id )
         {
-          $result[$index]['own'] = 'bottom';
+          $result[$index]['own']    = 'bottom';
+          $result[$index]['status'] = $result[$index]['bottom_status'];
         }
       }
       
@@ -158,10 +175,78 @@ class Model_Game extends \Orm\Model
 
     $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
   
-    $query->where('game_status', '!=', 0);
+    $query->where('game_status', '!=', -1);
     $query->order_by('date', 'desc');
     
     return $query;
   }
 
+  public static function update_status_minimu($game_id, $status)
+  {
+    $game = self::find($game_id);    
+
+    if ( $game->game_status < $status )
+      $game->game_status = $status;
+
+    if ( $game->top_status < $status )
+      $game->top_status = $status;
+
+    if ( $game->bottom_status < $status )
+      $game->bottom_status = $status;
+    
+    $game->save();
+  }
+
+  public static function get_game_status($game_id, $team_id = null)
+  {
+    $game = self::find($game_id);
+  
+    // game_idが無効
+    if ( ! $game ) return null;
+
+    // 管理者権限
+    if ( Auth::has_access('admin.admin') )
+      return $game->game_status;
+
+    // チームIDの指定がない
+    if ( ! $team_id ) return null;
+
+    // 先攻 or 後攻
+    if ( $game->team_top == $team_id )
+      return $game->top_status;
+
+    if ( $game->team_bottom == $team_id )
+      return $game->bottom_status;
+
+    // 該当なし
+    return null;
+  }
+
+  public static function update_status($game_id, $team_id, $status )
+  {
+    $game = self::find($game_id);
+    
+    if ( ! $game ) return false;
+
+    // 各種ステータス update
+    if ( Auth::has_access('admin.admin') )
+    {
+      $game->game_status   = $status;
+      $game->top_status    = $status;
+      $game->bottom_status = $status;
+    }
+    else
+    {
+      if ( $game->team_top    == $team_id )  $game->top_status    = $status;
+      if ( $game->team_bottom == $team_id )  $game->bottom_status = $status;
+    
+      // 両チームのステータスが同じだったらgame_statusもそれに合わせる
+      if ( $game->team_top === $game->team_bottom )
+        $game->game_status = $game->team_top;
+    }
+
+    $game->save();
+
+    return true;
+  }
 }

@@ -57,7 +57,7 @@ class Model_User extends \Orm\Model
         Input::post('username'),
         Input::post('password'),
         Input::post('email'),
-        Input::post('group'),
+        Input::post('group') ?: 1,
         array('dispname' => Input::post('name'))
       );
  

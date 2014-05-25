@@ -6,7 +6,7 @@ class Controller_Admin extends Controller_Base
   {
     parent::before();
 
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('moderator.moderator') )
       Response::redirect(Uri::create('/'));
 
     $kind = Uri::segment(2);
@@ -23,10 +23,12 @@ class Controller_Admin extends Controller_Base
 
   public function action_user($id = null)
   {
-    $form = $this->_get_user_form($id);
+    if ( Auth::has_access('admin.admin') )
+    {
+      $form = $this->_get_user_form($id);
 
-    // view set
-    $this->view->set_safe('form', $form->build(Uri::current()));
+      $this->view->set_safe('form', $form->build(Uri::current()));
+    }
 
     return Response::forge( $this->view );
   }
@@ -121,9 +123,13 @@ class Controller_Admin extends Controller_Base
 
   public function action_player()
   {
-    $form = $this->_get_regist_player_form();
+    if ( Auth::has_access('admin.admin') )
+    {
+      $form = $this->_get_regist_player_form();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
+      $this->view->set_safe('form', $form->build(Uri::current()));
+    }
+
     $this->view->players = Model_Player::get_players();
 
     return Response::forge( $this->view );
@@ -175,6 +181,9 @@ class Controller_Admin extends Controller_Base
 
   public function action_team()
   {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect('/admin');
+
     $form = $this->_get_team_form();
 
     $this->view->set_safe('form', $form->build(Uri::current()));
@@ -270,6 +279,9 @@ class Controller_Admin extends Controller_Base
 
   public static function _get_playerinfo_form($id)
   {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect('/admin/player');
+
     $player = Model_Player::find($id);
 
     $form = self::_get_regist_player_form();

@@ -92,6 +92,7 @@ return array(
           'game'  => array('ban'),
         ),
         'moderator' => array(
+          'moderator' => array('moderator'),
           'game' => array('create', 'editall', 'status'),
         ),
         /**

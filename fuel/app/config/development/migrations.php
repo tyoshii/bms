@@ -58,6 +58,8 @@ return array(
 				49 => '051_add_statsu_to_teams',
 				50 => '052_rename_field_statsu_to_status_in_teams',
 				51 => '053_add_status_to_players',
+				52 => '054_add_top_status_to_games',
+				53 => '055_add_bottom_status_to_games',
 			),
 		),
 		'module' => 

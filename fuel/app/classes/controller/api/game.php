@@ -91,6 +91,9 @@ class Controller_Api_Game extends Controller_Rest
     // stats_metaへの登録
     Model_Stats_Player::registPlayer($ids, $players);
 
+    // status update
+    Model_Game::update_status_minimum($ids['game_id'], 1);
+
     echo 'OK';
   }
 

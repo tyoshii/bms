@@ -58,7 +58,8 @@
 
 <tbody>
 
-{% for game in games %}
+{% for game in games if game.status != -1%}
+
 <tr class="{%if game.own %}own{%endif%} {{game.result}}">
 <td>{{ game.date }}</td>
 
@@ -108,12 +109,17 @@
 <option value="0" {%if game.status == 0%}selected{%endif%}>試合登録のみ</option>
 <option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
 <option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
-{%if auth_has_access('game.ban') %}
-<option value="-1" {%if game.status == -1%}selected{%endif%}>無効</option>
-{%endif%}
 </select>
 </td>
 {%endif%}
+
+{# 無効 #}
+{%if auth_has_access('game.status') and game.own%}
+<td>
+<button class="btn btn-warning" onClick="changeGameStatus(-1, {{game.id}}, {{team_id}});">無効</button>
+</td>
+{%endif%}
+
 </tr>
 {% endfor %}
 
@@ -136,8 +142,8 @@ function change_topbottom() {
 }
 
 // status update
-function changeGameStatus(self, game_id, team_id) {
-  var status = $(self).val();
+function changeGameStatus(s, game_id, team_id) {
+  var status = typeof(s) === 'object' ? $(s).val() : s;
 
   if ( status === -1 ) {
     if ( ! window.confirm("無効試合としてよいですか？") ) {

@@ -104,7 +104,7 @@
 {# ステータス #}
 {%if auth_has_access('game.status') and game.own%}
 <td>
-<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}});">
+<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}}, {{team_id}});">
 <option value="0" {%if game.status == 0%}selected{%endif%}>試合登録のみ</option>
 <option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
 <option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
@@ -136,26 +136,30 @@ function change_topbottom() {
 }
 
 // status update
-function changeGameStatus(self, id) {
+function changeGameStatus(self, game_id, team_id) {
   var status = $(self).val();
 
-  if ( window.confirm("無効試合としてよいですか？") ) {
-    
-    $.ajax({
-      type: 'POST',
-      url: '/api/game/updateStatus',
-      data: {
-        id: id,
-        status: status
-      },
-      success: function() {
-        location.reload();
-      },
-      error: function() {
-        alert("失敗しました");
-      }
-    });
+  if ( status === -1 ) {
+    if ( ! window.confirm("無効試合としてよいですか？") ) {
+      return false;
+    }
   }
+    
+  $.ajax({
+    type: 'POST',
+    url: '/api/game/updateStatus',
+    data: {
+      game_id: game_id,
+      team_id: team_id,
+      status: status
+    },
+    success: function() {
+      location.reload();
+    },
+    error: function() {
+      alert("ステータスのアップデートに失敗しました");
+    }
+  });
 }
 
 $(document).ready(function() {

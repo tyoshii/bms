@@ -98,16 +98,26 @@ class Model_Game extends \Orm\Model
     foreach ( $result as $index => $res )
     {
       // ログインしている場合、自分のチームの試合にflag
-      $result[$index]['own'] = 0;
-      if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+      // - 加えて、game.statusをセット
+      $result[$index]['own'] = false;
+
+      if ( Auth::has_access('admin.admin') )
+      {
+        $result[$index]['own']    = 'admin';
+        $result[$index]['status'] = $result[$index]['game_status'];
+      }
+
+      if ( $team_id = Model_Player::getMyTeamId() )
       {
         if ( $res['team_top'] == $team_id ) 
         {
-          $result[$index]['own'] = 'top';
+          $result[$index]['own']    = 'top';
+          $result[$index]['status'] = $result[$index]['top_status'];
         }
         else if ( $res['team_bottom'] == $team_id )
         {
-          $result[$index]['own'] = 'bottom';
+          $result[$index]['own']    = 'bottom';
+          $result[$index]['status'] = $result[$index]['bottom_status'];
         }
       }
       

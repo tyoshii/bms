@@ -39,7 +39,6 @@ class Controller_Register extends Controller
          ->confirm()
          ->name()
          ->email()
-         ->group()
          ->submit('登録'); 
 
     $form = $form->form;

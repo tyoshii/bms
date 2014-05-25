@@ -50,8 +50,8 @@
 {%if auth_check() %}
     <th>成績入力</th>
 {%endif%}
-{%if auth_has_access('admin.admin')%}
-    <th>無効</th>
+{%if auth_has_access('game.status')%}
+    <th>ステータス</th>
 {%endif%}
 </tr>
 </thead>
@@ -93,11 +93,17 @@
 {%endif%}
 </td>
 
-{# 無効 #}
-{%if auth_has_access('admin.admin') %}
+{# ステータス #}
+{%if auth_has_access('game.status') and game.own != '0'%}
 <td>
-  <input type="hidden" name="id" value="{{game.id}}">
-  <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
+<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}});">
+<option value="0">試合登録完了</option>
+<option value="1">成績入力中</option>
+<option value="2">成績入力完了</option>
+{%if auth_has_access('game.ban') %}
+<option value="-1">無効</option>
+{%endif%}
+</select>
 </td>
 {%endif%}
 </tr>
@@ -121,7 +127,10 @@
 function change_topbottom() {
 }
 
-function changeGameStatus(id, status) {
+// status update
+function changeGameStatus(self, id) {
+  var status = $(self).val();
+
   if ( window.confirm("無効試合としてよいですか？") ) {
     
     $.ajax({

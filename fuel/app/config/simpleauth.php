@@ -87,9 +87,12 @@ return array(
      * Roles as name => array(location => rights)
      */
     'roles' => array(
-        'admin' => true,
+        'admin' => array(
+          'admin' => array('admin'),
+          'game'  => array('ban'),
+        ),
         'moderator' => array(
-          'game' => array('create', 'editall'),
+          'game' => array('create', 'editall', 'status'),
         ),
         /**
          * Examples

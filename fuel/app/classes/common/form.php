@@ -27,11 +27,11 @@ class Common_Form
       'type'  => 'text',
       'class' => 'form-control',
       'value' => $value,
-      'description' => '半角英数 / 50字以内',
+      'description' => '半角英数と「 - 」「 _ 」が使用可能 / 50字以内',
     ), array())
       ->add_rule('required')
       ->add_rule('trim')
-      ->add_rule('valid_string', array('alpha', 'numeric'))
+      ->add_rule('valid_string', array('alpha', 'numeric', 'dashes'))
       ->add_rule('max_length', 50);
 
     return $this;

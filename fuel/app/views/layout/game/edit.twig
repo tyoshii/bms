@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<a href="/game" class="pull-right">試合一覧へもどる</a>
+
 {# 試合概要 #}
 <h3>{{date}} {{team_top}}<small>先攻</small> vs {{team_bottom}}<small>後攻</small></h3>
 <h4>
@@ -29,12 +31,6 @@
     </li>
     <li {%if uri_segment(3)=="other"%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/other/{{team_id}}">{{team_name}}：その他</a>
-    </li>
-
-    <li>&nbsp;</li>
-
-    <li>
-      <a href="/game">試合一覧へ戻る</a>
     </li>
 </ul>
 

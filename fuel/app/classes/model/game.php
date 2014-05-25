@@ -181,7 +181,7 @@ class Model_Game extends \Orm\Model
     return $query;
   }
 
-  public static function update_status_minimu($game_id, $status)
+  public static function update_status_minimum($game_id, $status)
   {
     $game = self::find($game_id);    
 

@@ -9,7 +9,9 @@ class Model_Game extends \Orm\Model
 		'team_top_name',
 		'team_bottom',
 		'team_bottom_name',
-		'game_status',
+		'game_status' => array(
+      'default' => 0,
+    ),
     'top_status' => array(
       'default' => 1,
     ),
@@ -51,7 +53,6 @@ class Model_Game extends \Orm\Model
       // games insert
       $game = self::forge(array(
         'date'             => $data['date'],
-        'game_status'      => 1,
         'team_top'         => $data['top'] ?: 0,
         'team_top_name'    => $team_top_name,
         'team_bottom'      => $data['bottom'] ?: 0,
@@ -174,7 +175,7 @@ class Model_Game extends \Orm\Model
 
     $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
   
-    $query->where('game_status', '!=', 0);
+    $query->where('game_status', '!=', -1);
     $query->order_by('date', 'desc');
     
     return $query;

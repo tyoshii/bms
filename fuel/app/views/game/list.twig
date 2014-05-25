@@ -47,7 +47,9 @@
     <th>スコア</th>
     <th>後攻</th>
     <th>試合概要</th>
+{%if auth_check() %}
     <th>成績入力</th>
+{%endif%}
 {%if auth_has_access('admin.admin')%}
     <th>無効</th>
 {%endif%}

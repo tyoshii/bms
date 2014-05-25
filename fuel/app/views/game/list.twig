@@ -97,11 +97,11 @@
 {%if auth_has_access('game.status') and game.own != '0'%}
 <td>
 <select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}});">
-<option value="0">試合登録完了</option>
-<option value="1">成績入力中</option>
-<option value="2">成績入力完了</option>
+<option value="0" {%if game.status == 0%}selected{%endif%}>試合登録完了</option>
+<option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
+<option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
 {%if auth_has_access('game.ban') %}
-<option value="-1">無効</option>
+<option value="-1" {%if game.status == -1%}selected{%endif%}>無効</option>
 {%endif%}
 </select>
 </td>

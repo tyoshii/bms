@@ -18,7 +18,25 @@ class Controller_Api_Game extends Controller_Rest
       throw new Exception();
     }
 
-    return $val->validated();
+    $ids = $val->validated();
+
+    // check acl if no admin
+    if ( ! Auth::has_access('admin.admin') )
+    {
+      // has Moderators ?
+      if ( ! Auth::member('50') )
+      {
+        throw new Exception('権限がありません');
+      }
+
+      // Moderatorsだとして、自分のチームの試合ですか？
+      if ( $ids['game_id'] !== Model_Player::getMyTeamId() )
+      {
+        throw new Exception('権限がありません');
+      } 
+    }
+
+    return $ids;
   }
 
   public function post_updateStatus()

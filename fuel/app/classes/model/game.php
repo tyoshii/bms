@@ -10,6 +10,12 @@ class Model_Game extends \Orm\Model
 		'team_bottom',
 		'team_bottom_name',
 		'game_status',
+    'top_status' => array(
+      'default' => 1,
+    ),
+    'bottom_status' => array(
+      'default' => 1,
+    ),
 		'created_at',
 		'updated_at',
 	);

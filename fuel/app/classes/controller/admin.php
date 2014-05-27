@@ -40,6 +40,9 @@ class Controller_Admin extends Controller_Base
 
   public function post_user($id = null)
   {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::current());
+
     $form = $this->_get_user_form($id);
 
     $val = $form->validation();
@@ -196,10 +199,6 @@ class Controller_Admin extends Controller_Base
 
   public function action_team()
   {
-    if ( ! Auth::has_access('admin.admin') )
-      Response::redirect('/admin');
-
-
     $view = View::forge('admin/team.twig');
     $view->teams = Model_Team::get_teams();
 
@@ -211,6 +210,9 @@ class Controller_Admin extends Controller_Base
 
   public function post_team()
   {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::current());
+
     // bann
     if ( Input::post('id') )
     {

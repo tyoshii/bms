@@ -24,26 +24,56 @@ class Controller_Admin extends Controller_Base
     return Response::forge( View::forge('layout/admin.twig') );
   }
 
-  public function action_user($id = null)
+  public function action_user_detail($id)
   {
-    $view = View::forge('admin/user.twig');
+    $form = $this->_get_user_form($id);
 
-    if ( Auth::has_access('admin.admin') )
+    if ( Input::post() )
     {
-      $form = $this->_get_user_form($id);
-
-      $view->set_safe('form', $form->build(Uri::current()));
+      $val = $form->validation();
+      if ( $val->run() )
+      {
+        if ( Model_User::updates() )
+        {
+          Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
+      }
+      else
+      {
+        Session::set_flash('error', $val->show_errors());
+      }
     }
+    
+    $view = View::forge('admin/user_detail.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
 
     return Response::forge($view);
   }
 
-  public function post_user($id = null)
+  public function action_user()
+  {
+    $view = View::forge('admin/user.twig');
+
+    // get user list
+    if ( Auth::has_access('admin.admin') )
+      $view->users = Model_User::find('all');
+    else
+      $view->users = Model_User::get_users_only_my_team();
+
+    // form
+    $form = $this->_get_user_form();
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
+  public function post_user()
   {
     if ( ! Auth::has_access('admin.admin') )
       Response::redirect(Uri::current());
 
-    $form = $this->_get_user_form($id);
+    $form = $this->_get_user_form();
 
     $val = $form->validation();
     if ( $val->run() )
@@ -378,16 +408,12 @@ class Controller_Admin extends Controller_Base
 
   private function _get_user_form($id = null)
   {
+    $form = '';
+
     if ( $id )
-    {
-      $this->view->kind = 'updateuser';
       $form = self::_get_user_update_form($id);
-    }
     else
-    {
-      $this->view->users = Model_User::find('all');
       $form = self::_get_user_regist_form();
-    }
 
     // 必須項目のHTML変更
     $form->set_config('required_mark', '<span class="red">*</span>');
@@ -415,15 +441,16 @@ class Controller_Admin extends Controller_Base
     return $form->form; 
   }
 
-  static private function _get_user_update_form($id = '')
+  static private function _get_user_update_form($id)
   {
     $form = Common_Form::forge('regist_user');
+    $form->id($id);
 
     // user info
     $info = Model_User::find($id) ?: Model_User::forge();
-
-    // 項目
     $name = Model_Player::get_name_by_username($info->username);
+
+    // form 
     $form->username($info->username)
          ->email($info->email)
          ->name($name)

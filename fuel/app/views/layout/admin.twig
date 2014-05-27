@@ -14,13 +14,6 @@
 </ul>
 </div>
 
-{% if kind %}
-<div class="row">
-  <div class="col-md-4">{% include 'admin/' ~ kind ~ "/left.twig" %}</div>
-  <div class="col-md-8">{% include 'admin/' ~ kind ~ "/right.twig" %}</div>
-</div>
-{% endif %}
-
 {% endblock %}
 
 
@@ -31,12 +24,12 @@
 $(document).ready(function(){
   // navvar active
   $('div#bms-navbar li.bms-navbar-admin').addClass('active');
-});
 
   // dataTable
   var $target = $("#player");
   if ( $target ) {
     $target.dataTable();
   }
+});
 </script>
 {% endblock %}

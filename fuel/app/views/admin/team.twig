@@ -1,3 +1,19 @@
+{%extends 'layout/admin.twig'%}
+
+{%block content%}
+
+{# header #}
+{{parent()}}
+
+<div class="row">
+
+<div class="col-md-4">
+<h3>新規チーム登録</h3>
+{{ form }}
+</div>
+
+<div class="col-md-8">
+
 <table class="table table-hover">
 
 <thead>
@@ -24,3 +40,8 @@
 </tbody>
 
 </table>
+</div>
+
+</div>
+
+{%endblock%}

@@ -8,29 +8,34 @@ class Controller_Admin extends Controller_Base
 
     if ( ! Auth::has_access('moderator.moderator') )
       Response::redirect(Uri::create('/'));
+  }
 
+  public function after($response)
+  {
     $kind = Uri::segment(2);
 
-    $this->view = View::forge('admin.twig');
-    $this->view->kind = $kind;
-    $this->view->active = array( $kind => 'active' );
+    $response->body->active = array( $kind => 'active' );
+
+    return $response;
   }
 
   public function action_index()
   {
-    return Response::forge( View::forge('admin.twig') );
+    return Response::forge( View::forge('layout/admin.twig') );
   }
 
   public function action_user($id = null)
   {
+    $view = View::forge('admin/user.twig');
+
     if ( Auth::has_access('admin.admin') )
     {
       $form = $this->_get_user_form($id);
 
-      $this->view->set_safe('form', $form->build(Uri::current()));
+      $view->set_safe('form', $form->build(Uri::current()));
     }
 
-    return Response::forge( $this->view );
+    return Response::forge($view);
   }
 
   public function post_user($id = null)
@@ -72,15 +77,18 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->users = Model_User::find('all');
+    // view set
+    $view = View::forge('admin/user.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->users = Model_User::find('all');
+
+    return Response::forge($view);
   }
 
   public function post_playerinfo($id)
   {
-    $this->view->kind = 'playerinfo';
+    $view = View::forge('admin/playerinfo.twig');
     
     $form = self::_get_playerinfo_form($id);
     $val = $form->validation();
@@ -106,33 +114,37 @@ class Controller_Admin extends Controller_Base
     }
 
     $form->repopulate();
-    $this->view->set_safe('form', $form->build(Uri::current()));
 
-    return Response::forge($this->view);
+    // view set
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
   }
 
   public function action_playerinfo($id)
   {
-    $this->view->kind = 'playerinfo';
+    $view = View::forge('admin/playerinfo.twig');
 
     $form = self::_get_playerinfo_form($id);
-    $this->view->set_safe('form', $form->build(Uri::current()));
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function action_player()
   {
+    $view = View::forge('admin/player.twig');
+
     if ( Auth::has_access('admin.admin') )
     {
       $form = $this->_get_regist_player_form();
 
-      $this->view->set_safe('form', $form->build(Uri::current()));
+      $view->set_safe('form', $form->build(Uri::current()));
     }
 
-    $this->view->players = Model_Player::get_players();
+    $view->players = Model_Player::get_players();
 
-    return Response::forge( $this->view );
+    return Response::forge( $view );
   }
 
   public function post_player()
@@ -173,10 +185,13 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->players = Model_Player::get_players();
+    // view set
+    $view = View::forge('admin/player.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->players = Model_Player::get_players();
+
+    return Response::forge($view);
   }
 
   public function action_team()
@@ -184,12 +199,14 @@ class Controller_Admin extends Controller_Base
     if ( ! Auth::has_access('admin.admin') )
       Response::redirect('/admin');
 
+
+    $view = View::forge('admin/team.twig');
+    $view->teams = Model_Team::get_teams();
+
     $form = $this->_get_team_form();
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->teams = Model_Team::get_teams();
-
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function post_team()
@@ -227,21 +244,24 @@ class Controller_Admin extends Controller_Base
       Session::set_flash('error', $val->show_errors());
       $form->repopulate();
 
-      $this->view->set_safe('form', $form->build(Uri::current()));
-      $this->view->set_safe('teams', Model_Team::find('all'));
+      // view set
+      $view = View::forge('admin/team.twig');
+      $view->set_safe('form', $form->build(Uri::current()));
+      $view->set_safe('teams', Model_Team::find('all'));
 
-      return Response::forge($this->view);
+      return Response::forge($view);
     }
   }
 
   public function action_league()
   {
+    $view = View::forge('admin/league.twig');
+    $view->leagues = Model_League::find('all');
+
     $form = $this->_get_addleague_form();
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->leagues = Model_League::find('all');
-
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function post_league()
@@ -271,10 +291,13 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->leagues = Model_League::find('all');
+    // view set
+    $view = View::forge('admin/league.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->leagues = Model_League::find('all');
+
+    return Response::forge($view);
   }
 
   public static function _get_playerinfo_form($id)

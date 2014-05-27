@@ -1,7 +1,0 @@
-<h3>利用者追加</h3>
-
-{%if auth_has_access('admin.admin')%}
-{{ form }}
-{%else%}
-利用者の追加はadmin権限がなければ実施できません。
-{%endif%}

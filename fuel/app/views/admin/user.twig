@@ -5,6 +5,12 @@
 {# header #}
 {{parent()}}
 
+{%if not auth_has_access('admin.admin')%}
+<div class="alert alert-warning">
+モデレーター権限では利用者管理の操作/閲覧は出来ません。
+</div>
+{%else%}
+
 <div class="row">
 
 <div class="col-md-4">
@@ -56,4 +62,5 @@
 
 </div>
 
+{%endif%} {# ! auth_has_access('admin.admin') #}
 {%endblock%}

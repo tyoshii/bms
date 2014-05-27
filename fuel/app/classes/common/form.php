@@ -20,6 +20,18 @@ class Common_Form
   {
     return new Common_Form($name, $config);
   }
+
+  public function id($value)
+  {
+    $this->form->add('id', 'ID', array(
+      'type' => 'hidden',
+      'value' => $value,
+    ))
+      ->add_rule('required')
+      ->add_rule('match_value', $value, true);
+
+    return $this;
+  }
   
   public function username($value = '')
   {
@@ -128,11 +140,14 @@ class Common_Form
 
   public function group($value = '')
   {
+    $groups = Auth::get_groups();
+    $my_group = $groups[0][1];
+
     // roles取得
     $groups = Config::get("simpleauth.groups");
     $roles = array();
     foreach ($groups as $k => $v) {
-        if ($k > 0) {
+        if ($k > 0 and $k <= $my_group) {
             $roles[$k] = $v["name"];
         }
     }

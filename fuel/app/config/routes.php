@@ -9,7 +9,7 @@ return array(
 
   'admin'         => 'admin/index',
   'admin/user'            => 'admin/user',
-  'admin/user/(:segment)' => 'admin/user/$1',
+  'admin/user/(:segment)' => 'admin/user_detail/$1',
   'admin/player'  => 'admin/player',
   'admin/player/(:segment)'  => 'admin/playerinfo/$1',
   'admin/team'    => 'admin/team',

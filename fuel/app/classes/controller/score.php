@@ -9,6 +9,7 @@ class Controller_Score extends Controller_Base
     $score = Model_Games_Runningscore::find(Input::param('id'), array(
       'related' => array('games'),
     ));
+    var_dump($score);
     return Response::forge( $view );
   }
   public function action_record_self()

@@ -4,19 +4,74 @@
 
 <h1>Hello <small>野球ばか</small></h1>
 
-{%if auth_check() == false %}
-アカウントがない場合は<a href="/register">Sign Up</a>
+<div class="row">
+<div class="col-md-6">
+<h3>BMS - Baseball Management System</h3>
+<pre class="alert alert-info">
+草野球の試合における成績管理ができるシステムです。
+
+今までの成績管理では、
+チームの代表/担当の人がスコア入力を全て担当していたと思いますが、
+意外と負荷が高かったりします。
+
+このシステムでは所属選手一人ひとりがアカウントを持つことが可能となっています。
+よって、自分の成績を自分で入力することが可能となっています。
+</pre>
+
+<pre class="alert alert-warning">
+まだバギーなところがありますが、
+各種フィードバックお願いします！
+
+◯◯システム　という名前がカタイので
+このツールの名前、絶賛募集中です！
+良いのがあれば採用します！
+</pre>
+</div>
+
+<div class="col-md-6">
+
+{# ログインしてない場合はこちら #}
+{%if auth_check() %}
+
+{%if no_belong_team and not auth_has_access('admin.admin')%}
+<h3>所属しているチームがありません</h3>
+<a href="/user/team">所属チームを設定しましょう！</a>
+{%else%}
+
+<h3>最近の試合</h3>
+
+{%if games|length == 0 %}
+まだ試合がありません
+{%else%}
+
+<table class="table games">
+{%for game in games%}
+<tr gameid="{{game.id}}">
+<td>{{game.team_top_name}}</td>
+<td>{{game.tsum}} - {{game.bsum}}</td>
+<td>{{game.team_bottom_name}}</td>
+</tr>
+{%endfor%}
+{%endif%}
+</table>
+
+{%endif%}{#if no_belong_team#}
+
+{%else%}
+
+<h3>Login</h3>
+{{login_form}}
+<a class="pull-right" href="/register">新規ユーザー登録はこちら</a>
+
+</div>
+</div>
+
 {%endif%}
 
-{% endblock %}
+{% endblock content %}
 
 
-{% block js %}
+{% block js%}
 {{ parent() }}
-<script>
-$(document).ready(function(){
-  $('div#bms-navbar li.bms-navbar-top').addClass('active');
-});
-</script>
-
+<script type="text/javascript" src="/js/top.js"></script>
 {% endblock %}

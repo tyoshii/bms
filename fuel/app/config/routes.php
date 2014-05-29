@@ -8,18 +8,20 @@ return array(
   'user/password' => 'user/password',
 
   'admin'         => 'admin/index',
-  'admin/user'    => 'admin/user',
-  'admin/member'  => 'admin/member',
-  'admin/member/(:segment)'  => 'admin/memberinfo/$1',
+  'admin/user'            => 'admin/user',
+  'admin/user/(:segment)' => 'admin/user_detail/$1',
+  'admin/player'  => 'admin/player',
+  'admin/player/(:segment)'  => 'admin/playerinfo/$1',
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
 
   'game'                                  => 'game/list',
-  'game/(:segment)'                       => 'game/score/$1',
-  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2/player',
+  'game/(:segment)'                       => 'game/summary/$1',
+  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2',
   'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
   
   'api/game/(:segment)'  => 'api/game/$1',
+  'api/deploy'           => 'api/deploy/index',
 
   'score'               => 'score/record_team',
   'score/record_self'   => 'score/record_self',

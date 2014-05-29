@@ -1,0 +1,45 @@
+{%extends 'layout/admin.twig'%}
+
+{%block content%}
+
+{# header #}
+{{parent()}}
+
+<div class="row">
+
+<div class="col-md-4">
+<h3>新規リーグ追加</h3>
+{{ form }}
+</div>
+
+<div class="col-md-8">
+
+<table class="table">
+
+<thead>
+<tr>
+<th>id</th>
+<th>リーグ名</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+{% for league in leagues %}
+<tr>
+<td>{{ league.id }}</td>
+<td>{{ league.name }}</td>
+<td>
+<form method="POST">
+<input type="hidden" name="id" value="{{user.id}}">
+<input type="submit" class="btn btn-warning" onClick="return window.confirm('このリーグを無効にしてよろしいですか？');" value="無効">
+</form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</div>
+
+</div>
+
+{%endblock%}

@@ -5,6 +5,9 @@ class Model_Team extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'name',
+    'status' => array(
+      'default' => 0,
+    ),
 		'created_at',
 		'updated_at',
 	);
@@ -31,16 +34,24 @@ class Model_Team extends \Orm\Model
     )
   );
 
-  public static function getTeams()
+  public static function get_teams()
   {
-    $res = self::find('all', array('select' => array('id', 'name')));
-  
-    $return = array();
-    foreach ( $res as $row )
+    return DB::select()
+      ->from(self::$_table_name)
+      ->where('status', '!=', '-1')
+      ->execute()->as_array('id');
+  }
+
+  public static function get_teams_key_value()
+  {
+    $teams = self::get_teams();
+
+    $kv = array();
+    foreach ( $teams as $id => $team )
     {
-      $return[$row['id']] = $row['name'];
+      $kv[$id] = $team['name'];
     }
 
-    return $return;
+    return $kv;
   }
 }

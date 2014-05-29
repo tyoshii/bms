@@ -1,0 +1,54 @@
+{%extends 'layout/admin.twig'%}
+
+{%block content%}
+
+{# header #}
+{{parent()}}
+
+{%if not auth_has_access('admin.admin')%}
+<div class="alert alert-warning">
+モデレーター権限ではチーム管理の操作/閲覧は出来ません。
+</div>
+{%else%}
+
+<div class="row">
+
+<div class="col-md-4">
+<h3>新規チーム登録</h3>
+{{ form }}
+</div>
+
+<div class="col-md-8">
+
+<table class="table table-hover">
+
+<thead>
+<tr>
+<th>id</th>
+<th>チーム名</th>
+<th>無効</th>
+</tr>
+</thead>
+
+<tbody>
+{% for team in teams %}
+<tr>
+<td>{{ team.id }}</td>
+<td>{{ team.name }}</td>
+<td>
+<form method="POST">
+<input type="hidden" name='id' value="{{team.id}}">
+<input type="submit" class="btn btn-warning" value="無効">
+</form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+{%endif%} {# ! auth_has_access('admin.admin') #}
+{%endblock%}

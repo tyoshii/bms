@@ -1,17 +1,12 @@
 {# meta info #}
-{% macro meta(member_id, index, loop_last) %}
-<td class="member-id disable">{{member_id}}</td>
+{% macro meta(player_id, index, loop_last) %}
+<td class="member-id disable">{{player_id|default(0)}}</td>
 <td class="daseki-number disable">{{index}}</td>
 
 <td class="button" colspan="3">
 
-{% set disable = 'disable' %}
-{% if loop_last %}
-{% set disable = '' %}
-{% endif %}
-
-<button class="{{disable}} btn btn-info btn-xs add" onClick="add_daseki(this, {{index}});">追加</button>
-<button class="{{disable}} btn btn-danger btn-xs delete" onClick="delete_daseki(this, {{index}});">削除</button>
+<button class="{%if not loop_last%}disable{%endif%} btn btn-info btn-xs add" onClick="add_daseki(this, {{index}});">追加</button>
+<button class="{%if not loop_last%}disable{%endif%} btn btn-danger btn-xs delete" onClick="delete_daseki(this, {{index}});">削除</button>
 </td>
 
 <th class="daseki-number-text">第{{index}}打席</th>

@@ -9,11 +9,15 @@
 <div class="row">
 
 <div class="col-md-3">
-{%if auth_check()%}
+{%if auth_has_access('game.create')%}
 <h3>新規ゲーム追加</h3>
 {{ form }}
 {%else%}
-新規ゲームを追加する場合はログインしてください。
+{%if auth_check()%}
+新規ゲームを追加できる権限をもっていません。
+{%else%}
+新規ゲームを追加する場合は<a href="/login?url=/game">ログイン</a>してください。
+{%endif%}
 {%endif%}
 </div>
 
@@ -28,6 +32,8 @@
 <div class="btn-group">
 <button type="button" class="btn btn-default" onClick="filter('all');">全試合</button>
 <button type="button" class="btn btn-default" onClick="filter('own');">MyTeam</button>
+<button type="button" class="btn btn-default" onClick="filter('win');">勝ち</button>
+<button type="button" class="btn btn-default" onClick="filter('lose');">負け</button>
 </div>
 </div>
 
@@ -40,28 +46,80 @@
     <th>先攻</th>
     <th>スコア</th>
     <th>後攻</th>
-    <th></th>
+    <th>試合概要</th>
+{%if auth_check() %}
+    <th>成績入力</th>
+{%endif%}
+{%if auth_has_access('game.status')%}
+    <th>ステータス</th>
+{%endif%}
 </tr>
 </thead>
 
 <tbody>
 
-{% for game in games %}
-<tr class="{%if game.own == 1%}own{%endif%}">
+{% for game in games if game.status != -1%}
+
+<tr class="{%if game.own %}own{%endif%} {{game.result}}">
 <td>{{ game.date }}</td>
+
+{# 先攻 #}
 <td>
 <div>{{ game.team_top_name }}</div>
-<a href="/game/{{game.id}}/top/player" class="btn btn-info btn-xs">成績入力</a>
+{%if auth_has_access('admin.admin') and
+     game.team_top != 0 and
+     game.status != 2 %}
+<a href="/game/{{game.id}}/player/{{game.team_top}}" class="btn btn-info btn-xs">成績入力</a>
+{%endif%}
 </td>
-<td><a href="/game/{{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
+
+{# 得点 #}
+<td><a href="/game/{{game.id}}/score">{{game.top_result}} {{game.tsum}} - {{game.bsum}} {{game.bottom_result}}</a></td>
+
+{# 後攻 #}
 <td>
 <div>{{ game.team_bottom_name }}</div>
-<a href="/game/{{game.id}}/bottom/player" class="btn btn-info btn-xs">成績入力</a>
+{%if auth_has_access('admin.admin') and
+     game.team_bottom != 0 and
+     game.status != 2 %}
+<a href="/game/{{game.id}}/player/{{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
+{%endif%}
 </td>
+
+{# 試合概要 #}
 <td>
-  <input type="hidden" name="id" value="{{game.id}}">
-  <input type="submit" class="btn btn-warning" onClick="changeGameStatus({{game.id}}, 0);" value="無効">
+<a href="/game/{{game.id}}" class="btn btn-info">概要</a>
 </td>
+
+{# 成績入力#}
+<td>
+{%if game.own%}
+{%if game.status == 2%}
+<span class="glyphicon glyphicon-ok">入力完了</span>
+{%else%}
+<a href="/game/{{game.id}}/player/" class="btn btn-info">成績入力</a>
+{%endif%}
+{%endif%}
+</td>
+
+{# ステータス #}
+{%if auth_has_access('game.status') and game.own%}
+<td>
+<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}}, {{team_id}});">
+<option value="0" {%if game.status == 0%}selected{%endif%}>試合登録のみ</option>
+<option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
+<option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
+</select>
+</td>
+{%endif%}
+
+{# 無効 #}
+{%if auth_has_access('game.status') and game.own%}
+<td>
+<button class="btn btn-warning" onClick="changeGameStatus(-1, {{game.id}}, {{team_id}});">無効</button>
+</td>
+{%endif%}
+
 </tr>
 {% endfor %}
 
@@ -76,26 +134,38 @@
 
 
 {% block js %}
+
 {{ parent() }}
+
 <script>
-function changeGameStatus(id, status) {
-  if ( window.confirm("無効試合としてよいですか？") ) {
-    
-    $.ajax({
-      type: 'POST',
-      url: '/api/game/updateStatus',
-      data: {
-        id: id,
-        status: status
-      },
-      success: function() {
-        location.reload();
-      },
-      error: function() {
-        alert("失敗しました");
-      }
-    });
+function change_topbottom() {
+}
+
+// status update
+function changeGameStatus(s, game_id, team_id) {
+  var status = typeof(s) === 'object' ? $(s).val() : s;
+
+  if ( status === -1 ) {
+    if ( ! window.confirm("無効試合としてよいですか？") ) {
+      return false;
+    }
   }
+    
+  $.ajax({
+    type: 'POST',
+    url: '/api/game/updateStatus',
+    data: {
+      game_id: game_id,
+      team_id: team_id,
+      status: status
+    },
+    success: function() {
+      location.reload();
+    },
+    error: function() {
+      alert("ステータスのアップデートに失敗しました");
+    }
+  });
 }
 
 $(document).ready(function() {
@@ -124,6 +194,14 @@ function filter(type) {
   else if ( type === 'own' ) {
     $("#game-list tbody tr").hide();
     $("#game-list tbody tr.own").show();
+  }
+  else if ( type === 'win' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr.win").show();
+  }
+  else if ( type === 'lose' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr.lose").show();
   }
 }
 

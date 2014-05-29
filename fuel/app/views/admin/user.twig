@@ -1,0 +1,61 @@
+{%extends 'layout/admin.twig'%}
+
+{%block content%}
+
+{# header #}
+{{parent()}}
+
+<div class="row">
+
+<div class="col-md-4">
+<h3>利用者追加</h3>
+
+{%if auth_has_access('admin.admin')%}
+{{ form }}
+{%else%}
+<div class="alert alert-warning">
+利用者の追加はadmin権限がなければ実施できません。
+</div>
+{%endif%}
+</div>
+
+<div class="col-md-8">
+
+<table class="table">
+
+<thead>
+<tr>
+<th>id</th>
+<th>ユーザー名</th>
+<th>メール</th>
+<th>権限グループ</th>
+<th>更新</th>
+<th>無効</th>
+</tr>
+</thead>
+
+<tbody>
+{% for user in users %}
+<tr>
+<td>{{ user.id }}</td>
+<td>{{ user.username }}</td>
+<td>{{ user.email }}</td>
+<td>{{ user.group }}</td>
+<td>
+  <a href="/admin/user/{{user.id}}" class="btn btn-info">更新</a>
+<td>
+<form method="POST">
+<input type="hidden" name="username" value="{{user.username}}">
+<input type="submit" class="btn btn-warning" onClick="return window.confirm('このユーザーを無効にしてよろしいですか？');" value="無効">
+</form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+{%endblock%}

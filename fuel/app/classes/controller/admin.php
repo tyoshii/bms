@@ -6,34 +6,74 @@ class Controller_Admin extends Controller_Base
   {
     parent::before();
 
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('moderator.moderator') )
       Response::redirect(Uri::create('/'));
+  }
 
+  public function after($response)
+  {
     $kind = Uri::segment(2);
 
-    $this->view = View::forge('admin.twig');
-    $this->view->kind = $kind;
-    $this->view->active = array( $kind => 'active' );
+    $response->body->active = array( $kind => 'active' );
+
+    return $response;
   }
 
   public function action_index()
   {
-    return Response::forge( View::forge('admin.twig') );
+    return Response::forge( View::forge('layout/admin.twig') );
   }
 
-  public function action_user($id = null)
+  public function action_user_detail($id)
   {
     $form = $this->_get_user_form($id);
 
-    // view set
-    $this->view->set_safe('form', $form->build(Uri::current()));
+    if ( Input::post() )
+    {
+      $val = $form->validation();
+      if ( $val->run() )
+      {
+        if ( Model_User::updates() )
+        {
+          Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
+      }
+      else
+      {
+        Session::set_flash('error', $val->show_errors());
+      }
+    }
+    
+    $view = View::forge('admin/user_detail.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    return Response::forge( $this->view );
+    return Response::forge($view);
   }
 
-  public function post_user($id = null)
+  public function action_user()
   {
-    $form = $this->_get_user_form($id);
+    $view = View::forge('admin/user.twig');
+
+    // get user list
+    if ( Auth::has_access('admin.admin') )
+      $view->users = Model_User::find('all');
+    else
+      $view->users = Model_User::get_users_only_my_team();
+
+    // form
+    $form = $this->_get_user_form();
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
+  public function post_user()
+  {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::current());
+
+    $form = $this->_get_user_form();
 
     $val = $form->validation();
     if ( $val->run() )
@@ -70,16 +110,17 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->users = Model_User::find('all');
+    // view set
+    $view = View::forge('admin/user.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->users = Model_User::find('all');
+
+    return Response::forge($view);
   }
 
   public function post_playerinfo($id)
   {
-    $this->view->kind = 'playerinfo';
-    
     $form = self::_get_playerinfo_form($id);
     $val = $form->validation();
 
@@ -89,7 +130,7 @@ class Controller_Admin extends Controller_Base
         'name'     => Input::post('name'),
         'number'   => Input::post('number'),
         'team'     => Input::post('team'),
-        'username' => Input::post('username'),
+        'username' => Input::post('username') ?: '',
       );
 
       if ( Model_Player::regist($props, Input::post('id')) )
@@ -104,29 +145,38 @@ class Controller_Admin extends Controller_Base
     }
 
     $form->repopulate();
-    $this->view->set_safe('form', $form->build(Uri::current()));
 
-    return Response::forge($this->view);
+    // view set
+    $view = View::forge('admin/playerinfo.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
   }
 
   public function action_playerinfo($id)
   {
-    $this->view->kind = 'playerinfo';
+    $view = View::forge('admin/playerinfo.twig');
 
     $form = self::_get_playerinfo_form($id);
-    $this->view->set_safe('form', $form->build(Uri::current()));
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function action_player()
   {
-    $form = $this->_get_regist_player_form();
+    $view = View::forge('admin/player.twig');
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->players = Model_Player::get_players();
+      $form = $this->_get_regist_player_form();
 
-    return Response::forge( $this->view );
+      $view->set_safe('form', $form->build(Uri::current()));
+    if ( Auth::has_access('admin.admin') )
+    {
+    }
+
+    $view->players = Model_Player::get_players();
+
+    return Response::forge( $view );
   }
 
   public function post_player()
@@ -151,7 +201,7 @@ class Controller_Admin extends Controller_Base
         'name'     => Input::post('name'),
         'number'   => Input::post('number'),
         'team'     => Input::post('team'),
-        'username' => Input::post('username'),
+        'username' => Input::post('username') ?: '',
       );
 
       if ( Model_Player::regist($props) )
@@ -167,24 +217,31 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->players = Model_Player::get_players();
+    // view set
+    $view = View::forge('admin/player.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->players = Model_Player::get_players();
+
+    return Response::forge($view);
   }
 
   public function action_team()
   {
+    $view = View::forge('admin/team.twig');
+    $view->teams = Model_Team::get_teams();
+
     $form = $this->_get_team_form();
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->teams = Model_Team::get_teams();
-
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function post_team()
   {
+    if ( ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::current());
+
     // bann
     if ( Input::post('id') )
     {
@@ -218,21 +275,24 @@ class Controller_Admin extends Controller_Base
       Session::set_flash('error', $val->show_errors());
       $form->repopulate();
 
-      $this->view->set_safe('form', $form->build(Uri::current()));
-      $this->view->set_safe('teams', Model_Team::find('all'));
+      // view set
+      $view = View::forge('admin/team.twig');
+      $view->set_safe('form', $form->build(Uri::current()));
+      $view->set_safe('teams', Model_Team::find('all'));
 
-      return Response::forge($this->view);
+      return Response::forge($view);
     }
   }
 
   public function action_league()
   {
+    $view = View::forge('admin/league.twig');
+    $view->leagues = Model_League::find('all');
+
     $form = $this->_get_addleague_form();
+    $view->set_safe('form', $form->build(Uri::current()));
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->leagues = Model_League::find('all');
-
-    return Response::forge($this->view);
+    return Response::forge($view);
   }
 
   public function post_league()
@@ -262,10 +322,13 @@ class Controller_Admin extends Controller_Base
 
     $form->repopulate();
 
-    $this->view->set_safe('form', $form->build(Uri::current()));
-    $this->view->leagues = Model_League::find('all');
+    // view set
+    $view = View::forge('admin/league.twig');
 
-    return Response::forge($this->view);
+    $view->set_safe('form', $form->build(Uri::current()));
+    $view->leagues = Model_League::find('all');
+
+    return Response::forge($view);
   }
 
   public static function _get_playerinfo_form($id)
@@ -278,8 +341,12 @@ class Controller_Admin extends Controller_Base
     $form->field('name')->set_value($player->name);
     $form->field('number')->set_value($player->number);
     $form->field('team')->set_value($player->team);
-    $form->field('username')->set_value($player->username);
     $form->field('submit')->set_value('更新');
+    
+    if ( Auth::has_access('admin.admin') )
+    {
+      $form->field('username')->set_value($player->username);
+    }
 
     // id
     $form->add('id', 'プレイヤーID', array(
@@ -341,16 +408,12 @@ class Controller_Admin extends Controller_Base
 
   private function _get_user_form($id = null)
   {
+    $form = '';
+
     if ( $id )
-    {
-      $this->view->kind = 'updateuser';
       $form = self::_get_user_update_form($id);
-    }
     else
-    {
-      $this->view->users = Model_User::find('all');
       $form = self::_get_user_regist_form();
-    }
 
     // 必須項目のHTML変更
     $form->set_config('required_mark', '<span class="red">*</span>');
@@ -378,15 +441,16 @@ class Controller_Admin extends Controller_Base
     return $form->form; 
   }
 
-  static private function _get_user_update_form($id = '')
+  static private function _get_user_update_form($id)
   {
     $form = Common_Form::forge('regist_user');
+    $form->id($id);
 
     // user info
     $info = Model_User::find($id) ?: Model_User::forge();
-
-    // 項目
     $name = Model_Player::get_name_by_username($info->username);
+
+    // form 
     $form->username($info->username)
          ->email($info->email)
          ->name($name)
@@ -414,16 +478,32 @@ class Controller_Admin extends Controller_Base
 
     $form = $form->form;
 
-    // 紐付けユーザー
-    $users = array(''=>'') + Model_User::get_username_list();
+    // moderatorの場合、teamは自チーム固定
+    if ( ! Auth::has_access('admin.admin') )
+    {
+      $team_id   = Model_Player::getMyTeamId();
+      $team_name = Model_Player::get_my_team_name();
 
-    $form->add_before('username', '紐づけるユーザー名', array(
-      'type' => 'select',
-      'options' => $users,
-      'class' => 'form-control chosen-select',
-    ), array(), 'submit')
-      ->add_rule('in_array', array_keys($users));
+      $team = $form->field('team');
 
+      $team->set_options(array($team_id => $team_name), '', true);
+      $team->set_value($team_id);
+      $team->add_rule('match_value', $team_id, true);
+    }
+
+    // 紐付けユーザー(admin.adminのみ
+    if ( Auth::has_access('admin.admin') )
+    {
+      $users = array(''=>'') + Model_User::get_username_list();
+  
+      $form->add_before('username', '紐づけるユーザー名', array(
+        'type' => 'select',
+        'options' => $users,
+        'class' => 'form-control chosen-select',
+      ), array(), 'submit')
+        ->add_rule('in_array', array_keys($users));
+    }
+ 
     // required
     $form->set_config('required_mark', '<span class="red">*</span>');
 

@@ -1,10 +1,9 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation() }}
+{# header #}
+{{ parent() }}
 
 <div class="row">
 <div class="col-md-3"></div>
@@ -72,8 +71,9 @@
 {% endblock %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
+
 <script>
 $(document).ready(function() {
     setTimeout("autosave('batter');", 30000);

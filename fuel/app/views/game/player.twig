@@ -1,13 +1,10 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% macro name_select(members, id) %}
 <select class="member_id select2" onChange="update_number(this);">
 <option value="0">--------------------</option>
 {% for member in members %}
-{% set selected = '' %}
-{% if member.id == id %}{% set selected = 'selected' %}
-{% endif %}
-<option value="{{member.id}}" {{selected}}>{{member.name}}</option>
+<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
 {% endfor %}
 </select>
 {% endmacro %}
@@ -17,16 +14,11 @@
 <select class="position">
 <option value="0" selected>--</option>
 {% for i in 1..9 %}
-{% if i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
+
 {% for i in ['D','H','R'] %}
-{% if p != 0 and i == p %}{% set selected = 'selected' %}
-{% else %}{% set selected = '' %}
-{% endif %}  
-<option value="{{i}}" {{selected}}>{{i}}</option>
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
 {% endfor %}
 </select>
 {% endmacro %}
@@ -34,12 +26,12 @@
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation() }}
+{# header #}
+{{ parent() }}
 
 <table id="player" class="table">
 
+<thead>
 <tr>
 <th class="change"></th>
 <th class="order">打順</th>
@@ -52,21 +44,23 @@
 <th class="position">ポジション5</th>
 <th class="position">ポジション6</th>
 </tr>
+</thead>
 
-{% for player in players %}
+<tbody>
+{% for meta in metum %}
 <tr class="player-tr">
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
-{% if player.order == '' or ( player.order > 9 and loop.last ) %}
+{% if meta.order == 0 or ( meta.order > 9 and loop.last ) %}
 <button onClick="delete_order(this, '{{loop.last}}');" class="btn btn-danger btn-xs delete-order">削除</button>
 {% endif %}
 </td>
-<td class="order">{{- player.order -}}</td>
-<td class="member_id">{{_self.name_select(members, player.member_id)}}</td>
-<td class="number">{{ player.number }}</td>
-{% for i in 0..5 %}
-<td class="position">{{_self.position_select(player.position[i])}}</td>
-{% endfor %}
+<td class="order">{{- meta.order -}}</td>
+<td class="member_id">{{_self.name_select(members, meta.player_id)}}</td>
+<td class="number">{{ meta.number }}</td>
+{% for pos in meta.position|split(',')%}
+<td class="position">{{_self.position_select(pos)}}</td>
+{%endfor%}
 </tr>
 {% endfor %}
 
@@ -81,6 +75,8 @@
 <td></td>
 <td></td>
 <td></td>
+
+</tbody>
 </table>
 
 {# 背番号データ #}
@@ -105,8 +101,8 @@
 {% endblock %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
 
 <script>
 $(document).ready(function() {

@@ -1,0 +1,56 @@
+{% extends 'layout/admin.twig' %}
+
+{%block content%}
+
+{# header #}
+{{parent()}}
+
+<div class="row">
+
+<div class="col-md-4">
+<h3>選手登録</h3>
+{{ form }}
+</div>
+
+<div class="col-md-8">
+
+<table id="player" class="table table-hover">
+
+<thead>
+<tr>
+<th>id</th>
+<th>名前</th>
+<th>背番号</th>
+<th>所属チーム</th>
+<th>ユーザー名</th>
+<th>変更</th>
+<th>無効</th>
+</tr>
+</thead>
+
+<tbody>
+{% for player in players %}
+<tr>
+<td>{{ player.id }}</td>
+<td>{{ player.name }}</td>
+<td>{{ player.number }}</td>
+<td>{{ player.teamname }}</td>
+<td>{{ player.username }}</td>
+<td>
+<a href="/admin/player/{{player.id}}" class="btn btn-info">変更</a>
+</td>
+<td>
+<form method="POST">
+<input type="hidden" name="id" value="{{player.id}}">
+<input type="submit" class="btn btn-warning" value="無効">
+</form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+</div>
+
+{%endblock content%}

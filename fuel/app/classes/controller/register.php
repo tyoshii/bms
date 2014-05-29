@@ -2,41 +2,51 @@
 
 class Controller_Register extends Controller
 {
-  public function action_index(){
+  public function action_index()
+  {
     $view = View::forge('register.twig');
 
-    $input_name			= Input::post('input_name');
-    $input_password = Input::post('input_password');
-    $input_confirm  = Input::post('input_confirm_password');
-    $input_mail			= Input::post('input_mail');
+    $form = self::_get_register_form();
 
-    if( isset($input_name) && isset($input_password) && isset($input_mail) && isset($input_confirm) ){
-      if($input_password === $input_confirm && strlen($input_password) >= 8 ){
-        try{
-          $result = Auth::create_user(
-              $input_name,
-              $input_password,
-              $input_mail,
-              1
-              );
-          if($result === false){
-            throw new Exception('Failed');
-          }
+    $val = $form->validation();
 
-          // 成功した場合は、loginページへリダイレクト
-          Session::set_flash('info', 'アカウントの作成に成功しました。ログインしてください。');
-          Response::redirect(Uri::create('/login'));
-
-        }catch(Exception $e){
-          $view->ret_message = "Create Account:$input_name Failed. " . $e->getMessage();
-        }
-      }else{
-        $view->ret_message = "Password is too short(from 8 to 250 characters) or not matched. Please Retry.";
+    if ( Input::post() && $val->run() )
+    {
+      if ( Model_User::regist() )
+      {
+        // 成功した場合は、loginページへリダイレクト
+        Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
+        Response::redirect(Uri::create('/login'));
       }
     }
-    $view->input_name = $input_name;
-    $view->input_mail = $input_mail;
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    }
 
-    return Response::forge( $view );
+    $form->repopulate();
+    $view->set_safe('form', $form->build(Uri::current()) );
+
+    return Response::forge($view);
   }
+
+  public function _get_register_form()
+  {
+    $form = Common_Form::forge('regist_user');
+
+    $form->username()
+         ->password()
+         ->confirm()
+         ->name()
+         ->email()
+         ->submit('登録'); 
+
+    $form = $form->form;
+
+    // 必須の表示
+    $form->set_config('required_mark', '<span class="red">*</span>');
+
+    return $form;
+  }
+
 }

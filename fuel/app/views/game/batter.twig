@@ -1,10 +1,9 @@
-{% extends "layout/layout.twig" %}
+{% extends "layout/game/edit.twig" %}
 
 {% block content %}
 
-{% import 'game-nav.twig' as nav %}
-{{ nav.header(date, team_top, team_bottom) }}
-{{ nav.navigation() }}
+{# header #}
+{{ parent() }}
 
 <table id="batter" class="table">
 <thead>
@@ -31,10 +30,10 @@
 <th>エラー</th>
 </thead>
 
-{% for batter in players %}
+{% for batter in metum %}
 <tr class="result result-{{loop.index}}">
-<td class="member-id disable">{{batter.member_id}}</td>
-<td class="order">{{batter.order}}</td>
+<td class="member-id disable">{{batter.player_id|default(0)}}</td>
+<td class="order">{%if batter.order != 0%}{{batter.order}}{%endif%}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
 {%if batter.number == '' %}
@@ -47,25 +46,25 @@
 </td>
 {%endif%}
 
-{% set seiseki = batters[batter.member_id].seiseki %}
-{% set detail  = batters[batter.member_id].detail  %}
+{% set hitting = hittings[batter.player_id] %}
+{% set detail  = details[batter.player_id]  %}
 
-<td class="seiseki daseki">{{seiseki.daseki}}</td>
-<td class="seiseki dasuu">{{seiseki.dasuu}}</td>
-<td class="seiseki anda">{{seiseki.anda}}</td>
-<td class="seiseki niruida">{{seiseki.niruida}}</td>
-<td class="seiseki sanruida">{{seiseki.sanruida}}</td>
-<td class="seiseki honruida">{{seiseki.honruida}}</td>
-<td class="seiseki sanshin">{{seiseki.sanshin}}</td>
-<td class="seiseki yontama">{{seiseki.yontama}}</td>
-<td class="seiseki shikyuu">{{seiseki.shikyuu}}</td>
-<td class="seiseki gida">{{seiseki.gida}}</td>
-<td class="seiseki gihi">{{seiseki.gihi}}</td>
+<td class="seiseki daseki">{{hitting.TPA}}</td>
+<td class="seiseki dasuu">{{hitting.AB}}</td>
+<td class="seiseki anda">{{hitting.H}}</td>
+<td class="seiseki niruida">{{hitting['2B']}}</td>
+<td class="seiseki sanruida">{{hitting['3B']}}</td>
+<td class="seiseki honruida">{{hitting.HR}}</td>
+<td class="seiseki sanshin">{{hitting.SO}}</td>
+<td class="seiseki yontama">{{hitting.BB}}</td>
+<td class="seiseki shikyuu">{{hitting.HBP}}</td>
+<td class="seiseki gida">{{hitting.SAC}}</td>
+<td class="seiseki gihi">{{hitting.SF}}</td>
 
-<td class="daten"><input type="number" class="form-control" value="{{seiseki.daten}}" min="0"></td>
-<td class="tokuten"><input type="number" class="form-control" value="{{seiseki.tokuten}}" min="0"></td>
-<td class="steal"><input type="number" class="form-control" value="{{seiseki.steal}}" min="0"></td>
-<td class="error"><input type="number" class="form-control" value="{{seiseki.error}}" min="0"></td>
+<td class="daten"><input type="number" value="{{hitting.RBI}}" min="0"></td>
+<td class="tokuten"><input type="number" class="" value="{{hitting.R}}" min="0"></td>
+<td class="steal"><input type="number" class="" value="{{hitting.SB}}" min="0"></td>
+<td class="error"><input type="number" class="" value="{{fieldings[batter.player_id].E}}" min="0"></td>
 </tr>
 
 
@@ -84,7 +83,7 @@
 {# 打席情報がなければ #}
 {% if detail|length == 0 %}
 <tr class="result disable detail detail-{{loop.index}}">
-{{ detail_macro.meta(batter.member_id, 1, true) }}
+{{ detail_macro.meta(batter.player_id, 1, true) }}
 {{ detail_macro.direction(0) }}
 {{ detail_macro.kind(0) }}
 {{ detail_macro.result(results, 0) }}
@@ -94,10 +93,10 @@
   {# 打席情報があればループ #}
   {% for d in detail %}
   <tr class="result disable detail detail-{{loop.parent.loop.index}}">
-  {{ detail_macro.meta(batter.member_id, loop.index, loop.last) }}
+  {{ detail_macro.meta(batter.player_id, loop.index, loop.last) }}
   {{ detail_macro.direction(d.direction) }}
   {{ detail_macro.kind(d.kind) }}
-  {{ detail_macro.result(results, d.result) }}
+  {{ detail_macro.result(results, d.result_id) }}
   <td colspan="6"></td>
   </tr>
   {% endfor %}
@@ -114,8 +113,9 @@
 {% endblock content %}
 
 {% block js %}
+
 {{ parent() }}
-{% include 'game-js.twig' %}
+
 <script>
 $(document).ready(function() {
     setTimeout("autosave('batter');", 30000);

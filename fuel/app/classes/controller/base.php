@@ -6,14 +6,7 @@ class Controller_Base extends Controller
 
   public function before()
   {
-    if ( Uri::segment(1) === 'login' )
-    {
-      $this->_login_form = self::_get_login_form(array('form_class' => 'form'));
-    }
-    else
-    {
-      $this->_login_form = self::_get_login_form();
-    }
+    $this->_login_form = self::_get_login_form();
 
     if ( Auth::check() ) {
       return;
@@ -28,14 +21,16 @@ class Controller_Base extends Controller
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
           Session::set_flash('info', 'ログインに成功しました！こんにちわ');
-          Response::redirect(Uri::current());
-        }
-        else
-        {
-          Session::set_flash('error', 'ログインに失敗しました');
-          $this->_login_form->repopulate();
+
+          $redirect_to = Session::get('redirect_to', '/');
+          Session::delete('redirect_to');
+
+          Response::redirect($redirect_to);
         }
       }
+          
+      Session::set_flash('error', 'ログインに失敗しました');
+      $this->_login_form->repopulate();
     }
   }
 
@@ -45,24 +40,21 @@ class Controller_Base extends Controller
     return $res;
   }
 
-  static public function _get_login_form ($cond = array())
+  static public function _get_login_form ()
   {
-    $form_name  = isset($cond['form_name'])  ? $cond['form_name']  : 'login';
-    $form_class = isset($cond['form_class']) ? $cond['form_class'] : 'navbar-form navbar-right';
-
     // login form
-    $form = Fieldset::forge($form_name, array(
+    $form = Fieldset::forge('login', array(
       'form_attributes' => array(
-        'class' => $form_class,
-        'role'  => 'search',
+        'class' => 'form',
+        'role'  => 'login',
       ),
     ));
 
-    $form->add('username', '', array('class' => 'form-control', 'placeholder' => 'Account'))
+    $form->add('username', 'ユーザー名', array('class' => 'form-control', 'placeholder' => 'Username'))
       ->add_rule('required')
       ->add_rule('max_length', 40);
 
-    $form->add('password', '', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
+    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
       ->add_rule('required')
       ->add_rule('min_length', 8)
       ->add_rule('max_length', 250);

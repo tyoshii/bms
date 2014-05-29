@@ -10,12 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" size="16x16">
+    <link rel="apple-touch-icon" href="/favicon.ico">
 
     {% block css %}
     <link href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     <link href="/twbootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/chosen/chosen.css" type="text/css" rel="stylesheet">
     <link href="/datepicker/css/datepicker.css" type="text/css" rel="stylesheet">
+    <link href="http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css" type="text/css" rel="stylesheet">
     <link href="/css/bms.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,12 +33,16 @@
   </head>
   <body>
 
+<div id="wrap">
+
+{# production以外は上部に赤い線 #}
 {%if env != 'production'%}
 <div style="width:100%; background-color:red; height: 5px;">
 &nbsp;
 </div>
 {%endif%}
 
+{# header #}
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -46,13 +52,12 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/"><strong>Baseball Management System</strong></a>
+    <a class="navbar-brand" href="/"><strong>BMS</strong></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bms-navbar">
     <ul class="nav navbar-nav">
-      <li class="bms-navbar-top"><a href="/">Top</a></li>
       {%block li_game %}<li>{%endblock%}<a href="/game">試合一覧</a></li>
       {%block li_score%}<li>{%endblock%}<a href="/score">成績</a></li>
 <!--
@@ -69,7 +74,7 @@
         </ul>
       </li>
 -->
-      {% if has_access('admin.admin') == true %}
+      {% if auth_has_access('moderator.moderator') %}
         <li class="bms-navbar-admin"><a href="/admin">管理者Menu</a></li>
       {% endif %}
     </ul>
@@ -84,10 +89,8 @@
 
     <ul class="nav navbar-nav navbar-right">
       {% if login == true %}
-        <li><a href="/user/info">{{screen_name}}</a></li>
+        <li><a href="/user/info"><img src="/favicon.ico" height="22" width="22">&nbsp;{{screen_name}}</a></li>
         <li><a href="/logout">Logout</a></li>
-      {% else %}
-        {{ login_form }}
       {% endif %}
     </ul>
 <!--
@@ -106,6 +109,7 @@
   </div><!-- /.navbar-collapse -->
 </nav>
 
+{# flash error #}
 {% if get_flash('error') %}
 <div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -113,18 +117,29 @@
 </div>
 {% endif %}
 
+{# flash info #}
 {% if get_flash('info') %}
 <div class="alert alert-info alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   <strong>Information</strong> {{ get_flash('info') }}
 </div>
-
 {% endif %}
+
+{# main #}
 <div class="container">
 {% block content %}{% endblock %}
 </div>
 
-  </body>
+<div id="push"></div>
+</div>{# div#wrap #}
+
+{# footer #}
+<div id="footer">
+<hr>
+<a href="mailto:tyoshii716@gmail.com">お問い合わせ / フィードバック</a>
+</div>
+
+</body>
 </html>
 
 {% block js %} 
@@ -134,6 +149,7 @@
 <script type="text/javascript" src="/chosen/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="/bootstrap_formhelpers/js/bootstrap-formhelpers.min.js"></script>
 <script type="text/javascript" src="/datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {

@@ -1,71 +1,67 @@
 Baseball Management System
 ==========================
 
-REQUIRE
-=======
+# REQUIRE
 
-    php5.X
-    mysql5.X
+* php5.X
+    * fuelphp 1.8
+* mysql5.X
 
-RELEASE
-=======
+# メンテナンスモードの切り替え
+* php oil r service:out
+* php oil r service:in
 
-    # git clone and update submodule
+* adminユーザーはメンテナンスモードでも画面を見ることが出来ます。
+
+# 開発環境構築
+
+## git clone and update submodule
+
     $ git clone --recursive https://github.com:tyoshii/bms
     $ cd bms
     $ git submodule init
     $ git submodule update
 
-    # copy config file ( and edit )
+## copy config file ( and edit appropriate value)
     $ cp fuel/app/config/_password.php fuel/app/config/password.php
     $ cp fuel/app/config/_salt.php     fuel/app/config/salt.php
     $ cp fuel/app/config/_crypt.php    fuel/app/config/crypt.php
 
-    # database setting
-    # - for development
+## database setting
+    
+### for development
     $ vi fuel/app/config/development/db.php
 
-    # - for production
+### for production
     $ vi fuel/app/config/production/db.php
 
-    # httpd conf copy and edit
+## httpd conf copy and edit
     $ cp conf/virtualhost-bms.conf ${HTTP_CONF_ROOT}/
-        ## edit settings:
+        ## edit settings follow:
         ### ServerName
         ### DocumentRoot
         ### SetEnv FUEL_ENV
 
-    # deploy only production ( mkdir/copy/symlink dir/file )
-    $ cp deploy
-    $ sudo perl deploy.pl
-
-COMPOSER UPDATE
-===============
-
+## composer
     $ php composer.phar update
 
-DATABASE
-========
-
+## database
     $ mysqladmin create -u root -p bms
     $ php oil r migrate:current
     $ php oil refine dbinit:batter_result
-    
-ADMIN ACCOUNT
-=============
 
+## add admin account
     $ php oil console
     >>> Auth::create_user('admin', 'password', 'admin@yahoo.co.jp', 100);
+    
 
-CAUTION
-=======
+# Deploy
 
-check it:
-    apache user
+## production
 
-IGNORE FILES
-============
-
-    fuel/app/config/salt.php
-    fuel/app/config/password.php
-    fuel/app/config/crypt.php
+* masterへpushするとgithubのweb-wookからapi/deployをコール
+* api/deployが以下を実施
+    * git pull origin master
+    * php oil r migrate:current
+    * deploy.pl の実行
+* 自力Deployは上記コマンドを本番機で実施

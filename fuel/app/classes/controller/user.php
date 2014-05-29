@@ -57,10 +57,12 @@ class Controller_User extends Controller_Base
       else // idが無ければ新規登録
       {
         // かぶりチェック
-        if ( Model_Player::query()
-              ->where('team', $props['team'])
-              ->where('number', $props['number'])
-              ->get_one() )
+        $already = Model_Player::query()
+          ->where('team', $props['team'])
+          ->where('number', $props['number'])
+          ->get_one();
+
+        if ( $already && $already->username )
         {
           Session::set_flash('error', 'その背番号はすでに使われています');
         }
@@ -68,7 +70,8 @@ class Controller_User extends Controller_Base
         {
           // user_id 取得
           // 新規選手登録
-          $player = Model_Player::forge($props);
+          $player = $already ?: Model_Player::forge();
+          $player->set($props);
           $player->save();
           
           Session::set_flash('info', '新たに所属チームに登録されました。');
@@ -216,7 +219,7 @@ class Controller_User extends Controller_Base
 
     // 所属チーム
     $default = array('' => '');
-    $teams = Model_Team::getTeams();
+    $teams = Model_Team::get_teams_key_value();
 
     $form->add('team', '所属チーム', array(
       'type' => 'select',
@@ -283,8 +286,6 @@ class Controller_User extends Controller_Base
 
     $info = Auth::get_profile_fields();
 
-    $dispname = isset($info['dispname']) ? $info['dispname'] : Auth::get_screen_name();
-
     $form->add('username', '', array(
       'value' => Auth::get_screen_name(),
       'type' => 'hidden'
@@ -312,7 +313,7 @@ class Controller_User extends Controller_Base
       'disabled' => 'disabled',
     ));
 
-    $form->add('dispname', '表示名/選手名', array('value' => $dispname, 'maxlength' => 16, 'class' => 'form-control'))
+    $form->add('dispname', '表示名/選手名', array('value' => Common::get_dispname(), 'maxlength' => 16, 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 

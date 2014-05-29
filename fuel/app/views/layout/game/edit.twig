@@ -1,0 +1,60 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+
+<a href="/game" class="pull-right">試合一覧へもどる</a>
+
+{# 試合概要 #}
+<h3>{{date}} {{team_top}}<small>先攻</small> vs {{team_bottom}}<small>後攻</small></h3>
+<h4>
+<p class="text-right">
+<small class="autosave text-success">
+<!-- 自動保存は相性がよくなかったので消した -->
+<span class="disable">30秒ごとに自動保存を行います...</span>
+</small>
+</p>
+</h4>
+
+{# tab メニュー #}
+<ul class="nav nav-tabs">
+    <li {%if uri_segment(3)=='score'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/score/{{team_id}}">スコア</a>
+    </li>
+    <li {%if uri_segment(3)=='player'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/player/{{team_id}}">{{team_name}}：出場選手</a>
+    </li>
+    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/pitcher/{{team_id}}">{{team_name}}：投手成績</a>
+    </li>
+    <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/batter/{{team_id}}">{{team_name}}：野手成績</a>
+    </li>
+    <li {%if uri_segment(3)=="other"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/other/{{team_id}}">{{team_name}}：その他</a>
+    </li>
+</ul>
+
+{# データ保存の際にjsから取得しやすいように #}
+<data id="game_id" class="disable">{{game_id}}</data>
+<data id="team_id" class="disable">{{team_id}}</data>
+
+{%endblock%}
+
+
+{%block js%}
+
+{{ parent() }}
+
+<script src="/js/game/edit.js"></script>
+<script src="/select2/select2.min.js"></script>
+<script>
+
+$(document).ready(function() {
+  $('.select2').select2({
+    width: "100%",
+  });
+});
+
+</script>
+
+{%endblock%}

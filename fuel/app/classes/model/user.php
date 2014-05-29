@@ -115,4 +115,23 @@ class Model_User extends \Orm\Model
       
     return true;
   }
+
+  public static function get_users_only_my_team()
+  {
+    $team_id = Model_Player::getMyTeamId();
+    if ( ! $team_id ) return array();
+
+    $players = Model_Player::query()
+                  ->where('team', $team_id)
+                  ->where('username', '!=', '')
+                  ->get();
+
+    $usernames = array();
+    foreach ( $players as $player )
+      $usernames[] = $player->username;
+
+    return DB::select()->from(self::$_table_name)
+                ->where('username', 'in', $usernames)
+                ->execute()->as_array(); 
+  }
 }

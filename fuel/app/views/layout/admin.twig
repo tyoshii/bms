@@ -8,16 +8,11 @@
   <li class="{{active.user}}"><a href="/admin/user">利用者管理</a></li>
   <li class="{{active.player}}"><a href="/admin/player">選手管理</a></li>
   <li class="{{active.team}}"><a href="/admin/team">チーム管理</a></li>
+{#
   <li class="{{active.league}}"><a href="/admin/league">リーグ管理</a></li>
+#}
 </ul>
 </div>
-
-{% if kind %}
-<div class="row">
-  <div class="col-md-4">{% include 'admin/' ~ kind ~ "/left.twig" %}</div>
-  <div class="col-md-8">{% include 'admin/' ~ kind ~ "/right.twig" %}</div>
-</div>
-{% endif %}
 
 {% endblock %}
 
@@ -29,12 +24,12 @@
 $(document).ready(function(){
   // navvar active
   $('div#bms-navbar li.bms-navbar-admin').addClass('active');
-});
 
   // dataTable
   var $target = $("#player");
   if ( $target ) {
     $target.dataTable();
   }
+});
 </script>
 {% endblock %}

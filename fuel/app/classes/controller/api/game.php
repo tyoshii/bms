@@ -21,7 +21,7 @@ class Controller_Api_Game extends Controller_Rest
     $ids = $val->validated();
 
     // check acl if no admin
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('admin.admin') and Auth::has_access('moderator.moderator') )
     {
       // has Moderators ?
       if ( ! Auth::member('50') )

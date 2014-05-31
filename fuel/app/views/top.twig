@@ -24,9 +24,9 @@
 
 <table class="table games">
 {%for game in games%}
-<tr gameid="{{game.id}}">
+<tr>
 <td>{{game.team_top_name}}</td>
-<td>{{game.tsum}} - {{game.bsum}}</td>
+<td><a href="/game/{{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
 <td>{{game.team_bottom_name}}</td>
 </tr>
 {%endfor%}
@@ -70,9 +70,3 @@
 
 
 {% endblock content %}
-
-
-{% block js%}
-{{ parent() }}
-<script type="text/javascript" src="/js/top.js"></script>
-{% endblock %}

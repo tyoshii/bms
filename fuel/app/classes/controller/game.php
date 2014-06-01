@@ -23,6 +23,7 @@ class Controller_Game extends Controller_Base
     $view->info  = $info;
     $view->score = Model_Games_Runningscore::find($game_id);
 
+    // stats
     $view->player_top    = Model_Stats_Player::getStarter($game_id, $info['team_top']); 
     $view->player_bottom = Model_Stats_Player::getStarter($game_id, $info['team_bottom']); 
 
@@ -31,6 +32,9 @@ class Controller_Game extends Controller_Base
 
     $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
     $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+
+    // other
+    $view->my_team_id = Model_Player::getMyTeamId();
 
     return Response::forge($view);
   }
@@ -128,7 +132,7 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('admin.admin') )
+        if ( ! Auth::has_access('moderator.moderator') )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
@@ -290,7 +294,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      if ( ! Auth::has_access('moderator.moderator') and $player['player_id'] !== $myid )
       {
         continue;
       }

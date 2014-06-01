@@ -34,12 +34,6 @@ class Controller_Base extends Controller
     }
   }
 
-  public function after($res)
-  {
-    $res->body->env = Fuel::$env;
-    return $res;
-  }
-
   static public function _get_login_form ()
   {
     // login form

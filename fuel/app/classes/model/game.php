@@ -53,9 +53,9 @@ class Model_Game extends \Orm\Model
       // games insert
       $game = self::forge(array(
         'date'             => $data['date'],
-        'team_top'         => $data['top'] ?: 0,
+        'team_top'         => $data['top_name'] ? 0 : $data['top'],
         'team_top_name'    => $team_top_name,
-        'team_bottom'      => $data['bottom'] ?: 0,
+        'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
         'team_bottom_name' => $team_bottom_name,
       ));
   

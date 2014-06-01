@@ -2,12 +2,18 @@
 {%if team == 'top' %}
   {%set players = player_top%}
   {%set stats   = pitching_top%}
+  {%set team_id = info.team_top%}
 {%else%}
   {%set players = player_bottom%}
   {%set stats   = pitching_bottom%}
+  {%set team_id = info.team_bottom%}
 {%endif%}
 
-<h3>投手成績</h3>
+<h3>投手成績
+{%if team_id == my_team_id%}
+<small><a class="pull-right" href="/game/{{info.id}}/pithcer/{{team_id}}">成績入力</a></small>
+{%endif%}
+</h3>
 
 <table class="table table-striped batter">
 <tr>

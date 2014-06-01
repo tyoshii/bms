@@ -96,7 +96,7 @@ class Model_Game extends \Orm\Model
 
     // 自分が出場している試合かどうか
     // サブクエリで取得する
-    $play = DB::select('id')
+    $play = DB::select( DB::expr('COUNT(*)') )
               ->from('stats_players')
               ->where('game_id', DB::expr('games.id'))
               ->where('player_id', Model_Player::getMyPlayerID());

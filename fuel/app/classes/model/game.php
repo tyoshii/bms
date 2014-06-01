@@ -92,7 +92,21 @@ class Model_Game extends \Orm\Model
 
   public static function getGames()
   {
-    $query  = self::_getGamesQuery();
+    $query = self::_getGamesQuery();
+
+    // 自分が出場している試合かどうか
+    // サブクエリで取得する
+    $play = DB::select('id')
+              ->from('stats_players')
+              ->where('game_id', DB::expr('games.id'))
+              ->where('player_id', Model_Player::getMyPlayerID());
+
+    $query->select(
+      '*',
+      array(DB::expr('('.$play->__toString().')'), 'play')
+    );
+
+    // execute
     $result = $query->execute()->as_array();
 
     // add value

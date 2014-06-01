@@ -23,6 +23,7 @@ class Controller_Game extends Controller_Base
     $view->info  = $info;
     $view->score = Model_Games_Runningscore::find($game_id);
 
+    // stats
     $view->player_top    = Model_Stats_Player::getStarter($game_id, $info['team_top']); 
     $view->player_bottom = Model_Stats_Player::getStarter($game_id, $info['team_bottom']); 
 
@@ -31,6 +32,9 @@ class Controller_Game extends Controller_Base
 
     $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
     $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+
+    // other
+    $view->my_team_id = Model_Player::getMyTeamId();
 
     return Response::forge($view);
   }

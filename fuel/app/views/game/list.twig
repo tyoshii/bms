@@ -69,7 +69,7 @@
 {%if auth_has_access('admin.admin') and
      game.team_top != 0 and
      game.status != 2 %}
-<a href="/game/{{game.id}}/player/{{game.team_top}}" class="btn btn-info btn-xs">成績入力</a>
+<a href="/game/{{game.id}}/batter/{{game.team_top}}" class="btn btn-info btn-xs">成績入力</a>
 {%endif%}
 </td>
 
@@ -82,7 +82,7 @@
 {%if auth_has_access('admin.admin') and
      game.team_bottom != 0 and
      game.status != 2 %}
-<a href="/game/{{game.id}}/player/{{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
+<a href="/game/{{game.id}}/batter/{{game.team_bottom}}" class="btn btn-info btn-xs">成績入力</a>
 {%endif%}
 </td>
 
@@ -97,7 +97,7 @@
 {%if game.status == 2%}
 <span class="glyphicon glyphicon-ok">入力完了</span>
 {%else%}
-<a href="/game/{{game.id}}/player/" class="btn btn-info">成績入力</a>
+<a href="/game/{{game.id}}/batter/" class="btn btn-info">成績入力</a>
 {%endif%}
 {%endif%}
 </td>

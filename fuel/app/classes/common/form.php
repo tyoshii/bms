@@ -78,7 +78,7 @@ class Common_Form
 
   public function name($value = '')
   {
-    $this->form->add('name', '名前', array(
+    $this->form->add('name', '選手名', array(
       'type' => 'text',
       'class' => 'form-control',
       'value' => $value,

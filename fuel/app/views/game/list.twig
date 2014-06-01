@@ -34,6 +34,7 @@
 <button type="button" class="btn btn-default" onClick="filter('own');">MyTeam</button>
 <button type="button" class="btn btn-default" onClick="filter('win');">勝ち</button>
 <button type="button" class="btn btn-default" onClick="filter('lose');">負け</button>
+<button type="button" class="btn btn-default" onClick="filter('play');">出場した試合</button>
 </div>
 </div>
 
@@ -61,7 +62,7 @@
 
 {% for game in games if game.status != -1%}
 
-<tr class="{%if game.own %}own{%endif%} {{game.result}}">
+<tr class="{%if game.own %}own{%endif%} {{game.result}}" {%if game.play%}play="true"{%endif%}>
 
 <td>{%if game.play%}(出場){%endif%}</td>
 <td>{{ game.date }}</td>
@@ -205,6 +206,10 @@ function filter(type) {
   else if ( type === 'lose' ) {
     $("#game-list tbody tr").hide();
     $("#game-list tbody tr.lose").show();
+  }
+  else if ( type === 'play' ) {
+    $("#game-list tbody tr").hide();
+    $("#game-list tbody tr[play='true']").show();
   }
 }
 

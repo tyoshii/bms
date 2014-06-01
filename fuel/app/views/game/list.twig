@@ -101,9 +101,11 @@
 {%if game.status == 2%}
 <span class="glyphicon glyphicon-ok">入力完了</span>
 {%else%}
+{%if game.play%}
 <a href="/game/{{game.id}}/batter/" class="btn btn-info">成績入力</a>
 {%endif%}
-{%endif%}
+{%endif%}{# if game.status == 2 #}
+{%endif%}{# if game.own #}
 </td>
 
 {# ステータス #}

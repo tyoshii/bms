@@ -1,6 +1,8 @@
 # dir
 dir /var/www/bms_staging/
 dir /var/www/bms_staging/public/
+dir /var/www/bms_staging/fuel/
+dir /var/www/bms_staging/fuel/app/
 dir /var/www/bms_staging/fuel/app/cache/
 
 # httpd conf

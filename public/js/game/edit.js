@@ -166,7 +166,7 @@ function post_other(is_alert) {
   });
 }
 
-function post_batter(is_alert, is_regist) {
+function post_batter(is_alert, is_comp) {
 
   var data = [];
   var detail = [];
@@ -239,7 +239,7 @@ function post_batter(is_alert, is_regist) {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
       batter: data,
-      regist: is_regist
+      complete: is_comp
     },
     success: function(html) {
       if ( is_alert === true ) {
@@ -444,7 +444,7 @@ function add_order(self, kind) {
   $('.select2').select2();
 }
 
-function post_pitcher(is_alert) {
+function post_pitcher(is_alert, is_comp) {
   var $pitcher = $("table#pitcher tbody tr");
   var data = [];
 
@@ -487,7 +487,8 @@ function post_pitcher(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      pitcher: data
+      pitcher: data,
+      complete: is_comp
     },
     success: function(html) {
       if ( is_alert === true ) {

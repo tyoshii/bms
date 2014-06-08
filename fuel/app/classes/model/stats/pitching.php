@@ -4,6 +4,9 @@ class Model_Stats_Pitching extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
+    'status' => array(
+      'default' => 0,
+    ),
 		'player_id',
 		'game_id',
     'team_id',

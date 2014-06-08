@@ -11,11 +11,21 @@ class Controller_Api_Deploy extends Controller
 
     if ( $data['ref'] === 'refs/heads/master' )
     {
-      self::_deploy('/home/tyoshii/git/tyoshii/bms/', 'master', 'production');
+      self::_deploy(
+        '/home/tyoshii/git/tyoshii/bms/',
+        'master',
+        'production',
+        'bms.list'
+      );
     } 
     if ( $data['ref'] === 'refs/heads/staging' )
     {
-      self::_deploy('/home/tyoshii/git/tyoshii/bms_staging/', 'staging', 'staging');
+      self::_deploy(
+        '/home/tyoshii/git/tyoshii/bms_staging/',
+        'staging',
+        'staging',
+        'bms_staging.list'
+      );
     } 
   }
   

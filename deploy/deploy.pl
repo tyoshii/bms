@@ -8,10 +8,10 @@ use File::Spec;
 use File::Path;
 
 # option
-my $force = $ARGV[0] eq 'force';
+my $file  = $ARGV[0];
+my $force = $ARGV[1] eq 'force';
 
 # file list
-my $list = 'bms.list';
 my @files = `cat $list`;
 
 my $hash;

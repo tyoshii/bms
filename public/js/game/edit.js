@@ -1,3 +1,14 @@
+var stats = {
+  type: function() {
+    var path = location.pathname.split('/');
+    return path[3];
+  },
+  data: function() {
+    return {};
+  }
+};
+
+
 $(document).ready(function(){
   batter_result_update();
 });
@@ -155,7 +166,7 @@ function post_other(is_alert) {
   });
 }
 
-function post_batter(is_alert) {
+function post_batter(is_alert, is_regist) {
 
   var data = [];
   var detail = [];
@@ -227,7 +238,8 @@ function post_batter(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      batter: data
+      batter: data,
+      regist: is_regist
     },
     success: function(html) {
       if ( is_alert === true ) {

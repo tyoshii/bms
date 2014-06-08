@@ -155,13 +155,15 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
+    $status = Input::post('regist') ? 1 : 0;
+
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Hitting::replaceAll($ids, $batter);
+      Model_Stats_Hitting::replaceAll($ids, $batter, $status);
     }
     else
     {
-      Model_Stats_Hitting::regist($ids, $batter);
+      Model_Stats_Hitting::regist($ids, $batter, $status);
     }
 
     echo 'OK';

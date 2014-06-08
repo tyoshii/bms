@@ -73,7 +73,7 @@ class Model_Stats_Hitting extends \Orm\Model
     );
   }
 
-  public static function regist($ids, $stats)
+  public static function regist($ids, $stats, $status)
   {
     Mydb::begin();
 
@@ -96,6 +96,8 @@ class Model_Stats_Hitting extends \Orm\Model
         // set props => save
         $props = self::_get_insert_props($stat);
         $hit->set($props);
+        $hit->status = $status;
+
         $hit->save();
 
         // hittingdetails
@@ -145,7 +147,7 @@ class Model_Stats_Hitting extends \Orm\Model
     }
   }
 
-  public static function replaceAll($ids, $stats)
+  public static function replaceAll($ids, $stats, $status)
   {
     Mydb::begin();
 
@@ -164,6 +166,8 @@ class Model_Stats_Hitting extends \Orm\Model
         // hittings
         $props = self::_get_insert_props($stat);
         $hit = self::forge($ids + $props + array('player_id' => $player_id));
+        $hit->status = $status;
+
         $hit->save();
 
         // hittingdetails

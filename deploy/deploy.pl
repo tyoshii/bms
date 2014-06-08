@@ -12,7 +12,7 @@ my $file  = $ARGV[0];
 my $force = $ARGV[1] eq 'force';
 
 # file list
-my @files = `cat $list`;
+my @files = `cat $file`;
 
 my $hash;
 for my $row ( @files ) {

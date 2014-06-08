@@ -127,13 +127,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_pitchingsへのinsert
+    $status = Input::post('complete') ? 1 : 0;
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Pitching::replaceAll($ids, $pitcher);
+      Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
     }
     else
     {
-      Model_Stats_Pitching::regist($ids, $pitcher);
+      Model_Stats_Pitching::regist($ids, $pitcher, $status);
     }
 
     echo 'OK';
@@ -155,7 +156,7 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
-    $status = Input::post('regist') ? 1 : 0;
+    $status = Input::post('complete') ? 1 : 0;
 
     if ( Auth::has_access('admin.admin') )
     {

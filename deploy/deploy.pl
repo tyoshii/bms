@@ -8,8 +8,8 @@ use File::Spec;
 use File::Path;
 
 # option
-my $file  = $ARGV[0];
-my $force = $ARGV[1] eq 'force';
+my $file  = $ARGV[0] or die 'specify deploy file list';
+my $force = defined $ARGV[1] ? $ARGV[1] eq 'force' : 0;
 
 # file list
 my @files = `cat $file`;

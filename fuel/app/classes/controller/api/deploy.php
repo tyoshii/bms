@@ -54,6 +54,10 @@ class Controller_Api_Deploy extends Controller
       chdir($git_dir);
       `FUEL_ENV={$fuel_env} /usr/bin/env php oil r service:in`;
 
+      // version up
+      `/usr/bin/env php oil r version:up`;
+      `/usr/bin/env php oil r version`;
+
       echo "DEPLOY DONE";
     
     } catch (Exception $e) {

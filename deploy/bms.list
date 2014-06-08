@@ -26,3 +26,6 @@ symlink ../public/css/                   /var/www/bms/public/css/
 symlink ../public/favicon.ico            /var/www/bms/public/favicon.ico
 
 copy ../public/index.php /var/www/bms/public/index.php
+
+# version file
+symlink ../CHANGELOG.md /var/www/bms/

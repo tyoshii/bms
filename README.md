@@ -64,6 +64,6 @@ Baseball Management System
     * git pull origin master
     * php oil r migrate:current
     * deploy.pl の実行
-        $ cd deploy
-        $ perl deploy.pl bms.list
+    $ cd deploy
+    $ perl deploy.pl bms.list
 * 自力Deployは上記コマンドを本番機で実施

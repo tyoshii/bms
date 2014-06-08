@@ -61,7 +61,7 @@
 
 {% for game in games if game.status != -1%}
 
-<tr class="{%if game.own %}own{%endif%} {{game.result}}" {%if game.play%}play="true"{%endif%}>
+<tr gameid="{{game.id}}" class="{%if game.own %}own{%endif%} {{game.result}}" {%if game.play%}play="true"{%endif%}>
 
 <td>{%if game.play%}(出場){%endif%}</td>
 <td>{{ game.date }}</td>

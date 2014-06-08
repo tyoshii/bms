@@ -1,3 +1,27 @@
+$(document).ready(function() {
+  // click tr, go game summary
+  $("table#game-list tbody tr").click(function(){
+    location.href = "/game/" + $(this).attr('gameid');
+  });
+
+  //datepicker
+  $('input.form-datepicker').each(function() {
+    $(this).datepicker();
+  });
+
+  // search
+  $("#search").keyup(function(){
+  
+    if ( ! $(this).val()) {
+      $("#game-list tbody tr").show();
+    }
+    else {
+      $("#game-list tbody tr").hide();
+      $("#game-list tbody tr:contains(" + this.value + ")").show();
+    }
+  });
+});
+
 // status update
 function changeGameStatus(s, game_id, team_id) {
   var status = typeof(s) === 'object' ? $(s).val() : s;
@@ -25,24 +49,6 @@ function changeGameStatus(s, game_id, team_id) {
   });
 }
 
-$(document).ready(function() {
-  $('input.form-datepicker').each(function() {
-    $(this).datepicker();
-  });
-});
-
-// search
-$("#search").keyup(function(){
-
-  if ( ! $(this).val()) {
-    $("#game-list tbody tr").show();
-  }
-  else {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr:contains(" + this.value + ")").show();
-  }
-});
-
 // filter
 function filter(type) {
   if ( type === 'all' ) {
@@ -65,3 +71,4 @@ function filter(type) {
     $("#game-list tbody tr[play='true']").show();
   }
 }
+

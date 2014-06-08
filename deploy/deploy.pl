@@ -8,11 +8,11 @@ use File::Spec;
 use File::Path;
 
 # option
-my $force = $ARGV[0] eq 'force';
+my $file  = $ARGV[0] or die 'specify deploy file list';
+my $force = defined $ARGV[1] ? $ARGV[1] eq 'force' : 0;
 
 # file list
-my $list = 'bms.list';
-my @files = `cat $list`;
+my @files = `cat $file`;
 
 my $hash;
 for my $row ( @files ) {

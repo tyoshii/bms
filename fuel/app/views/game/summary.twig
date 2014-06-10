@@ -3,10 +3,24 @@
 
 {% block content %}
 
-<a href="/game" class="pull-right">試合一覧へもどる</a>
+<div class="pull-right">
+<ol class="breadcrumb">
+
+{%if auth_has_access('moderator.moderator') %}
+<li><a href="/game/{{info.id}}/score">スコア修正</a></li>
+<li><a href="/game/{{info.id}}/player/{{my_team_id}}">出場選手</a></li>
+{%endif%}
+
+{%if my_team_id%}
+<li><a href="/game/{{info.id}}/batter/{{my_team_id}}">野手成績</a></li>
+<li><a href="/game/{{info.id}}/pitcher/{{my_team_id}}">投手成績</a></li>
+{%endif%}
+
+<li class="active"><a href="/game">試合一覧へもどる</a></li>
+</ol>
+</div>
 
 <h3>試合スコア</h3>
-
 <table class="table score">
 
 <tr>

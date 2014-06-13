@@ -6,7 +6,10 @@ $(document).ready(function() {
 
   //datepicker
   $('input.form-datepicker').each(function() {
-    $(this).datepicker();
+    $self = $(this);
+    $self.datepicker().on('changeDate', function(ev) {
+      $self.datepicker('hide');
+    });
   });
 
   // search

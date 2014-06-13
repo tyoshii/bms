@@ -15,7 +15,7 @@
     {% block css %}
     <link href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     <link href="/twbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/chosen/chosen.css" type="text/css" rel="stylesheet">
+    <link href="/select2/select2.css" type="text/css" rel="stylesheet">
     <link href="/datepicker/css/datepicker.css" type="text/css" rel="stylesheet">
     <link href="http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css" type="text/css" rel="stylesheet">
     <link href="/css/bms.css" rel="stylesheet">
@@ -151,16 +151,15 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/jquery-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script type="text/javascript" src="/twbootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="/select2/select2.min.js"></script>
 <script type="text/javascript" src="/bootstrap_formhelpers/js/bootstrap-formhelpers.min.js"></script>
 <script type="text/javascript" src="/datepicker/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-  // select searchable plugin
-  $('select.chosen-select').each(function() {
-    $(this).chosen();
+  $('.select2').select2({
+    width: "100%",
   });
 });
 </script>

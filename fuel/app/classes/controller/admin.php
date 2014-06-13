@@ -502,7 +502,7 @@ class Controller_Admin extends Controller_Base
       $form->add_before('username', '紐づけるユーザー名', array(
         'type' => 'select',
         'options' => $users,
-        'class' => 'form-control chosen-select',
+        'class' => 'select2',
       ), array(), 'submit')
         ->add_rule('in_array', array_keys($users));
     }

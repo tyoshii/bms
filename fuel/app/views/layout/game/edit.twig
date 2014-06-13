@@ -50,19 +50,6 @@
 
 
 {%block js%}
-
 {{ parent() }}
-
 <script src="/js/game/edit.js"></script>
-<script src="/select2/select2.min.js"></script>
-<script>
-
-$(document).ready(function() {
-  $('.select2').select2({
-    width: "100%",
-  });
-});
-
-</script>
-
 {%endblock%}

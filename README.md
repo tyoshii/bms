@@ -69,3 +69,13 @@ Baseball Management System
     $ perl deploy.pl bms.list
 
 * 自力Deployは上記コマンドを本番機で実施
+
+# OSS
+
+fuelphp
+jquery
+jquery-ui
+twitter bootstrap
+select2
+datepicker
+bootstrap_formhelpers

@@ -78,4 +78,3 @@ jquery-ui
 twitter bootstrap
 select2
 datepicker
-bootstrap_formhelpers

@@ -72,9 +72,9 @@ Baseball Management System
 
 # OSS
 
-fuelphp
-jquery
-jquery-ui
-twitter bootstrap
-select2
-datepicker
+fuelphp-1.8 http://fuelphp.jp/docs/1.8/license.html
+jquery-1.10.2 https://jquery.org/license/
+jquery-ui-1.10.4 https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt
+twitter bootstrap-3.0.3 https://github.com/twbs/bootstrap/blob/master/LICENSE
+select2-3.4.5 https://github.com/ivaynberg/select2/blob/master/LICENSE
+datepicker-2.0 https://github.com/eternicode/bootstrap-datepicker/blob/master/LICENSE 

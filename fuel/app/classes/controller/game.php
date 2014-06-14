@@ -196,7 +196,7 @@ class Controller_Game extends Controller_Base
     $attrs = array(
       'type'    => 'select',
       'options' => $teams,
-      'class'   => 'form-control chosen-select',
+      'class'   => 'select2',
     );
 
     // - 先攻

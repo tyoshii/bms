@@ -27,5 +27,8 @@ symlink ../public/favicon.ico            /var/www/bms/public/favicon.ico
 
 copy ../public/index.php /var/www/bms/public/index.php
 
+# system.php copy default file 
+copy ../fuel/php/config/_system.php /var/www/bms/fuel/app/config/system.php
+
 # version file
 symlink ../CHANGELOG.md /var/www/bms/

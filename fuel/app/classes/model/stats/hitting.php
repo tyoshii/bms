@@ -200,4 +200,9 @@ class Model_Stats_Hitting extends \Orm\Model
       throw new Exception();
     }
   }
+
+  public static function getStats($where)
+  {
+    return Model_Stat::getStats(self::$_table_name, $where);
+  }
 }

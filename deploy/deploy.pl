@@ -10,6 +10,7 @@ use File::Path;
 # option
 my $file  = $ARGV[0] or die 'specify deploy file list';
 my $force = defined $ARGV[1] ? $ARGV[1] eq 'force' : 0;
+my $debug = defined $ARGV[2] ? $ARGV[2] eq 'debug' : 0;
 
 # file list
 my @files = `cat $file`;
@@ -126,11 +127,14 @@ sub _symlink {
 
 sub _red {
     my $msg = shift;
-    print "\e[31m$msg\e[m\n";
+    # print "\e[31m$msg\e[m\n";
 }
 
 sub _green {
     my $msg = shift;
-    print "\e[32m$msg\e[m\n";
+
+    if ( $debug ) {
+        print "\e[32m$msg\e[m\n";
+    }
 }
 

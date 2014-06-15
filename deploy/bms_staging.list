@@ -30,4 +30,4 @@ copy ../public/index.php /var/www/bms_staging/public/index.php
 copy ../fuel/app/config/_system.php /var/www/bms_staging/fuel/app/config/system.php
 
 # version file
-symlink ../CHANGELOG.md /var/www/bms_staging/
+symlink ../CHANGELOG.md /var/www/bms_staging/CHANGELOG.md

@@ -127,7 +127,7 @@ sub _symlink {
 
 sub _red {
     my $msg = shift;
-    # print "\e[31m$msg\e[m\n";
+    print "\e[31m$msg\e[m\n";
 }
 
 sub _green {

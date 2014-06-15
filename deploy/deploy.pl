@@ -60,7 +60,7 @@ for my $hash_sym ( @{$hash->{'symlink'}} ) {
         mkdir $dest;
         chdir $dest;
 
-        my @orig_lists = `find $orig -type f`;
+        my @orig_lists = `find "$orig" -type f`;
         for my $f ( @orig_lists ) {
             chomp $f;
             next if $f =~ m{\.git};
@@ -97,7 +97,7 @@ sub _copy {
     if ( -f $dest || -d $dest ) {
         if ( ! $force ) {
             print "delete dest file for copy\n";
-            `rm -i $dest`;
+            `rm -i "$dest"`;
         }
     }
 
@@ -114,7 +114,7 @@ sub _symlink {
     my $dest = shift;
 
     if ( -l $dest ) {
-        `rm $dest`;
+        `rm "$dest"`;
     }
 
     if ( symlink $orig, $dest ) {

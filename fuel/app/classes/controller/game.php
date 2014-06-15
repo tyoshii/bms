@@ -185,6 +185,7 @@ class Controller_Game extends Controller_Base
     $form->add('date', '試合実施日', array(
       'class'            => 'form-control form-datepicker',
       'placeholder'      => '試合実施日',
+      'value'        => date('Y-m-d'),
       'data-date-format' => 'yyyy-mm-dd',
     ))
       ->add_rule('required')

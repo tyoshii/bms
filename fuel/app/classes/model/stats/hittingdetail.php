@@ -32,9 +32,9 @@ class Model_Stats_Hittingdetail extends \Orm\Model
     Common::db_clean(self::$_table_name, $where);
   }
 
-  public static function getStats($game_id)
+  public static function getStats($where)
   {
-    $result = Model_Stat::getStats(self::$_table_name, $game_id);
+    $result = Model_Stat::getStats(self::$_table_name, $where, null);
 
     $stats = array();
     foreach ( $result as $res )

@@ -136,9 +136,13 @@ class Controller_Game extends Controller_Base
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
-        $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
-        $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
-        $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');
+        $where = array(
+          'game_id' => $game_id,
+          'team_id' => $team_id,
+        );
+        $view->hittings  = Model_Stats_Hitting::getStats($where);
+        $view->details   = Model_Stats_Hittingdetail::getStats($where); 
+        $view->fieldings = Model_Stats_Fielding::getStats($where);
         break;
 
       case 'other':

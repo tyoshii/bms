@@ -28,4 +28,9 @@ class Model_Stats_Fielding extends \Orm\Model
   {
     Common::db_clean(self::$_table_name, $where);
   }
+
+  public static function getStats($where)
+  {
+    return Model_Stat::getStats(self::$_table_name, $where);
+  }
 }

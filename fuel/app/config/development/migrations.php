@@ -60,6 +60,8 @@ return array(
 				51 => '053_add_status_to_players',
 				52 => '054_add_top_status_to_games',
 				53 => '055_add_bottom_status_to_games',
+				54 => '056_add_status_to_stats_hittings',
+				55 => '057_add_status_to_stats_pitchings',
 			),
 		),
 		'module' => 

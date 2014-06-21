@@ -44,7 +44,7 @@ class Controller_Api_Deploy extends Controller
       // oil
       // stagingとproductionで同じデータを見ている場合、
       // stagingでmigrateしたあとにproductionでmigrateするとエラーになる？
-      `FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate:current`;
+      `FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate`;
 
       // deploy
       chdir("{$git_dir}/deploy/");
@@ -53,6 +53,10 @@ class Controller_Api_Deploy extends Controller
       // service in
       chdir($git_dir);
       `FUEL_ENV={$fuel_env} /usr/bin/env php oil r service:in`;
+
+      // version up
+      `/usr/bin/env php oil r version:up`;
+      `/usr/bin/env php oil r version`;
 
       echo "DEPLOY DONE";
     

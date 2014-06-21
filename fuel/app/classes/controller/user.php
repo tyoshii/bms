@@ -225,7 +225,7 @@ class Controller_User extends Controller_Base
       'type' => 'select',
       'options' => $default + $teams,
       'value' => $team,
-      'class' => 'form-control chosen-select',
+      'class' => 'select2',
       'data-placeholder' => 'Select Team',
     ))
       ->add_rule('in_array', array_keys($teams));

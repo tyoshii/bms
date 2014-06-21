@@ -16,13 +16,18 @@ symlink ../conf/bms.ini /etc/php.d/bms.ini
 symlink ../fuel/                         /var/www/bms_staging/fuel/
 symlink ../public/assets/                /var/www/bms_staging/public/assets/
 symlink ../public/twbootstrap/           /var/www/bms_staging/public/twbootstrap/
-symlink ../public/bootstrap_formhelpers/ /var/www/bms_staging/public/bootstrap_formhelpers/
-symlink ../public/chosen/                /var/www/bms_staging/public/chosen/
 symlink ../public/select2/               /var/www/bms_staging/public/select2/
 symlink ../public/jquery-ui/             /var/www/bms_staging/public/jquery-ui/
 symlink ../public/datepicker/            /var/www/bms_staging/public/datepicker/
+symlink ../public/datatable/             /var/www/bms_staging/public/datatable/
 symlink ../public/js/                    /var/www/bms_staging/public/js/
 symlink ../public/css/                   /var/www/bms_staging/public/css/
 symlink ../public/favicon.ico            /var/www/bms_staging/public/favicon.ico
 
 copy ../public/index.php /var/www/bms_staging/public/index.php
+
+# system.php copy default file 
+copy ../fuel/app/config/_system.php /var/www/bms_staging/fuel/app/config/system.php
+
+# version file
+symlink ../CHANGELOG.md /var/www/bms_staging/CHANGELOG.md

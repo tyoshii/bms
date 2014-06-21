@@ -29,7 +29,7 @@ class Controller_Api_Deploy extends Controller
     } 
   }
   
-  private static function _deploy($git_dir, $branch, $fuel_env)
+  private static function _deploy($git_dir, $branch, $fuel_env, $deploy_list)
   {
     try {
       chdir($git_dir);
@@ -48,7 +48,7 @@ class Controller_Api_Deploy extends Controller
 
       // deploy
       chdir("{$git_dir}/deploy/");
-      `/usr/bin/env perl deploy.pl force`;
+      `/usr/bin/env perl deploy.pl {$deploy_list} force`;
 
       // service in
       chdir($git_dir);

@@ -263,4 +263,47 @@ class Model_Game extends \Orm\Model
 
     return true;
   }
+
+  public static function get_incomplete_gameids($player_id)
+  {
+    $query = DB::select()->distinct(true)->from('stats_players');
+    $query->join('games', 'LEFT')->on('games.id', '=', 'stats_players.game_id');
+    $query->where('stats_players.player_id', $player_id);
+    $query->where('games.game_status', '!=', -1);
+
+    $play_game_ids = $query->execute()->as_array('game_id');
+
+    $alert_games = array();
+    foreach ( $play_game_ids as $game_id => $data )
+    {
+      // 野手成績の入力が完了しているかどうか
+      $status = Model_Stats_Hitting::query()->where(array(
+        'game_id' => $game_id,
+        'player_id' => $player_id,
+      ))->get_one();
+
+      if ( ! $status || $status->status === '0' )
+      { 
+        $alert_games[] = array('kind' => 'batter') + $data;
+        continue; 
+      }
+      
+      // 投手成績のアラート
+      if ( strstr($data['position'], '1') )
+      {
+        $status = Model_Stats_Pitching::query()->where(array(
+          'game_id' => $game_id,
+          'player_id' => $player_id,
+        ))->get_one();
+
+        if ( ! $status || $status->status === '0' )
+        { 
+          $alert_games[] = array('kind' => 'pitcher') + $data;
+          continue; 
+        }
+      }
+    } 
+
+    return $alert_games;
+  }
 }

@@ -116,7 +116,7 @@ class Common_Form
       'type' => 'select',
       'options' => array(''=>'') + $teams,
       'value' => $value,
-      'class' => 'form-control chosen-select',
+      'class' => 'select2',
     ))
       ->add_rule('required')
       ->add_rule('in_array', array_keys($teams));

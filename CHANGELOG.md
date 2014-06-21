@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 0.0.3
+
+* ステージング環境追加
+* OSS整理
+
 ## Version 0.0.2
 
 * テーブル正規化

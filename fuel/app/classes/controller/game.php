@@ -153,6 +153,8 @@ class Controller_Game extends Controller_Base
                         ->get_one();
 
         $view->others = json_decode($stat->others);
+
+        $view->game_status = Model_Game::get_game_status($game_id, $team_id);
         break;
 
       default:

@@ -81,6 +81,13 @@ class Controller_Register extends Controller
         Response::redirect('/');
       }
     }
+    
+    $form->repopulate();
+
+    $view = View::forge('forget_password.twig');
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
   }
 
   public function get_reset_password()

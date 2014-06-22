@@ -264,18 +264,32 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
-  public static function get_incomplete_gameids($player_id)
+  // player_idが出場した試合一覧
+  public static function get_play_game($player_id)
   {
     $query = DB::select()->distinct(true)->from('stats_players');
     $query->join('games', 'LEFT')->on('games.id', '=', 'stats_players.game_id');
     $query->where('stats_players.player_id', $player_id);
     $query->where('games.game_status', '!=', -1);
 
-    $play_game_ids = $query->execute()->as_array('game_id');
+    return $query->execute()->as_array('game_id');
+  }
+
+  public static function get_incomplete_gameids($player_id)
+  {
+    $team_id = Model_Player::find($player_id)->team;
+    $play_game_ids = self::get_play_game($player_id);
 
     $alert_games = array();
     foreach ( $play_game_ids as $game_id => $data )
     {
+      // game_statusのチェック
+      // 成績入力中のものに関してのみアラートを表示する
+      if ( self::get_game_status($game_id, $team_id) !== '1' )
+      {
+        continue;
+      }
+
       // 野手成績の入力が完了しているかどうか
       $status = Model_Stats_Hitting::query()->where(array(
         'game_id' => $game_id,

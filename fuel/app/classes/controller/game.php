@@ -133,7 +133,7 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('moderator.moderator') )
+        if ( ! Auth::has_access('admin.admin') )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績

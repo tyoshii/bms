@@ -28,6 +28,14 @@
 {# header #}
 {{ parent() }}
 
+
+{%if metum|length == 0%}
+<div class="alert alert-warning">
+<p>出場選手に投手がいません。</p>
+<p>出場選手でポジションを確認するか、チーム管理者に問い合わせてください。</p>
+</div>
+{%endif%}
+
 <table id="pitcher" class="table">
 <thead>
 <tr>

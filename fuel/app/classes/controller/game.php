@@ -124,7 +124,8 @@ class Controller_Game extends Controller_Base
         $view->metum = self::_filter_only_pitcher($view->metum);
 
         // 成績
-        $view->stats = Model_Stat::getStats('stats_pitchings', $game_id, 'player_id');
+        $where = array( 'game_id' => $game_id );
+        $view->stats = Model_Stat::getStats('stats_pitchings', $where, 'player_id');
         break;
 
       case 'batter':

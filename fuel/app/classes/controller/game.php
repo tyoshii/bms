@@ -96,7 +96,8 @@ class Controller_Game extends Controller_Base
       Response::redirect(Uri::create('/game'));
     }
 
-    $view = View::forge("game/{$kind}.twig");
+    // view load
+    $view = Theme::instance()->view("game/{$kind}.twig");
 
     // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )

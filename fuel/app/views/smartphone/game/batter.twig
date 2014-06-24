@@ -5,6 +5,77 @@
 {# header #}
 {{ parent() }}
 
+{%set batter = metum.0%}
+
+<data class="player-id disable">{{batter.id}}</data>
+
+<table id="batter-meta" class="table">
+<thead>
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>背番号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{batter.order}}</td>
+<td>{{batter.name}}</td>
+<td>{{batter.number}}</td>
+</tr>
+</tbody>
+</table>
+
+<table id="batter-detail" class="table table-striped">
+
+<tr class="batter-detail-header">
+<th>第1打席</th>
+<th>方向</th>
+<th>種類</th>
+<th>結果</th>
+</tr>
+
+<tr class="batter-detail-data">
+<td>
+<div class="btn-group">
+  <button type="button" class="btn btn-info btn-xs">+</button>
+  <button type="button" class="btn btn-danger btn-xs">-</button>
+</div>
+</td>
+
+{#方向#}
+<td>
+<select class="direction">
+<option value="0">--</option>
+{%for i in 1..9%}
+<option value="{{i}}">{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+{#種類#}
+<td>
+<select class="kind">
+<option value="0">--</option>
+<option value="1">ゴロ</option>
+<option value="2">ライナー</option>
+<option value="3">フライ</option>
+</select>
+</td>
+
+{#結果#}
+<td>
+<select class="result">
+<option value="0">--</option>
+{%for res in results%}
+<option value="{{res.id}}">{{res.result}}</option>
+{%endfor%}
+</select>
+</td>
+</tr>
+
+</table>
+
 <table id="batter" class="table">
 <thead>
 <tr>

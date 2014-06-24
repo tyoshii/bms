@@ -69,6 +69,10 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
+table#batter-meta th, td {
+  text-align: center;
+}
+
 table#pitcher input {
   width: 60px;
 }

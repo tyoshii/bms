@@ -12,16 +12,67 @@
 <table id="batter-meta" class="table">
 <thead>
 <tr>
+<th></th>
 <th>打順</th>
 <th>名前</th>
 <th>背番号</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td><span class="glyphicon glyphicon-chevron-left"></span></td>
 <td>{{batter.order}}</td>
 <td>{{batter.name}}</td>
 <td>{{batter.number}}</td>
+<td><span class="glyphicon glyphicon-chevron-right"></span></td>
+</tr>
+</tbody>
+</table>
+
+<table id="batter-result" class="table">
+<tbody>
+<tr>
+
+<th>打点</th>
+<td>
+<select class="">
+{%for i in 0..20%}
+<option value="{{i}}">{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<th>得点</th>
+<td>
+<select class="">
+{%for i in 0..20%}
+<option value="{{i}}">{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+<tr>
+
+<th>盗塁</th>
+<td>
+<select class="">
+{%for i in 0..20%}
+<option value="{{i}}">{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<th>エラー</th>
+<td>
+<select class="">
+{%for i in 0..20%}
+<option value="{{i}}">{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
 </tr>
 </tbody>
 </table>
@@ -200,7 +251,7 @@ $(document).ready(function() {
 {{parent()}}
 
 <style>
-.container {
+.container, #footer {
   font-size: x-small;
 }
 </style>

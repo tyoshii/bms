@@ -5,7 +5,7 @@ return array(
     'connection'  => array(
       'host'       => 'bm-s.info',
       'port'       => '3306',
-      'dsn'        => 'mysql:host=bm-s.info;dbname=bms;port=3306',
+      'database'   => 'bms',
       'username'   => 'root',
       'password'   => Config::get('password.mysql.production.root'),
     ),

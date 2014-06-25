@@ -1,8 +1,16 @@
 $("span[role=switch-batter]").click(function(){
-  $root = $(this).parents("div.batter-result-wrapper");
-  index = $root.attr("index");
-  next  = parseInt(index) + 1;
+  var type  = $(this).attr("type"),
+      $root = $(this).parents("div.batter-result-wrapper"),
+      hide_index = $root.attr("index"),
+      show_index = 0;
 
-  $("div[index="+index+"]").hide();
-  $("div[index="+next+"]").show();
+  if ( type === 'next' ) {
+    show_index = parseInt(hide_index) + 1;
+  }
+  else {
+    show_index = parseInt(hide_index) - 1;
+  }
+
+  $("div[index="+hide_index+"]").hide();
+  $("div[index="+show_index+"]").show();
 });

@@ -9,7 +9,7 @@
 
 <div class="batter-result-wrapper {%if not loop.first%}disable{%endif%}" index="{{loop.index}}">
 
-<data class="player-id disable">{{batter.id}}</data>
+<data class="player-id disable">{{batter.player_id}}</data>
 
 <table id="batter-meta" class="table">
 <thead>
@@ -25,20 +25,89 @@
 <tr>
 <td>
 {%if not loop.first%}
-<span class="glyphicon glyphicon-chevron-left"></span>{%endif%}
+<span class="glyphicon glyphicon-chevron-left" role="switch-batter" type="prev"></span>{%endif%}
 </td>
 <td>{{batter.order}}</td>
 <td>{{batter.name}}</td>
 <td>{{batter.number}}</td>
 <td>
 {%if not loop.last%}
-<span class="glyphicon glyphicon-chevron-right" role="switch-batter"></span>{%endif%}
+<span class="glyphicon glyphicon-chevron-right" role="switch-batter" type="next"></span>{%endif%}
 </td>
 </tr>
 </tbody>
 </table>
 
-<table id="batter-result" class="table">
+
+{# 打席詳細 #}
+{% set detail  = details[batter.player_id]  %}
+<table id="batter-detail" class="table table-striped">
+
+<tr class="batter-detail-header">
+<th></th>
+<th>方向</th>
+<th>種類</th>
+<th>結果</th>
+</tr>
+
+{%for d in detail%}
+<tr class="batter-detail-data" index="{{loop.index}}">
+
+{#打席#}
+<td>第{{loop.index}}打席</td>
+
+{#方向#}
+<td>
+<select class="direction">
+<option value="0">--</option>
+{%for i in 1..9%}
+<option value="{{i}}" {%if i==d.direction%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+{#種類#}
+<td>
+<select class="kind">
+<option value="0">--</option>
+<option value="1" {%if d.kind==1%}selected{%endif%}>ゴロ</option>
+<option value="2" {%if d.kind==2%}selected{%endif%}>ライナー</option>
+<option value="3" {%if d.kind==3%}selected{%endif%}>フライ</option>
+</select>
+</td>
+
+{#結果#}
+<td>
+<select class="result">
+<option value="0">--</option>
+{%for res in results%}
+<option value="{{res.id}}" {%if res.id==d.result_id%}selected{%endif%}>{{res.result}}</option>
+{%endfor%}
+</select>
+</td>
+</tr>
+
+{%endfor%}{# for d in detail#}
+
+{#打席追加/削除ボタン#}
+<tfoot>
+<tr>
+<td colspan="4">
+<div class="btn-group pull-left">
+<button type="button" class="btn btn-info btn-xs">追加</button>
+<button type="button" class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+</tr>
+</tfoot>
+
+</table>
+
+{# 成績 #}
+{# モバイル版では、打点・得点・盗塁・エラー、のみを表示 #}
+{% set stats = hittings[batter.player_id] %}
+
+<table id="batter-stats" class="table">
 <tbody>
 <tr>
 
@@ -46,7 +115,7 @@
 <td>
 <select class="">
 {%for i in 0..20%}
-<option value="{{i}}">{{i}}</option>
+<option value="{{i}}" {%if i==stats.RBI%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -55,7 +124,7 @@
 <td>
 <select class="">
 {%for i in 0..20%}
-<option value="{{i}}">{{i}}</option>
+<option value="{{i}}" {%if i==stats.R%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -67,7 +136,7 @@
 <td>
 <select class="">
 {%for i in 0..20%}
-<option value="{{i}}">{{i}}</option>
+<option value="{{i}}" {%if i==stats.SB%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -76,63 +145,13 @@
 <td>
 <select class="">
 {%for i in 0..20%}
-<option value="{{i}}">{{i}}</option>
+<option value="{{i}}" {%if i==fieldings[batter.player_id].E%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
 
 </tr>
 </tbody>
-</table>
-
-<table id="batter-detail" class="table table-striped">
-
-<tr class="batter-detail-header">
-<th>第1打席</th>
-<th>方向</th>
-<th>種類</th>
-<th>結果</th>
-</tr>
-
-<tr class="batter-detail-data">
-<td>
-<div class="btn-group">
-  <button type="button" class="btn btn-info btn-xs">+</button>
-  <button type="button" class="btn btn-danger btn-xs">-</button>
-</div>
-</td>
-
-{#方向#}
-<td>
-<select class="direction">
-<option value="0">--</option>
-{%for i in 1..9%}
-<option value="{{i}}">{{i}}</option>
-{%endfor%}
-</select>
-</td>
-
-{#種類#}
-<td>
-<select class="kind">
-<option value="0">--</option>
-<option value="1">ゴロ</option>
-<option value="2">ライナー</option>
-<option value="3">フライ</option>
-</select>
-</td>
-
-{#結果#}
-<td>
-<select class="result">
-<option value="0">--</option>
-{%for res in results%}
-<option value="{{res.id}}">{{res.result}}</option>
-{%endfor%}
-</select>
-</td>
-</tr>
-
 </table>
 
 </div>{# id="batter-result-wrapper-{{loop.index}}" #}

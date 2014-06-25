@@ -5,7 +5,9 @@
 {# header #}
 {{ parent() }}
 
-{%set batter = metum.0%}
+{%for batter in metum%}
+
+<div class="batter-result-wrapper {%if not loop.first%}disable{%endif%}" index="{{loop.index}}">
 
 <data class="player-id disable">{{batter.id}}</data>
 
@@ -21,11 +23,17 @@
 </thead>
 <tbody>
 <tr>
-<td><span class="glyphicon glyphicon-chevron-left"></span></td>
+<td>
+{%if not loop.first%}
+<span class="glyphicon glyphicon-chevron-left"></span>{%endif%}
+</td>
 <td>{{batter.order}}</td>
 <td>{{batter.name}}</td>
 <td>{{batter.number}}</td>
-<td><span class="glyphicon glyphicon-chevron-right"></span></td>
+<td>
+{%if not loop.last%}
+<span class="glyphicon glyphicon-chevron-right" role="switch-batter"></span>{%endif%}
+</td>
 </tr>
 </tbody>
 </table>
@@ -126,6 +134,10 @@
 </tr>
 
 </table>
+
+</div>{# id="batter-result-wrapper-{{loop.index}}" #}
+
+{%endfor%}
 
 <table id="batter" class="table">
 <thead>
@@ -238,6 +250,8 @@
 {% block js %}
 
 {{ parent() }}
+
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
 
 <script>
 $(document).ready(function() {

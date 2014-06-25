@@ -144,31 +144,18 @@ class Model_Stats_Hitting extends \Orm\Model
           }
         }
 
-        // get model
+        // insert stats_hittings
         $hit = self::query()->where($ids + array('player_id' => $player_id,))->get_one();
         if ( ! $hit )
           $hit = self::forge($ids + array('player_id' => $player_id));
 
-        // set props => save
         $hit->set($stats);
         $hit->status = $status;
 
         $hit->save();
 
         // fieldings
-        $field = Model_Stats_Fielding::query()->where($ids + array(
-          'player_id' => $player_id,
-        ))->get_one();
-        if ( ! $field )
-          $field = Model_Stats_Fielding::forge($ids + array(
-            'player_id' => $player_id,
-          ));
-
-        $field->set(array(
-          'E' => $stats['E'] ?: 0,
-        ));
-
-        $field->save();
+        Model_Stats_Fielding::regist($ids, $player_id, $stats);
       }
 
       Mydb::commit();

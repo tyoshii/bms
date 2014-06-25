@@ -46,19 +46,6 @@ th.position {
   width: 100px;
 }
 
-td.daten {
-  width: 70px;
-}
-td.tokuten {
-  width: 70px;
-}
-td.steal {
-  width: 70px;
-}
-td.error {
-  width: 70px;
-}
-
 td.button {
   text-align: right;
 }
@@ -128,10 +115,16 @@ table#score input {
   width: 40px;
 }
 
-table#batter td.daten input,
-table#batter td.tokuten input,
-table#batter td.steal input,
-table#batter td.error input {
+table#batter td.RBI,
+table#batter td.R,
+table#batter td.SB,
+table#batter td.E {
+  width: 70px;
+}
+table#batter td.RBI input,
+table#batter td.R input,
+table#batter td.SB input,
+table#batter td.E input {
   width: 40px;
 }
 

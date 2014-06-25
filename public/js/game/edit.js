@@ -191,27 +191,16 @@ function post_batter(is_alert, is_comp) {
       });
     }
     else {
-      var seiseki = {};
-
-      // td
-      var category1 = [
-        'daseki', 'dasuu',
-        'anda', 'niruida', 'sanruida', 'honruida',
-        'sanshin', 'yontama', 'shikyuu',
-        'gida', 'gihi'
-      ];
-      for ( var i in category1 ) {
-        var key = category1[i];
-        var val = $this.children('td.' + key).text();
-
-        if ( val == '' ) val = 0;
-
-        seiseki[key] = val;
-      }
+      var stats = {
+        'TPA': 0, 'AB':  0,
+        'H':   0, '2B':  0, '3B':  0, 'HR':  0,
+        'SO':  0, 'BB':  0, 'HBP': 0,
+        'SAC': 0, 'SF':  0,
+      };
 
       // input number
       var category2 = [
-        'daten', 'tokuten', 'steal', 'error' 
+        'RBI', 'R', 'SB', 'E' 
       ];
       for ( var i in category2 ) {
         var key = category2[i];
@@ -219,11 +208,11 @@ function post_batter(is_alert, is_comp) {
 
         if ( val == '' ) val = 0;
 
-        seiseki[key] = val;
+        stats[key] = val;
       }
 
       data[id] = {
-        seiseki: seiseki,
+        stats: stats,
         detail: [],
       };
     }

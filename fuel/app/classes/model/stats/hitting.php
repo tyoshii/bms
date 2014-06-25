@@ -124,8 +124,8 @@ class Model_Stats_Hitting extends \Orm\Model
         if ( ! $data ) continue;
 
         // set value
-        $detail = array_key_exists('detail', $data)  ? $data['detail']  : null;
-        $stats  = array_key_exists('seiseki', $data) ? $data['seiseki'] : null;
+        $detail = array_key_exists('detail', $data) ? $data['detail'] : null;
+        $stats  = array_key_exists('stats',  $data) ? $data['stats']  : null;
 
         if ( $detail )
         {

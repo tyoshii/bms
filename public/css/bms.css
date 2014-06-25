@@ -72,6 +72,12 @@ tr.detail {
 table#batter-meta th, td {
   text-align: center;
 }
+table#batter-stats th, td {
+  text-align: center;
+}
+table#batter-detail th, td {
+  text-align: center;
+}
 
 table#pitcher input {
   width: 60px;

@@ -1,7 +1,7 @@
 // switch batter
 $("span[role=switch-batter]").click(function(){
   var type  = $(this).attr("type"),
-      $root = $(this).parents("div.batter-result-wrapper"),
+      $root = $(this).parents("div.batter-stats-container"),
       hide_index = $root.attr("index"),
       show_index = 0;
 
@@ -18,7 +18,7 @@ $("span[role=switch-batter]").click(function(){
 
 // add/delete batter detail
 $("button.detail-add").click(function(){
-  $table = $(this).parents("table#batter-detail");
+  $table = $(this).parents("table.batter-detail");
   $base  = $table.find("tr.batter-detail-data:last");
   index  = $base.attr("index");
   PA = parseInt(index) + 1;
@@ -39,7 +39,7 @@ $("button.detail-add").click(function(){
 });
 
 $("button.detail-del").click(function(){
-  $table = $(this).parents("table#batter-detail");
+  $table = $(this).parents("table.batter-detail");
   $base  = $table.find("tr.batter-detail-data:last");
   index  = $base.attr("index");
 
@@ -48,4 +48,60 @@ $("button.detail-del").click(function(){
   }
 
   $base.remove();
+});
+
+// save/decide stats
+$("div.batter-stats-post button").click(function(){
+  var post_type = $(this).attr('post_type');
+
+  var data = [];
+
+  $("div.batter-stats-container").each(function(){
+    var player_id = $(this).find("data.player-id").text();
+
+    // stats
+    var stats = {};
+    $(this).find("table.batter-stats select").each(function() {
+      var role = $(this).attr('role');
+      var val  = $(this).val();
+
+      stats[role] = val === "" ? 0 : val;
+    });
+
+    // detail
+    var detail = [];
+    $(this).find("tr.batter-detail-data[player_id="+player_id+"]").each(function() {
+
+      detail.push({
+        direction: $(this).find("select[role=direction]").val(),
+        kind:      $(this).find("select[role=kind]").val(),
+        result:    $(this).find("select[role=result]").val(),
+      });
+    });
+
+    // set
+    data[player_id] = {
+      seiseki: stats, // TODO: key name change to `stats'
+      detail: detail,
+    };
+  });
+  console.log(data);
+
+  // ajax
+  $.ajax({
+    url: "/api/game/updateBatter",
+    type: "POST",
+    data: {
+      game_id: $("data#game_id").text(),
+      team_id: $("data#team_id").text(),
+      batter: data,
+      complete: post_type === "complete",
+    },
+    success: function(html) {
+      alert("野手成績の保存に成功しました。");
+    },
+    error: function(html) {
+      alert("エラーが発生しました。");
+    },
+  });
 });

@@ -69,14 +69,14 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
-table#batter-meta th, td {
+div.batter-stats-container table th, td {
   text-align: center;
 }
-table#batter-stats th, td {
+div.batter-stats-post {
   text-align: center;
 }
-table#batter-detail th, td {
-  text-align: center;
+div.batter-stats-post button {
+  margin: 10px;
 }
 
 table#pitcher input {

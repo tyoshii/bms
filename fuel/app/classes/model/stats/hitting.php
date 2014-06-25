@@ -165,7 +165,7 @@ class Model_Stats_Hitting extends \Orm\Model
     }
   }
 
-  public static function replaceAll($ids, $stats, $status)
+  public static function replaceAll($ids, $datas, $status)
   {
     Mydb::begin();
 
@@ -177,40 +177,9 @@ class Model_Stats_Hitting extends \Orm\Model
       Model_Stats_Fielding::clean($ids);
 
       // regist new data
-      foreach ( $stats as $player_id => $stat )
-      {
-        if ( ! $stat ) continue;
-
-        // hittings
-        $props = self::_get_insert_props($stat);
-        $hit = self::forge($ids + $props + array('player_id' => $player_id));
-        $hit->status = $status;
-
-        $hit->save();
-
-        // hittingdetails
-        if ( $stat['detail'] )
-        {
-          foreach ( $stat['detail'] as $bat_times => $data )
-          {
-            $detail = Model_Stats_Hittingdetail::forge($ids + array(
-              'player_id' => $player_id,
-              'bat_times' => $bat_times + 1,
-              'direction' => $data['direction'],
-              'kind'      => $data['kind'],
-              'result_id' => $data['result'],
-            ));
-            $detail->save();
-          }
-        }
-
-        // fieldings
-        $field = Model_Stats_Fielding::forge($ids + array(
-          'player_id' => $player_id,
-          'E'         => $stat['seiseki']['error'] ?: 0,
-        ));
-        $field->save();
-      }
+      // TODO: registへの第2引数（成績データ）は複数の成績ではなく個人にしたい。
+      // player_idとdataを渡すように
+      self::regist($ids, $datas, $status);
 
       Mydb::commit();
     } catch ( Exception $e ) {

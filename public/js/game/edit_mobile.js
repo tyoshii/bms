@@ -87,7 +87,7 @@ $("div.batter-stats-post button").click(function(){
 
     // set
     data[player_id] = {
-      seiseki: stats, // TODO: key name change to `stats'
+      stats: stats,
       detail: detail,
     };
   });

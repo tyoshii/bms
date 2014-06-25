@@ -51,6 +51,7 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+
 $("div.batter-stats-post button").click(function(){
   var post_type = $(this).attr('post_type');
 
@@ -60,12 +61,17 @@ $("div.batter-stats-post button").click(function(){
     var player_id = $(this).find("data.player-id").text();
 
     // stats
-    var stats = {};
+    var stats = {
+      'TPA': 0, 'AB':  0,
+      'H':   0, '2B':  0, '3B':  0, 'HR':  0,
+      'SO':  0, 'BB':  0, 'HBP': 0,
+      'SAC': 0, 'SF':  0,
+    };
     $(this).find("table.batter-stats select").each(function() {
       var role = $(this).attr('role');
       var val  = $(this).val();
 
-      stats[role] = val === "" ? 0 : val;
+      stats[role] = parseInt(val);
     });
 
     // detail
@@ -85,7 +91,7 @@ $("div.batter-stats-post button").click(function(){
       detail: detail,
     };
   });
-  console.log(data);
+  // console.log(data);
 
   // ajax
   $.ajax({

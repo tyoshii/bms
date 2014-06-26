@@ -1,0 +1,30 @@
+# dir
+dir /var/www/bms_test/
+dir /var/www/bms_test/public/
+dir /var/www/bms_test/fuel/
+dir /var/www/bms_test/fuel/app/
+dir /var/www/bms_test/fuel/app/cache/
+
+# httpd conf
+symlink ../conf/virtualhost-00.conf  /etc/httpd/conf.d/virtualhost-00.conf
+symlink ../conf/virtualhost-bms.conf /etc/httpd/conf.d/virtualhost-bms.conf
+
+# php conf
+symlink ../conf/bms.ini /etc/php.d/bms.ini
+
+# fuel app
+symlink ../fuel/                         /var/www/bms_test/fuel/
+symlink ../public/assets/                /var/www/bms_test/public/assets/
+symlink ../public/twbootstrap/           /var/www/bms_test/public/twbootstrap/
+symlink ../public/select2/               /var/www/bms_test/public/select2/
+symlink ../public/jquery-ui/             /var/www/bms_test/public/jquery-ui/
+symlink ../public/datepicker/            /var/www/bms_test/public/datepicker/
+symlink ../public/datatable/             /var/www/bms_test/public/datatable/
+symlink ../public/js/                    /var/www/bms_test/public/js/
+symlink ../public/css/                   /var/www/bms_test/public/css/
+symlink ../public/favicon.ico            /var/www/bms_test/public/favicon.ico
+
+copy ../public/index.php /var/www/bms_test/public/index.php
+
+# version file
+symlink ../CHANGELOG.md /var/www/bms_test/CHANGELOG.md

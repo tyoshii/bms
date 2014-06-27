@@ -51,9 +51,6 @@
 {%if auth_check() %}
     <th>成績入力</th>
 {%endif%}
-{%if auth_has_access('game.status')%}
-    <th>ステータス</th>
-{%endif%}
 </tr>
 </thead>
 
@@ -101,17 +98,6 @@
 {%endif%}{# if game.status == 2 #}
 {%endif%}{# if game.own #}
 </td>
-
-{# ステータス #}
-{%if auth_has_access('game.status') and game.own%}
-<td>
-<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}}, {{team_id}});">
-<option value="0" {%if game.status == 0%}selected{%endif%}>試合登録のみ</option>
-<option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
-<option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
-</select>
-</td>
-{%endif%}
 
 {# 無効 #}
 {%if auth_has_access('game.status') and game.own%}

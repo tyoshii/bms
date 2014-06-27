@@ -19,6 +19,11 @@ body {
 }
 
 
+img#user-icon {
+  margin: -10px;
+}
+
+
 th.team {
   width: 100px;
 }

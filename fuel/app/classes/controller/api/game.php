@@ -178,7 +178,7 @@ class Controller_Api_Game extends Controller_Rest
 
     $ids = self::_getIds();
 
-    // insert
+    // insert(old json format)
     $other = Input::post('other');
 
     $game = Model_Games_Stat::query()
@@ -188,6 +188,9 @@ class Controller_Api_Game extends Controller_Rest
 
     $game->others = json_encode($other); 
     $game->save();
+
+    // update game status
+    Model_Game::update_status($ids['game_id'], $ids['team_id'], $other['status']);
 
     echo 'OK';
   }

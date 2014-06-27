@@ -22,6 +22,7 @@ symlink ../public/datepicker/            /var/www/bms_staging/public/datepicker/
 symlink ../public/datatable/             /var/www/bms_staging/public/datatable/
 symlink ../public/js/                    /var/www/bms_staging/public/js/
 symlink ../public/css/                   /var/www/bms_staging/public/css/
+symlink ../public/image/                 /var/www/bms_staging/public/image/
 symlink ../public/favicon.ico            /var/www/bms_staging/public/favicon.ico
 
 copy ../public/index.php /var/www/bms_staging/public/index.php

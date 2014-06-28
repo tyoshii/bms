@@ -15,15 +15,28 @@ class Model_Score_Self extends \Orm\Model
 		'updated_at',
 	);
 
+  public static function getUserName()
+  {
+    return Auth::get_screen_name();
+  }
+
   public static function getSelfScores()
   {
     // userIDからユーザ名(uniq)を取得
     // select username from users where id = <ID>;
     
     $username = Auth::get_screen_name();
-
     $team_id = Model_Team::get_teams();
 
+    //Common::debug($username);
+    //Common::debug($team_id);
+
+    $res = Array(
+      "value"     => 1,
+      "username"  => $username
+    );
+
+    /*
     //$team_id = Model_Team::find_by_username($username)->team;
 
     // model名はテーブル名とあわせて規則性がある
@@ -56,9 +69,9 @@ class Model_Score_Self extends \Orm\Model
 
     // ドキュメント見るのが一番早い
     // https://www.google.co.jp/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=fuelphp+orm&safe=off&spell=1
-    
+    */
     // ちな
-    Common::debug($res);
+    //Common::debug($res);
 
     // debugメソッド用意してある
     // <pre> をはいてvar_dumpしてexitしてくれる。

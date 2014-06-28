@@ -53,9 +53,9 @@ class Model_Game extends \Orm\Model
       // games insert
       $game = self::forge(array(
         'date'             => $data['date'],
-        'team_top'         => $data['top'] ?: 0,
+        'team_top'         => $data['top_name'] ? 0 : $data['top'],
         'team_top_name'    => $team_top_name,
-        'team_bottom'      => $data['bottom'] ?: 0,
+        'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
         'team_bottom_name' => $team_bottom_name,
       ));
   
@@ -92,7 +92,21 @@ class Model_Game extends \Orm\Model
 
   public static function getGames()
   {
-    $query  = self::_getGamesQuery();
+    $query = self::_getGamesQuery();
+
+    // 自分が出場している試合かどうか
+    // サブクエリで取得する
+    $play = DB::select( DB::expr('COUNT(*)') )
+              ->from('stats_players')
+              ->where('game_id', DB::expr('games.id'))
+              ->where('player_id', Model_Player::getMyPlayerID());
+
+    $query->select(
+      '*',
+      array(DB::expr('('.$play->__toString().')'), 'play')
+    );
+
+    // execute
     $result = $query->execute()->as_array();
 
     // add value
@@ -248,5 +262,48 @@ class Model_Game extends \Orm\Model
     $game->save();
 
     return true;
+  }
+
+  public static function get_incomplete_gameids($player_id)
+  {
+    $query = DB::select()->distinct(true)->from('stats_players');
+    $query->join('games', 'LEFT')->on('games.id', '=', 'stats_players.game_id');
+    $query->where('stats_players.player_id', $player_id);
+    $query->where('games.game_status', '!=', -1);
+
+    $play_game_ids = $query->execute()->as_array('game_id');
+
+    $alert_games = array();
+    foreach ( $play_game_ids as $game_id => $data )
+    {
+      // 野手成績の入力が完了しているかどうか
+      $status = Model_Stats_Hitting::query()->where(array(
+        'game_id' => $game_id,
+        'player_id' => $player_id,
+      ))->get_one();
+
+      if ( ! $status || $status->status === '0' )
+      { 
+        $alert_games[] = array('kind' => 'batter') + $data;
+        continue; 
+      }
+      
+      // 投手成績のアラート
+      if ( strstr($data['position'], '1') )
+      {
+        $status = Model_Stats_Pitching::query()->where(array(
+          'game_id' => $game_id,
+          'player_id' => $player_id,
+        ))->get_one();
+
+        if ( ! $status || $status->status === '0' )
+        { 
+          $alert_games[] = array('kind' => 'pitcher') + $data;
+          continue; 
+        }
+      }
+    } 
+
+    return $alert_games;
   }
 }

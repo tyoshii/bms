@@ -4,6 +4,9 @@ class Model_Stats_Hitting extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
+    'status' => array(
+      'default' => 0,
+    ),
 		'player_id',
 		'game_id',
 		'team_id',
@@ -70,7 +73,7 @@ class Model_Stats_Hitting extends \Orm\Model
     );
   }
 
-  public static function regist($ids, $stats)
+  public static function regist($ids, $stats, $status)
   {
     Mydb::begin();
 
@@ -93,24 +96,24 @@ class Model_Stats_Hitting extends \Orm\Model
         // set props => save
         $props = self::_get_insert_props($stat);
         $hit->set($props);
+        $hit->status = $status;
+
         $hit->save();
 
         // hittingdetails
         if ( $stat['detail'] )
         {
+          // clean player stats
+          Model_Stats_Hittingdetail::clean($ids + array(
+            'player_id' => $player_id,
+          ));
+
+          // regist
           foreach ( $stat['detail'] as $bat_times => $data )
           {
-            $detail = Model_Stats_Hittingdetail::query()->where($ids + array(
+            $detail = Model_Stats_Hittingdetail::forge($ids + array(
               'player_id' => $player_id,
               'bat_times' => $bat_times + 1,
-            ))->get_one();
-            if ( ! $detail )
-              $detail = Model_Stats_Hittingdetail::forge($ids + array(
-                'player_id' => $player_id,
-                'bat_times' => $bat_times + 1,
-              ));
-
-            $detail->set(array(
               'direction' => $data['direction'],
               'kind'      => $data['kind'],
               'result_id' => $data['result'],
@@ -142,7 +145,7 @@ class Model_Stats_Hitting extends \Orm\Model
     }
   }
 
-  public static function replaceAll($ids, $stats)
+  public static function replaceAll($ids, $stats, $status)
   {
     Mydb::begin();
 
@@ -161,6 +164,8 @@ class Model_Stats_Hitting extends \Orm\Model
         // hittings
         $props = self::_get_insert_props($stat);
         $hit = self::forge($ids + $props + array('player_id' => $player_id));
+        $hit->status = $status;
+
         $hit->save();
 
         // hittingdetails
@@ -192,5 +197,10 @@ class Model_Stats_Hitting extends \Orm\Model
       Mydb::rollback();
       throw new Exception();
     }
+  }
+
+  public static function getStats($where)
+  {
+    return Model_Stat::getStats(self::$_table_name, $where);
   }
 }

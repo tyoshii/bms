@@ -23,6 +23,7 @@ class Controller_Game extends Controller_Base
     $view->info  = $info;
     $view->score = Model_Games_Runningscore::find($game_id);
 
+    // stats
     $view->player_top    = Model_Stats_Player::getStarter($game_id, $info['team_top']); 
     $view->player_bottom = Model_Stats_Player::getStarter($game_id, $info['team_bottom']); 
 
@@ -31,6 +32,9 @@ class Controller_Game extends Controller_Base
 
     $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
     $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+
+    // other
+    $view->my_team_id = Model_Player::getMyTeamId();
 
     return Response::forge($view);
   }
@@ -120,7 +124,8 @@ class Controller_Game extends Controller_Base
         $view->metum = self::_filter_only_pitcher($view->metum);
 
         // 成績
-        $view->stats = Model_Stat::getStats('stats_pitchings', $game_id, 'player_id');
+        $where = array( 'game_id' => $game_id );
+        $view->stats = Model_Stat::getStats('stats_pitchings', $where, 'player_id');
         break;
 
       case 'batter':
@@ -128,13 +133,17 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('admin.admin') )
+        if ( ! Auth::has_access('moderator.moderator') )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
-        $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
-        $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
-        $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');
+        $where = array(
+          'game_id' => $game_id,
+          'team_id' => $team_id,
+        );
+        $view->hittings  = Model_Stats_Hitting::getStats($where);
+        $view->details   = Model_Stats_Hittingdetail::getStats($where); 
+        $view->fieldings = Model_Stats_Fielding::getStats($where);
         break;
 
       case 'other':
@@ -181,6 +190,7 @@ class Controller_Game extends Controller_Base
     $form->add('date', '試合実施日', array(
       'class'            => 'form-control form-datepicker',
       'placeholder'      => '試合実施日',
+      'value'        => date('Y-m-d'),
       'data-date-format' => 'yyyy-mm-dd',
     ))
       ->add_rule('required')
@@ -192,7 +202,7 @@ class Controller_Game extends Controller_Base
     $attrs = array(
       'type'    => 'select',
       'options' => $teams,
-      'class'   => 'form-control chosen-select',
+      'class'   => 'select2',
     );
 
     // - 先攻
@@ -290,7 +300,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      if ( ! Auth::has_access('moderator.moderator') and $player['player_id'] !== $myid )
       {
         continue;
       }

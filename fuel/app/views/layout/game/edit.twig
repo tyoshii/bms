@@ -17,21 +17,29 @@
 
 {# tab メニュー #}
 <ul class="nav nav-tabs">
+
+{%if auth_has_access('moderator.moderator')%}
     <li {%if uri_segment(3)=='score'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/score/{{team_id}}">スコア</a>
     </li>
     <li {%if uri_segment(3)=='player'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/player/{{team_id}}">{{team_name}}：出場選手</a>
     </li>
-    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
-      <a href="/game/{{game_id}}/pitcher/{{team_id}}">{{team_name}}：投手成績</a>
-    </li>
+{%endif%}
+
     <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/batter/{{team_id}}">{{team_name}}：野手成績</a>
     </li>
+    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/pitcher/{{team_id}}">{{team_name}}：投手成績</a>
+    </li>
+
+{%if auth_has_access('moderator.moderator')%}
     <li {%if uri_segment(3)=="other"%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/other/{{team_id}}">{{team_name}}：その他</a>
     </li>
+{%endif%}
+
 </ul>
 
 {# データ保存の際にjsから取得しやすいように #}
@@ -42,19 +50,6 @@
 
 
 {%block js%}
-
 {{ parent() }}
-
 <script src="/js/game/edit.js"></script>
-<script src="/select2/select2.min.js"></script>
-<script>
-
-$(document).ready(function() {
-  $('.select2').select2({
-    width: "100%",
-  });
-});
-
-</script>
-
 {%endblock%}

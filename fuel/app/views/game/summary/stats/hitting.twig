@@ -2,14 +2,16 @@
 {%if team == 'top' %}
   {%set players = player_top%}
   {%set stats   = hitting_top%}
+  {%set team_id = info.team_top%}
 {%else%}
   {%set players = player_bottom%}
   {%set stats   = hitting_bottom%}
+  {%set team_id = info.team_bottom%}
 {%endif%}
 
 <h3>野手成績</h3>
 
-<table class="table table-hover batter">
+<table class="table table-striped batter">
 <tr>
 <th>打順</th>
 <th>名前</th>
@@ -50,6 +52,7 @@
 <td>{{stats[player.player_id]['RBI']}}</td>
 <td>{{stats[player.player_id]['R']}}</td>
 <td>{{stats[player.player_id]['SB']}}</td>
+<td></td>
 </tr>
 {%endfor%}
 </table>

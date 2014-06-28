@@ -15,9 +15,9 @@
     {% block css %}
     <link href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     <link href="/twbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/chosen/chosen.css" type="text/css" rel="stylesheet">
+    <link href="/select2/select2.css" type="text/css" rel="stylesheet">
     <link href="/datepicker/css/datepicker.css" type="text/css" rel="stylesheet">
-    <link href="http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css" type="text/css" rel="stylesheet">
+    <link href="/datatable/media/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet">
     <link href="/css/bms.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -34,6 +34,11 @@
   <body>
 
 <div id="wrap">
+
+{# ステージング環境への誘導 #}
+{%if auth_has_access('moderator.moderator')%}
+<button class="btn btn-default btn-xs" onClick="location.href='http://'+location.host+':8080';">ステージング環境</button>
+{%endif%}
 
 {# production以外は上部に赤い線 #}
 {%if env != 'production'%}
@@ -88,9 +93,9 @@
 -->
 
     <ul class="nav navbar-nav navbar-right">
-      {% if login == true %}
-        <li><a href="/user/info"><img src="/favicon.ico" height="22" width="22">&nbsp;{{screen_name}}</a></li>
-        <li><a href="/logout">Logout</a></li>
+      {% if auth_check() %}
+        <li><a href="/user/info"><img src="/favicon.ico" height="22" width="22">&nbsp;マイページ</a></li>
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
       {% endif %}
     </ul>
 <!--
@@ -136,6 +141,7 @@
 {# footer #}
 <div id="footer">
 <hr>
+<div>System Version {{config('system.version')}} updated at {{config('system.update_at')}}</div>
 <a href="mailto:tyoshii716@gmail.com">お問い合わせ / フィードバック</a>
 </div>
 
@@ -146,16 +152,14 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/jquery-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script type="text/javascript" src="/twbootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/chosen/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="/bootstrap_formhelpers/js/bootstrap-formhelpers.min.js"></script>
+<script type="text/javascript" src="/select2/select2.min.js"></script>
 <script type="text/javascript" src="/datepicker/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/datatable/media/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-  // select searchable plugin
-  $('select.chosen-select').each(function() {
-    $(this).chosen();
+  $('.select2').select2({
+    width: "100%",
   });
 });
 </script>

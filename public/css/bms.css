@@ -19,6 +19,11 @@ body {
 }
 
 
+img#user-icon {
+  margin: -10px;
+}
+
+
 th.team {
   width: 100px;
 }
@@ -106,6 +111,10 @@ table#pitcher td.R {
   width: 80px;
 }
 
+table#game-list tbody tr {
+  cursor: pointer;
+}
+
 table#game-list tr.own {
   background-color: #FFFFCC;  
 }
@@ -119,10 +128,6 @@ table#batter td.tokuten input,
 table#batter td.steal input,
 table#batter td.error input {
   width: 40px;
-}
-
-table.games td {
-  cursor: pointer;
 }
 
 .disable {

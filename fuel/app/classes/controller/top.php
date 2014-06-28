@@ -15,6 +15,9 @@ class Controller_Top extends Controller_Base
     {
       if ( $player = Model_Player::find_by_username(Auth::get_screen_name()) )
       {
+        // アラート
+        $view->alert_games = Model_Game::get_incomplete_gameids($player->id);
+        // 最近の試合
         $view->games = Model_Game::getGamesOnlyMyTeam();
       }
       else

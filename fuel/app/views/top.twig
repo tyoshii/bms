@@ -16,6 +16,21 @@
 <a href="/user/team">所属チームを設定しましょう！</a>
 {%else%}
 
+{%if alert_games|length > 0%}
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">成績入力の完了していない試合があります！</h3>
+  </div>
+  <div class="panel-body">
+<ul>
+{%for game in alert_games%}
+<li><a href="/game/{{game.id}}/{{game.kind}}/">{{game.team_top_name}} vs {{game.team_bottom_name}}</a>
+{%endfor%}
+</ul>
+  </div>
+</div>
+{%endif%}
+
 <h3>最近の試合</h3>
 
 {%if games|length == 0 %}
@@ -39,7 +54,9 @@
 
 <h3>Login</h3>
 {{login_form}}
-<a class="pull-right" href="/register">新規ユーザー登録はこちら</a>
+
+<p><a href="/register">新規ユーザー登録はこちら</a></p>
+<p><a href="/forget_password">パスワードを忘れた場合はこちら</a></p>
 
 {%endif%}
 </div>

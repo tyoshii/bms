@@ -60,6 +60,11 @@ return array(
 				51 => '053_add_status_to_players',
 				52 => '054_add_top_status_to_games',
 				53 => '055_add_bottom_status_to_games',
+				54 => '056_add_status_to_stats_hittings',
+				55 => '057_add_status_to_stats_pitchings',
+				56 => '058_add_updated_to_users',
+				57 => '059_delete_updated_at_from_users',
+				58 => '060_rename_field_updated_to_updated_at_in_users',
 			),
 		),
 		'module' => 

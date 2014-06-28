@@ -127,13 +127,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_pitchingsへのinsert
+    $status = Input::post('complete') ? 1 : 0;
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Pitching::replaceAll($ids, $pitcher);
+      Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
     }
     else
     {
-      Model_Stats_Pitching::regist($ids, $pitcher);
+      Model_Stats_Pitching::regist($ids, $pitcher, $status);
     }
 
     echo 'OK';
@@ -155,13 +156,15 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
+    $status = Input::post('complete') ? 1 : 0;
+
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Hitting::replaceAll($ids, $batter);
+      Model_Stats_Hitting::replaceAll($ids, $batter, $status);
     }
     else
     {
-      Model_Stats_Hitting::regist($ids, $batter);
+      Model_Stats_Hitting::regist($ids, $batter, $status);
     }
 
     echo 'OK';
@@ -175,7 +178,7 @@ class Controller_Api_Game extends Controller_Rest
 
     $ids = self::_getIds();
 
-    // insert
+    // insert(old json format)
     $other = Input::post('other');
 
     $game = Model_Games_Stat::query()
@@ -185,6 +188,9 @@ class Controller_Api_Game extends Controller_Rest
 
     $game->others = json_encode($other); 
     $game->save();
+
+    // update game status
+    Model_Game::update_status($ids['game_id'], $ids['team_id'], $other['status']);
 
     echo 'OK';
   }

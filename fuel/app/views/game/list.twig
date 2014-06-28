@@ -48,12 +48,8 @@
     <th>先攻</th>
     <th>スコア</th>
     <th>後攻</th>
-    <th>試合概要</th>
 {%if auth_check() %}
     <th>成績入力</th>
-{%endif%}
-{%if auth_has_access('game.status')%}
-    <th>ステータス</th>
 {%endif%}
 </tr>
 </thead>
@@ -62,7 +58,7 @@
 
 {% for game in games if game.status != -1%}
 
-<tr class="{%if game.own %}own{%endif%} {{game.result}}" {%if game.play%}play="true"{%endif%}>
+<tr gameid="{{game.id}}" class="{%if game.own %}own{%endif%} {{game.result}}" {%if game.play%}play="true"{%endif%}>
 
 <td>{%if game.play%}(出場){%endif%}</td>
 <td>{{ game.date }}</td>
@@ -90,11 +86,6 @@
 {%endif%}
 </td>
 
-{# 試合概要 #}
-<td>
-<a href="/game/{{game.id}}" class="btn btn-info">概要</a>
-</td>
-
 {# 成績入力#}
 <td>
 {%if game.own%}
@@ -107,17 +98,6 @@
 {%endif%}{# if game.status == 2 #}
 {%endif%}{# if game.own #}
 </td>
-
-{# ステータス #}
-{%if auth_has_access('game.status') and game.own%}
-<td>
-<select name="status" class="form-control" onChange="changeGameStatus(this, {{game.id}}, {{team_id}});">
-<option value="0" {%if game.status == 0%}selected{%endif%}>試合登録のみ</option>
-<option value="1" {%if game.status == 1%}selected{%endif%}>成績入力中</option>
-<option value="2" {%if game.status == 2%}selected{%endif%}>成績入力完了</option>
-</select>
-</td>
-{%endif%}
 
 {# 無効 #}
 {%if auth_has_access('game.status') and game.own%}
@@ -140,80 +120,6 @@
 
 
 {% block js %}
-
 {{ parent() }}
-
-<script>
-function change_topbottom() {
-}
-
-// status update
-function changeGameStatus(s, game_id, team_id) {
-  var status = typeof(s) === 'object' ? $(s).val() : s;
-
-  if ( status === -1 ) {
-    if ( ! window.confirm("無効試合としてよいですか？") ) {
-      return false;
-    }
-  }
-    
-  $.ajax({
-    type: 'POST',
-    url: '/api/game/updateStatus',
-    data: {
-      game_id: game_id,
-      team_id: team_id,
-      status: status
-    },
-    success: function() {
-      location.reload();
-    },
-    error: function() {
-      alert("ステータスのアップデートに失敗しました");
-    }
-  });
-}
-
-$(document).ready(function() {
-  $('input.form-datepicker').each(function() {
-    $(this).datepicker();
-  });
-});
-
-// search
-$("#search").keyup(function(){
-
-  if ( ! $(this).val()) {
-    $("#game-list tbody tr").show();
-  }
-  else {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr:contains(" + this.value + ")").show();
-  }
-});
-
-// filter
-function filter(type) {
-  if ( type === 'all' ) {
-    $("#game-list tbody tr").show();
-  }
-  else if ( type === 'own' ) {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr.own").show();
-  }
-  else if ( type === 'win' ) {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr.win").show();
-  }
-  else if ( type === 'lose' ) {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr.lose").show();
-  }
-  else if ( type === 'play' ) {
-    $("#game-list tbody tr").hide();
-    $("#game-list tbody tr[play='true']").show();
-  }
-}
-
-</script>
+<script type="text/javascript" src="/js/game/list.js"></script>
 {% endblock %}

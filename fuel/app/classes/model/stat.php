@@ -2,11 +2,15 @@
 
 class Model_Stat
 {
-  public static function getStats($table, $game_id, $index_key = null)
+  public static function getStats($table, $where, $index_key = 'player_id')
   {
-    return DB::select()->from($table)
-                       ->where('game_id', $game_id)
-                       ->execute()
-                       ->as_array($index_key);
+    $query = DB::select()->from($table);
+
+    foreach ( $where as $key => $val )
+    {
+      $query->where($key, $val);
+    }
+
+    return $query->execute()->as_array($index_key);
   }
 }

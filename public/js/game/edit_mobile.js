@@ -1,7 +1,7 @@
 // switch batter
 $("span[role=switch-batter]").click(function(){
   var type  = $(this).attr("type"),
-      $root = $(this).parents("div.batter-stats-container"),
+      $root = $(this).parents("div.stats-container"),
       hide_index = $root.attr("index"),
       show_index = 0;
 
@@ -52,12 +52,12 @@ $("button.detail-del").click(function(){
 
 // save/decide stats
 
-$("div.batter-stats-post button").click(function(){
+$("div.stats-post[role=hitting] button").click(function(){
   var post_type = $(this).attr('post_type');
 
   var data = [];
 
-  $("div.batter-stats-container").each(function(){
+  $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();
 
     // stats

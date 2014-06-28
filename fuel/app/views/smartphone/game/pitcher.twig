@@ -33,6 +33,8 @@
 
 
 {%for player in metum%}
+{%set stat = stats[player.player_id]%}
+
 <div class="panel panel-default">
 <table class="table pitching-stats">
 
@@ -59,26 +61,26 @@
 <tr>
 <th>勝敗</th>
 <td>
-<select>
-<option>勝</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="result">
+<option value=""></option>
+<option value="win"  {%if stat.W  %}selected{%endif%}>勝</option>
+<option value="lose" {%if stat.L  %}selected{%endif%}>負</option>
+<option value="save" {%if stat.SV %}selected{%endif%}>Ｓ</option>
+<option value="hold" {%if stat.HLD%}selected{%endif%}>Ｈ</option>
 </select>
 </td>
 <th>投球回</th>
 <td>
-<select>
-<option>1</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="IP">
+{%for i in 0..20%}
+<option value="{{i}}" {%if stat.IP == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
-<select>
-<option>1/3</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="IP_frac">
+<option value=""></option>
+{%for i in 0 .. 2%}
+<option value="{{i}}/3" {%if stat.IP_frac == i~'/3'%}selected{%endif%}>{{i}}/3</option>
+{%endfor%}
 </select>
 </td>
 </tr>
@@ -88,20 +90,18 @@
 <tr>
 <th>被安打</th>
 <td>
-<select>
-<option>勝</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="H">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.H == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 <th>奪三振</th>
 <td>
-<select>
-<option>1</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="SO">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.SO == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 </tr>
@@ -109,20 +109,18 @@
 <tr>
 <th>四球</th>
 <td>
-<select>
-<option>勝</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="BB">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.BB == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 <th>死球</th>
 <td>
-<select>
-<option>1</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select role="HB">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.HB == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 </tr>
@@ -130,24 +128,23 @@
 <tr>
 <th>自責点</th>
 <td>
-<select>
-<option>勝</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select class="ER">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.ER == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 <th>失点</th>
 <td>
-<select>
-<option>1</option>
-<option>1</option>
-<option>1</option>
-<option>10</option>
+<select class="R">
+{%for i in 0 .. 40%}
+<option value="{{i}}" {%if stat.R == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </td>
 </tr>
-</table>
+
+</table>{# class="table pitching-stats" #}
 </div>{# class="panel panel-default" #}
 {%endfor%}
 

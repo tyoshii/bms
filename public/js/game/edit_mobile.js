@@ -1,3 +1,33 @@
+// object
+var stats = {
+
+  data: [],
+   
+  post: {
+
+    complete: false, 
+ 
+    ajax: function(path) {
+      $.ajax({
+        url: "/api/game/" + path,
+        type: "POST",
+        data: {
+          game_id: $("data#game_id").text(),
+          team_id: $("data#team_id").text(),
+          stats: stats.data,
+          complete: stats.post.complete
+        },
+        success: function(html) {
+          alert('成績保存に成功しまし');
+        },
+        error: function(html) {
+          alert('エラーが発生しました');
+        }
+      });
+    },
+  },
+}
+
 // switch batter
 $("span[role=switch-batter]").click(function(){
   var type  = $(this).attr("type"),
@@ -51,9 +81,32 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+$("div.stats-post[role=pitching] button").click(function(){
+  stats.data= [];
+  stats.post.complete = $(this).attr("post_type") === 'complete';
+
+  $("table.pitching-stats").each(function() {
+    var player_id = $(this).attr("player_id");
+
+    stats.data[player_id] = {
+      result  : $(this).find("select[role=result]").val(),
+      IP      : $(this).find("select[role=IP]").val(),
+      IP_frac : $(this).find("select[role=IP_frac]").val(),
+      H       : $(this).find("select[role=H]").val(),
+      SO      : $(this).find("select[role=SO]").val(),
+      BB      : $(this).find("select[role=BB]").val(),
+      HB      : $(this).find("select[role=HB]").val(),
+      ER      : $(this).find("select[role=ER]").val(),
+      R       : $(this).find("select[role=R]").val()
+    };
+  });
+  // console.log(stats);
+
+  stats.post.ajax('updatePitcher');
+});
 
 $("div.stats-post[role=hitting] button").click(function(){
-  var post_type = $(this).attr('post_type');
+  var post_type = $(this).attr("post_type");
 
   var data = [];
 
@@ -92,6 +145,7 @@ $("div.stats-post[role=hitting] button").click(function(){
     };
   });
   // console.log(data);
+
 
   // ajax
   $.ajax({

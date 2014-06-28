@@ -21,7 +21,7 @@ class Controller_Api_Game extends Controller_Rest
     $ids = $val->validated();
 
     // check acl if no admin
-    if ( ! Auth::has_access('admin.admin') )
+    if ( ! Auth::has_access('admin.admin') and Auth::has_access('moderator.moderator') )
     {
       // has Moderators ?
       if ( ! Auth::member('50') )
@@ -67,7 +67,7 @@ class Controller_Api_Game extends Controller_Rest
   {
     // 権限チェック
     if ( ! Auth::has_access('game.editall') )
-      return Response::forge('出場選手を編集する権限がありません', 403);
+      return Response::forge('スコアを編集する権限がありません', 403);
 
     $form = Fieldset::forge('score');
     $form->add_model(Model_Games_Runningscore::forge());
@@ -127,13 +127,14 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // stats_pitchingsへのinsert
+    $status = Input::post('complete') ? 1 : 0;
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Pitching::replaceAll($ids, $pitcher);
+      Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
     }
     else
     {
-      Model_Stats_Pitching::regist($ids, $pitcher);
+      Model_Stats_Pitching::regist($ids, $pitcher, $status);
     }
 
     echo 'OK';
@@ -155,13 +156,15 @@ class Controller_Api_Game extends Controller_Rest
     $game->save();
 
     // satasへの登録
+    $status = Input::post('complete') ? 1 : 0;
+
     if ( Auth::has_access('admin.admin') )
     {
-      Model_Stats_Hitting::replaceAll($ids, $batter);
+      Model_Stats_Hitting::replaceAll($ids, $batter, $status);
     }
     else
     {
-      Model_Stats_Hitting::regist($ids, $batter);
+      Model_Stats_Hitting::regist($ids, $batter, $status);
     }
 
     echo 'OK';

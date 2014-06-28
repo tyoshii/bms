@@ -32,10 +32,19 @@ class Model_Stats_Hittingdetail extends \Orm\Model
     Common::db_clean(self::$_table_name, $where);
   }
 
-  public static function getStats($game_id)
+  public static function getStats($where)
   {
-    $result = Model_Stat::getStats(self::$_table_name, $game_id);
+    // データ取得
+    $query = DB::select()->from(self::$_table_name);
+    foreach ( $where as $key => $val )
+    {
+      $query->where($key, $val);
+    }
+    $query->order_by('bat_times');
 
+    $result = $query->execute()->as_array();
+
+    // データ整形
     $stats = array();
     foreach ( $result as $res )
     {

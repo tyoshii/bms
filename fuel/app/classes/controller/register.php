@@ -4,6 +4,10 @@ class Controller_Register extends Controller
 {
   public function action_index()
   {
+    // ログイン中だったらトップへ飛ばす
+    if ( Auth::check() and ! Auth::has_access('admin.admin') )
+      Response::redirect(Uri::create('/'));
+
     $view = View::forge('register.twig');
 
     $form = self::_get_register_form();

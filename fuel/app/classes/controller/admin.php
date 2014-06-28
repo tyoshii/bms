@@ -415,6 +415,9 @@ class Controller_Admin extends Controller_Base
     else
       $form = self::_get_user_regist_form();
 
+    // 利用者の観点からは選手名は必須ではない
+    $form->field('name')->delete_rule('required', true);
+
     // 必須項目のHTML変更
     $form->set_config('required_mark', '<span class="red">*</span>');
 
@@ -443,7 +446,7 @@ class Controller_Admin extends Controller_Base
 
   static private function _get_user_update_form($id)
   {
-    $form = Common_Form::forge('regist_user');
+    $form = Common_Form::forge('update_user');
     $form->id($id);
 
     // user info
@@ -499,7 +502,7 @@ class Controller_Admin extends Controller_Base
       $form->add_before('username', '紐づけるユーザー名', array(
         'type' => 'select',
         'options' => $users,
-        'class' => 'form-control chosen-select',
+        'class' => 'select2',
       ), array(), 'submit')
         ->add_rule('in_array', array_keys($users));
     }

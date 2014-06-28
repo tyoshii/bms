@@ -53,7 +53,14 @@ Baseball Management System
 ## add admin account
     $ php oil console
     >>> Auth::create_user('admin', 'password', 'admin@yahoo.co.jp', 100);
-    
+
+## sendmailの設定
+
+* 各自の環境でsendmailの設定を行うこと
+* その後以下のコマンドで送信テスト
+```
+$ php oil r sendmail:test your-address@hoge.com
+```
 
 # Deploy
 
@@ -64,4 +71,22 @@ Baseball Management System
     * git pull origin master
     * php oil r migrate:current
     * deploy.pl の実行
+
+    $ cd deploy
+    $ perl deploy.pl bms.list
+
 * 自力Deployは上記コマンドを本番機で実施
+
+# OSS
+
+fuelphp-1.8 http://fuelphp.jp/docs/1.8/license.html
+jquery-1.10.2 https://jquery.org/license/
+jquery-ui-1.10.4 https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt
+twitter bootstrap-3.0.3 https://github.com/twbs/bootstrap/blob/master/LICENSE
+select2-3.4.5 https://github.com/ivaynberg/select2/blob/master/LICENSE
+datepicker-2.0 https://github.com/eternicode/bootstrap-datepicker/blob/master/LICENSE 
+datatable-1.10.0 http://datatables.net/license/mit
+
+# Sendmail
+
+* Fromには no-reply@bm-s.info を指定するようにする。

@@ -23,8 +23,7 @@ class Service
 		/***************************
 		 Put in TASK DETAILS HERE
 		 **************************/
-    \Config::load('maintenance', 'm');
-    if ( \Config::get('m.mode') === 'on' )
+    if ( \Config::get('system.mode') === 'on' )
     {
       echo "現在メンテナンスモードです";
     }
@@ -51,9 +50,8 @@ class Service
 		echo "\nRunning task [Service:Out]";
 		echo "\n-------------------------------------------\n\n";
 
-    \Config::load('maintenance', 'm');
-    \Config::set('m.mode', 'on');
-    \Config::save('maintenance', 'm');
+    \Config::set('system.mode', 'on');
+    \Config::save('system', 'system');
 
     echo 'service out... go to maintenance mode';
 	}
@@ -76,9 +74,8 @@ class Service
 		/***************************
 		 Put in TASK DETAILS HERE
 		 **************************/
-    \Config::load('maintenance', 'm');
-    \Config::set('m.mode', 'off');
-    \Config::save('maintenance', 'm');
+    \Config::set('system.mode', 'off');
+    \Config::save('system', 'system');
 
     echo 'service in... start !!';
 	}

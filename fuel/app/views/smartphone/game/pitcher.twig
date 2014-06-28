@@ -36,9 +36,7 @@
 {%set stat = stats[player.player_id]%}
 
 <div class="panel panel-default">
-<table class="table pitching-stats">
-
-<data class="player-id disable">{{player.player_id}}</data>
+<table class="table pitching-stats" player_id="{{player.player_id}}">
 
 <thead>
 </thead>
@@ -128,7 +126,7 @@
 <tr>
 <th>自責点</th>
 <td>
-<select class="ER">
+<select role="ER">
 {%for i in 0 .. 40%}
 <option value="{{i}}" {%if stat.ER == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
@@ -136,7 +134,7 @@
 </td>
 <th>失点</th>
 <td>
-<select class="R">
+<select role="R">
 {%for i in 0 .. 40%}
 <option value="{{i}}" {%if stat.R == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}

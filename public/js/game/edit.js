@@ -442,7 +442,9 @@ function add_order(self, kind) {
   $clone.fadeIn();
   
   // select2 available
-  $('.select2').select2();
+  $('.select2').select2({
+    width: '100%',
+  });
 }
 
 function post_pitcher(is_alert, is_comp) {

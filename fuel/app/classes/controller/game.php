@@ -308,7 +308,7 @@ class Controller_Game extends Controller_Base
         continue;
       }
 
-      if ( strpos($player['position'], '1') !== false )
+      if ( array_search(1, $player['position']) !== false )
       {
         $res[$index] = $player;
       }

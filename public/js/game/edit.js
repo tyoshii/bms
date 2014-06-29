@@ -587,7 +587,7 @@ function post_player(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      players: data
+      stats: data
     },
     success: function(html) {
       if ( is_alert === true ) {

@@ -18,6 +18,8 @@
 </tr>
 </thead>
 
+<tbody>
+
 {%for player in metum%}
 {# 交代された選手かどうかはorderで判断している #}
 <tr order="{{player.order}}" {%if player.order != 0%}played="starter"{%endif%}>
@@ -62,16 +64,25 @@
 </tr>
 {%endfor%}
 
+<tbody>
 </table>
 
 {# 選手の追加/削除 #}
-<div class="btn-group pull-left">
+<div class="btn-group pull-right">
 <button role="player-add" class="btn btn-info btn-xs">追加</button>
 <button role="player-del" class="btn btn-danger btn-xs">削除</button>
 </div>
 
+<hr>
+<br><br>
+
+<div class="stats-post" role="player">
+<button class="btn btn-success">登録</button>
 </div>
 
+</div>
+
+{# PC画面 #}
 <table id="player" class="table">
 
 <thead>

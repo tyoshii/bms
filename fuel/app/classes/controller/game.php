@@ -133,7 +133,7 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('moderator.moderator') )
+        if ( ! Auth::has_access('admin.admin') )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
@@ -153,6 +153,8 @@ class Controller_Game extends Controller_Base
                         ->get_one();
 
         $view->others = json_decode($stat->others);
+
+        $view->game_status = Model_Game::get_game_status($game_id, $team_id);
         break;
 
       default:

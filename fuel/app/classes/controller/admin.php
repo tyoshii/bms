@@ -94,18 +94,20 @@ class Controller_Admin extends Controller_Base
           Response::redirect(Uri::create('admin/user'));
         }
       }
-      else
-      {
-        if ( Model_User::disable() )
-        {
-          Session::set_flash('info', Input::post('username').'を無効にしました。');
-          Response::redirect(Uri::create('admin/user'));
-        }
-      }
     }
     else // ! $val->run()
     {
-      Session::set_flash('error', $val->show_errors());
+      // ユーザーを無効にするボタンはvalidationが別
+      if ( Model_User::disable() )
+      {
+        Session::set_flash('info', Input::post('username').'を無効にしました。');
+        Response::redirect(Uri::create('admin/user'));
+      }
+      else
+      {
+        // validation error
+        Session::set_flash('error', $val->show_errors());
+      }
     }
 
     $form->repopulate();

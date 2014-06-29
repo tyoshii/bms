@@ -106,7 +106,7 @@ class Model_User extends \Orm\Model
 
     try {
       // 無効化（グループで操作）
-      Auth::update_user(array('group' => -1), $uname );
+      Auth::update_user(array('group' => -1), $username );
 
     } catch ( Exception $e ) {
       Session::set_flash('error', $e->getMessage());

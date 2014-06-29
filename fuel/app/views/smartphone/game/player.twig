@@ -1,33 +1,56 @@
 {% extends "layout/game/edit.twig" %}
 
-{% macro name_select(members, id) %}
-<select class="member_id select2" onChange="update_number(this);">
-<option value="0">--------------------</option>
-{% for member in members %}
-<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
-{% endfor %}
-</select>
-{% endmacro %}
-
-
-{% macro position_select(p) %}
-<select class="position">
-<option value="0" selected>--</option>
-{% for i in 1..9 %}
-<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
-{% endfor %}
-
-{% for i in ['D','H','R'] %}
-<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
-{% endfor %}
-</select>
-{% endmacro %}
-
-
 {% block content %}
 
 {# header #}
 {{ parent() }}
+
+<div class="stats-container">
+
+<table class="table">
+
+<thead>
+<tr>
+<th></th>
+<th>打順</th>
+<th>守備</th>
+<th>名前</th>
+</tr>
+</thead>
+
+{%for player in metum%}
+<tr>
+<td>
+<button class="btn btn-info btn-xs">交代</button>
+</td>
+<td>{{player.order}}</td>
+<td>
+<div>
+<select>
+<option>1</option>
+</select>
+</div>
+<div>
+<select>
+<option>1</option>
+</select>
+</div>
+<div>
+<select>
+<option>1</option>
+</select>
+</div>
+</td>
+<td>
+<select class="select2">
+<option>{{player.number}}:{{player.name}}</option>
+</select>
+</td>
+</tr>
+{%endfor%}
+</table>
+
+</div>
 
 <table id="player" class="table">
 
@@ -98,3 +121,27 @@
 {{parent()}}
 <link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
 {%endblock css%}
+
+{% macro name_select(members, id) %}
+<select class="member_id select2" onChange="update_number(this);">
+<option value="0">--------------------</option>
+{% for member in members %}
+<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
+{% endfor %}
+</select>
+{% endmacro %}
+
+
+{% macro position_select(p) %}
+<select class="position">
+<option value="0" selected>--</option>
+{% for i in 1..9 %}
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
+{% endfor %}
+
+{% for i in ['D','H','R'] %}
+<option value="{{i}}" {%if i==p%}selected{%endif%}>{{i}}</option>
+{% endfor %}
+</select>
+{% endmacro %}
+

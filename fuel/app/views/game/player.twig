@@ -48,7 +48,7 @@
 
 <tbody>
 {% for meta in metum %}
-<tr class="player-tr">
+<tr class="player-tr" {%if meta.order != 0%}played="starter"{%endif%}>
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
 {% if meta.order == 0 or ( meta.order > 9 and loop.last ) %}

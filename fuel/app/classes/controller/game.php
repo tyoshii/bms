@@ -104,7 +104,9 @@ class Controller_Game extends Controller_Base
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
+    // - TODO: 変数名をmembersからplayersへ変更したい。
     $view->members = Model_Player::get_players($team_id);
+    $view->players = $view->members;
 
     // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);

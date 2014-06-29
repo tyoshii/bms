@@ -33,7 +33,7 @@ class Controller_Admin extends Controller_Base
       $val = $form->validation();
       if ( $val->run() )
       {
-        if ( Model_User::updates() )
+        if ( Model_User::update_group(Input::type('username'), Input::type('group')) )
         {
           Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
           Response::redirect(Uri::create('admin/user'));
@@ -88,7 +88,7 @@ class Controller_Admin extends Controller_Base
       }
       else if ( Input::post('submit') == '更新' )
       {
-        if ( Model_User::updates() )
+        if ( Model_User::update_group(Input::post('username'), Input::post('group')) )
         {
           Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
           Response::redirect(Uri::create('admin/user'));
@@ -97,16 +97,30 @@ class Controller_Admin extends Controller_Base
     }
     else // ! $val->run()
     {
-      // ユーザーを無効にするボタンはvalidationが別
-      if ( Model_User::disable() )
+      // ユーザーを無効/最有効にするボタンはvalidationが別
+      if ( Input::post('submit') === '無効' )
       {
-        Session::set_flash('info', Input::post('username').'を無効にしました。');
-        Response::redirect(Uri::create('admin/user'));
+        if ( Model_User::disable(Input::post('username')) )
+        {
+          Session::set_flash('info', Input::post('username').'を無効にしました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
       }
+      else if ( Input::post('submit') === '最有効' )
+      {
+        if ( Model_user::update_group(Input::post('username'), 1) )
+        {
+          Session::set_flash('info', Input::post('username').'を有効にしました。');
+          Response::redirect(Uri::create('admin/user'));
+        }
+      } 
       else
       {
         // validation error
-        Session::set_flash('error', $val->show_errors());
+        if ( $error = $val->show_errors() )
+          Session::set_flash('error', $error);
+        else
+          Session::set_flash('error', 'システムエラーが発生しました。');
       }
     }
 

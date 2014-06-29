@@ -76,15 +76,11 @@ class Model_User extends \Orm\Model
     }
   }
 
-  // update is already
-  public static function updates()
+  private static function _update($username, $values)
   {
     // グループ更新
     try {
-      Auth::update_user(
-        array('group' => Input::post('group')),
-        Input::post('username')
-      );
+      Auth::update_user($values, $username);
 
     } catch ( Exception $e ) {
       Session::set_flash('error', $e->getMessage());
@@ -94,26 +90,23 @@ class Model_User extends \Orm\Model
     return true;
   }
 
-  public static function disable()
+  public static function update_group( $username, $group)
   {
-    $username = Input::post('username');
-        
+    return self::_update($username, array(
+      'group' => $group,
+    ));
+  }
+
+  public static function disable($username)
+  {
     if ( $username === Auth::get('username') )
     {
       Session::set_flash('error', '自分自身のアカウントは無効にできません');
       return false;
     }
 
-    try {
-      // 無効化（グループで操作）
-      Auth::update_user(array('group' => -1), $username );
-
-    } catch ( Exception $e ) {
-      Session::set_flash('error', $e->getMessage());
-      return false;
-    }
-      
-    return true;
+    // 無効化（グループで操作）
+    return self::update_group($username, -1);
   }
 
   public static function get_users_only_my_team()

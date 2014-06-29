@@ -1,12 +1,8 @@
 // object
 var stats = {
-
   data: [],
-   
   post: {
-
     complete: false, 
- 
     ajax: function(path) {
       $.ajax({
         url: "/api/game/" + path,
@@ -27,6 +23,48 @@ var stats = {
     },
   },
 }
+
+// position add/delete
+$("div.player-position select[role=position]").change(function(){
+  var $base = $(this).parent("div");
+  var index = $base.attr("index");
+  var attr  = $base.attr("index_attr");
+
+  // delete select box
+  if ( $(this).val() == '' ) {
+    if ( attr != 'last' ) {
+      // console.log('delete');      
+
+      // paretn cache
+      var $td = $base.parent("td");
+
+      // remove
+      $base.remove();
+
+      // re-index
+      var index = 1;
+      $td.find("div.player-position").each(function() {
+        $(this).attr('index', index);
+        index++;
+      });
+    }
+  }
+  // add
+  else {
+    if ( index != 6 && attr == 'last' ) {
+      // console.log('add');      
+      var $clone = $base.clone(true);
+
+      $clone.attr('index', parseInt($base.attr('index')) + 1);
+      $clone.attr('index_attr', 'last'); 
+      $base.removeAttr('index_attr');
+
+      $clone.find("select[role=position]").val('');
+
+      $clone.insertAfter($base);
+    }
+  }
+});
 
 // switch batter
 $("span[role=switch-batter]").click(function(){

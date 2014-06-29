@@ -20,7 +20,7 @@
 
 {%for player in metum%}
 <tr>
-<td>{{player.order}}</td>
+<td>{%if player.order != 0%}{{player.order}}{%endif%}</td>
 <td>
 {%for position in player.position%}
 <div class="player-position">

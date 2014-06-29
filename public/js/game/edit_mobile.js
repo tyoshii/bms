@@ -24,6 +24,20 @@ var stats = {
   },
 }
 
+// common function
+function clean_position_select($dom) {
+
+  $dom.find("div.player-position").each(function() {
+    if ( $(this).attr("index_attr") == 'last' ) {
+      $(this).attr("index", 1);
+    }
+    else {
+      $(this).remove();
+    }
+  });
+}
+
+
 // position add/delete
 $("div.player-position select[role=position]").change(function(){
   var $base = $(this).parent("div");
@@ -63,6 +77,83 @@ $("div.player-position select[role=position]").change(function(){
 
       $clone.insertAfter($base);
     }
+  }
+});
+
+// switch player
+$("div[role=switch-player] button").click(function(){
+
+  // cloneする前にselect2の機能を落とす
+  // 仕様っぽい
+  $(".select2").each(function() {
+    $(this).select2('destroy');
+  });
+
+  // clone
+  var $base = $("tr[played=starter]:last");
+  $clone = $base.clone(true);
+
+  // clear data
+  $clone.removeAttr("played");
+  $clone.find("td[role=order]").text('');
+
+  clean_position_select($clone);
+
+  $clone.find("select[role=player_id]").val(0);
+  $clone.find("div[role=delete-player]").show();
+
+  // append_to dom
+  var $append_to = $(this).parents("tr");
+  $clone.insertAfter($append_to);
+
+  // select2 available
+  $(".select2").select2({
+    width: "100%",
+  });
+});
+
+// delete switch player
+$("div[role=delete-player] button").click(function() {
+  $(this).parents("tr").remove();
+});
+
+// add player
+$("button[role=player-add]").click(function() {
+
+  // cloneする前にselect2の機能を落とす
+  // 仕様っぽい
+  $(".select2").each(function() {
+    $(this).select2('destroy');
+  });
+
+  // clone
+  $base = $("tr[played=starter]").last();
+  $clone = $base.clone(true);
+
+  // clear data
+  var $order = $clone.find("td[role=order]");
+  $order.text( parseInt($order.text()) + 1 );
+  $clone.attr("order", $order.text() );
+
+  clean_position_select($clone);
+
+  $clone.find("select[role=player_id]").val(0);
+
+  // append
+  $clone.insertAfter($("table.player-table tr:last"));
+  
+  // select2 available
+  $(".select2").select2({
+    width: "100%",
+  });
+});
+
+// delete player
+$("button[role=player-del]").click(function() {
+  var $tr = $("tr[played=starter]:last");
+
+  if ( $tr.attr("order") > 9 ) {
+    $tr.remove();
   }
 });
 

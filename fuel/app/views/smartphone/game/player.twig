@@ -19,10 +19,11 @@
 </thead>
 
 {%for player in metum%}
-<tr>
+{# 交代された選手かどうかはorderで判断している #}
+<tr order="{{player.order}}" {%if player.order != 0%}played="starter"{%endif%}>
 
 {# 打順 #}
-<td>{%if player.order != 0%}{{player.order}}{%endif%}</td>
+<td role="order">{%if player.order != 0%}{{player.order}}{%endif%}</td>
 
 {# 守備 #}
 <td>
@@ -39,7 +40,8 @@
 
 {# 名前 #}
 <td>
-<select class="select2">
+<select class="select2" role="player_id">
+<option value="0">--------------------</option>
 {%for p in players%}
 <option value="{{p.id}}" {%if p.id == player.id%}selected{%endif%}>{{p.number}}:{{p.name}}</option>
 {%endfor%}
@@ -48,26 +50,25 @@
 
 {# 交代/削除ボタン #}
 <td>
-<div><button class="btn btn-info btn-xs">交代</button></div>
+<div role="switch-player">
+<button class="btn btn-info btn-xs">交代</button>
+</div>
 {# 交代された選手かどうかはorderで判断している #}
-{%if player.order == 0%}
-<div><button class="btn btn-danger btn-xs">削除</button></div>
-{%endif%}
-</td>
-</tr>
-{%endfor%}
-
-{# 選手の追加/削除 #}
-<tr>
-<td colspan="4">
-<div class="btn-group pull-left">
-<button class="btn btn-info btn-xs">追加</button>
+<div role="delete-player" class="{%if player.order != 0%}disable{%endif%}">
 <button class="btn btn-danger btn-xs">削除</button>
 </div>
 </td>
+
 </tr>
+{%endfor%}
 
 </table>
+
+{# 選手の追加/削除 #}
+<div class="btn-group pull-left">
+<button role="player-add" class="btn btn-info btn-xs">追加</button>
+<button role="player-del" class="btn btn-danger btn-xs">削除</button>
+</div>
 
 </div>
 

@@ -7,47 +7,56 @@
 
 <div class="stats-container">
 
-<table class="table">
+<table class="table player-table">
 
 <thead>
 <tr>
-<th></th>
 <th>打順</th>
 <th>守備</th>
 <th>名前</th>
+<th></th>
 </tr>
 </thead>
 
 {%for player in metum%}
 <tr>
-<td>
-<button class="btn btn-info btn-xs">交代</button>
-</td>
 <td>{{player.order}}</td>
 <td>
-<div>
+{%for position in player.position|split(',')%}
+<div class="player-position">
 <select>
-<option>1</option>
+{%for i in ['',1,2,3,4,5,6,7,8,9,'D','H','R']%}
+<option value="{{i}}" {%if position == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
 </select>
 </div>
-<div>
-<select>
-<option>1</option>
-</select>
-</div>
-<div>
-<select>
-<option>1</option>
-</select>
-</div>
+{%endfor%}
 </td>
 <td>
 <select class="select2">
 <option>{{player.number}}:{{player.name}}</option>
 </select>
 </td>
+<td>
+<div>
+<button class="btn btn-info btn-xs">交代</button>
+</div>
+<div>
+<button class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
 </tr>
 {%endfor%}
+
+<tr>
+<td colspan="4">
+<div class="btn-group">
+<button class="btn btn-info">追加</button>
+<button class="btn btn-danger">削除</button>
+</div>
+</td>
+</tr>
+
 </table>
 
 </div>

@@ -207,6 +207,28 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+$("div.stats-post[role=player] button").click(function() {
+  stats.data = [];
+ 
+  $("table.player-table tbody tr").each(function() {
+
+    var position = [];
+    $(this).find("select[role=position]").each(function() {
+      if ( $(this).val() != 0 )
+        position.push($(this).val());
+    });
+
+    stats.data.push({
+      order: $(this).find("td[role=order]").text(),
+      player_id: $(this).find("select[role=player_id]").val(),
+      position: position,
+    });
+  });
+  // console.log(stats.data);
+
+  stats.post.ajax('updatePlayer');
+});
+
 $("div.stats-post[role=pitching] button").click(function(){
   stats.data= [];
   stats.post.complete = $(this).attr("post_type") === 'complete';

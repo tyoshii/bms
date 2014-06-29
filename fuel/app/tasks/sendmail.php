@@ -64,7 +64,20 @@ http://bm-s.info
 __BODY__;
     $email->body($body);
 
-    $email->send();
+    try {
+      $email->send();
+    }
+catch(\EmailValidationFailedException $e)
+{
+      echo "hoge";
+      echo $e->getMessage();
+}
+catch(\EmailSendingFailedException $e)
+{
+  
+      echo "hoge";
+      echo $e->getMessage();
+    }
 
     echo "メール送信テスト完了";
 	}

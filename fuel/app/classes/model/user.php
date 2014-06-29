@@ -75,7 +75,7 @@ class Model_User extends \Orm\Model
       return false;
     }
   }
-  
+
   // update is already
   public static function updates()
   {

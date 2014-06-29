@@ -20,19 +20,20 @@ $("span[role=switch-batter]").click(function(){
 $("button.detail-add").click(function(){
   $table = $(this).parents("table.batter-detail");
   $base  = $table.find("tr.batter-detail-data:last");
-  index  = $base.attr("index");
-  PA = parseInt(index) + 1;
 
   // クローンして初期化
   var $clone = $base.clone(true);  
 
+  // 打席数
+  var PA = parseInt($base.attr("index")) + 1;
+
   $clone.find("td.PA").text("第"+PA+"打席");
+  $clone.attr("index", PA);
+
+  // select 初期化
   $clone.find("select").each(function(){
     $(this).val(0);
   });
-
-  // index increment
-  $clone.attr("index", PA);
 
   // append
   $clone.insertAfter($base);

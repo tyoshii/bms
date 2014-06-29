@@ -25,11 +25,9 @@ $(document).ready(function(){
   // navvar active
   $('div#bms-navbar li.bms-navbar-admin').addClass('active');
 
-  // dataTable
-  var $target = $("#player");
-  if ( $target ) {
-    $target.dataTable();
-  }
+  $("table[apply=datatable]").each(function() {
+    $(this).dataTable();
+  });
 });
 </script>
 {% endblock %}

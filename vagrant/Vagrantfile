@@ -133,7 +133,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       httpd: {
         port: 80,
         # docroot: "/vagrant/app/webroot"
-        docroot: "/var/www/html/public"
+        docroot: "/var/www/html"
       },
       php: {
         timezone: "Asia/Tokyo"

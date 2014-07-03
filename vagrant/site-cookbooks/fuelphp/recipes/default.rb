@@ -4,14 +4,22 @@ execute "add-apt-repository ppa:ondrej/php5" do
     user "root"
     not_if "which php"
 end
+
+bash 'deploy' do
+    code <<-EOC
+        cd /vagrant/deploy
+        /usr/bin/env perl deploy.pl bms.list forcd
+    EOC
+end
+
 #
 # virtualhost-bms.conf
-template "virtualhost-bms.conf" do
-  path "/etc/httpd/conf.d/virtualhost-bms.conf"
-  source "virtualhost-bms.conf.erb"
-  mode 0664
+#template "virtualhost-bms.conf" do
+#  path "/etc/httpd/conf.d/virtualhost-bms.conf"
+#  source "virtualhost-bms.conf.erb"
+#  mode 0664
   #notifies :restart, 'service[mysql]'
-end
+#end
 
 # setup the vhost
 #web_app "fuelphp" do
@@ -30,23 +38,23 @@ end
 #end
 
 # add a quick symlink
-link "/var/www/html/fuel" do
-    to "/vagrant/fuel"
-end
-link "/var/www/html/public" do
-    to "/vagrant/public"
-end
+#link "/var/www/html/fuel" do
+#    to "/vagrant/fuel"
+#end
+#link "/var/www/html/public" do
+#    to "/vagrant/public"
+#end
 
 # add a quick symlink
-link "/vagrant/fuel/app/config/crypt.php" do
-    to "/vagrant/fuel/app/config/_crypt.php"
-end
-link "/vagrant/fuel/app/config/salt.php" do
-    to "/vagrant/fuel/app/config/_salt.php"
-end
-link "/vagrant/fuel/app/config/password.php" do
-    to "/vagrant/fuel/app/config/_password.php"
-end
+#link "/vagrant/fuel/app/config/crypt.php" do
+#    to "/vagrant/fuel/app/config/_crypt.php"
+#end
+#link "/vagrant/fuel/app/config/salt.php" do
+#    to "/vagrant/fuel/app/config/_salt.php"
+#end
+#link "/vagrant/fuel/app/config/password.php" do
+#    to "/vagrant/fuel/app/config/_password.php"
+#end
 
 # copy our fuellog convinience script for monitoring fuelphp logs
 #cookbook_file '/usr/local/bin/fuellog' do

@@ -56,10 +56,10 @@ tr.detail {
   background-color: #F5F5F5;  
 }
 
-div.batter-stats-container table th, td {
+div.stats-container table th, td {
   text-align: center;
 }
-div.batter-stats-post {
+div.stats-post {
   text-align: center;
 }
 div.batter-stats-post button {

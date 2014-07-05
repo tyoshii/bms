@@ -15,11 +15,6 @@ class Model_Score_Self extends \Orm\Model
 		'updated_at',
 	);
 
-  public static function getUserName()
-  {
-    return Auth::get_screen_name();
-  }
-
   public static function getSelfScores()
   {
     // userIDからユーザ名(uniq)を取得
@@ -28,66 +23,28 @@ class Model_Score_Self extends \Orm\Model
     $username = Auth::get_screen_name();
     $team_id = Model_Team::get_teams();
 
-    //Common::debug($username);
-    //Common::debug($team_id);
+    $query = <<<___QUERY___
+SELECT
+    p.number, t.name as team, p.name, sum(s.TPA) as TPA, count(s.id) as G,sum(s.AB) as AB, sum(s.H) as H, sum(s.2B) as 2B, sum(s.3B) as 3B, sum(s.HR) as HR,sum(s.RBI) as RBI,sum(s.R) as R,sum(s.SO) as SO,sum(s.BB) as BB,sum(s.HBP) as HBP,sum(s.SAC) as SAC,sum(s.SF) as SF,sum(s.SB) as SB,(SELECT sum(E) from stats_fieldings where player_id = s.player_id) as E
+FROM
+    stats_hittings AS s
+LEFT JOIN
+    players AS p
+ON
+    s.player_id = p.id
+LEFT JOIN
+    teams AS  t
+ON
+    t.id = p.team
+WHERE
+    p.status != -1
+GROUP BY
+    s.player_id
+;
+___QUERY___;
 
-    $res = Array(
-      "value"     => 1,
-      "username"  => $username
-    );
+    $result = DB::query($query)->execute()->as_array();
 
-    /*
-    //$team_id = Model_Team::find_by_username($username)->team;
-
-    // model名はテーブル名とあわせて規則性がある
-    
-    // Model_Team <- teamsテーブルのモデル
-    // Model_Player <- playersテーブルのモデル
-
-    // 全部のテーブルにはidからがある
-
-    // selectはfind
-    $res = Model_Team::find(1);
-
-    // findは find_by_id と同じ意味
-    // つまり find_by_カラム名　でselectのクエリが発行可能
-    // select * from teams where カラム名 = 1;
-    $res = Model_Team::find_by_username('sonuma');
-
-    // findで取得したormオブジェクトはそこから　更新が可能（update
-    $res->username('tyoshii'); //tyoshiiに書き換え
-    $res->save(); //保存
-
-    // 削除も可能
-    $res->delete();
-
-    // 新規insertはforge（newの意味)で新しく作ることで可能
-    $team = Model_Team::forge();
-    $team->username = 'sonuma';
-    $team->number   = 19;
-    $team->save();
-
-    // ドキュメント見るのが一番早い
-    // https://www.google.co.jp/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=fuelphp+orm&safe=off&spell=1
-    */
-    // ちな
-    //Common::debug($res);
-
-    // debugメソッド用意してある
-    // <pre> をはいてvar_dumpしてexitしてくれる。
-
-    // user名からチームIDを取得 
-    // select team from players where username = <USERNAME>;
-
-    // チームIDから試合IDを取得(複数ある)
-    // select id,team_top,team_bottom from games where team_top = <TEAM_ID> OR team_bottom = <TEAM_ID>;
-
-    // （打撃結果）stats_hittingdetailsから結果を持ってくる
-    // 打率ならresult_idがあればよい
-    // select * from stats_hittingdetails where game_id in <GAME_ID> and team_id = <TEAM_ID>
-
-    // 自分自身の成績の場合は、ユーザ名からplayer_idを拾えばよい
-    // 個人毎の成績ならplayer_idでselectする
-    return $res;
+    return $result;
   }
 }

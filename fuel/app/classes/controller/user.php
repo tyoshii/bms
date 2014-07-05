@@ -30,27 +30,31 @@ class Controller_User extends Controller_Base
 
     if ( $val->run() )
     {
-      $id    = Input::post('member_id');
-      $props = array(
+      $id       = Input::post('member_id');
+      $username = Auth::get_screen_name();
+      $props    = array(
         'team'     => Input::post('team'),
         'number'   => Input::post('number'),
         'name'     => Common::get_dispname(),
-        'username' => Auth::get_screen_name(),
+        'username' => $username,
       );
 
       // idが送られてくれば更新
       if ( $player = Model_Player::find($id) )
       {
         // player_idの書き換えチェック
-        if ( $player->username != Auth::get_screen_name() )
+        if ( $player->username !== $username )
         {
           Session::set_flash('error', '不正な処理が行われました。');
-          Response::redirect();
+          Response::redirect(Uri::current());
         }
 
         $player->set($props);
         $player->save();
         
+        // 権限リセット
+        Auth::update_user(array('group' => 1));
+
         Session::set_flash('info', '所属チームの更新が成功しました。');
         Response::redirect(Uri::current());
       }
@@ -73,6 +77,9 @@ class Controller_User extends Controller_Base
           $player = $already ?: Model_Player::forge();
           $player->set($props);
           $player->save();
+        
+          // 権限リセット
+          Auth::update_user(array('group' => 1));
           
           Session::set_flash('info', '新たに所属チームに登録されました。');
           Response::redirect(Uri::current());

@@ -391,23 +391,24 @@ function add_order(self, kind) {
     $(this).select2('destroy');
   });
 
-  var $tr = $($('.player-tr')[0]);
+  var $tr = $("tr[played=starter]:last");
   var $clone = $tr.clone(true);
 
   // init number
   $clone.find('td.number').text('');
 
-  // init order
+  // 打順を追加
   if ( kind === 'last' ) {
     // 最後に追加するときは、打順をインクリメント
-    var last_order = $('.player-tr:last td.order').text();
-    $clone.find('td.order').text(++last_order);
+    var order = $tr.find("td.order").text();
+    $clone.find('td.order').text( parseInt(order) + 1 );
 
     // 元々最後だった行から削除ボタンを消す
-    var $last = $('.player-tr:last');
-    $last.find('button.delete-order').remove();
+    $tr.find('button.delete-order').remove();
   }
+  // 交代の時
   else {
+    $clone.removeAttr("played");
     $clone.find('td.order').text('');
   }
 
@@ -431,7 +432,9 @@ function add_order(self, kind) {
   $clone.fadeIn();
   
   // select2 available
-  $('.select2').select2();
+  $('.select2').select2({
+    width: '100%',
+  });
 }
 
 function post_pitcher(is_alert, is_comp) {

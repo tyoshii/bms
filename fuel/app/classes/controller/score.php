@@ -6,15 +6,12 @@ class Controller_Score extends Controller_Base
   {
     $view = View::forge('score/record_team.twig');
 
-    $game = Model_Score_Self::getSelfScores();
-    //$score = Model_Games_Runningscore::find(Input::param('id'), array(
-    //  'related' => array('games'),
-    //));
+    $view->stat = Model_Score_Team::getTeamScore();
+    $view->team_id   = Model_Player::getMyTeamId();
+    $view->team_name = Model_Player::get_my_team_name();
 
-    //$score = Model_Score_Self::find(1,array());
-    //var_dump($score);
-
-    //$view->game_info = $team_score;
+    $view->game_infos   = Model_Score_Team::getTeamGameInfo();
+    $view->game_result  = Model_Score_Team::getTeamWinLose($view->team_id,$view->game_infos);
 
     return Response::forge( $view );
   }
@@ -23,7 +20,6 @@ class Controller_Score extends Controller_Base
     $view = View::forge('score/record_self.twig');
 
     $view->stats = Model_Score_Self::getSelfScores();
-
     $view->dispname = Common::get_dispname();
  
     return Response::forge( $view );

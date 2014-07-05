@@ -1,3 +1,7 @@
 .container, #footer {
   font-size: x-small;
 }
+
+table.player-table div.player-position {
+  margin: 0px 0px 5px;
+}

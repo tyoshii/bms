@@ -58,4 +58,31 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
     return $stats;
   }
+
+  public static function regist($ids, $player_id, $bat_times, $stat)
+  {
+    $props = $ids + array(
+      'player_id' => $player_id,
+      'bat_times' => $bat_times,
+      'direction' => $stat['direction'],
+      'kind'      => $stat['kind'],
+      'result_id' => $stat['result'],
+    );
+
+      self::forge($props)->save();
+  }
+
+  public static function replaceAll($ids, $player_id, $stats)
+  {
+    // clean player stats
+    // - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると
+    // - 4打席目が残ってしまうため、一度削除している
+    self::clean($ids + array('player_id' => $player_id));
+
+    // insert
+    foreach ( $stats as $bat_times => $stat )
+    {
+      self::regist($ids, $player_id, $bat_times, $stat);
+    }
+  }
 }

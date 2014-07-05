@@ -58,7 +58,8 @@
 <td class="order">{{- meta.order -}}</td>
 <td class="member_id">{{_self.name_select(members, meta.player_id)}}</td>
 <td class="number">{{ meta.number }}</td>
-{% for pos in meta.position|split(',')%}
+{%for i in 0..5%}
+{%set pos = meta.position[i]%}
 <td class="position">{{_self.position_select(pos)}}</td>
 {%endfor%}
 </tr>

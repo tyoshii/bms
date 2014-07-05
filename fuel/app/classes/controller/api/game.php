@@ -94,7 +94,7 @@ class Controller_Api_Game extends Controller_Rest
     $ids = self::_getIds();
 
     // json登録(old)
-    $players = Input::post('players');
+    $players = Input::post('stats');
 
     $game = Model_Games_Stat::query()
               ->where(array($ids))
@@ -118,7 +118,7 @@ class Controller_Api_Game extends Controller_Rest
 
     // insert (json形式
     // - TODO いつか消す
-    $pitcher = Input::post('pitcher');
+    $pitcher = Input::post('stats');
 
     $game = Model_Games_Stat::query()
               ->where(array($ids))

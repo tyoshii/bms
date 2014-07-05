@@ -4,7 +4,7 @@
 <select class="member_id select2" onChange="update_number(this);">
 <option value="0">--------------------</option>
 {% for member in members %}
-<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
+<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>#{{member.number}} {{member.name}}</option>
 {% endfor %}
 </select>
 {% endmacro %}

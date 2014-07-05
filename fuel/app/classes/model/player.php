@@ -77,7 +77,7 @@ class Model_Player extends \Orm\Model
               ->from(array(self::$_table_name, 'p'))
               ->join('teams', 'LEFT')->on('p.team', '=', 'teams.id')
               ->where('p.status', '!=', -1) 
-              ->order_by('p.id');
+              ->order_by( DB::expr('CAST(p.number as SIGNED)') );
 
     if ( $team_id )
       $query->where('p.team', $team_id);

@@ -22,10 +22,10 @@ class Controller_Score extends Controller_Base
   {
     $view = View::forge('score/record_self.twig');
 
-    $self_score = Model_Score_Self::getSelfScores();
+    $view->stats = Model_Score_Self::getSelfScores();
 
-    $view->username = Model_Score_Self::getUserName();
-    
+    $view->dispname = Common::get_dispname();
+ 
     return Response::forge( $view );
   }
 }

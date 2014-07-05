@@ -1,23 +1,9 @@
 {% extends "layout/layout.twig" %}
 
-{%set menu %}
-is menu
-<ul class="nav nav-stacked nav-pills">
-  <li class="{%if uri_segment(2) == 'score' %}active{%endif%}"><a href="/score">所属チーム成績</a></li>
-  <li class="{%if uri_segment(2) == 'record_self'%}active{%endif%}"><a href="/score/record_self">個人成績</a></li>
-<ul>
-{% endset %}
-
-{% set main %}
-is main
-{% endset %}
-
 {% block content %}
-<!--
 {{uri_segment(2)}}
 <ul class="nav nav-tabs" id="myTab">
   <li class="active"><a href="#">所属チーム成績</a>
   <li><a href="/score/record_self">個人成績</a>
 </ul>
--->
 {% endblock %}

@@ -1,12 +1,8 @@
-// object
+// object: stats
 var stats = {
-
   data: [],
-   
   post: {
-
     complete: false, 
- 
     ajax: function(path) {
       $.ajax({
         url: "/api/game/" + path,
@@ -27,6 +23,136 @@ var stats = {
     },
   },
 }
+
+// object: player
+var player = {
+  clone: function(args) {
+    
+    // cloneする前にselect2の機能を落とす
+    // 仕様っぽい
+    $(".select2").each(function() {
+      $(this).select2('destroy');
+    });
+  
+    // clone
+    var $base = $("tr[played=starter]:last");
+    $clone = $base.clone(true);
+    
+    // clear data
+    // - order
+    if ( args.order !== undefined ) {
+      $clone.find("td[role=order]").text(args.order);
+      $clone.attr("order", args.order);
+    }
+    else {
+      var order = parseInt($base.attr("order")) + 1;
+      $clone.find("td[role=order]").text(order);
+      $clone.attr("order", order);
+    }
+
+    // - position
+    $clone.find("div.player-position").each(function() {
+      if ( $(this).attr("index_attr") == 'last' ) {
+        $(this).attr("index", 1);
+      }
+      else {
+        $(this).remove();
+      }
+    });
+
+    // - player_id
+    $clone.find("select[role=player_id]").val(0);
+  
+    // append
+    $clone.insertAfter(args.append_to);
+
+    // select2 available
+    $(".select2").select2({
+      width: "100%",
+    });
+
+    return $clone;
+  }
+};
+
+// position add/delete
+$("div.player-position select[role=position]").change(function(){
+  var $base = $(this).parent("div");
+  var index = $base.attr("index");
+  var attr  = $base.attr("index_attr");
+
+  // delete select box
+  if ( $(this).val() == '' ) {
+    if ( attr != 'last' ) {
+      // console.log('delete');      
+
+      // paretn cache
+      var $td = $base.parent("td");
+
+      // remove
+      $base.remove();
+
+      // re-index
+      var index = 1;
+      $td.find("div.player-position").each(function() {
+        $(this).attr('index', index);
+        index++;
+      });
+    }
+  }
+  // add
+  else {
+    if ( index != 6 && attr == 'last' ) {
+      // console.log('add');      
+      var $clone = $base.clone(true);
+
+      $clone.attr('index', parseInt($base.attr('index')) + 1);
+      $clone.attr('index_attr', 'last'); 
+      $base.removeAttr('index_attr');
+
+      $clone.find("select[role=position]").val('');
+
+      $clone.insertAfter($base);
+    }
+  }
+});
+
+// switch player
+$("div[role=switch-player] button").click(function(){
+
+  var $clone = player.clone({
+    order: '',
+    append_to: $(this).parents("tr")
+  });
+
+  // played attr remove
+  $clone.removeAttr("played");
+
+  // delete-player button enable
+  $clone.find("div[role=delete-player]").show();
+});
+
+// delete switch player
+$("div[role=delete-player] button").click(function() {
+  $(this).parents("tr").remove();
+});
+
+// add player
+$("button[role=player-add]").click(function() {
+
+  var $clone = player.clone({
+    append_to: $("table.player-table tr:last")
+  });
+});
+
+// delete player
+$("button[role=player-del]").click(function() {
+  var $tr = $("tr[played=starter]:last");
+
+  if ( $tr.attr("order") > 9 ) {
+    $tr.remove();
+  }
+});
 
 // switch batter
 $("span[role=switch-batter]").click(function(){
@@ -82,6 +208,28 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+$("div.stats-post[role=player] button").click(function() {
+  stats.data = [];
+ 
+  $("table.player-table tbody tr").each(function() {
+
+    var position = [];
+    $(this).find("select[role=position]").each(function() {
+      if ( $(this).val() != 0 )
+        position.push($(this).val());
+    });
+
+    stats.data.push({
+      order: $(this).find("td[role=order]").text(),
+      player_id: $(this).find("select[role=player_id]").val(),
+      position: position,
+    });
+  });
+  // console.log(stats.data);
+
+  stats.post.ajax('updatePlayer');
+});
+
 $("div.stats-post[role=pitching] button").click(function(){
   stats.data= [];
   stats.post.complete = $(this).attr("post_type") === 'complete';

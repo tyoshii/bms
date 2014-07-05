@@ -1,0 +1,154 @@
+{% extends "layout/game/edit.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+{%for batter in metum%}
+
+<div class="stats-container {%if not loop.first%}disable{%endif%}" index="{{loop.index}}">
+
+<data class="player-id disable">{{batter.player_id}}</data>
+
+<table class="table batter-meta">
+<thead>
+<tr>
+<th></th>
+<th>打順</th>
+<th>名前</th>
+<th>背番号</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+{%if not loop.first%}
+<span class="glyphicon glyphicon-chevron-left" role="switch-batter" type="prev"></span>{%endif%}
+</td>
+<td>{{batter.order}}</td>
+<td>{{batter.name}}</td>
+<td>{{batter.number}}</td>
+<td>
+{%if not loop.last%}
+<span class="glyphicon glyphicon-chevron-right" role="switch-batter" type="next"></span>{%endif%}
+</td>
+</tr>
+</tbody>
+</table>
+
+
+{# 打席詳細 #}
+{% set detail  = details[batter.player_id]  %}
+<table class="table table-striped batter-detail">
+
+<tr class="batter-detail-header">
+<th></th>
+<th>方向</th>
+<th>種類</th>
+<th>結果</th>
+</tr>
+
+{#打席詳細のフォーム#}
+{%for d in detail%}
+{%include 'batter-detail.twig'%}
+{%else%}
+{%include 'batter-detail.twig'%}
+{%endfor%}
+
+{#打席追加/削除ボタン#}
+<tfoot>
+<tr>
+<td colspan="4">
+<div class="btn-group pull-left">
+<button type="button" class="detail-add btn btn-info btn-xs">追加</button>
+<button type="button" class="detail-del btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+</tr>
+</tfoot>
+
+</table>
+
+{# 成績 #}
+{# モバイル版では、打点・得点・盗塁・エラー、のみを表示 #}
+{% set stats = hittings[batter.player_id] %}
+
+<table class="table batter-stats">
+<tbody>
+<tr>
+
+<th>打点</th>
+<td>
+<select role="RBI">
+{%for i in 0..20%}
+<option value="{{i}}" {%if i==stats.RBI%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<th>得点</th>
+<td>
+<select role="R">
+{%for i in 0..20%}
+<option value="{{i}}" {%if i==stats.R%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+<tr>
+
+<th>盗塁</th>
+<td>
+<select role="SB">
+{%for i in 0..20%}
+<option value="{{i}}" {%if i==stats.SB%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<th>エラー</th>
+<td>
+<select role="E">
+{%for i in 0..20%}
+<option value="{{i}}" {%if i==fieldings[batter.player_id].E%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+</tbody>
+</table>
+
+</div>{# class="stats-container" #}
+
+{%endfor%}
+
+{# 保存/决定ボタン #}
+<div class="stats-post" role="hitting">
+<button type="button" class="btn btn-default" post_type="save">保存</button>
+<button type="button" class="btn btn-success" post_type="complete">决定</button>
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+{{ parent() }}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+
+<script>
+$(document).ready(function() {
+    setTimeout("autosave('batter');", 30000);
+});
+</script>
+{% endblock %}
+
+
+{%block css%}
+{{parent()}}
+
+<link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
+{%endblock css%}

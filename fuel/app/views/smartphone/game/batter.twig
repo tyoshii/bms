@@ -7,7 +7,7 @@
 
 {%for batter in metum%}
 
-<div class="batter-stats-container {%if not loop.first%}disable{%endif%}" index="{{loop.index}}">
+<div class="stats-container {%if not loop.first%}disable{%endif%}" index="{{loop.index}}">
 
 <data class="player-id disable">{{batter.player_id}}</data>
 
@@ -122,12 +122,12 @@
 </tbody>
 </table>
 
-</div>{# class="batter-stats-container" #}
+</div>{# class="stats-container" #}
 
 {%endfor%}
 
 {# 保存/决定ボタン #}
-<div class="batter-stats-post">
+<div class="stats-post" role="hitting">
 <button type="button" class="btn btn-default" post_type="save">保存</button>
 <button type="button" class="btn btn-success" post_type="complete">决定</button>
 </div>
@@ -150,9 +150,5 @@ $(document).ready(function() {
 {%block css%}
 {{parent()}}
 
-<style>
-.container, #footer {
-  font-size: x-small;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
 {%endblock css%}

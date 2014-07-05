@@ -25,7 +25,41 @@ class Migration
 		 **************************/
 	}
 
+  public function position_remove_zero($args = NULL)
+  {
+		echo "\n===========================================";
+		echo "\nRunning task [migration:position_remove_zero stats]";
+		echo "\n-------------------------------------------\n\n";
 
+    $result = \Model_Stats_Player::find('all');
+
+    foreach ( $result as $res )
+    {
+      $positions = explode(',', $res->position);
+
+      while(true)
+      {
+        if ( count($positions) == 0 )
+        {
+          break;
+        }
+
+        if ( $positions[count($positions)-1] == 0 )
+        {
+          array_pop($positions);
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      $res->position = implode(',', $positions);
+      $res->save();
+    }
+
+    echo "DONE!!";
+  }
 
 	/**
 	 * This method gets ran when a valid method name is not used in the command.

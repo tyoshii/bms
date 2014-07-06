@@ -8,7 +8,7 @@ end
 bash 'deploy' do
     code <<-EOC
         cd /vagrant/deploy
-        /usr/bin/env perl deploy.pl bms.list forcd
+        /usr/bin/env perl deploy.pl bms.list force
     EOC
 end
 

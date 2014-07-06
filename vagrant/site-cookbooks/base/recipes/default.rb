@@ -37,6 +37,13 @@ end
   end
 end
 
+# Extrat
+%w{go}.each do |p|
+  package p do
+    action :install
+  end
+end
+
 
 # httpd設定
 service "httpd" do

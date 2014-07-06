@@ -117,8 +117,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # If you have your own Chef Server, the default validation client name is
   # chef-validator, unless you changed the configuration.
   # chef.validation_client_name = "ORGNAME-validator"
-  # config.omnibus.chef_version = :latest
-  config.omnibus.chef_version = "11.10.0"
+  config.omnibus.chef_version = :latest
   config.vm.provision :chef_solo do |chef|
     #chef.cookbooks_path = "./cookbooks/"
     #chef.add_recipe "php55"

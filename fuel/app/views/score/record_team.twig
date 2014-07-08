@@ -1,9 +1,136 @@
 {% extends "layout/layout.twig" %}
 
+{% block js %}
+{{parent()}}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#game_infos").dataTable();
+});
+</script>
+
+{% endblock %}
+
 {% block content %}
-{{uri_segment(2)}}
 <ul class="nav nav-tabs" id="myTab">
-  <li class="active"><a href="#">所属チーム成績</a>
+  <li class="active"><a href="#">所属チーム情報</a>
   <li><a href="/score/record_self">個人成績</a>
 </ul>
+
+<h2>{{team_name}}</h2>
+チーム成績 
+<table id="score" class="table table-hover">
+<thead>
+  <tr>
+    <th>勝</th>
+    <th>負</th>
+    <th>分</th>
+    <th>勝率</th>
+    <th>打率</th>
+    <th>試合数</th>
+    <th>打席数</th>
+    <th>打数</th>
+    <th>安打</th>
+    <th>二塁打</th>
+    <th>三塁打</th>
+    <th>本塁打</th>
+    <th>塁打数</th>
+    <th>打点</th>
+    <th>得点</th>
+    <th>三振</th>
+    <th>四球</th>
+    <th>死球</th>
+    <th>犠打</th>
+    <th>犠飛</th>
+    <th>盗塁</th>
+    <th>出塁率</th>
+    <th>長打率</th>
+    <th>OPS</th>
+    <th>失策</th>
+  </tr>
+</thead>
+<tbody>
+
+{# OBP:出塁率 #}
+{% if (stat.AB + stat.BB + stat.HBP + stat.SF) == 0 %}
+  {% set OBP=0.000%}
+{% else %}
+  {% set OBP=(stat.H + stat['2B'] + stat['3B'] + stat.HR + stat.BB + stat.HBP) / (stat.AB + stat.BB + stat.HBP + stat.SF) %}
+{% endif %}
+
+{# TB:塁打 #}
+{% set TB=stat.H + stat['2B'] + 2*stat['3B'] + 3*stat.HR %}
+
+{# SLG:長打率 #}
+{% if stat.AB == 0 %}
+  {% set SLG=0.000 %}
+{% else %}
+  {% set SLG= TB / stat.AB %}
+{% endif %}
+
+{# RATE:勝率 #}
+{% set GAMES=game_result.win + game_result.lose + game_result.draw %}
+{% if GAMES==0 %}
+  {% set RATE=0.000 %}
+{% else %}
+  {% set RATE=game_result.win/GAMES %}
+{% endif %}
+
+<tr>
+  <td>{{ game_result.win }}</td>
+  <td>{{ game_result.lose }}</td>
+  <td>{{ game_result.draw }}</td>
+  <td>{{"%.3f"|format( RATE ) }}</td>
+  <td>{% if stat.AB != 0 %}
+        {{"%.3f"|format( (stat.H + stat['2B'] + stat['3B'] + stat.HR) / stat.AB )}}</td>
+      {% else %}
+        0.000
+      {% endif %}
+  </td>
+  <td>{{ GAMES }}</td>
+  <td>{{ stat.TPA }}</td>
+  <td>{{ stat.AB }}</td>
+  <td>{{ stat.H }}</td>
+  <td>{{ stat['2B'] }}</td>
+  <td>{{ stat['3B'] }}</td>
+  <td>{{ stat.HR }}</td>
+  <td>{{ stat.H + stat['2B'] + 2*stat['3B'] + 3*stat.HR }}</td>
+  <td>{{ stat.RBI }}</td>
+  <td>{{ stat.R }}</td>
+  <td>{{ stat.SO }}</td>
+  <td>{{ stat.BB }}</td>
+  <td>{{ stat.HBP }}</td>
+  <td>{{ stat.SAC }}</td>
+  <td>{{ stat.SF }}</td>
+  <td>{{ stat.SB }}</td>
+  <td>{{"%.3f"|format( OBP ) }}</td>
+  <td>{{"%.3f"|format( SLG ) }}</td>
+  <td>{{"%.3f"|format( OBP + SLG ) }}</td>
+  <td>{{ stat.E }}</td>
+</tr>
+
+</tbody>
+</table>
+
+<table id="game_infos" class="table table-hover">
+<thead>
+  <tr>
+    <th>開催日</th>
+    <th>先攻</th>
+    <th>スコア</th>
+    <th>後攻</th>
+ </tr>
+</thead>
+<tbody>
+  {% for gi in game_infos %}
+  <tr>
+    <td>{{ gi.date }}</td>
+    <td>{{ gi.team_top_name }}</td>
+    <td>{{"%s - %s"|format(gi.tsum,gi.bsum) }}</td>
+    <td>{{gi.team_bottom_name }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+
 {% endblock %}
+

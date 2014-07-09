@@ -2,10 +2,22 @@
 
 {% block content %}
 
-<a href="/game" class="pull-right">試合一覧へもどる</a>
+<div class="pull-right">
+<ol class="breadcrumb">
+<li><a href="/game/{{game_id}}">試合概要</a></li>
+<li><a href="/game">試合一覧へもどる</a></li>
+</ol>
+</div>
 
 {# 試合概要 #}
-<h3>{{date}} {{team_top}}<small>先攻</small> vs {{team_bottom}}<small>後攻</small></h3>
+<div class="panel panel-default">
+<div class="panel-body">
+<h4>{{date}}</h4>
+<h5>{{team_top}} vs {{team_bottom}}</h5>
+</div>
+</div>
+
+{# 自動保存メッセージ(いつか消す #}
 <h4>
 <p class="text-right">
 <small class="autosave text-success">
@@ -50,19 +62,6 @@
 
 
 {%block js%}
-
 {{ parent() }}
-
 <script src="/js/game/edit.js"></script>
-<script src="/select2/select2.min.js"></script>
-<script>
-
-$(document).ready(function() {
-  $('.select2').select2({
-    width: "100%",
-  });
-});
-
-</script>
-
 {%endblock%}

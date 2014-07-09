@@ -1,18 +1,13 @@
 <?php
-/**
- * The test database settings. These get merged with the global settings.
- *
- * This environment is primarily used by unit tests, to run on a controlled environment.
- */
 
 return array(
-    'default' => array(
-        'connection'  => array(
-            'dsn'        => 'mysql:host=localhost;dbname=bms;port=3306',
-            'host'       => 'localhost',
-            'port'       => '3306',
-            'username'   => 'root',
-            'password'   => '',
-        ),
-    ),
+	'default' => array(
+      'connection'  => array(
+      'host'       => 'localhost',
+      'port'       => '3306',
+			'dsn'        => 'mysql:host=localhost;dbname=bms_test;port=3306',
+			'username'   => 'root',
+			'password'   => Config::get('password.mysql.test.root'),
+		),
+	),
 );

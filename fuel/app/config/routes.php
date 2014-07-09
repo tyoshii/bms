@@ -28,6 +28,8 @@ return array(
 #  'score/record_league' => 'score/record_league',
 
   'register' => 'register/index',
+  'forget_password' => 'register/forget_password',
+  'reset_password'  => 'register/reset_password',
 
 //  '_root_'  => 'welcome/index',  // The default route
   '_404_'   => 'welcome/404',    // The main 404 route

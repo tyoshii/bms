@@ -1,34 +1,106 @@
-{% extends "layout.twig" %}
+{% extends "layout/layout.twig" %}
+
+{% block js %}
+{{parent()}}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#score").dataTable();
+});
+</script>
+
+{% endblock %}
 
 {% block content %}
-
-<pre>
-自分の成績
-
-個人成績
-（所属チームごと選択？ -> 否、所属チームごとにアカウント作成）
-
-チーム成績
-（チーム総合、対戦成績）
-フィルター
- - 種別（練習試合、公式戦、、、etc)
- - 相手
-
-リーグ成績
-（対戦成績、個人タイトル、各チーム成績)
-
-ほかチームの成績がみれるかどうかは設定次第。
- - リーグ選択
- - チーム選択
-
-- どんなタイトルを用意するかは設定可能とするが
-- 最初はIT LEAGUEのを参考にだす
-
-</pre>
 
 <ul class="nav nav-tabs" id="myTab">
   <li><a href="/score">所属チーム成績</a>
   <li class="active"><a href="#">個人成績</a>
 </ul>
+
+<table id="score" class="table table-hover">
+<thead>
+  <tr>
+    <th>背番号</th>
+    <th>チーム</th>
+    <th>名前</th>
+    <th>打率</th>
+    <th>試合数</th>
+    <th>打席数</th>
+    <th>打数</th>
+    <th>安打</th>
+    <th>二塁打</th>
+    <th>三塁打</th>
+    <th>本塁打</th>
+    <th>塁打数</th>
+    <th>打点</th> 
+    <th>得点</th> 
+    <th>三振</th> 
+    <th>四球</th> 
+    <th>死球</th> 
+    <th>犠打</th> 
+    <th>犠飛</th> 
+    <th>盗塁</th> 
+    <th>出塁率</th>
+    <th>長打率</th>
+    <th>OPS</th>
+    <th>失策</th>
+  </tr>
+</thead>
+
+<tbody>
+{% for stat in stats %}
+  {# OBP:出塁率 #}
+  {% if (stat.AB + stat.BB + stat.HBP + stat.SF) == 0 %}
+    {% set OBP=0.000%}
+  {% else %}
+    {% set OBP=(stat.H + stat['2B'] + stat['3B'] + stat.HR + stat.BB + stat.HBP) / (stat.AB + stat.BB + stat.HBP + stat.SF) %}
+  {% endif %}
+
+  {# TB:塁打 #}
+  {% set TB=stat.H + stat['2B'] + 2*stat['3B'] + 3*stat.HR %}
+
+  {# SLG:長打率 #}
+  {% if stat.AB == 0 %}
+    {% set SLG=0.000 %}
+  {% else %}
+    {% set SLG= TB / stat.AB %}
+  {% endif %}
+
+  <tr>
+    <td>{{ stat.number }}</td>
+    <td>{{ stat.team }}</td>
+    <td>{{ stat.name }}</td>
+    <td>{% if stat.AB != 0 %}
+          {{"%.3f"|format( (stat.H + stat['2B'] + stat['3B'] + stat.HR) / stat.AB )}}</td>
+        {% else %}
+          0.000
+        {% endif %}
+    </td>
+    <td>{{ stat.G }}</td>
+    <td>{{ stat.TPA }}</td>
+    <td>{{ stat.AB }}</td>
+    <td>{{ stat.H }}</td>
+    <td>{{ stat['2B'] }}</td>
+    <td>{{ stat['3B'] }}</td>
+    <td>{{ stat.HR }}</td>
+    <td>{{ stat.H + stat['2B'] + 2*stat['3B'] + 3*stat.HR }}</td>
+    <td>{{ stat.RBI }}</td>
+    <td>{{ stat.R }}</td>
+    <td>{{ stat.SO }}</td>
+    <td>{{ stat.BB }}</td>
+    <td>{{ stat.HBP }}</td>
+    <td>{{ stat.SAC }}</td>
+    <td>{{ stat.SF }}</td>
+    <td>{{ stat.SB }}</td>
+    <td>{{"%.3f"|format( OBP ) }}</td>
+    <td>{{"%.3f"|format( SLG ) }}</td>
+    <td>{{"%.3f"|format( OBP + SLG ) }}</td>
+    <td>{{ stat.E }}</td>
+   
+  </tr>
+{% endfor %}
+
+</tbody>
+</table>
 
 {% endblock %}

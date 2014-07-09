@@ -34,6 +34,15 @@ class Controller_Base extends Controller
     }
   }
 
+  public function after($res)
+  {
+    $res = parent::after($res);
+
+    $res->body->usericon = Common::get_usericon_url();
+
+    return $res;
+  }
+
   static public function _get_login_form ()
   {
     // login form

@@ -1,6 +1,8 @@
 # dir
 dir /var/www/bms/
 dir /var/www/bms/public/
+dir /var/www/bms/fuel/
+dir /var/www/bms/fuel/app/
 dir /var/www/bms/fuel/app/cache/
 
 # httpd conf
@@ -14,13 +16,16 @@ symlink ../conf/bms.ini /etc/php.d/bms.ini
 symlink ../fuel/                         /var/www/bms/fuel/
 symlink ../public/assets/                /var/www/bms/public/assets/
 symlink ../public/twbootstrap/           /var/www/bms/public/twbootstrap/
-symlink ../public/bootstrap_formhelpers/ /var/www/bms/public/bootstrap_formhelpers/
-symlink ../public/chosen/                /var/www/bms/public/chosen/
 symlink ../public/select2/               /var/www/bms/public/select2/
 symlink ../public/jquery-ui/             /var/www/bms/public/jquery-ui/
 symlink ../public/datepicker/            /var/www/bms/public/datepicker/
+symlink ../public/datatable/             /var/www/bms/public/datatable/
 symlink ../public/js/                    /var/www/bms/public/js/
 symlink ../public/css/                   /var/www/bms/public/css/
+symlink ../public/image/                 /var/www/bms/public/image/
 symlink ../public/favicon.ico            /var/www/bms/public/favicon.ico
 
 copy ../public/index.php /var/www/bms/public/index.php
+
+# version file
+symlink ../CHANGELOG.md /var/www/bms/CHANGELOG.md

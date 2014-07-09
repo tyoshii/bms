@@ -8,11 +8,12 @@ use File::Spec;
 use File::Path;
 
 # option
-my $force = $ARGV[0] eq 'force';
+my $file  = $ARGV[0] or die 'specify deploy file list';
+my $force = defined $ARGV[1] ? $ARGV[1] eq 'force' : 0;
+my $debug = defined $ARGV[2] ? $ARGV[2] eq 'debug' : 0;
 
 # file list
-my $list = 'bms.list';
-my @files = `cat $list`;
+my @files = `cat $file`;
 
 my $hash;
 for my $row ( @files ) {
@@ -59,7 +60,7 @@ for my $hash_sym ( @{$hash->{'symlink'}} ) {
         mkdir $dest;
         chdir $dest;
 
-        my @orig_lists = `find $orig -type f`;
+        my @orig_lists = `find "$orig" -type f`;
         for my $f ( @orig_lists ) {
             chomp $f;
             next if $f =~ m{\.git};
@@ -96,7 +97,7 @@ sub _copy {
     if ( -f $dest || -d $dest ) {
         if ( ! $force ) {
             print "delete dest file for copy\n";
-            `rm -i $dest`;
+            `rm -i "$dest"`;
         }
     }
 
@@ -113,7 +114,7 @@ sub _symlink {
     my $dest = shift;
 
     if ( -l $dest ) {
-        `rm $dest`;
+        `rm "$dest"`;
     }
 
     if ( symlink $orig, $dest ) {
@@ -131,6 +132,9 @@ sub _red {
 
 sub _green {
     my $msg = shift;
-    print "\e[32m$msg\e[m\n";
+
+    if ( $debug ) {
+        print "\e[32m$msg\e[m\n";
+    }
 }
 

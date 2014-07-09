@@ -96,14 +96,17 @@ class Controller_Game extends Controller_Base
       Response::redirect(Uri::create('/game'));
     }
 
-    $view = View::forge("game/{$kind}.twig");
+    // view load
+    $view = Theme::instance()->view("game/{$kind}.twig");
 
     // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )
       $team_id = Model_Player::getMyTeamId();
 
     // 所属選手
+    // - TODO: 変数名をmembersからplayersへ変更したい。
     $view->members = Model_Player::get_players($team_id);
+    $view->players = $view->members;
 
     // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
@@ -124,7 +127,8 @@ class Controller_Game extends Controller_Base
         $view->metum = self::_filter_only_pitcher($view->metum);
 
         // 成績
-        $view->stats = Model_Stat::getStats('stats_pitchings', $game_id, 'player_id');
+        $where = array( 'game_id' => $game_id );
+        $view->stats = Model_Stat::getStats('stats_pitchings', $where, 'player_id');
         break;
 
       case 'batter':
@@ -132,13 +136,17 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('moderator.moderator') )
+        if ( ! Auth::has_access('admin.admin') )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
-        $view->hittings  = Model_Stat::getStats('stats_hittings', $game_id, 'player_id');
-        $view->details   = Model_Stats_Hittingdetail::getStats($game_id); 
-        $view->fieldings = Model_Stat::getStats('stats_fieldings', $game_id, 'player_id');
+        $where = array(
+          'game_id' => $game_id,
+          'team_id' => $team_id,
+        );
+        $view->hittings  = Model_Stats_Hitting::getStats($where);
+        $view->details   = Model_Stats_Hittingdetail::getStats($where); 
+        $view->fieldings = Model_Stats_Fielding::getStats($where);
         break;
 
       case 'other':
@@ -148,6 +156,8 @@ class Controller_Game extends Controller_Base
                         ->get_one();
 
         $view->others = json_decode($stat->others);
+
+        $view->game_status = Model_Game::get_game_status($game_id, $team_id);
         break;
 
       default:
@@ -185,6 +195,7 @@ class Controller_Game extends Controller_Base
     $form->add('date', '試合実施日', array(
       'class'            => 'form-control form-datepicker',
       'placeholder'      => '試合実施日',
+      'value'        => date('Y-m-d'),
       'data-date-format' => 'yyyy-mm-dd',
     ))
       ->add_rule('required')
@@ -196,7 +207,7 @@ class Controller_Game extends Controller_Base
     $attrs = array(
       'type'    => 'select',
       'options' => $teams,
-      'class'   => 'form-control chosen-select',
+      'class'   => 'select2',
     );
 
     // - 先攻
@@ -299,7 +310,7 @@ class Controller_Game extends Controller_Base
         continue;
       }
 
-      if ( strpos($player['position'], '1') !== false )
+      if ( array_search(1, $player['position']) !== false )
       {
         $res[$index] = $player;
       }

@@ -1,3 +1,14 @@
+var stats = {
+  type: function() {
+    var path = location.pathname.split('/');
+    return path[3];
+  },
+  data: function() {
+    return {};
+  }
+};
+
+
 $(document).ready(function(){
   batter_result_update();
 });
@@ -126,7 +137,8 @@ function post_other(is_alert) {
     mip2: $("select#mip2").val(),
     mip1: $("select#mip1").val(),
     place: $("input#place").val(),
-    memo: $("textarea#memo").val()
+    memo: $("textarea#memo").val(),
+    status: $("select#status").val()
   };
 //console.log(data);
 
@@ -155,7 +167,7 @@ function post_other(is_alert) {
   });
 }
 
-function post_batter(is_alert) {
+function post_batter(is_alert, is_comp) {
 
   var data = [];
   var detail = [];
@@ -180,27 +192,16 @@ function post_batter(is_alert) {
       });
     }
     else {
-      var seiseki = {};
-
-      // td
-      var category1 = [
-        'daseki', 'dasuu',
-        'anda', 'niruida', 'sanruida', 'honruida',
-        'sanshin', 'yontama', 'shikyuu',
-        'gida', 'gihi'
-      ];
-      for ( var i in category1 ) {
-        var key = category1[i];
-        var val = $this.children('td.' + key).text();
-
-        if ( val == '' ) val = 0;
-
-        seiseki[key] = val;
-      }
+      var stats = {
+        'TPA': 0, 'AB':  0,
+        'H':   0, '2B':  0, '3B':  0, 'HR':  0,
+        'SO':  0, 'BB':  0, 'HBP': 0,
+        'SAC': 0, 'SF':  0,
+      };
 
       // input number
       var category2 = [
-        'daten', 'tokuten', 'steal', 'error' 
+        'RBI', 'R', 'SB', 'E' 
       ];
       for ( var i in category2 ) {
         var key = category2[i];
@@ -208,11 +209,11 @@ function post_batter(is_alert) {
 
         if ( val == '' ) val = 0;
 
-        seiseki[key] = val;
+        stats[key] = val;
       }
 
       data[id] = {
-        seiseki: seiseki,
+        stats: stats,
         detail: [],
       };
     }
@@ -227,7 +228,8 @@ function post_batter(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      batter: data
+      batter: data,
+      complete: is_comp
     },
     success: function(html) {
       if ( is_alert === true ) {
@@ -389,23 +391,24 @@ function add_order(self, kind) {
     $(this).select2('destroy');
   });
 
-  var $tr = $($('.player-tr')[0]);
+  var $tr = $("tr[played=starter]:last");
   var $clone = $tr.clone(true);
 
   // init number
   $clone.find('td.number').text('');
 
-  // init order
+  // 打順を追加
   if ( kind === 'last' ) {
     // 最後に追加するときは、打順をインクリメント
-    var last_order = $('.player-tr:last td.order').text();
-    $clone.find('td.order').text(++last_order);
+    var order = $tr.find("td.order").text();
+    $clone.find('td.order').text( parseInt(order) + 1 );
 
     // 元々最後だった行から削除ボタンを消す
-    var $last = $('.player-tr:last');
-    $last.find('button.delete-order').remove();
+    $tr.find('button.delete-order').remove();
   }
+  // 交代の時
   else {
+    $clone.removeAttr("played");
     $clone.find('td.order').text('');
   }
 
@@ -429,10 +432,12 @@ function add_order(self, kind) {
   $clone.fadeIn();
   
   // select2 available
-  $('.select2').select2();
+  $('.select2').select2({
+    width: '100%',
+  });
 }
 
-function post_pitcher(is_alert) {
+function post_pitcher(is_alert, is_comp) {
   var $pitcher = $("table#pitcher tbody tr");
   var data = [];
 
@@ -475,7 +480,8 @@ function post_pitcher(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      pitcher: data
+      stats: data,
+      complete: is_comp
     },
     success: function(html) {
       if ( is_alert === true ) {
@@ -585,7 +591,7 @@ function post_player(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      players: data
+      stats: data
     },
     success: function(html) {
       if ( is_alert === true ) {

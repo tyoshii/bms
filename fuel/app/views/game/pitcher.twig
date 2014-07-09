@@ -28,6 +28,14 @@
 {# header #}
 {{ parent() }}
 
+
+{%if metum|length == 0%}
+<div class="alert alert-warning">
+<p>出場選手に投手がいません。</p>
+<p>出場選手でポジションを確認するか、チーム管理者に問い合わせてください。</p>
+</div>
+{%endif%}
+
 <table id="pitcher" class="table">
 <thead>
 <tr>
@@ -105,7 +113,8 @@
 </tbody>
 </table>
 
-<button class="btn btn-success" onClick="post_pitcher(true);">登録</button>
+<button class="btn btn-default" onClick="post_pitcher(true);">保存</button>
+<button class="btn btn-success" onClick="post_pitcher(true, true);">完了</button>
 
 {% endblock content %}
 

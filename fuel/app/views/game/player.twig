@@ -4,7 +4,7 @@
 <select class="member_id select2" onChange="update_number(this);">
 <option value="0">--------------------</option>
 {% for member in members %}
-<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>{{member.name}}[{{member.number}}]</option>
+<option value="{{member.id}}" {%if member.id == id%}selected{%endif%}>#{{member.number}} {{member.name}}</option>
 {% endfor %}
 </select>
 {% endmacro %}
@@ -48,17 +48,18 @@
 
 <tbody>
 {% for meta in metum %}
-<tr class="player-tr">
+<tr class="player-tr" {%if meta.order != 0%}played="starter"{%endif%}>
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
 {% if meta.order == 0 or ( meta.order > 9 and loop.last ) %}
 <button onClick="delete_order(this, '{{loop.last}}');" class="btn btn-danger btn-xs delete-order">削除</button>
 {% endif %}
 </td>
-<td class="order">{{- meta.order -}}</td>
+<td class="order">{%if meta.order != 0%}{{- meta.order -}}{%endif%}</td>
 <td class="member_id">{{_self.name_select(members, meta.player_id)}}</td>
 <td class="number">{{ meta.number }}</td>
-{% for pos in meta.position|split(',')%}
+{%for i in 0..5%}
+{%set pos = meta.position[i]%}
 <td class="position">{{_self.position_select(pos)}}</td>
 {%endfor%}
 </tr>
@@ -92,13 +93,6 @@
 
 {% endblock %}
 
-
-
-{% block css %}
-{{ parent() }}
-<link href="/bootstrap_formhelpers/css/bootstrap-formhelpers.css" rel="stylesheet">
-<link href="/select2/select2.css" rel="stylesheet">
-{% endblock %}
 
 {% block js %}
 

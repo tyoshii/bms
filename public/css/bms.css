@@ -19,6 +19,11 @@ body {
 }
 
 
+img#user-icon {
+  margin: -10px;
+}
+
+
 th.team {
   width: 100px;
 }
@@ -46,19 +51,6 @@ th.position {
   width: 100px;
 }
 
-td.daten {
-  width: 70px;
-}
-td.tokuten {
-  width: 70px;
-}
-td.steal {
-  width: 70px;
-}
-td.error {
-  width: 70px;
-}
-
 td.button {
   text-align: right;
 }
@@ -67,6 +59,16 @@ td.daseki-number-text {
 }
 tr.detail {
   background-color: #F5F5F5;  
+}
+
+div.stats-container table th, td {
+  text-align: center;
+}
+div.stats-post {
+  text-align: center;
+}
+div.batter-stats-post button {
+  margin: 10px;
 }
 
 table#pitcher input {
@@ -106,6 +108,10 @@ table#pitcher td.R {
   width: 80px;
 }
 
+table#game-list tbody tr {
+  cursor: pointer;
+}
+
 table#game-list tr.own {
   background-color: #FFFFCC;  
 }
@@ -114,15 +120,17 @@ table#score input {
   width: 40px;
 }
 
-table#batter td.daten input,
-table#batter td.tokuten input,
-table#batter td.steal input,
-table#batter td.error input {
-  width: 40px;
+table#batter td.RBI,
+table#batter td.R,
+table#batter td.SB,
+table#batter td.E {
+  width: 70px;
 }
-
-table.games td {
-  cursor: pointer;
+table#batter td.RBI input,
+table#batter td.R input,
+table#batter td.SB input,
+table#batter td.E input {
+  width: 40px;
 }
 
 .disable {

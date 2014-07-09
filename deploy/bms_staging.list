@@ -1,0 +1,31 @@
+# dir
+dir /var/www/bms_staging/
+dir /var/www/bms_staging/public/
+dir /var/www/bms_staging/fuel/
+dir /var/www/bms_staging/fuel/app/
+dir /var/www/bms_staging/fuel/app/cache/
+
+# httpd conf
+symlink ../conf/virtualhost-00.conf  /etc/httpd/conf.d/virtualhost-00.conf
+symlink ../conf/virtualhost-bms.conf /etc/httpd/conf.d/virtualhost-bms.conf
+
+# php conf
+symlink ../conf/bms.ini /etc/php.d/bms.ini
+
+# fuel app
+symlink ../fuel/                         /var/www/bms_staging/fuel/
+symlink ../public/assets/                /var/www/bms_staging/public/assets/
+symlink ../public/twbootstrap/           /var/www/bms_staging/public/twbootstrap/
+symlink ../public/select2/               /var/www/bms_staging/public/select2/
+symlink ../public/jquery-ui/             /var/www/bms_staging/public/jquery-ui/
+symlink ../public/datepicker/            /var/www/bms_staging/public/datepicker/
+symlink ../public/datatable/             /var/www/bms_staging/public/datatable/
+symlink ../public/js/                    /var/www/bms_staging/public/js/
+symlink ../public/css/                   /var/www/bms_staging/public/css/
+symlink ../public/image/                 /var/www/bms_staging/public/image/
+symlink ../public/favicon.ico            /var/www/bms_staging/public/favicon.ico
+
+copy ../public/index.php /var/www/bms_staging/public/index.php
+
+# version file
+symlink ../CHANGELOG.md /var/www/bms_staging/CHANGELOG.md

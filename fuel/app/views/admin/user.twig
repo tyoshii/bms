@@ -21,7 +21,7 @@
 
 <div class="col-md-8">
 
-<table class="table">
+<table class="table table-hover" apply="datatable">
 
 <thead>
 <tr>
@@ -46,7 +46,11 @@
 <td>
 <form method="POST">
 <input type="hidden" name="username" value="{{user.username}}">
-<input type="submit" class="btn btn-warning" onClick="return window.confirm('このユーザーを無効にしてよろしいですか？');" value="無効">
+{%if user.group == '-1'%}
+<input type="submit" name="submit" class="btn btn-default" onClick="return window.confirm('このユーザーを再有効にしてよいですか？');" value="最有効">
+{%else%}
+<input type="submit" name="submit" class="btn btn-warning" onClick="return window.confirm('このユーザーを無効にしてよろしいですか？');" value="無効">
+{%endif%}
 </form>
 </td>
 </tr>

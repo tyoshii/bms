@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.06
+
+* 成績を表示
+* 成績入力のスマホ対応
+* usericonをgravaterから取得
+
 ## Version 0.0.5
 
 * パスワードを忘れてしまった時のインターフェースを実装

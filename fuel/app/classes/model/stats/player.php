@@ -39,7 +39,25 @@ class Model_Stats_Player extends \Orm\Model
 
     $query->order_by('player.disp_order');
 
-    return $query->execute()->as_array();
+    $result = $query->execute()->as_array();
+
+    foreach ( $result as $index => $res )
+    {
+      if ( $res['position'] == '' )
+      {
+        $result[$index]['position'][] = '';
+      }
+      else
+      {
+        // テンプレート表示の際に、次のselectボックスを出すために、
+        // 配列の最後にから配列を入れる。
+        $temp   = explode(',', $res['position']);
+        $temp[] = '';
+        $result[$index]['position'] = $temp;
+      }
+    }
+
+    return $result;
   }
 
   public static function createNewGame($game_id, $team_id)
@@ -82,7 +100,7 @@ class Model_Stats_Player extends \Orm\Model
           'disp_order' => $disp_order,
           'player_id'  => $player['player_id'],
           'order'      => $player['order'] ?: 0,
-          'position'   => implode(',', $player['position']),
+          'position'   => array_key_exists('position', $player) ? implode(',', $player['position'] ) : '',
         ));
 
         $player->save();

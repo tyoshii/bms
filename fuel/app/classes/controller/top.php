@@ -9,7 +9,7 @@ class Controller_Top extends Controller_Base
 
 	public function action_index()
 	{
-    $view = View::forge('top.twig');
+    $view = Theme::instance()->view('top.twig');
 
     if ( Auth::check() )
     {

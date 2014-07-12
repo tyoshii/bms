@@ -100,7 +100,7 @@ class Model_Stats_Player extends \Orm\Model
           'disp_order' => $disp_order,
           'player_id'  => $player['player_id'],
           'order'      => $player['order'] ?: 0,
-          'position'   => implode(',', $player['position']),
+          'position'   => array_key_exists('position', $player) ? implode(',', $player['position'] ) : '',
         ));
 
         $player->save();

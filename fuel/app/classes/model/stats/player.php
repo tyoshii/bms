@@ -96,11 +96,14 @@ class Model_Stats_Player extends \Orm\Model
       {
         if ( ! $player ) continue;
 
+        // player_id, order, position
+        extract($player);
+
         $player = self::forge($ids + array(
           'disp_order' => $disp_order,
-          'player_id'  => $player['player_id'],
-          'order'      => $player['order'] ?: 0,
-          'position'   => implode(',', $player['position']),
+          'player_id'  => $player_id,
+          'order'      => $order ?: 0,
+          'position'   => isset($position) ? implode(',', $position ) : '',
         ));
 
         $player->save();

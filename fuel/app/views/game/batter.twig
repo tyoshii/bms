@@ -61,10 +61,10 @@
 <td class="seiseki gida">{{hitting.SAC}}</td>
 <td class="seiseki gihi">{{hitting.SF}}</td>
 
-<td class="RBI"><input type="number" value="{{hitting.RBI}}" min="0"></td>
-<td class="R"><input type="number" class="" value="{{hitting.R}}" min="0"></td>
-<td class="SB"><input type="number" class="" value="{{hitting.SB}}" min="0"></td>
-<td class="E"><input type="number" class="" value="{{fieldings[batter.player_id].E}}" min="0"></td>
+<td class="RBI"><input type="number" value="{{hitting.RBI}}" onMousedown="eraseTA(this)" min="0"></td>
+<td class="R"><input type="number" class="" value="{{hitting.R}}" onMousedown="eraseTA(this)" min="0"></td>
+<td class="SB"><input type="number" class="" value="{{hitting.SB}}" onMousedown="eraseTA(this)" min="0"></td>
+<td class="E"><input type="number" class="" value="{{fieldings[batter.player_id].E}}" onMousedown="eraseTA(this)" min="0"></td>
 </tr>
 
 

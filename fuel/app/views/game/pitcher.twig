@@ -117,14 +117,3 @@
 <button class="btn btn-success" onClick="post_pitcher(true, true);">完了</button>
 
 {% endblock content %}
-
-{% block js %}
-
-{{ parent() }}
-
-<script>
-$(document).ready(function() {
-    setTimeout("autosave('pitcher');", 30000);
-});
-</script>
-{% endblock %}

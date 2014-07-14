@@ -11,6 +11,27 @@ body {
   /* Negative indent footer by it's height */
   margin: 0 auto -60px;
 }
+
+nav div.alert {
+  margin-bottom: 0px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+nav div[env] {
+  padding: 5px;
+  color: white;
+}
+nav div[env="development"] {
+  background-color: red;
+}
+nav div[env="test"] {
+  background-color: green;
+}
+nav div[env="staging"] {
+  background-color: blue;
+}
  
 /* Set the fixed height of the footer here */
 #push, #footer {

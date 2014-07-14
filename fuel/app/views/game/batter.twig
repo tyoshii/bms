@@ -107,9 +107,14 @@
 {% endfor %}
 </table>
 
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
 <button class="btn btn-default" onClick="post_batter(true);">保存</button>
 <button class="btn btn-success" onClick="post_batter(true, true);">决定</button>
-
+{%endif%}
 
 {% endblock content %}
 

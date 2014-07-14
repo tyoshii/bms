@@ -12,6 +12,8 @@ class Controller_Admin extends Controller_Base
 
   public function after($response)
   {
+    $response = parent::after($response);
+
     $kind = Uri::segment(2);
 
     $response->body->active = array( $kind => 'active' );

@@ -16,9 +16,13 @@ var stats = {
         success: function(html) {
           alert('成績保存に成功しまし');
         },
-        error: function(html) {
-          alert('エラーが発生しました');
-        }
+        error: function(res) {
+          if ( res.status === 403 ) {
+            alert(res.responseText);
+          }
+          else {
+            alert("システムエラーが発生しました");
+          }
       });
     },
   },

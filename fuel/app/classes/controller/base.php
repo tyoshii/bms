@@ -39,6 +39,17 @@ class Controller_Base extends Controller
     $res = parent::after($res);
 
     $res->body->usericon = Common::get_usericon_url();
+    $res->body->env = Fuel::$env;
+
+    // induct to each env
+    if ( Auth::has_access('moderator.moderator') )
+    {
+      $res->body->induct_each_env = true;
+    }
+    if ( Model_Player::get_my_team_name() === 'レジャーズ' )
+    {
+      $res->body->induct_each_env = true;
+    }
 
     return $res;
   }

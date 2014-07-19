@@ -35,20 +35,27 @@
 
 <div id="wrap">
 
+{# header #}
+<nav class="navbar navbar-default" role="navigation">
+
 {# ステージング環境への誘導 #}
-{%if auth_has_access('moderator.moderator')%}
-<button class="btn btn-default btn-xs" onClick="location.href='http://'+location.host+':8080';">ステージング環境</button>
+{%if induct_each_env%}
+<div class="alert alert-info alert-dismissable" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+Switching each env : 
+<a class="alert-link" onClick="location.href='http://'+location.hostname;">production</a>
+/
+<a class="alert-link" onClick="location.href='http://'+location.hostname+':8080';">staging</a>
+/
+<a class="alert-link" onClick="location.href='http://'+location.hostname+':9999';">test</a>
+</div>
 {%endif%}
 
 {# production以外は上部に赤い線 #}
 {%if env != 'production'%}
-<div style="width:100%; background-color:red; height: 5px;">
-&nbsp;
-</div>
+<div env="{{env}}">FUEL_ENV = {{env}}</div>
 {%endif%}
 
-{# header #}
-<nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bms-navbar">

@@ -9,7 +9,6 @@ class Base_Twig_Extension extends Twig_Extension
   public function getGlobals()
   {
     return array(
-      'env' => Fuel::$env,
       'screen_name' => Common::get_dispname(),
     );
   }

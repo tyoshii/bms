@@ -18,9 +18,9 @@
 <tbody>
 {%for i in range(1,12)%} 
 <tr>
-<th>{{loop.index}}</th>
+<th data-type="inning">{{loop.index}}</th>
 <td>
-<select>
+<select data-type="score_top">
 <option value=""></option>
 {%for j in range(0,40)%}
 <option value="{{j}}" {%if j==score['t'~i]%}selected{%endif%}>{{j}}</option>
@@ -29,7 +29,7 @@
 </td>
 
 <td>
-<select>
+<select data-type="score_bottom">
 <option value=""></option>
 {%for j in range(0,40)%}
 <option value="{{j}}" {%if j==score['b'~i]%}selected{%endif%}>{{j}}</option>
@@ -44,13 +44,15 @@
 <tfoot>
 <tr>
 <th>R</th>
-<th>{{score.tsum}}</th>
-<th>{{score.bsum}}</th>
+<th data-type="score_top_sum">{{score.tsum}}</th>
+<th data-type="score_bottom_sum">{{score.bsum}}</th>
 </tr>
 </tfoot>
 </table>
 
-
+<div class="stats-post" role="score">
+<button type="button" class="btn btn-success">登録</button>
+</div>
 
 <table id="score" class="table">
 <thead>
@@ -135,6 +137,7 @@ $(document).ready(function(){
   });
 });
 </script>
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
 {% endblock js %}
 
 {%block css%}

@@ -464,4 +464,18 @@ class Model_Games_Runningscore extends \Orm\Model
 
     $score->save();
   }
+
+  public static function regist($game_id, $stats)
+  {
+    // 空の値をnullにする
+    foreach ( $stats as $key => $val )
+    {
+      if ( $val === '' )
+        $stats[$key] = null;
+    }
+
+    $score = self::find($game_id);
+    $score->set($stats);
+    $score->save();
+  }
 }

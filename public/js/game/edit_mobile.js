@@ -23,10 +23,11 @@ var stats = {
           else {
             alert("システムエラーが発生しました");
           }
+        },
       });
     },
   },
-}
+};
 
 // object: player
 var player = {

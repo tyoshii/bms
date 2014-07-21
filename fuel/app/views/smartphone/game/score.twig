@@ -1,0 +1,143 @@
+{% extends 'layout/game/edit.twig' %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+<table class="table table-bordered" role="score">
+
+<thead>
+<tr>
+<th class="width-20">
+<th class="width-40"><p>先攻</p>{{team_top}}</th>
+<th class="width-40"><p>後攻</p>{{team_bottom}}</th>
+</tr>
+</thead>
+
+<tbody>
+{%for i in range(1,12)%} 
+<tr>
+<th>{{loop.index}}</th>
+<td>
+<select>
+<option value=""></option>
+{%for j in range(0,40)%}
+<option value="{{j}}" {%if j==score['t'~i]%}selected{%endif%}>{{j}}</option>
+{%endfor%}
+</select>
+</td>
+
+<td>
+<select>
+<option value=""></option>
+{%for j in range(0,40)%}
+<option value="{{j}}" {%if j==score['b'~i]%}selected{%endif%}>{{j}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+{%endfor%}
+</tbody>
+
+<tfoot>
+<tr>
+<th>R</th>
+<th>{{score.tsum}}</th>
+<th>{{score.bsum}}</th>
+</tr>
+</tfoot>
+</table>
+
+
+
+<table id="score" class="table">
+<thead>
+<tr>
+<th class="team">チーム</th>
+{% for i in range(1,12) %}
+<th>{{i}}</th>
+{% endfor %}
+<th class="sum">合計</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td class="team">{{team_top}}</td>
+{% for i in range(1,12) %}
+{% set k = 't' ~ i %}
+{% set v = score[k] %}
+<td><input type="number" class="score tscore" value="{{v}}" min="0" name="{{k}}"></td>
+{% endfor %}
+<td class="tsum">{{score.tsum}}</td>
+</tr>
+
+<tr>
+<td class="team">{{team_bottom}}</td>
+{% for i in range(1,12) %}
+{% set k = 'b' ~ i %}
+{% set v = score[k] %}
+<td><input type="number" class="score bscore" value="{{v}}" min="0" name="{{k}}"></td>
+{% endfor %}
+<td class="bsum">{{score.bsum}}</td>
+</tr>
+
+</tbody>
+</table>
+
+<button class="btn btn-success" onClick="post_score(true);">登録</button>
+
+{% endblock content %}
+
+
+{% block js %}
+
+{{parent()}}
+
+<script>
+
+function calcsum() {
+
+  var tscore = 0, bscore = 0;
+
+  $('.tscore').each(function(){
+    var s = parseInt($(this).val());
+    tscore += isNaN(s) ? 0 : s;
+  });
+  $('.bscore').each(function(){
+    var s = parseInt($(this).val());
+    bscore += isNaN(s) ? 0 : s;
+  });
+
+  $('td.tsum').each(function(){
+    $(this).text(tscore);
+  });
+  $('td.bsum').each(function(){
+    $(this).text(bscore);
+  });
+
+  $('input.tsum').attr('value', tscore);
+  $('input.bsum').attr('value', bscore);
+
+  return true;
+}
+
+$(document).ready(function(){
+  calcsum();
+
+  $('input.score').each(function() {
+      $(this).bind('click blur keydown keyup keypress change',function(){
+        calcsum();
+      });
+  });
+});
+</script>
+{% endblock js %}
+
+{%block css%}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
+{%endblock css%}

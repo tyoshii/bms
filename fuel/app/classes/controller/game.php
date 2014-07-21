@@ -307,7 +307,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('moderator.moderator') and $player['player_id'] !== $myid )
+      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
       {
         continue;
       }

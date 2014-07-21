@@ -16,14 +16,14 @@
 </thead>
 
 <tbody>
-{%for i in range(1,12)%} 
+{%for score in scores%} 
 <tr>
 <th data-type="inning">{{loop.index}}</th>
 <td>
 <select data-type="score_top">
-<option value=""></option>
-{%for j in range(0,40)%}
-<option value="{{j}}" {%if j==score['t'~i]%}selected{%endif%}>{{j}}</option>
+<option></option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if score.top == i~''%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -31,8 +31,8 @@
 <td>
 <select data-type="score_bottom">
 <option value=""></option>
-{%for j in range(0,40)%}
-<option value="{{j}}" {%if j==score['b'~i]%}selected{%endif%}>{{j}}</option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if i == score.bottom%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -44,8 +44,8 @@
 <tfoot>
 <tr>
 <th>R</th>
-<th data-type="score_top_sum">{{score.tsum}}</th>
-<th data-type="score_bottom_sum">{{score.bsum}}</th>
+<th data-type="score_top_sum">{{tsum}}</th>
+<th data-type="score_bottom_sum">{{bsum}}</th>
 </tr>
 </tfoot>
 </table>
@@ -53,44 +53,6 @@
 <div class="stats-post" role="score">
 <button type="button" class="btn btn-success">登録</button>
 </div>
-
-<table id="score" class="table">
-<thead>
-<tr>
-<th class="team">チーム</th>
-{% for i in range(1,12) %}
-<th>{{i}}</th>
-{% endfor %}
-<th class="sum">合計</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td class="team">{{team_top}}</td>
-{% for i in range(1,12) %}
-{% set k = 't' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="score tscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="tsum">{{score.tsum}}</td>
-</tr>
-
-<tr>
-<td class="team">{{team_bottom}}</td>
-{% for i in range(1,12) %}
-{% set k = 'b' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="score bscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="bsum">{{score.bsum}}</td>
-</tr>
-
-</tbody>
-</table>
-
-<button class="btn btn-success" onClick="post_score(true);">登録</button>
 
 {% endblock content %}
 

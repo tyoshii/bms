@@ -478,4 +478,27 @@ class Model_Games_Runningscore extends \Orm\Model
     $score->set($stats);
     $score->save();
   }
+
+  public static function get_score($game_id)
+  {
+    $score = self::find($game_id);
+
+    $return = array();
+
+    for ( $i = 1; $i <= 12; $i++ )
+    {
+      $tkey = 't'.$i;
+      $bkey = 'b'.$i;
+
+      if ( $score->$tkey === null and $score->$bkey === null )
+        break;
+
+      $return[] = array(
+        'top'    => $score->$tkey,
+        'bottom' => $score->$bkey,
+      );
+    }
+
+    return array($return, $score->tsum, $score->bsum);
+  }
 }

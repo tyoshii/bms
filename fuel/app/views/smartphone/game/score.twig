@@ -42,7 +42,18 @@
 </tbody>
 
 <tfoot>
+
+{# スコア追加/削除ボタン #}
 <tr>
+<td colspan="3">
+<div class="btn-group">
+<button type="score-add" class="btn btn-info btn-xs">追加</button>
+<button type="score-del" class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+</tr>
+
+<tr class="active">
 <th>R</th>
 <th data-type="score_top_sum">{{tsum}}</th>
 <th data-type="score_bottom_sum">{{bsum}}</th>

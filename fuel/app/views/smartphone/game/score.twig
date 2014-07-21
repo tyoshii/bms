@@ -30,9 +30,9 @@
 
 <td>
 <select data-type="score_bottom">
-<option value=""></option>
+<option></option>
 {%for i in range(0,40)%}
-<option value="{{i}}" {%if i == score.bottom%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if score.bottom == i~''%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>

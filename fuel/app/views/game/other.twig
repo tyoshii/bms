@@ -76,15 +76,3 @@
 
 
 {% endblock %}
-
-
-{% block js %}
-
-{{ parent() }}
-
-<script>
-$(document).ready(function() {
-    setTimeout("autosave('batter');", 30000);
-});
-</script>
-{% endblock %}

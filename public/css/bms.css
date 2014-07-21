@@ -137,6 +137,21 @@ table#game-list tr.own {
   background-color: #FFFFCC;  
 }
 
+table .width-20 {
+  width: 10%
+}
+table .width-40 {
+  width: 40%
+}
+
+table[role=score] th {
+  text-align: center;
+}
+table[role=score] select {
+  background-color: white;
+  border: 0px;
+}
+
 table#score input {
   width: 40px;
 }

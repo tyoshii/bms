@@ -272,6 +272,8 @@ class Model_Game extends \Orm\Model
     $query->where('stats_players.player_id', $player_id);
     $query->where('games.game_status', '!=', -1);
 
+    $query->order_by('date');
+
     return $query->execute()->as_array('game_id');
   }
 

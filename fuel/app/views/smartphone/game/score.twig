@@ -58,48 +58,18 @@
 
 
 {% block js %}
-
 {{parent()}}
-
-<script>
-
-function calcsum() {
-
-  var tscore = 0, bscore = 0;
-
-  $('.tscore').each(function(){
-    var s = parseInt($(this).val());
-    tscore += isNaN(s) ? 0 : s;
-  });
-  $('.bscore').each(function(){
-    var s = parseInt($(this).val());
-    bscore += isNaN(s) ? 0 : s;
-  });
-
-  $('td.tsum').each(function(){
-    $(this).text(tscore);
-  });
-  $('td.bsum').each(function(){
-    $(this).text(bscore);
-  });
-
-  $('input.tsum').attr('value', tscore);
-  $('input.bsum').attr('value', bscore);
-
-  return true;
-}
-
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+<script type="text/javascript" src="/js/game/score.js"></script>
+<script type="text/javascript">
 $(document).ready(function(){
   calcsum();
 
-  $('input.score').each(function() {
-      $(this).bind('click blur keydown keyup keypress change',function(){
-        calcsum();
-      });
+  $("table[role=score] tbody select").change(function() {
+    calcsum();
   });
 });
 </script>
-<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
 {% endblock js %}
 
 {%block css%}

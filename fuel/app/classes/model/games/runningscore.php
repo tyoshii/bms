@@ -469,7 +469,9 @@ class Model_Games_Runningscore extends \Orm\Model
     }
 
     $score = self::find($game_id);
-    $score->set($stats);
+    $score->delete();
+
+    $score = self::forge(array('id' => $game_id) + $stats);
     $score->save();
   }
 

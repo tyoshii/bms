@@ -6,7 +6,7 @@ class Model_Games_Runningscore extends \Orm\Model
 		'id',
     't1' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -17,7 +17,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't2' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -28,7 +28,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't3' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -39,7 +39,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't4' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -50,7 +50,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't5' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -61,7 +61,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't6' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -72,7 +72,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't7' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -83,7 +83,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't8' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -94,7 +94,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't9' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -105,7 +105,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't10' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -116,7 +116,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't11' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -127,7 +127,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't12' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -138,7 +138,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't13' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -149,7 +149,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't14' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -160,7 +160,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't15' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -171,7 +171,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't16' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -182,7 +182,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't17' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -193,7 +193,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     't18' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -204,6 +204,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
     'tsum' => array(
       'data_type' => 'int',
+      'default' => 0,
       'validation' => array(
         'required',
         'valid_string' => array('numeric'),
@@ -215,7 +216,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b1' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -226,7 +227,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b2' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -237,7 +238,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b3' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -248,7 +249,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b4' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -259,7 +260,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b5' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -270,7 +271,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b6' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -281,7 +282,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b7' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -292,7 +293,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b8' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -303,7 +304,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b9' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -314,7 +315,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b10' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -325,7 +326,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b11' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -336,7 +337,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b12' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -347,7 +348,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b13' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -358,7 +359,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b14' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -369,7 +370,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b15' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -380,7 +381,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b16' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -391,7 +392,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b17' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -402,7 +403,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'b18' => array(
       'data_type' => 'int',
-      'default' => 0,
+      'default' => null,
       'validation' => array(
         'valid_string' => array('numeric'),
       ),
@@ -413,6 +414,7 @@ class Model_Games_Runningscore extends \Orm\Model
     ),
 		'bsum' => array(
       'data_type' => 'int',
+      'default' => 0,
       'validation' => array(
         'required',
         'valid_string' => array('numeric'),
@@ -450,17 +452,9 @@ class Model_Games_Runningscore extends \Orm\Model
   {
     $score = self::forge();
     $score->id = $id;
+    $score->t1 = 0;
+    $score->b1 = 0;
 
-    // default 0
-    foreach ( self::$_properties as $key => $val )
-    {
-      if ( in_array($key, array('id', 'created_at', 'updated_at')) )
-      {
-        continue;
-      }
-
-      $score->$key = 0;
-    }
 
     $score->save();
   }

@@ -126,10 +126,16 @@
 </div>{# class="stats-container" #}
 
 {# 保存/决定ボタン #}
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
 <div class="stats-post" role="pitching">
 <button type="button" class="btn btn-default" post_type="save">保存</button>
 <button type="button" class="btn btn-success" post_type="complete">决定</button>
 </div>
+{%endif%}
 
 {% endblock content %}
 

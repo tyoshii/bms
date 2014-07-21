@@ -111,6 +111,9 @@ class Controller_Game extends Controller_Base
     // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
+    // game_status
+    $view->game_status = Model_Game::get_game_status($game_id, $team_id);
+
     switch ( $kind )
     {
       case 'score':
@@ -157,7 +160,6 @@ class Controller_Game extends Controller_Base
 
         $view->others = json_decode($stat->others);
 
-        $view->game_status = Model_Game::get_game_status($game_id, $team_id);
         break;
 
       default:

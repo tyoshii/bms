@@ -236,8 +236,13 @@ function post_batter(is_alert, is_comp) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("システムエラーが発生しました");
+      }
     }, 
   });
   
@@ -488,8 +493,13 @@ function post_pitcher(is_alert, is_comp) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("システムエラーが発生しました");
+      }
     }, 
   });
 }

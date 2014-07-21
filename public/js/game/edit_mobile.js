@@ -16,9 +16,13 @@ var stats = {
         success: function(html) {
           alert('成績保存に成功しまし');
         },
-        error: function(html) {
-          alert('エラーが発生しました');
-        }
+        error: function(res) {
+          if ( res.status === 403 ) {
+            alert(res.responseText);
+          }
+          else {
+            alert("システムエラーが発生しました");
+          }
       });
     },
   },
@@ -255,10 +259,9 @@ $("div.stats-post[role=pitching] button").click(function(){
 });
 
 $("div.stats-post[role=hitting] button").click(function(){
-  var post_type = $(this).attr("post_type");
-
-  var data = [];
-
+  stats.data = [];
+  stats.post.complete = $(this).attr("post_type") === 'complete';
+  
   $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();
 
@@ -288,29 +291,12 @@ $("div.stats-post[role=hitting] button").click(function(){
     });
 
     // set
-    data[player_id] = {
+    stats.data[player_id] = {
       stats: stats,
       detail: detail,
     };
   });
   // console.log(data);
 
-
-  // ajax
-  $.ajax({
-    url: "/api/game/updateBatter",
-    type: "POST",
-    data: {
-      game_id: $("data#game_id").text(),
-      team_id: $("data#team_id").text(),
-      batter: data,
-      complete: post_type === "complete",
-    },
-    success: function(html) {
-      alert("野手成績の保存に成功しました。");
-    },
-    error: function(html) {
-      alert("エラーが発生しました。");
-    },
-  });
+  stats.post.ajax('updateBatter');
 });

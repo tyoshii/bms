@@ -77,10 +77,14 @@ class Controller_Api_Game extends Controller_Rest
 
     $val = $form->validation();
 
-    if ( ! $val->run(Input::post('stats'), true) )
+    // TODO: スマホ版の実装でstatsのキーでポストしている
+    // PCもいつかそっちによせる
+    $stats = Input::post('stats') ?: Input::post();
+
+    if ( ! $val->run($stats, true) )
       return Response::forge($val->show_errors(), 400);
   
-    Model_Games_Runningscore::regist(Input::post('game_id'), Input::post('stats'));
+    Model_Games_Runningscore::regist(Input::post('game_id'), $stats);
 
     echo 'OK';
   }

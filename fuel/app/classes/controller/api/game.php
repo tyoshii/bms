@@ -72,13 +72,15 @@ class Controller_Api_Game extends Controller_Rest
     if ( ! Auth::has_access('game.editall') )
       return Response::forge('スコアを編集する権限がありません', 403);
 
+Common::debug(Input::post());
+exit;
     $form = Fieldset::forge('score');
     $form->add_model(Model_Games_Runningscore::forge());
 
     $val = $form->validation();
 
     if ( ! $val->run() )
-      return Response::forge('NG', 400);
+      return Response::forge('リクエストが正しくありません。', 400);
   
     $score = Model_Games_Runningscore::find( Input::post('game_id') );
     $score->set(Input::post());

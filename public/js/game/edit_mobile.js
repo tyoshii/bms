@@ -213,6 +213,26 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+$("div.stats-post[role=score] button").click(function() {
+  stats.data = {};
+
+  // each inning score
+  $("table[role=score] tbody tr").each(function() {
+    var i = $(this).find("[data-type=inning]").text();
+    stats.data['t'+i] = $(this).find("[data-type=score_top]").val();
+    stats.data['b'+i] = $(this).find("[data-type=score_bottom]").val();
+  });
+
+  // sum score
+  stats.data['tsum'] = $("[data-type=score_top_sum]").text(); 
+  stats.data['bsum'] = $("[data-type=score_bottom_sum]").text(); 
+
+  // console.log(stats.data);
+  
+  // post
+  stats.post.ajax('updateScore');
+});
+
 $("div.stats-post[role=player] button").click(function() {
   stats.data = [];
  

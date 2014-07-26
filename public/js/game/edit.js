@@ -100,8 +100,11 @@ function post_score(is_alert) {
     var t_key = 't' + i;
     var b_key = 'b' + i;
 
-    data[t_key] = _num( $('[name=' + t_key + ']').val() );
-    data[b_key] = _num( $('[name=' + b_key + ']').val() );
+    var t_val = $('[name=' + t_key + ']').val();
+    var b_val = $('[name=' + b_key + ']').val();
+
+    data[t_key] = t_val == '' ? t_val : _num( t_val );
+    data[b_key] = b_val == '' ? b_val : _num( b_val );
   }
 
   // sum

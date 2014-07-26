@@ -80,6 +80,34 @@ var player = {
   }
 };
 
+// score add/delete
+$("button[type=score-add]").click(function() {
+
+  var $last = $("table[role=score] tbody tr:last");
+  var inning = $last.find("[data-type=inning]").text();
+
+  var $clone = $last.clone(true);
+
+  $clone.find("[data-type=inning]").text(parseInt(inning) + 1);
+  $clone.find("[data-type=score_top]").val('');
+  $clone.find("[data-type=score_bottom]").val('');
+
+  $clone.insertAfter($last);
+});
+
+$("button[type=score-del]").click(function() {
+
+  var $last = $("table[role=score] tbody tr:last");
+  var inning = $last.find("[data-type=inning]").text();
+
+  // 初回は消さない
+  if ( inning == 1 ) {
+    return false;
+  }
+
+  $last.remove();
+});
+
 // position add/delete
 $("div.player-position select[role=position]").change(function(){
   var $base = $(this).parent("div");
@@ -213,6 +241,26 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+$("div.stats-post[role=score] button").click(function() {
+  stats.data = {};
+
+  // each inning score
+  $("table[role=score] tbody tr").each(function() {
+    var i = $(this).find("[data-type=inning]").text();
+    stats.data['t'+i] = $(this).find("[data-type=score_top]").val();
+    stats.data['b'+i] = $(this).find("[data-type=score_bottom]").val();
+  });
+
+  // sum score
+  stats.data['tsum'] = $("[data-type=score_top_sum]").text(); 
+  stats.data['bsum'] = $("[data-type=score_bottom_sum]").text(); 
+
+  // console.log(stats.data);
+  
+  // post
+  stats.post.ajax('updateScore');
+});
+
 $("div.stats-post[role=player] button").click(function() {
   stats.data = [];
  

@@ -117,9 +117,15 @@ class Controller_Game extends Controller_Base
     switch ( $kind )
     {
       case 'score':
+
+        // TODO: scoresをスマホ対応のために新しく追加
+        // PC版もscoresの方へいつかマージします。
         $view->score = Model_Games_Runningscore::find($game_id, array(
           'related' => array('games'),
         ));
+        list($view->scores, $view->tsum, $view->bsum)
+          = Model_Games_Runningscore::get_score($game_id);
+        
         break;
 
       case 'player':

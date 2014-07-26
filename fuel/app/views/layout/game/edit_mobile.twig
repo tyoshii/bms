@@ -1,0 +1,57 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+
+<div class="pull-right">
+<ol class="breadcrumb">
+<li><a href="/game/{{game_id}}">試合概要</a></li>
+<li><a href="/game">試合一覧へもどる</a></li>
+</ol>
+</div>
+
+{# 試合概要 #}
+<div class="panel panel-default">
+<div class="panel-body">
+<h4>{{date}}</h4>
+<h5>{{team_top}} vs {{team_bottom}}</h5>
+</div>
+</div>
+
+{# tab メニュー #}
+<ul class="nav nav-tabs">
+
+{%if auth_has_access('moderator.moderator')%}
+    <li {%if uri_segment(3)=='score'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/score/{{team_id}}">スコア</a>
+    </li>
+    <li {%if uri_segment(3)=='player'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/player/{{team_id}}">選手</a>
+    </li>
+{%endif%}
+
+    <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/batter/{{team_id}}">野手</a>
+    </li>
+    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/pitcher/{{team_id}}">投手</a>
+    </li>
+
+{%if auth_has_access('moderator.moderator')%}
+    <li {%if uri_segment(3)=="other"%}class="active"{%endif%}>
+      <a href="/game/{{game_id}}/other/{{team_id}}">その他</a>
+    </li>
+{%endif%}
+
+</ul>
+
+{# データ保存の際にjsから取得しやすいように #}
+<data id="game_id" class="disable">{{game_id}}</data>
+<data id="team_id" class="disable">{{team_id}}</data>
+
+{%endblock%}
+
+
+{%block js%}
+{{ parent() }}
+<script src="/js/game/edit.js"></script>
+{%endblock%}

@@ -36,6 +36,8 @@
 <td class="order">{%if batter.order != 0%}{{batter.order}}{%endif%}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>
+
+{# 打席詳細入力のtoggleボタン #}
 {%if batter.number == '' %}
 <td class="detail"></td>
 {%else%}

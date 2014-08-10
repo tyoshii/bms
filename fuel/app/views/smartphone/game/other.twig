@@ -1,0 +1,75 @@
+{% extends "layout/game/edit_mobile.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+<table class="table">
+
+<thead>
+</thead>
+
+<tbody>
+
+<tr>
+<th>MIP<br>2ポイント</th>
+
+<td class="MIP">
+<select id="mip2" name="mip" class="select2">
+<option value="0">--------------------</option>
+{% for member in members %}
+<option value="{{member.id}}" {%if others.mip2 == member.id%}selected{%endif%}>{{member.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+
+<tr>
+<th>MIP<br>1ポイント</th>
+
+<td class="MIP">
+<select id="mip1" name="mip" class="select2">
+<option value="0">--------------------</option>
+{% for member in members %}
+<option value="{{member.id}}" {%if others.mip1 == member.id%}selected{%endif%}>{{member.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+
+{# 球場 #}
+<tr>
+<th>球場</th>
+<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
+<td></td>
+</tr>
+
+{# memo #}
+<tr>
+<th>メモ</th>
+<td><textarea class="form-control" id="memo">{{others.memo}}</textarea></td>
+<td></td>
+</tr>
+
+{# 試合ステータス #}
+<tr>
+<th>ステータス</th>
+<td>
+<select id="status" name="status" class="form-control"> 
+<option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
+<option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
+<option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
+</select>
+</td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
+<button class="btn btn-success" onClick="post_other(true);">登録</button>
+
+{% endblock %}

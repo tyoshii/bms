@@ -72,4 +72,40 @@
 
 <button class="btn btn-success" onClick="post_other(true);">登録</button>
 
+<hr>
+
+<ul>
+<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+</ul>
+
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script type="text/javascript">
+var remind_mail = function() {
+
+  if ( confirm("成績入力の完了していない人にメールを送信します。") ) {
+    $.ajax({
+      url: "/api/mail/remind",
+      type: "POST",
+      data: {
+        game_id: $("data#game_id").text(),
+        team_id: $("data#team_id").text(),
+      },
+      success: function() {
+        alert("メールを送信しました。");
+      },
+      error: function(res) {
+        var text = res.responseText;
+        if ( text ) {
+          alert(text);
+        } else {
+          alert("システムエラーが発生しました。");
+        }
+      }
+    });
+  }
+};
+</script>
 {% endblock %}

@@ -151,7 +151,7 @@ class Controller_Api_Game extends Controller_Rest
 
     // insert (json形式
     // - TODO いつか消す
-    $batter = Input::post('batter');
+    $batter = Input::post('stats');
 
     $game = Model_Games_Stat::query()
             ->where(array($ids))

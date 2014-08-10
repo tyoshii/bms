@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## Version 0.06
+## Version 0.0.7
+
+* mobile : 成績入力のヘッダータブを修正
+* mobile : スコア入力を最適化
+* mobile : can not zoom
+
+## Version 0.0.6
 
 * 成績を表示
 * 成績入力のスマホ対応

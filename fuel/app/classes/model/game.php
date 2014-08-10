@@ -322,4 +322,12 @@ class Model_Game extends \Orm\Model
 
     return $alert_games;
   }
+
+  public static function remind_mail( $game_id, $team_id )
+  {
+    // played member
+    $player = Model_Stats_Player::getStarter($game_id, $team_id);
+
+    Common::debug($player);
+  }
 }

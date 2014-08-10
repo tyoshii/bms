@@ -75,7 +75,6 @@ class Model_Stats_Player extends \Orm\Model
       $default[] = array(
         'player_id' => 0,
         'order'     => $i,
-        'position'  => array(0,0,0,0,0,0),
       );
     }
 

@@ -39,9 +39,12 @@ class Controller_Api_Game extends Controller_Rest
     // check game status
     $action = Request::main()->action;
     $status = Model_Game::get_game_status($ids['game_id'], $ids['team_id']);
-    if ( $action !== 'updateStatus' and $status == 2 )
+    if ( $action !== 'updateStatus' and $action !== 'updateOther' )
     {
-      throw new Exception('既に成績入力を完了している試合です'); 
+      if ( $status == 2 )
+      {
+        throw new Exception('既に成績入力を完了している試合です');
+      }
     }
 
     return $ids;
@@ -74,12 +77,14 @@ class Controller_Api_Game extends Controller_Rest
 
     $val = $form->validation();
 
-    if ( ! $val->run() )
-      return Response::forge('NG', 400);
+    // TODO: スマホ版の実装でstatsのキーでポストしている
+    // PCもいつかそっちによせる
+    $stats = Input::post('stats') ?: Input::post();
+
+    if ( ! $val->run($stats, true) )
+      return Response::forge($val->show_errors(), 400);
   
-    $score = Model_Games_Runningscore::find( Input::post('game_id') );
-    $score->set(Input::post());
-    $score->save();
+    Model_Games_Runningscore::regist(Input::post('game_id'), $stats);
 
     echo 'OK';
   }
@@ -146,7 +151,7 @@ class Controller_Api_Game extends Controller_Rest
 
     // insert (json形式
     // - TODO いつか消す
-    $batter = Input::post('batter');
+    $batter = Input::post('stats');
 
     $game = Model_Games_Stat::query()
             ->where(array($ids))

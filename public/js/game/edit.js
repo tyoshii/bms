@@ -100,8 +100,11 @@ function post_score(is_alert) {
     var t_key = 't' + i;
     var b_key = 'b' + i;
 
-    data[t_key] = _num( $('[name=' + t_key + ']').val() );
-    data[b_key] = _num( $('[name=' + b_key + ']').val() );
+    var t_val = $('[name=' + t_key + ']').val();
+    var b_val = $('[name=' + b_key + ']').val();
+
+    data[t_key] = t_val == '' ? t_val : _num( t_val );
+    data[b_key] = b_val == '' ? b_val : _num( b_val );
   }
 
   // sum
@@ -236,8 +239,13 @@ function post_batter(is_alert, is_comp) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("システムエラーが発生しました");
+      }
     }, 
   });
   
@@ -488,8 +496,13 @@ function post_pitcher(is_alert, is_comp) {
         alert("成績保存に成功");
       }
     },
-    error: function(html) {
-      alert("成績保存でエラーが発生しました");
+    error: function(res) {
+      if ( res.status === 403 ) {
+        alert(res.responseText);
+      }
+      else {
+        alert("システムエラーが発生しました");
+      }
     }, 
   });
 }
@@ -607,19 +620,4 @@ function post_player(is_alert) {
       }
     }, 
   });
-}
-
-function autosave(kind) {
-  // 自動保存機能を停止
-  return false;
-
-  if ( kind === 'player' ) {
-    post_player(false);
-  } else if ( kind === 'pitcher' ) {
-    post_pitcher(false);
-  } else if ( kind === 'batter' ) {
-    post_batter(false);
-  }
-
-  setTimeout('autosave("'+kind+'")', 30000);
 }

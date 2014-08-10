@@ -65,6 +65,7 @@ return array(
 				56 => '058_add_updated_to_users',
 				57 => '059_delete_updated_at_from_users',
 				58 => '060_rename_field_updated_to_updated_at_in_users',
+				59 => '061_rename_field_nullfalse_to_nullok_in_games_runningscores',
 			),
 		),
 		'module' => 

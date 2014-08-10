@@ -12,6 +12,8 @@ class Controller_Admin extends Controller_Base
 
   public function after($response)
   {
+    $response = parent::after($response);
+
     $kind = Uri::segment(2);
 
     $response->body->active = array( $kind => 'active' );
@@ -33,7 +35,7 @@ class Controller_Admin extends Controller_Base
       $val = $form->validation();
       if ( $val->run() )
       {
-        if ( Model_User::update_group(Input::type('username'), Input::type('group')) )
+        if ( Model_User::update_group(Input::post('username'), Input::post('group')) )
         {
           Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
           Response::redirect(Uri::create('admin/user'));

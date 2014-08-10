@@ -111,12 +111,21 @@ class Controller_Game extends Controller_Base
     // players
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
+    // game_status
+    $view->game_status = Model_Game::get_game_status($game_id, $team_id);
+
     switch ( $kind )
     {
       case 'score':
+
+        // TODO: scoresをスマホ対応のために新しく追加
+        // PC版もscoresの方へいつかマージします。
         $view->score = Model_Games_Runningscore::find($game_id, array(
           'related' => array('games'),
         ));
+        list($view->scores, $view->tsum, $view->bsum)
+          = Model_Games_Runningscore::get_score($game_id);
+        
         break;
 
       case 'player':
@@ -157,7 +166,6 @@ class Controller_Game extends Controller_Base
 
         $view->others = json_decode($stat->others);
 
-        $view->game_status = Model_Game::get_game_status($game_id, $team_id);
         break;
 
       default:
@@ -305,7 +313,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('moderator.moderator') and $player['player_id'] !== $myid )
+      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
       {
         continue;
       }

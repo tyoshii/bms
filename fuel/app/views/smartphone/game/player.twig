@@ -1,4 +1,4 @@
-{% extends "layout/game/edit.twig" %}
+{% extends "layout/game/edit_mobile.twig" %}
 
 {% block content %}
 
@@ -76,9 +76,15 @@
 <hr>
 <br><br>
 
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
 <div class="stats-post" role="player">
 <button class="btn btn-success">登録</button>
 </div>
+{%endif%}
 
 </div>
 

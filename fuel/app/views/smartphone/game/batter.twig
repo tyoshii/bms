@@ -1,4 +1,4 @@
-{% extends "layout/game/edit.twig" %}
+{% extends "layout/game/edit_mobile.twig" %}
 
 {% block content %}
 
@@ -127,10 +127,16 @@
 {%endfor%}
 
 {# 保存/决定ボタン #}
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
 <div class="stats-post" role="hitting">
 <button type="button" class="btn btn-default" post_type="save">保存</button>
 <button type="button" class="btn btn-success" post_type="complete">决定</button>
 </div>
+{%endif%}
 
 {% endblock content %}
 
@@ -138,12 +144,6 @@
 {% block js %}
 {{ parent() }}
 <script type="text/javascript" src="/js/game/edit_mobile.js"></script>
-
-<script>
-$(document).ready(function() {
-    setTimeout("autosave('batter');", 30000);
-});
-</script>
 {% endblock %}
 
 

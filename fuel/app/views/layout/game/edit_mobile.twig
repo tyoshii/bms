@@ -53,5 +53,10 @@
 
 {%block js%}
 {{ parent() }}
-<script src="/js/game/edit.js"></script>
+<script type="text/javascrip" src="/js/game/edit_mobile.js"></script>
 {%endblock%}
+
+{% block css %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
+{% endblock %}

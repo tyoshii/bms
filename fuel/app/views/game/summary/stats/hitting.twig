@@ -35,7 +35,7 @@
 
 {%for player in players%}
 <tr>
-<td>{{player.order}}</td>
+<td>{% if player.order != 0 %}{{player.order}}{% endif %}</td>
 <td>{{player.name}}</td>
 <td>{{player.number}}</td>
 <td>{{stats[player.player_id]['TPA']}}</td>

@@ -1,5 +1,5 @@
 // object: stats
-var stats = {
+var STATS = {
   data: [],
   post: {
     complete: false, 
@@ -10,8 +10,8 @@ var stats = {
         data: {
           game_id: $("data#game_id").text(),
           team_id: $("data#team_id").text(),
-          stats: stats.data,
-          complete: stats.post.complete
+          stats: STATS.data,
+          complete: STATS.post.complete
         },
         success: function(html) {
           alert('成績保存に成功しまし');
@@ -242,27 +242,27 @@ $("button.detail-del").click(function(){
 
 // save/decide stats
 $("div.stats-post[role=score] button").click(function() {
-  stats.data = {};
+  STATS.data = {};
 
   // each inning score
   $("table[role=score] tbody tr").each(function() {
     var i = $(this).find("[data-type=inning]").text();
-    stats.data['t'+i] = $(this).find("[data-type=score_top]").val();
-    stats.data['b'+i] = $(this).find("[data-type=score_bottom]").val();
+    STATS.data['t'+i] = $(this).find("[data-type=score_top]").val();
+    STATS.data['b'+i] = $(this).find("[data-type=score_bottom]").val();
   });
 
   // sum score
-  stats.data['tsum'] = $("[data-type=score_top_sum]").text(); 
-  stats.data['bsum'] = $("[data-type=score_bottom_sum]").text(); 
+  STATS.data['tsum'] = $("[data-type=score_top_sum]").text(); 
+  STATS.data['bsum'] = $("[data-type=score_bottom_sum]").text(); 
 
-  // console.log(stats.data);
+  // console.log(STATS.data);
   
   // post
-  stats.post.ajax('updateScore');
+  STATS.post.ajax('updateScore');
 });
 
 $("div.stats-post[role=player] button").click(function() {
-  stats.data = [];
+  STATS.data = [];
  
   $("table.player-table tbody tr").each(function() {
 
@@ -272,25 +272,25 @@ $("div.stats-post[role=player] button").click(function() {
         position.push($(this).val());
     });
 
-    stats.data.push({
+    STATS.data.push({
       order: $(this).find("td[role=order]").text(),
       player_id: $(this).find("select[role=player_id]").val(),
       position: position,
     });
   });
-  // console.log(stats.data);
+  // console.log(STATS.data);
 
-  stats.post.ajax('updatePlayer');
+  STATS.post.ajax('updatePlayer');
 });
 
 $("div.stats-post[role=pitching] button").click(function(){
-  stats.data= [];
-  stats.post.complete = $(this).attr("post_type") === 'complete';
+  STATS.data= [];
+  STATS.post.complete = $(this).attr("post_type") === 'complete';
 
   $("table.pitching-stats").each(function() {
     var player_id = $(this).attr("player_id");
 
-    stats.data[player_id] = {
+    STATS.data[player_id] = {
       result  : $(this).find("select[role=result]").val(),
       IP      : $(this).find("select[role=IP]").val(),
       IP_frac : $(this).find("select[role=IP_frac]").val(),
@@ -302,14 +302,14 @@ $("div.stats-post[role=pitching] button").click(function(){
       R       : $(this).find("select[role=R]").val()
     };
   });
-  // console.log(stats);
+  // console.log(STATS);
 
-  stats.post.ajax('updatePitcher');
+  STATS.post.ajax('updatePitcher');
 });
 
 $("div.stats-post[role=hitting] button").click(function(){
-  stats.data = [];
-  stats.post.complete = $(this).attr("post_type") === 'complete';
+  STATS.data = [];
+  STATS.post.complete = $(this).attr("post_type") === 'complete';
   
   $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();
@@ -340,12 +340,12 @@ $("div.stats-post[role=hitting] button").click(function(){
     });
 
     // set
-    stats.data[player_id] = {
+    STATS.data[player_id] = {
       stats: stats,
       detail: detail,
     };
   });
-  // console.log(data);
+  console.log(STATS.data);
 
-  stats.post.ajax('updateBatter');
+  STATS.post.ajax('updateBatter');
 });

@@ -6,12 +6,14 @@
 <div class="pull-right">
 <ol class="breadcrumb">
 
+{%if my_team_id%}
+
 {%if auth_has_access('moderator.moderator') %}
 <li><a href="/game/{{info.id}}/score">スコア修正</a></li>
 <li><a href="/game/{{info.id}}/player/{{my_team_id}}">出場選手</a></li>
+<li><a href="/game/{{info.id}}/other/{{my_team_id}}">その他</a></li>
 {%endif%}
 
-{%if my_team_id%}
 <li><a href="/game/{{info.id}}/batter/{{my_team_id}}">野手成績</a></li>
 <li><a href="/game/{{info.id}}/pitcher/{{my_team_id}}">投手成績</a></li>
 {%endif%}

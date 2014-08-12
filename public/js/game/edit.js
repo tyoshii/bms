@@ -231,7 +231,7 @@ function post_batter(is_alert, is_comp) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      batter: data,
+      stats: data,
       complete: is_comp
     },
     success: function(html) {

@@ -74,7 +74,16 @@
 </td>
 
 {# 得点 #}
-<td><a href="/game/{{game.id}}/score">{{game.top_result}} {{game.tsum}} - {{game.bsum}} {{game.bottom_result}}</a></td>
+<td>
+{# adminの時はscoreへのリンクをしない #}
+{% if auth_has_access('admin.admin') %}
+{{game.top_result}} {{game.tsum}} - {{game.bsum}} {{game.bottom_result}}
+{% else %}
+<a href="/game/{{game.id}}/score">
+{{game.top_result}} {{game.tsum}} - {{game.bsum}} {{game.bottom_result}}
+</a>
+{% endif %}
+</td>
 
 {# 後攻 #}
 <td>

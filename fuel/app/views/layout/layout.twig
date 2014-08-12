@@ -52,7 +52,7 @@ Switching each env :
 {%endif%}
 
 {# production以外は上部に赤い線 #}
-{%if env != 'production'%}
+{%if env and env != 'production'%}
 <div env="{{env}}">FUEL_ENV = {{env}}</div>
 {%endif%}
 

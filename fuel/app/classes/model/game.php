@@ -293,12 +293,7 @@ class Model_Game extends \Orm\Model
       }
 
       // 野手成績の入力が完了しているかどうか
-      $status = Model_Stats_Hitting::query()->where(array(
-        'game_id' => $game_id,
-        'player_id' => $player_id,
-      ))->get_one();
-
-      if ( ! $status || $status->status === '0' )
+      if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
       { 
         $alert_games[] = array('kind' => 'batter') + $data;
         continue; 
@@ -307,12 +302,7 @@ class Model_Game extends \Orm\Model
       // 投手成績のアラート
       if ( strstr($data['position'], '1') )
       {
-        $status = Model_Stats_Pitching::query()->where(array(
-          'game_id' => $game_id,
-          'player_id' => $player_id,
-        ))->get_one();
-
-        if ( ! $status || $status->status === '0' )
+        if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
         { 
           $alert_games[] = array('kind' => 'pitcher') + $data;
           continue; 
@@ -321,5 +311,42 @@ class Model_Game extends \Orm\Model
     } 
 
     return $alert_games;
+  }
+
+  public static function remind_mail( $game_id, $team_id )
+  {
+    // played member
+    $players = Model_Stats_Player::getStarter($game_id, $team_id);
+
+    foreach ( $players as $index => $player )
+    {
+      $player_id = $player['player_id'];
+      $paths = [];
+
+      // player_idが0だったらスキップ（スタメン未登録
+      if ( $player['player_id'] === '0' )
+      {
+        continue;
+      }
+
+      // statusをチェックして、未完了であればメール送信
+      if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
+      { 
+        $paths[] = "game/{$game_id}/batter/{$team_id}";
+      }
+      
+      // 投手成績のアラート
+      if ( in_array('1', $player['position'] ) )
+      {
+        if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
+        { 
+          $paths[] = "game/{$game_id}/pitcher/{$team_id}";
+        }
+      }
+
+      // 対象があればメール
+      if (count($paths) !== 0)
+        Common_Email::remind_game_stats($player_id, $paths);
+    }
   }
 }

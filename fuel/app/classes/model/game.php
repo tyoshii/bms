@@ -321,7 +321,7 @@ class Model_Game extends \Orm\Model
     foreach ( $players as $index => $player )
     {
       $player_id = $player['player_id'];
-      $paths = [];
+      $paths = array();
 
       // player_idが0だったらスキップ（スタメン未登録
       if ( $player['player_id'] === '0' )

@@ -22,6 +22,7 @@ return array(
   
   'api/game/(:segment)'  => 'api/game/$1',
   'api/deploy'           => 'api/deploy/index',
+  'api/mail/remind'      => 'api/mail/remind',
 
   'score'               => 'score/record_team',
   'score/record_self'   => 'score/record_self',

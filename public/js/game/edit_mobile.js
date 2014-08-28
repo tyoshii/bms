@@ -349,3 +349,15 @@ $("div.stats-post[role=hitting] button").click(function(){
 
   STATS.post.ajax('updateBatter');
 });
+
+$("div.stats-post[role=other] button").click(function() {
+  STATS.data = {
+    mip2:   $("select#mip2").val(),
+    mip1:   $("select#mip1").val(),
+    place:  $("input#place").val(),
+    memo:   $("textarea#memo").val(),
+    status: $("select#status").val()
+  };
+
+  STATS.post.ajax('updateOther');
+});

@@ -12,7 +12,7 @@ script:
   - php oil t --coverage-html=./build/logs/clover.xml
 
 after_script:
-  - php fuel/vendor/bin/coveralls
+  - php fuel/vendor/bin/coveralls -v
 
 notifications:
   email:

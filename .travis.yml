@@ -6,9 +6,9 @@ php:
 before_script:
   - mysql -e 'create database bms;'
   - FUEL_ENV=test php composer.phar install
-  - FUEL_ENV=test php oil r migrate
 
 script:
+  - FUEL_ENV=test php oil r migrate
   - php oil t
 
 notifications:

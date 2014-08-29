@@ -1,41 +1,13 @@
 Baseball Management System
 ==========================
 
-# REQUIRE
+http://bm-s.info
 
-* php5.X
-    * fuelphp 1.8
-* mysql5.X
+草野球の試合における成績管理ができるシステムです。
 
-# メンテナンスモードの切り替え
-```
-php oil r service:out
-php oil r service:in
-```
+今までの成績管理では、
+チームの代表/マネージャー/担当の人がスコア入力をしていたと思いますが、
+思ったよりも負荷が高く、それなりに熱意を持った人でも三日坊主になりがちでした。
 
-* adminユーザーはメンテナンスモードでも画面を見ることが出来ます。
-
-# 開発環境構築
-
-https://github.com/tyoshii/bms/wiki/%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89
-
-# Deploy
-
-## production
-
-* masterへpushするとgithubのweb-wookからapi/deployをコール
-https://github.com/tyoshii/bms/blob/staging/fuel/app/classes/controller/api/deploy.php#L35-L61
-
-# OSS
-
-fuelphp-1.8 http://fuelphp.jp/docs/1.8/license.html
-jquery-1.10.2 https://jquery.org/license/
-jquery-ui-1.10.4 https://github.com/jquery/jquery-ui/blob/master/MIT-LICENSE.txt
-twitter bootstrap-3.0.3 https://github.com/twbs/bootstrap/blob/master/LICENSE
-select2-3.4.5 https://github.com/ivaynberg/select2/blob/master/LICENSE
-datepicker-2.0 https://github.com/eternicode/bootstrap-datepicker/blob/master/LICENSE 
-datatable-1.10.0 http://datatables.net/license/mit
-
-# Sendmail
-
-* Fromには no-reply@bm-s.info を指定するようにする。
+このシステムでは所属選手一人ひとりがアカウントを持つことが可能となっていて、
+自分の成績を自分で入力することが可能となっています。

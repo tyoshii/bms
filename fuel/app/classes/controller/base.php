@@ -6,6 +6,21 @@ class Controller_Base extends Controller
 
   public function before()
   {
+    // global value
+    View::set_global('env', Fuel::$env);
+    View::set_global('usericon', Common::get_usericon_url());
+
+    // induct to each env
+    if ( Auth::has_access('moderator.moderator') )
+    {
+      View::set_global('induct_each_env', true);
+    }
+    if ( Model_Player::get_my_team_name() === 'レジャーズ' )
+    {
+      View::set_global('induct_each_env', true);
+    }
+
+    // login
     $this->_login_form = self::_get_login_form();
 
     if ( Auth::check() ) {
@@ -32,26 +47,6 @@ class Controller_Base extends Controller
       Session::set_flash('error', 'ログインに失敗しました');
       $this->_login_form->repopulate();
     }
-  }
-
-  public function after($res)
-  {
-    $res = parent::after($res);
-
-    $res->body->usericon = Common::get_usericon_url();
-    $res->body->env = Fuel::$env;
-
-    // induct to each env
-    if ( Auth::has_access('moderator.moderator') )
-    {
-      $res->body->induct_each_env = true;
-    }
-    if ( Model_Player::get_my_team_name() === 'レジャーズ' )
-    {
-      $res->body->induct_each_env = true;
-    }
-
-    return $res;
   }
 
   static public function _get_login_form ()

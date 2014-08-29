@@ -21,6 +21,17 @@ class Test_Controller_Base extends \TestCase
   /**
    *
    */
+  public function test_View_set_globalのテスト()
+  {
+    $res = Request::forge('/')->execute()->response();
+
+    $this->assertSame(Fuel::$env, $res->body->env);
+    $this->assertSame(Common::get_usericon_url(), $res->body->usericon);
+  } 
+
+  /**
+   *
+   */
   public function test_最初アクセスすると未ログイン状態()
   {
     $res = Request::forge('/')->execute()->response();
@@ -65,11 +76,12 @@ class Test_Controller_Base extends \TestCase
     InputEx::reset();
 
     // create user for test
-    $rand = rand();
+    $rand = rand(1000,9999).rand(1000,9999);
     $username = 'test_'.$rand;
     $password = $rand;
+    $email    = $rand.'@yahoo.co.jp';
 
-    Auth::create_user($username, $password, 'test@yahoo.co.jp');
+    Auth::create_user($username, $password, $email);
 
     // login
     $_POST['username'] = $username;
@@ -78,6 +90,10 @@ class Test_Controller_Base extends \TestCase
     $res = Request::forge('/')->set_method('POST')->execute()->response();
     
     $this->assertTrue(Auth::check());
+    $this->assertSame('ログインに成功しました！こんにちわ', Session::get_flash('info'));
+
+    // logout
+    Auth::logout();
 
     // delete user
     Auth::delete_user($username);

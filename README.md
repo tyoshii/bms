@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tyoshii/bms.svg)](https://travis-ci.org/tyoshii/bms)
+
 Baseball Management System
 ==========================
 

@@ -47,5 +47,7 @@ class Response extends \Fuel\Core\Response
         }
 
         $response->send(true);
+
+        return $response;
     }
 }

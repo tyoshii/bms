@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/tyoshii/bms.svg)](https://travis-ci.org/tyoshii/bms)
+[![Coverage Status](https://coveralls.io/repos/tyoshii/bms/badge.png)](https://coveralls.io/r/tyoshii/bms)
 
 Baseball Management System
 ==========================

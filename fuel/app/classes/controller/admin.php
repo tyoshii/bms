@@ -7,7 +7,7 @@ class Controller_Admin extends Controller_Base
     parent::before();
 
     if ( ! Auth::has_access('moderator.moderator') )
-      Response::redirect(Uri::create('/'));
+      return Response::redirect(Uri::create('/'));
   }
 
   public function after($response)

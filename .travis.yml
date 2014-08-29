@@ -9,7 +9,10 @@ before_script:
 
 script:
   - FUEL_ENV=test php oil r migrate
-  - php oil t
+  - php oil t --coverage-html=./build/logs/clover.xml
+
+after_script:
+  - php fuel/vendor/bin/coveralls
 
 notifications:
   email:

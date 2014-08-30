@@ -1,0 +1,13 @@
+{% extends "layout/layout.twig" %}
+
+{% block content %}
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="/score">所属チーム情報</a>
+  <li><a href="/score/record_self">個人成績</a>
+</ul>
+
+<div class="alert alert-warning">
+所属しているチームがありません。
+</div>
+{% endblock %}
+

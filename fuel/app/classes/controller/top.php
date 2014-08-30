@@ -52,6 +52,6 @@ class Controller_Top extends Controller_Base
 
   public function action_404()
   {
-    return Response::forge(View::forge('errors/404.twig'));
+    return Response::forge(View::forge('errors/404.twig'), 404);
   }
 }

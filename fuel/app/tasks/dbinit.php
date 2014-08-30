@@ -42,7 +42,7 @@ class Dbinit
       'id' => '11',
       'category_id' => 1,
       'category' => '打者アウト',
-      'result'   => '凡打',
+      'result'   => 'アウト',
     ),
     array(
       'id' => '12',

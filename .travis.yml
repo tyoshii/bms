@@ -4,6 +4,7 @@ php:
   - 5.3
 
 before_script:
+  - mkdir -p build/logs
   - mysql -e 'create database bms;'
   - FUEL_ENV=test php composer.phar install
 

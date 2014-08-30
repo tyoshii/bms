@@ -197,8 +197,14 @@ $("span[role=switch-batter]").click(function(){
   if ( type === 'next' ) {
     show_index = parseInt(hide_index) + 1;
   }
-  else {
+  else if ( type === 'prev' ) {
     show_index = parseInt(hide_index) - 1;
+  }
+  else if ( type === 'first' ) {
+    show_index = 1;
+  }
+  else if ( type === 'last' ) {
+    show_index = $("div.stats-container:last").attr('index');
   }
 
   $("div[index="+hide_index+"]").hide();

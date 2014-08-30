@@ -18,8 +18,8 @@
 <td class="MIP">
 <select id="mip2" name="mip" class="select2">
 <option value="0">--------------------</option>
-{% for member in members %}
-<option value="{{member.id}}" {%if others.mip2 == member.id%}selected{%endif%}>{{member.name}}</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if others.mip2 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
 {%endfor%}
 </select>
 </td>
@@ -32,8 +32,8 @@
 <td class="MIP">
 <select id="mip1" name="mip" class="select2">
 <option value="0">--------------------</option>
-{% for member in members %}
-<option value="{{member.id}}" {%if others.mip1 == member.id%}selected{%endif%}>{{member.name}}</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if others.mip1 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
 {%endfor%}
 </select>
 </td>

@@ -1,6 +1,7 @@
 <?php
 
-class Model_Stats_Award extends \Orm\Model
+#class Model_Stats_Award extends \Orm\Model
+class Model_Stats_Award extends Model_Bms
 {
 	protected static $_properties = array(
 		'id',
@@ -48,10 +49,5 @@ class Model_Stats_Award extends \Orm\Model
 
     $award->set($stats);
     $award->save();
-  }
-
-  private static function _get_one_or_forge(array $props)
-  {
-    return self::query()->where($props)->get_one() ?: self::forge($props);
   }
 }

@@ -1,7 +1,6 @@
 <?php
 
-#class Model_Stats_Award extends \Orm\Model
-class Model_Stats_Award extends Model_Bms
+class Model_Stats_Award extends Model_Base
 {
 	protected static $_properties = array(
 		'id',
@@ -36,7 +35,7 @@ class Model_Stats_Award extends Model_Bms
       'game_id' => $game_id,
       'team_id' => $team_id,
     );
-    return self::_get_one_or_forge($props);
+    return self::get_one_or_forge($props);
   }
 
   public static function regist($game_id, $team_id, $stats)
@@ -45,7 +44,7 @@ class Model_Stats_Award extends Model_Bms
       'game_id' => $game_id,
       'team_id' => $team_id,
     );
-    $award = self::_get_one_or_forge($props);
+    $award = self::get_one_or_forge($props);
 
     $award->set($stats);
     $award->save();

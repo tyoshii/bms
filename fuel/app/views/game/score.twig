@@ -5,43 +5,160 @@
 {# header #}
 {{ parent() }}
 
-<table id="score" class="table">
+<div class="row">
+
+{# score #}
+<div class="col-md-6">
+
+<h3>スコア</h3>
+
+<table class="table table-bordered" role="score">
+
 <thead>
 <tr>
-<th class="team">チーム</th>
-{% for i in range(1,12) %}
-<th>{{i}}</th>
-{% endfor %}
-<th class="sum">合計</th>
+<th class="width-20">
+<th class="width-40"><p>先攻</p>{{team_top}}</th>
+<th class="width-40"><p>後攻</p>{{team_bottom}}</th>
 </tr>
+</thead>
+
+<tbody>
+{%for score in scores%} 
+<tr>
+<th data-type="inning">{{loop.index}}</th>
+<td>
+<select data-type="score_top">
+<option></option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if score.top == i~''%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<td>
+<select data-type="score_bottom">
+<option></option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if score.bottom == i~''%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+{%endfor%}
+</tbody>
+
+<tfoot>
+
+{# スコア追加/削除ボタン #}
+<tr>
+<td colspan="3">
+<div class="btn-group">
+<button type="score-add" class="btn btn-info btn-xs">追加</button>
+<button type="score-del" class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+</tr>
+
+<tr class="active">
+<th>R</th>
+<th data-type="score_top_sum">{{tsum}}</th>
+<th data-type="score_bottom_sum">{{bsum}}</th>
+</tr>
+</tfoot>
+</table>
+
+<div class="stats-post" role="score">
+<button type="button" class="btn btn-success">登録</button>
+</div>
+
+
+</div>{# <div class="col-md-6"> #}
+
+
+{# other #}
+<div class="col-md-6">
+
+<h3>試合情報</h3>
+
+<table class="table">
+
+<thead>
 </thead>
 
 <tbody>
 
 <tr>
-<td class="team">{{team_top}}</td>
-{% for i in range(1,12) %}
-{% set k = 't' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="score tscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="tsum">{{score.tsum}}</td>
+<th>MIP<br>2ポイント</th>
+
+<td class="MIP">
+<select id="mip2" name="mip" class="select2">
+<option value="0">--------------------</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if others.mip2 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+{%endfor%}
+</select>
+</td>
+
 </tr>
 
 <tr>
-<td class="team">{{team_bottom}}</td>
-{% for i in range(1,12) %}
-{% set k = 'b' ~ i %}
-{% set v = score[k] %}
-<td><input type="number" class="score bscore" value="{{v}}" min="0" name="{{k}}"></td>
-{% endfor %}
-<td class="bsum">{{score.bsum}}</td>
+<th>MIP<br>1ポイント</th>
+
+<td class="MIP">
+<select id="mip1" name="mip" class="select2">
+<option value="0">--------------------</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if others.mip1 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+
+{# 球場 #}
+<tr>
+<th>球場</th>
+<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
+<td></td>
+</tr>
+
+{# memo #}
+<tr>
+<th>メモ</th>
+<td><textarea class="form-control" id="memo">{{others.memo}}</textarea></td>
+<td></td>
+</tr>
+
+{# 試合ステータス #}
+<tr>
+<th>ステータス</th>
+<td>
+<select id="status" name="status" class="form-control"> 
+<option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
+<option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
+<option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
+</select>
+</td>
+<td></td>
 </tr>
 
 </tbody>
 </table>
 
-<button class="btn btn-success" onClick="post_score(true);">登録</button>
+<div class="stats-post" role="other">
+<button class="btn btn-success">登録</button>
+</div>
+
+</div>{# <div class="col-md-6"> #}
+
+</div>{# <div class="row"> #}
+<hr>
+
+<ul>
+<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+</ul>
+
 
 {% endblock content %}
 
@@ -52,7 +169,7 @@
 
 <script>
 
-function calcsum() {
+function calcsum_pc() {
 
   var tscore = 0, bscore = 0;
 
@@ -79,13 +196,56 @@ function calcsum() {
 }
 
 $(document).ready(function(){
-  calcsum();
+  calcsum_pc();
 
   $('input.score').each(function() {
       $(this).bind('click blur keydown keyup keypress change',function(){
-        calcsum();
+        calcsum_pc();
       });
   });
 });
 </script>
-{% endblock js %}
+
+{# スコアの追加削除ボタンの動作のため #}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+
+{# smartphone/game/score.jsからの移植 #}
+<script type="text/javascript" src="/js/game/score.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  calcsum();
+
+  $("table[role=score] tbody select").change(function() {
+    calcsum();
+  });
+});
+</script>
+
+{# smartphone/game/other.twigからの移植 #}
+<script type="text/javascript">
+var remind_mail = function() {
+
+  if ( confirm("成績入力の完了していない人にメールを送信します。") ) {
+    $.ajax({
+      url: "/api/mail/remind",
+      type: "POST",
+      data: {
+        game_id: $("data#game_id").text(),
+        team_id: $("data#team_id").text(),
+      },
+      success: function() {
+        alert("メールを送信しました。");
+      },
+      error: function(res) {
+        var text = res.responseText;
+        if ( text ) {
+          alert(text);
+        } else {
+          alert("システムエラーが発生しました。");
+        }
+      }
+    });
+  }
+};
+</script>
+{% endblock %}

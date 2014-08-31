@@ -80,34 +80,6 @@ var player = {
   }
 };
 
-// score add/delete
-$("button[type=score-add]").click(function() {
-
-  var $last = $("table[role=score] tbody tr:last");
-  var inning = $last.find("[data-type=inning]").text();
-
-  var $clone = $last.clone(true);
-
-  $clone.find("[data-type=inning]").text(parseInt(inning) + 1);
-  $clone.find("[data-type=score_top]").val('');
-  $clone.find("[data-type=score_bottom]").val('');
-
-  $clone.insertAfter($last);
-});
-
-$("button[type=score-del]").click(function() {
-
-  var $last = $("table[role=score] tbody tr:last");
-  var inning = $last.find("[data-type=inning]").text();
-
-  // 初回は消さない
-  if ( inning == 1 ) {
-    return false;
-  }
-
-  $last.remove();
-});
-
 // position add/delete
 $("div.player-position select[role=position]").change(function(){
   var $base = $(this).parent("div");

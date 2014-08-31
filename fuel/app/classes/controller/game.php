@@ -293,7 +293,7 @@ class Controller_Game extends Controller_Base
 
   private static function _filter_only_loginuser($players)
   {
-    $myid = Model_Player::getMyPlayerId(); 
+    $myid = Model_Player::get_my_player_id(); 
 
     $res = array();
     foreach ( $players as $player )
@@ -307,7 +307,7 @@ class Controller_Game extends Controller_Base
 
   private static function _filter_only_pitcher($players)
   {
-    $myid = Model_Player::getMyPlayerId(); 
+    $myid = Model_Player::get_my_player_id(); 
 
     $res = array();
     foreach ( $players as $index => $player )

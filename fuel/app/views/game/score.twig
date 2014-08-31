@@ -91,7 +91,7 @@
 {# 試合日時 #}
 <tr>
 <th>試合日</th>
-<td><input type="text" class="form-control"></td>
+<td><input type="text" class="form-control" name="date" value="{{gameinfo.date}}"></td>
 </tr>
 <tr>
 <th>開始時間</th>
@@ -101,14 +101,14 @@
 {# 球場 #}
 <tr>
 <th>球場</th>
-<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
+<td><input type="text" class="form-control" id="stadium" value="{{gameinfo.stadium}}"></td>
 <td></td>
 </tr>
 
 {# memo #}
 <tr>
 <th>メモ</th>
-<td><textarea class="form-control" id="memo" rows="4">{{others.memo}}</textarea></td>
+<td><textarea class="form-control" id="memo" rows="4">{{gameinfo.memo}}</textarea></td>
 <td></td>
 </tr>
 
@@ -126,11 +126,11 @@
 <tr>
 <th>MVP</th>
 
-<td class="MIP">
-<select id="mip2" name="mip" class="select2">
+<td class="MVP">
+<select id="mvp" name="mvp" class="select2">
 <option value="0">--------------------</option>
 {% for player in players %}
-<option value="{{player.id}}" {%if others.mip2 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+<option value="{{player.id}}" {%if mvp == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
 {%endfor%}
 </select>
 </td>
@@ -140,28 +140,15 @@
 <tr>
 <th>準MVP</th>
 
-<td class="MIP">
-<select id="mip1" name="mip" class="select2">
+<td class="MVP">
+<select id="second_mvp" name="second_mvp" class="select2">
 <option value="0">--------------------</option>
 {% for player in players %}
-<option value="{{player.id}}" {%if others.mip1 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+<option value="{{player.id}}" {%if second_mvp == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
 {%endfor%}
 </select>
 </td>
 
-</tr>
-
-{# 試合ステータス #}
-<tr class="disable">
-<th>ステータス</th>
-<td>
-<select id="status" name="status" class="form-control"> 
-<option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
-<option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
-<option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
-</select>
-</td>
-<td></td>
 </tr>
 
 </tbody>

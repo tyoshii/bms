@@ -5,6 +5,12 @@ class Model_Game extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'date',
+    'stadium' => array(
+      'default' => '',
+    ),
+    'memo' => array(
+      'default' => '',
+    ),
 		'team_top',
 		'team_top_name',
 		'team_bottom',

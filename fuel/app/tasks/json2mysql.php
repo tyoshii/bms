@@ -4,17 +4,59 @@ namespace Fuel\Tasks;
 
 class Json2mysql
 {
+  /**
+   * games_statsに入っているjsonフォーマットの情報をRDBMSへ
+   *
+   * games_stats.others => games / stats_award
+   */
+	public function other()
+  {
+    // 対象game_idを取得
+    $game_ids = \DB::select('id')->from('games')->execute()->as_array();
 
-	/**
-	 * This method gets ran when a valid method name is not used in the command.
-	 *
-	 * Usage (from command line):
-	 *
-	 * php oil r json2mysql
-	 *
-	 * @return string
-	 */
-	public function run($game_id = NULL)
+    // game_idsごとに処理
+    foreach ( $game_ids as $game_id )
+    {
+      $game_id = $game_id['id'];
+      echo "execute game_id = {$game_id}\n";
+
+      $others = \Model_Games_Stat::find_by_game_id($game_id);
+      if ( ! $others ) continue;
+      if ( ! $others->others ) continue;
+
+      $team_id = $others->team_id;
+
+      if ( $stats = json_decode($others->others, true) )
+      {
+        // updateしたロジックで既に動いている場合はスキップ
+        if ( array_key_exists('mvp', $stats) ) continue;
+
+        // award
+        $awards = array(
+          'mvp_player_id'        => $stats['mip2'],
+          'second_mvp_player_id' => $stats['mip1'],
+        );
+        \Model_Stats_Award::regist($game_id, $team_id, $awards);    
+
+        // stadium/memo
+        $game = \Model_Game::find($game_id);
+        $game->stadium = $stats['place'];
+        $game->memo    = $stats['memo'];
+        $game->save();
+
+        echo "game_id={$game_id}のothersをRDBMSへコピーしました。\n";
+      }
+    }
+  }
+
+  /**
+   * games_statsに入っているjsonフォーマットの情報をRDBMSへ
+   *
+   * games_stats.players  => stats_players
+   * games_stats.pitchers => stats_pitchings
+   * games_stats.batters  => stats_hittings ( stats_hittingdetails )
+   */
+	public function player_pitcher_batter($game_id = NULL)
 	{
     // 対象game_idを取得
     $game_ids = '';
@@ -94,6 +136,5 @@ class Json2mysql
 
     echo "DONE !!";
 	}
-
 }
 /* End of file tasks/json2mysql.php */

@@ -14,11 +14,22 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_summary($game_id)
+  public function action_add()
   {
+    echo "新規ゲーム追加";
+  }
+
+  public function action_summary()
+  {
+    $game_id = $this->param('game_id');
+
     $view = View::forge('game/summary.twig');
 
     $info = Model_Game::find($game_id);
+    if ( ! $info )
+    {
+      return Response::redirect('_404_');
+    }
 
     $view->info  = $info;
     $view->score = Model_Games_Runningscore::find($game_id);
@@ -88,8 +99,13 @@ class Controller_Game extends Controller_Base
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $kind = '', $team_id = null)
+  public function action_edit()
   {
+    // get param
+    $game_id = $this->param('game_id', null);
+    $team_id = $this->param('team_id', null);
+    $kind    = $this->param('kind', '');
+
     // error check
     if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
     {

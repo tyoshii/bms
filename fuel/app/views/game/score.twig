@@ -10,7 +10,7 @@
 {# score #}
 <div class="col-md-6">
 
-<h3>スコア</h3>
+<h3>スコア&nbsp;<small><button class="btn btn-info btn-xs">先攻後攻入れ替え</button></small></h3>
 
 <table class="table table-bordered" role="score">
 
@@ -88,8 +88,43 @@
 
 <tbody>
 
+{# 試合日時 #}
 <tr>
-<th>MIP<br>2ポイント</th>
+<th>試合日</th>
+<td><input type="text" class="form-control"></td>
+</tr>
+<tr>
+<th>開始時間</th>
+<td><input type="text" class="form-control"></td>
+</tr>
+
+{# 球場 #}
+<tr>
+<th>球場</th>
+<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
+<td></td>
+</tr>
+
+{# memo #}
+<tr>
+<th>メモ</th>
+<td><textarea class="form-control" id="memo" rows="4">{{others.memo}}</textarea></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
+
+<h3>表彰選手</h3>
+<table class="table">
+
+<thead></thead>
+
+<tbody>
+
+<tr>
+<th>MVP</th>
 
 <td class="MIP">
 <select id="mip2" name="mip" class="select2">
@@ -103,7 +138,7 @@
 </tr>
 
 <tr>
-<th>MIP<br>1ポイント</th>
+<th>準MVP</th>
 
 <td class="MIP">
 <select id="mip1" name="mip" class="select2">
@@ -116,22 +151,8 @@
 
 </tr>
 
-{# 球場 #}
-<tr>
-<th>球場</th>
-<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
-<td></td>
-</tr>
-
-{# memo #}
-<tr>
-<th>メモ</th>
-<td><textarea class="form-control" id="memo">{{others.memo}}</textarea></td>
-<td></td>
-</tr>
-
 {# 試合ステータス #}
-<tr>
+<tr class="disable">
 <th>ステータス</th>
 <td>
 <select id="status" name="status" class="form-control"> 
@@ -153,99 +174,15 @@
 </div>{# <div class="col-md-6"> #}
 
 </div>{# <div class="row"> #}
-<hr>
-
-<ul>
-<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
-</ul>
-
 
 {% endblock content %}
 
 
 {% block js %}
-
 {{parent()}}
-
-<script>
-
-function calcsum_pc() {
-
-  var tscore = 0, bscore = 0;
-
-  $('.tscore').each(function(){
-    var s = parseInt($(this).val());
-    tscore += isNaN(s) ? 0 : s;
-  });
-  $('.bscore').each(function(){
-    var s = parseInt($(this).val());
-    bscore += isNaN(s) ? 0 : s;
-  });
-
-  $('td.tsum').each(function(){
-    $(this).text(tscore);
-  });
-  $('td.bsum').each(function(){
-    $(this).text(bscore);
-  });
-
-  $('input.tsum').attr('value', tscore);
-  $('input.bsum').attr('value', bscore);
-
-  return true;
-}
-
-$(document).ready(function(){
-  calcsum_pc();
-
-  $('input.score').each(function() {
-      $(this).bind('click blur keydown keyup keypress change',function(){
-        calcsum_pc();
-      });
-  });
-});
-</script>
-
-{# スコアの追加削除ボタンの動作のため #}
-<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
-
-{# smartphone/game/score.jsからの移植 #}
 <script type="text/javascript" src="/js/game/score.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-  calcsum();
 
-  $("table[role=score] tbody select").change(function() {
-    calcsum();
-  });
-});
-</script>
-
-{# smartphone/game/other.twigからの移植 #}
-<script type="text/javascript">
-var remind_mail = function() {
-
-  if ( confirm("成績入力の完了していない人にメールを送信します。") ) {
-    $.ajax({
-      url: "/api/mail/remind",
-      type: "POST",
-      data: {
-        game_id: $("data#game_id").text(),
-        team_id: $("data#team_id").text(),
-      },
-      success: function() {
-        alert("メールを送信しました。");
-      },
-      error: function(res) {
-        var text = res.responseText;
-        if ( text ) {
-          alert(text);
-        } else {
-          alert("システムエラーが発生しました。");
-        }
-      }
-    });
-  }
-};
-</script>
+{# post-statsのメソッドのみ使っている #}
+{# TODO: PCとスマホでpost-stats周りのメソッドをあわせる #}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
 {% endblock %}

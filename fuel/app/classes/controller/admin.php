@@ -197,7 +197,7 @@ class Controller_Admin extends Controller_Base
     }
     else if ( Auth::has_access('moderator.moderator.') )
     {
-      $team_id = Model_Player::getMyTeamId();
+      $team_id = Model_Player::get_my_team_id();
       $view->players = Model_Player::get_players($team_id);
     }
 
@@ -509,7 +509,7 @@ class Controller_Admin extends Controller_Base
     // moderatorの場合、teamは自チーム固定
     if ( ! Auth::has_access('admin.admin') )
     {
-      $team_id   = Model_Player::getMyTeamId();
+      $team_id   = Model_Player::get_my_team_id();
       $team_name = Model_Player::get_my_team_name();
 
       $team = $form->field('team');

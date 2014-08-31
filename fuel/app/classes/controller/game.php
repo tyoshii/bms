@@ -34,7 +34,7 @@ class Controller_Game extends Controller_Base
     $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
 
     // other
-    $view->my_team_id = Model_Player::getMyTeamId();
+    $view->my_team_id = Model_Player::get_my_team_id();
 
     return Response::forge($view);
   }
@@ -47,7 +47,7 @@ class Controller_Game extends Controller_Base
     $view->set_safe('form', $form->build(Uri::current()));
 
     $view->games   = Model_Game::getGames();
-    $view->team_id = Model_Player::getMyTeamId() ?: 0;
+    $view->team_id = Model_Player::get_my_team_id() ?: 0;
     
     return Response::forge($view);
   } 
@@ -101,7 +101,7 @@ class Controller_Game extends Controller_Base
 
     // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )
-      $team_id = Model_Player::getMyTeamId();
+      $team_id = Model_Player::get_my_team_id();
 
     // 所属選手
     // - TODO: 変数名をmembersからplayersへ変更したい。
@@ -220,7 +220,7 @@ class Controller_Game extends Controller_Base
 
     // - 先攻
     $form->add('top', '先攻', $attrs + array(
-      'value'            => Model_Player::getMyTeamId(), // デフォルトで自分のチーム
+      'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
       'data-placeholder' => 'チームを選択',
     ))
       ->add_rule('in_array', array_keys($teams));
@@ -279,7 +279,7 @@ class Controller_Game extends Controller_Base
     // 自分の試合かどうか
     if ( ! Auth::has_access('admin.admin') )
     {
-      $team_id = Model_Player::getMyTeamId();
+      $team_id = Model_Player::get_my_team_id();
 
       if ( Input::post('top') != $team_id && Input::post('bottom') != $team_id )
       {

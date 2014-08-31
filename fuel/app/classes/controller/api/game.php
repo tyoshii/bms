@@ -30,7 +30,7 @@ class Controller_Api_Game extends Controller_Rest
       }
 
       // Moderatorsだとして、自分のチームの試合ですか？
-      if ( $ids['team_id'] !== Model_Player::getMyTeamId() )
+      if ( $ids['team_id'] !== Model_Player::get_my_team_id() )
       {
         throw new Exception('権限がありません');
       } 

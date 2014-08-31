@@ -99,7 +99,7 @@ class Model_Game extends \Orm\Model
     $play = DB::select( DB::expr('COUNT(*)') )
               ->from('stats_players')
               ->where('game_id', DB::expr('games.id'))
-              ->where('player_id', Model_Player::getMyPlayerID());
+              ->where('player_id', Model_Player::get_my_player_id());
 
     $query->select(
       '*',
@@ -122,7 +122,7 @@ class Model_Game extends \Orm\Model
         $result[$index]['status'] = $result[$index]['game_status'];
       }
 
-      if ( $team_id = Model_Player::getMyTeamId() )
+      if ( $team_id = Model_Player::get_my_team_id() )
       {
         if ( $res['team_top'] == $team_id ) 
         {
@@ -168,7 +168,7 @@ class Model_Game extends \Orm\Model
   {
     $result = array();
 
-    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+    if ( Auth::check() && $team_id = Model_Player::get_my_team_id() )
     {
       $query  = self::_getGamesQuery();
 

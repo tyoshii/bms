@@ -4,7 +4,7 @@ class Model_Score_Team
 
   public static function getTeamScore()
   {
-    $my_team_id = Model_Player::getMyTeamId();
+    $my_team_id = Model_Player::get_my_team_id();
 
     $query = <<<__QUERY__
 SELECT
@@ -34,7 +34,7 @@ __QUERY__;
 
   public static function getTeamGameInfo(){
  
-    $my_team_id = Model_Player::getMyTeamId();
+    $my_team_id = Model_Player::get_my_team_id();
     
     $query = <<<__QUERY__
 SELECT

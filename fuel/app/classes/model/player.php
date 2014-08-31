@@ -47,7 +47,7 @@ class Model_Player extends \Orm\Model
     return null;
   }
 
-  public static function getMyPlayerID()
+  public static function get_my_player_id()
   {
     if ( $res = self::find_by_username(Auth::get_screen_name()) )
       return $res->id;
@@ -57,13 +57,13 @@ class Model_Player extends \Orm\Model
 
   public static function get_my_team_name()
   {
-    if ( $team_id = self::getMyTeamId() )
+    if ( $team_id = self::get_my_team_id() )
     {
       return Model_Team::find($team_id)->name;
     }
   }
 
-  public static function getMyTeamId()
+  public static function get_my_team_id()
   {
     if ( $res = self::find_by_username(Auth::get_screen_name()) )
       return $res->team;

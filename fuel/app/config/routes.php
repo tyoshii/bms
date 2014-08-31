@@ -32,8 +32,5 @@ return array(
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',
 
-//  '_root_'  => 'welcome/index',  // The default route
-  '_404_'   => 'welcome/404',    // The main 404 route
-
-  'hello(/:name)?' => array('welcome/hello', 'name' => 'hello'),
+  '_404_'   => 'top/404',
 );

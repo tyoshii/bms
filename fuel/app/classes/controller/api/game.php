@@ -63,6 +63,7 @@ class Controller_Api_Game extends Controller_Rest
     if ( ! $ret )
       throw new Exception('ステータスのアップデートに失敗しました');
   
+    Session::set_flash('info', '試合ステータスを更新しました。');
     return "OK";
   }
 
@@ -98,17 +99,8 @@ class Controller_Api_Game extends Controller_Rest
 
     $ids = self::_getIds();
 
-    // json登録(old)
-    $players = Input::post('stats');
-
-    $game = Model_Games_Stat::query()
-              ->where(array($ids))
-              ->get_one();
-
-    $game->players = json_encode($players); 
-    $game->save();
-
     // stats_metaへの登録
+    $players = Input::post('stats');
     Model_Stats_Player::registPlayer($ids, $players);
 
     // status update
@@ -121,18 +113,10 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert (json形式
-    // - TODO いつか消す
-    $pitcher = Input::post('stats');
-
-    $game = Model_Games_Stat::query()
-              ->where(array($ids))
-              ->get_one();
-    $game->pitchers = json_encode($pitcher); 
-    $game->save();
-
     // stats_pitchingsへのinsert
+    $pitcher = Input::post('stats');
     $status = Input::post('complete') ? 1 : 0;
+
     if ( Auth::has_access('admin.admin') )
     {
       Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
@@ -149,18 +133,8 @@ class Controller_Api_Game extends Controller_Rest
   {
     $ids = self::_getIds();
 
-    // insert (json形式
-    // - TODO いつか消す
-    $batter = Input::post('stats');
-
-    $game = Model_Games_Stat::query()
-            ->where(array($ids))
-            ->get_one();
-
-    $game->batters = json_encode($batter); 
-    $game->save();
-
     // satasへの登録
+    $batter = Input::post('stats');
     $status = Input::post('complete') ? 1 : 0;
 
     if ( Auth::has_access('admin.admin') )
@@ -194,8 +168,19 @@ class Controller_Api_Game extends Controller_Rest
     $game->others = json_encode($other); 
     $game->save();
 
-    // update game status
-    Model_Game::update_status($ids['game_id'], $ids['team_id'], $other['status']);
+    // update games(stadium/memo)
+    // TODO: stadiumとmemoのvalidation
+    $game = Model_Game::find($ids['game_id']);
+    $game->stadium = $other['stadium'];
+    $game->memo    = $other['memo'];
+    $game->save();
+
+    // update award(mvp)
+    $stats = array(
+      'mvp_player_id'        => $other['mvp'],
+      'second_mvp_player_id' => $other['second_mvp'],
+    );
+    Model_Stats_Award::regist($ids['game_id'], $ids['team_id'], $stats);
 
     echo 'OK';
   }

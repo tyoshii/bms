@@ -330,11 +330,10 @@ $("div.stats-post[role=hitting] button").click(function(){
 
 $("div.stats-post[role=other] button").click(function() {
   STATS.data = {
-    mip2:   $("select#mip2").val(),
-    mip1:   $("select#mip1").val(),
-    place:  $("input#place").val(),
-    memo:   $("textarea#memo").val(),
-    status: $("select#status").val()
+    mvp:        $("select#mvp").val(),
+    second_mvp: $("select#second_mvp").val(),
+    stadium:    $("input#stadium").val(),
+    memo:       $("textarea#memo").val()
   };
 
   STATS.post.ajax('updateOther');

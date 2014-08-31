@@ -172,7 +172,9 @@ class Controller_Game extends Controller_Base
     $view->team_name = Model_Team::find($team_id)->name;
 
     // 試合情報
+    // TODO: gameinfo としてまとめたい
     $game = Model_Game::find($game_id);
+    $view->gameinfo = $game;
 
     // チーム名
     $view->team_top    = $game->team_top_name;
@@ -180,6 +182,13 @@ class Controller_Game extends Controller_Base
 
     // 試合日
     $view->date = $game->date;
+        
+    // 表彰
+    // TODO: 試合概要だけにあればよいが、othersでも使っていたためここで
+    $award = Model_Stats_Award::get_stats($game_id, $team_id);
+    $view->mvp        = $award->mvp_player_id;
+    $view->second_mvp = $award->second_mvp_player_id;
+
 
     return Response::forge($view);
   }

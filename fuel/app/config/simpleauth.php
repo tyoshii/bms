@@ -78,9 +78,9 @@ return array(
     'groups' => array(
         -1   => array('name' => 'Banned', 'roles' => array('banned')),
         0    => array('name' => 'Guests', 'roles' => array()),
-        1    => array('name' => 'Users', 'roles' => array('user')),
-        50   => array('name' => 'Moderators', 'roles' => array('user', 'moderator')),
-        100  => array('name' => 'Administrators', 'roles' => array('user', 'moderator', 'admin')),
+        1    => array('name' => '一般', 'roles' => array('user')),
+        50   => array('name' => 'チーム管理者', 'roles' => array('user', 'moderator')),
+        100  => array('name' => 'システム管理者', 'roles' => array('user', 'moderator', 'admin')),
     ),
 
     /**

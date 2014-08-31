@@ -30,8 +30,14 @@ class Controller_Game extends Controller_Base
     $view->hitting_top    = Model_Stats_Hitting::get_stats($game_id, $info['team_top']);
     $view->hitting_bottom = Model_Stats_Hitting::get_stats($game_id, $info['team_bottom']);
 
-    $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
-    $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+    $view->pitching_top    = Model_Stats_Pitching::get_stats(array(
+      'game_id' => $game_id,
+      'team_id' => $info['team_top'],
+    ));
+    $view->pitching_bottom = Model_Stats_Pitching::get_stats(array(
+      'game_id' => $game_id,
+      'team_id' => $info['team_bottom'],
+    ));
 
     // other
     $view->my_team_id = Model_Player::get_my_team_id();
@@ -130,8 +136,7 @@ class Controller_Game extends Controller_Base
         $view->metum = self::_filter_only_pitcher($view->metum);
 
         // 成績
-        $where = array( 'game_id' => $game_id );
-        $view->stats = Model_Stat::getStats('stats_pitchings', $where, 'player_id');
+        $view->stats = Model_Stats_Pitching::get_stats(array('game_id' => $game_id));
         break;
 
       case 'batter':
@@ -153,6 +158,7 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'other':
+        // TODO: いつか消す
         $stat = Model_Games_Stat::query()
                         ->where('game_id', $game_id)
                         ->where('team_id', $team_id)

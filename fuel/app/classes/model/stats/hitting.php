@@ -1,6 +1,6 @@
 <?php
 
-class Model_Stats_Hitting extends \Orm\Model
+class Model_Stats_Hitting extends Model_Base
 {
 	protected static $_properties = array(
 		'id',
@@ -190,7 +190,7 @@ class Model_Stats_Hitting extends \Orm\Model
 
   public static function getStats($where)
   {
-    return Model_Stat::getStats(self::$_table_name, $where);
+    return self::select_as_array(self::$_table_name, $where, 'player_id');
   }
 
   public static function get_status( $game_id, $player_id )

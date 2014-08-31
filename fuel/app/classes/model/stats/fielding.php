@@ -1,6 +1,6 @@
 <?php
 
-class Model_Stats_Fielding extends \Orm\Model
+class Model_Stats_Fielding extends Model_Base
 {
 	protected static $_properties = array(
 		'id',
@@ -31,7 +31,7 @@ class Model_Stats_Fielding extends \Orm\Model
 
   public static function getStats($where)
   {
-    return Model_Stat::getStats(self::$_table_name, $where);
+    return self::select_as_array(self::$_table_name, $where, 'player_id');
   }
 
   public static function regist($ids, $player_id, $stat)

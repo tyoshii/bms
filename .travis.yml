@@ -12,8 +12,7 @@ before_script:
 script:
   - FUEL_ENV=test php oil r migrate
   - FUEL_ENV=test php oil r dbinit:insert_data_for_travis
-  - php oil t
-  - php oil t --group=App --coverage-clover=./build/logs/clover.xml
+  - php oil t --coverage-clover=./build/logs/clover.xml
 
 after_script:
   - php fuel/vendor/bin/coveralls -v --config="../.coveralls.yml"

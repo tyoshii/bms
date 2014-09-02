@@ -15,8 +15,8 @@ class Controller_Base extends Controller
     {
       View::set_global('induct_each_env', true);
     }
-    if ( Model_Player::get_my_team_name() === 'レジャーズ' )
-    {
+    if ( in_array(Model_Player::get_my_team_id(), Config::get('bms.moderator_team_ids')) )
+    { 
       View::set_global('induct_each_env', true);
     }
 

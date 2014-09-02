@@ -13,7 +13,7 @@ class Controller_Top extends Controller_Base
         // アラート
         $view->alert_games = Model_Game::get_incomplete_gameids($player->id);
         // 最近の試合
-        $view->games = Model_Game::get_info_by_team(Model_Player::get_my_team_id);
+        $view->games = Model_Game::get_info_by_team(Model_Player::get_my_team_id());
       }
       else
       {

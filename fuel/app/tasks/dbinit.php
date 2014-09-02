@@ -148,17 +148,6 @@ class Dbinit
    */
   public function insert_data_for_travis()
   {
-    // user
-    \Auth::delete_user('admin');
-    \Auth::delete_user('moderator');
-    \Auth::delete_user('user');
-    \Auth::delete_user('banned');
-
-    \Auth::create_user('admin',     'password_admin',     'admin@bm-s.info',    100);
-    \Auth::create_user('moderator', 'password_moderator', 'moderator@bm-s.info', 50);
-    \Auth::create_user('user',      'password_user',      'user@bm-s.info',       1);
-    \Auth::create_user('banned',    'password_banned',    'banned@bm-s.info',    -1);
-
     // team
     $team1_id = \Model_Team::regist('テストチーム1');
     $team2_id = \Model_Team::regist('テストチーム2');
@@ -171,6 +160,39 @@ class Dbinit
       'bottom' => $team2_id,
     );
     \Model_Game::createNewGame($data);
+
+    // player
+    $props = array(
+      'team'     => $team1_id,
+      'name'     => '選手A',
+      'number'   => 1,
+      'username' => 'player1',
+    );
+    \Model_Player::regist($props);
+
+    // user
+    $data = array(
+      # username  => group
+      'admin'     => 100,
+      'moderator' => 50,
+      'user'      => 1,
+      'banned'    => -1,
+      'player1'   => 1,
+    );
+
+    foreach ( $data as $username => $group )
+    {
+      \Auth::delete_user($username);
+      \Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
+    }
+
+    // config
+    $ids = Config::get('bms.moderator_team_ids');
+    if ( count($ids) === 0 )
+    {
+      Config::set('bms.moderator_team_ids', array(1));
+      Config::save('bms', 'bms');
+    }
   }
 }
 /* End of file tasks/dbinit.php */

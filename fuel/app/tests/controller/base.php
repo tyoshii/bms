@@ -7,7 +7,7 @@
  * @group Controller
  * @group Controller_Base
  */
-class Test_Controller_Base extends \TestCase
+class Test_Controller_Base extends Test_Base
 {
   protected function setUp()
   {
@@ -97,5 +97,24 @@ class Test_Controller_Base extends \TestCase
 
     // delete user
     Auth::delete_user($username);
+  }
+
+  /**
+   * モデレーターチームのテスト
+   */
+  public function test_ログインユーザーの所属チームがモデレーターチームの場合()
+  {
+    // モデレーターチーム所属の選手でログイン
+    $ids = Config::get('bms.moderator_team_ids');
+    $username = Model_Player::find_by_team($ids[0])->username;
+    $user_id  = Model_User::find_by_username($username)->id;
+
+    Auth::force_login($user_id);
+ 
+    // request
+    $res = Request::forge('/')->execute()->response();
+
+    // check 
+    $this->assertSame(true, $res->body->induct_each_env);
   }
 }

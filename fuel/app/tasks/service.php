@@ -23,7 +23,7 @@ class Service
 		/***************************
 		 Put in TASK DETAILS HERE
 		 **************************/
-    if ( \Config::get('system.mode') === 'on' )
+    if ( \Config::get('bms.maintenance') === 'on' )
     {
       echo "現在メンテナンスモードです";
     }
@@ -50,13 +50,13 @@ class Service
 		echo "\nRunning task [Service:Out]";
 		echo "\n-------------------------------------------\n\n";
 
-    \Config::set('system.mode', 'on');
-    \Config::save('system', 'system');
+    \Config::set('bms.maintenance', 'on');
+    \Config::save('bms', 'bms');
 
     echo 'service out... go to maintenance mode';
 	}
 
-	/**
+	/*
 	 * This method gets ran when a valid method name is not used in the command.
 	 *
 	 * Usage (from command line):
@@ -74,8 +74,8 @@ class Service
 		/***************************
 		 Put in TASK DETAILS HERE
 		 **************************/
-    \Config::set('system.mode', 'off');
-    \Config::save('system', 'system');
+    \Config::set('bms.maintenance', 'off');
+    \Config::save('bms', 'bms');
 
     echo 'service in... start !!';
 	}

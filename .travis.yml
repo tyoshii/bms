@@ -2,6 +2,7 @@ language: php
 
 php:
   - 5.3
+  - 5.4
 
 before_script:
   - mkdir -p build/logs
@@ -10,7 +11,8 @@ before_script:
 
 script:
   - FUEL_ENV=test php oil r migrate
-  - php oil t --coverage-clover=./build/logs/clover.xml
+  - php oil t # 全テスト
+  - php oil t --group=App --coverage-clover=./build/logs/clover.xml
 
 after_script:
   - php fuel/vendor/bin/coveralls -v --config="../.coveralls.yml"

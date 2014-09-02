@@ -63,7 +63,7 @@ class Controller_Game extends Controller_Base
     $form = self::_get_addgame_form();
     $view->set_safe('form', $form->build(Uri::current()));
 
-    $view->games   = Model_Game::getGames();
+    $view->games   = Model_Game::get_info();
     $view->team_id = Model_Player::get_my_team_id() ?: 0;
     
     return Response::forge($view);
@@ -94,7 +94,7 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge('game/list.twig');
     $view->set_safe('form', $form->build(Uri::current()));
-    $view->games = Model_Game::getGames();
+    $view->games = Model_Game::get_info();
     
     return Response::forge($view);
   }

@@ -87,18 +87,10 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
-  public static function getGameInfo($game_id)
+  public static function get_info()
   {
-    $query = self::_getGamesQuery();
-
-    $query->where('games.id', $game_id);
-
-    return $query->execute()->as_array();
-  }
-
-  public static function getGames()
-  {
-    $query = self::_getGamesQuery();
+    // base query
+    $query = self::_get_info_query();
 
     // 自分が出場している試合かどうか
     // サブクエリで取得する
@@ -170,35 +162,20 @@ class Model_Game extends \Orm\Model
     return $result;
   }
 
-  public static function getGamesOnlyMyTeam()
+  public static function get_info_by_team($team_id = null)
   {
-    $result = array();
+    if ( ! $team_id ) return array();
 
-    if ( Auth::check() && $team_id = Model_Player::get_my_team_id() )
-    {
-      $query  = self::_getGamesQuery();
+    // base query
+    $query  = self::_get_info_query();
 
-      $query->where_open();
-      $query->or_where('team_top', $team_id);
-      $query->or_where('team_bottom', $team_id);
-      $query->where_close();
+    // add where : 先攻後攻どちらかがチームIDだったら
+    $query->where_open();
+    $query->or_where('team_top', $team_id);
+    $query->or_where('team_bottom', $team_id);
+    $query->where_close();
 
-      $result = $query->execute()->as_array();
-    }
-
-    return $result;
-  }
-
-  private static function _getGamesQuery()
-  {
-    $query = DB::select()->from(self::$_table_name);
-
-    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
-  
-    $query->where('game_status', '!=', -1);
-    $query->order_by('date', 'desc');
-    
-    return $query;
+    return $query->execute()->as_array();
   }
 
   public static function update_status_minimum($game_id, $status)
@@ -340,7 +317,7 @@ class Model_Game extends \Orm\Model
       { 
         $paths[] = "game/{$game_id}/batter/{$team_id}";
       }
-      
+
       // 投手成績のアラート
       if ( in_array('1', $player['position'] ) )
       {
@@ -354,5 +331,22 @@ class Model_Game extends \Orm\Model
       if (count($paths) !== 0)
         Common_Email::remind_game_stats($player_id, $paths);
     }
+  }
+
+  /**
+   * private function : return query for get game info
+   *
+   * @return : Queyry Builder object
+   */
+  private static function _get_info_query()
+  {
+    $query = DB::select()->from(self::$_table_name);
+
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
+
+    $query->where('game_status', '!=', -1);
+    $query->order_by('date', 'desc');
+
+    return $query;
   }
 }

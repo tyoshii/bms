@@ -11,6 +11,7 @@ before_script:
 
 script:
   - FUEL_ENV=test php oil r migrate
+  - FUEL_ENV=test php oil r dbinit:insert_data_for_travis
   - php oil t # 全テスト
   - php oil t --group=App --coverage-clover=./build/logs/clover.xml
 

@@ -55,9 +55,3 @@ import('testcase');
 
 // load my package for test
 Package::load('my');
-
-// create (if not) admin user
-if ( ! Model_User::find_by_username('admin') )
-{
-  Auth::create_user('admin', 'adminadmin', 'admin@bm-s.info');
-}

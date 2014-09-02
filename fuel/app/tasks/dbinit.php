@@ -142,5 +142,35 @@ class Dbinit
     echo "Finish!!";
 	}
 
+
+  /**
+   *
+   */
+  public function insert_data_for_travis()
+  {
+    // user
+    \Auth::delete_user('admin');
+    \Auth::delete_user('moderator');
+    \Auth::delete_user('user');
+    \Auth::delete_user('banned');
+
+    \Auth::create_user('admin',     'password_admin',     'admin@bm-s.info',    100);
+    \Auth::create_user('moderator', 'password_moderator', 'moderator@bm-s.info', 50);
+    \Auth::create_user('user',      'password_user',      'user@bm-s.info',       1);
+    \Auth::create_user('banned',    'password_banned',    'banned@bm-s.info',    -1);
+
+    // team
+    $team1_id = \Model_Team::regist('テストチーム1');
+    $team2_id = \Model_Team::regist('テストチーム2');
+
+    // game
+    // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
+    $data = array(
+      'date'   => date('Y-m-d'),
+      'top'    => $team1_id,
+      'bottom' => $team2_id,
+    );
+    \Model_Game::createNewGame($data);
+  }
 }
 /* End of file tasks/dbinit.php */

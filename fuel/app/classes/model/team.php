@@ -34,6 +34,16 @@ class Model_Team extends \Orm\Model
     )
   );
 
+  public static function regist($name = null)
+  {
+    if ( ! $name ) return false;
+
+    $team = Model_Team::forge(array('name' => $name));
+    $team->save();
+
+    return $team->id;
+  }
+
   public static function get_teams()
   {
     return DB::select()

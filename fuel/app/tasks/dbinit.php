@@ -187,11 +187,11 @@ class Dbinit
     }
 
     // config
-    $ids = Config::get('bms.moderator_team_ids');
+    $ids = \Config::get('bms.moderator_team_ids');
     if ( count($ids) === 0 )
     {
-      Config::set('bms.moderator_team_ids', array(1));
-      Config::save('bms', 'bms');
+      \Config::set('bms.moderator_team_ids', array(1));
+      \Config::save('bms', 'bms');
     }
   }
 }

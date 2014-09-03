@@ -68,7 +68,7 @@ class Model_Game extends \Orm\Model
       $game->save();
   
       // other table default value
-      Model_Games_Runningscore::createNewGame($game->id);
+      Model_Games_Runningscore::regist($game->id, array('t1' => 0, 'b1' => 0));
       Model_Stats_Player::createNewGame($game->id, $data['top']);
       Model_Stats_Player::createNewGame($game->id, $data['bottom']);
 
@@ -342,7 +342,7 @@ class Model_Game extends \Orm\Model
   {
     $query = DB::select()->from(self::$_table_name);
 
-    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.game_id');
 
     $query->where('game_status', '!=', -1);
     $query->order_by('date', 'desc');

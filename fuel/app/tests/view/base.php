@@ -24,4 +24,9 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
     echo "このテストはSeleniumが起動していないとSkipされてしまいます。\n";
     echo "\n";
   }
+
+  protected function setUp()
+  {
+    $this->timeouts()->implicitWait(10000);
+  }
 }

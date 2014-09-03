@@ -35,7 +35,7 @@ class Controller_Base extends Controller
         $auth = Auth::instance();
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
-          Session::set_flash('info', 'ログインに成功しました！こんにちわ');
+          Session::set_flash('info', 'ログインに成功しました！');
 
           $redirect_to = Session::get('redirect_to', '/');
           Session::delete('redirect_to');

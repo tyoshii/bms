@@ -90,7 +90,7 @@ class Test_Controller_Base extends Test_Base
     $res = Request::forge('/')->set_method('POST')->execute()->response();
     
     $this->assertTrue(Auth::check());
-    $this->assertSame('ログインに成功しました！こんにちわ', Session::get_flash('info'));
+    $this->assertSame('ログインに成功しました！', Session::get_flash('info'));
 
     // logout
     Auth::logout();

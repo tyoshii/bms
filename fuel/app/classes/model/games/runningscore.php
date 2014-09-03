@@ -4,6 +4,7 @@ class Model_Games_Runningscore extends \Orm\Model
 {
   protected static $_properties = array(
 		'id',
+    'game_id',
     't1' => array(
       'data_type' => 'int',
       'default' => null,
@@ -448,19 +449,10 @@ class Model_Games_Runningscore extends \Orm\Model
     'cascade_delete' => false,
   ));
 
-  public static function createNewGame($id)
+  public static function regist($game_id = null, array $stats)
   {
-    $score = self::forge();
-    $score->id = $id;
-    $score->t1 = 0;
-    $score->b1 = 0;
+    if ( ! $game_id ) return false;
 
-
-    $score->save();
-  }
-
-  public static function regist($game_id, $stats)
-  {
     // 空の値をnullにする
     foreach ( $stats as $key => $val )
     {
@@ -468,15 +460,20 @@ class Model_Games_Runningscore extends \Orm\Model
         $stats[$key] = null;
     }
 
-    $score = self::find($game_id);
-    $score->delete();
+    // 既に登録されているものであれば、一度削除
+    if ( $score = self::find($game_id) )
+    {
+      $score->delete();
+    }
 
-    $score = self::forge(array('id' => $game_id) + $stats);
+    $score = self::forge(array('game_id' => $game_id) + $stats);
     $score->save();
   }
 
-  public static function get_score($game_id)
+  public static function get_score($game_id = null)
   {
+    if ( ! $game_id ) return false;
+
     $score = self::find($game_id);
 
     $return = array();

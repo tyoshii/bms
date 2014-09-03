@@ -69,6 +69,7 @@ return array(
         60 => '062_create_stats_awards',
         61 => '063_add_stadium_to_games',
         62 => '064_add_memo_to_games',
+        63 => '065_add_game_id_to_games_runningscores',
       ),
     ),
     'module' => 

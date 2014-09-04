@@ -13,50 +13,11 @@
 <table class="table">
 <tbody>
 
-<tr>
-<th>MIP</th>
-
-<td class="MIP">
-<label>2ポイント</label>
-<select id="mip2" name="mip" class="select2">
-<option value="0">--------------------</option>
-{% for player in players %}
-<option value="{{player.id}}" {%if others.mip2 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
-{%endfor%}
-</select>
-</td>
-
-<td class="MIP">
-<label>1ポイント</label>
-<select id="mip1" name="mip" class="select2">
-<option value="0">--------------------</option>
-{% for player in players %}
-<option value="{{player.id}}" {%if others.mip1 == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
-{%endfor%}
-</select>
-</td>
-
-</tr>
-
-{# 球場 #}
-<tr>
-<th>球場</th>
-<td><input type="text" class="form-control" id="place" value="{{others.place}}"></td>
-<td></td>
-</tr>
-
-{# memo #}
-<tr>
-<th>メモ</th>
-<td><textarea class="form-control" id="memo">{{others.memo}}</textarea></td>
-<td></td>
-</tr>
-
 {# 試合ステータス #}
 <tr>
 <th>試合ステータス</th>
 <td>
-<select id="status" name="status" class="form-control"> 
+<select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{gameinfo.id}}, {{team_id}});"> 
 <option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
 <option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
 <option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
@@ -67,8 +28,6 @@
 
 </tbody>
 </table>
-
-<button class="btn btn-success" onClick="post_other(true);">登録</button>
 
 {#div class="col-md-6"#}</div>
 <div class="col-md-3"></div>
@@ -84,6 +43,10 @@
 
 {% block js %}
 {{ parent() }}
+
+{# changeGameStatusのためだけに読んでいる #}
+<script type="text/javascript" src="/js/game/list.js"></script>
+
 <script type="text/javascript">
 var remind_mail = function() {
 

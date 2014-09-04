@@ -4,7 +4,7 @@ class Model_Score_Team
 
   public static function getTeamScore()
   {
-    $my_team_id = Model_Player::getMyTeamId();
+    $my_team_id = Model_Player::get_my_team_id();
 
     $query = <<<__QUERY__
 SELECT
@@ -34,17 +34,17 @@ __QUERY__;
 
   public static function getTeamGameInfo(){
  
-    $my_team_id = Model_Player::getMyTeamId();
+    $my_team_id = Model_Player::get_my_team_id();
     
     $query = <<<__QUERY__
 SELECT
-  gr.id,gr.tsum,gr.bsum,g.team_top,g.team_bottom,g.game_status,g.team_top_name,g.team_bottom_name,g.date
+  g.id,gr.tsum,gr.bsum,g.team_top,g.team_bottom,g.game_status,g.team_top_name,g.team_bottom_name,g.date
 FROM
   games as g
 LEFT JOIN
   games_runningscores as gr
 ON
-  g.id = gr.id
+  g.id = gr.game_id
 WHERE
   (g.team_top = $my_team_id or g.team_bottom = $my_team_id)
 ORDER BY

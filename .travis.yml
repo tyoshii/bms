@@ -1,15 +1,24 @@
 language: php
 
 php:
-  - 5.3
+  - 5.4
+  - 5.5
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.2.jar
+  - java -jar selenium-server-standalone-2.42.2.jar > /tmp/selenium.log 2> /tmp/selenium.error &
 
 before_script:
   - mkdir -p build/logs
   - mysql -e 'create database bms;'
   - FUEL_ENV=test php composer.phar install
+  - php -S localhost:8888 -t public > builtinserver.log 2>&1 &
 
 script:
   - FUEL_ENV=test php oil r migrate
+  - FUEL_ENV=test php oil r dbinit:insert_data_for_travis
   - php oil t --coverage-clover=./build/logs/clover.xml
 
 after_script:

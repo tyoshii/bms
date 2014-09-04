@@ -111,7 +111,7 @@ class Model_User extends \Orm\Model
 
   public static function get_users_only_my_team()
   {
-    $team_id = Model_Player::getMyTeamId();
+    $team_id = Model_Player::get_my_team_id();
     if ( ! $team_id ) return array();
 
     $players = Model_Player::query()

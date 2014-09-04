@@ -25,6 +25,23 @@ class Migration
 		 **************************/
 	}
 
+  public function runningscore_id2game_id()
+  {
+		echo "\n===========================================";
+		echo "\nRunning task [migration:runningscore_id2game_id]";
+		echo "\n-------------------------------------------\n\n";
+
+    $scores = \Model_Games_Runningscore::find('all');
+
+    foreach ( $scores as $score )
+    {
+      $score->game_id = $score->id;
+      $score->save();
+    }
+
+    echo "DONE";
+  }
+
   public function position_remove_zero($args = NULL)
   {
 		echo "\n===========================================";

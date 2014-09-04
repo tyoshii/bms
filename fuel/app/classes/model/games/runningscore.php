@@ -4,6 +4,7 @@ class Model_Games_Runningscore extends \Orm\Model
 {
   protected static $_properties = array(
 		'id',
+    'game_id',
     't1' => array(
       'data_type' => 'int',
       'default' => null,
@@ -440,27 +441,25 @@ class Model_Games_Runningscore extends \Orm\Model
 	);
 	protected static $_table_name = 'games_runningscores';
 
-  protected static $_belongs_to = array('games' => array(
-    'model_to' => 'Model_Game',
-    'key_from' => 'id',
-    'key_to' => 'id',
-    'cascade_save' => true,
-    'cascade_delete' => false,
-  ));
+  protected static $_belongs_to = array(
+    'games' => array(
+      'model_to' => 'Model_Game',
+      'key_from' => 'game_id',
+      'key_to' => 'id',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    ),
+  );
 
-  public static function createNewGame($id)
+  public static function regist($game_id = null, $stats = array())
   {
-    $score = self::forge();
-    $score->id = $id;
-    $score->t1 = 0;
-    $score->b1 = 0;
+    if ( ! $game_id ) return false;
 
+    if ( count($stats) === 0 )
+    {
+      $stats = array('t1' => 0, 'b1' => 0);
+    }
 
-    $score->save();
-  }
-
-  public static function regist($game_id, $stats)
-  {
     // 空の値をnullにする
     foreach ( $stats as $key => $val )
     {
@@ -468,20 +467,25 @@ class Model_Games_Runningscore extends \Orm\Model
         $stats[$key] = null;
     }
 
-    $score = self::find($game_id);
-    $score->delete();
+    // 既に登録されているものであれば、一度削除
+    if ( $score = self::find_by_game_id($game_id) )
+    {
+      $score->delete();
+    }
 
-    $score = self::forge(array('id' => $game_id) + $stats);
+    $score = self::forge(array('game_id' => $game_id) + $stats);
     $score->save();
   }
 
-  public static function get_score($game_id)
+  public static function get_score($game_id = null)
   {
-    $score = self::find($game_id);
+    if ( ! $game_id ) return false;
+
+    $score = self::find_by_game_id($game_id);
 
     $return = array();
 
-    for ( $i = 1; $i <= 12; $i++ )
+    for ( $i = 2; $i <= 12; $i++ )
     {
       $tkey = 't'.$i;
       $bkey = 'b'.$i;

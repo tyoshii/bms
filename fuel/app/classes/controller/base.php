@@ -49,6 +49,20 @@ class Controller_Base extends Controller
     }
   }
 
+  /**
+   * error common function
+   */
+  public function action_error()
+  {
+    $code = $this->param('status_code');
+    $view = View::forge('errors/index.twig');
+
+    return Response::forge($view, $code);
+  }
+
+  /**
+   * login form Fieldset::forge()
+   */
   static public function _get_login_form ()
   {
     // login form

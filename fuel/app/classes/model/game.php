@@ -5,6 +5,12 @@ class Model_Game extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'date',
+    'stadium' => array(
+      'default' => '',
+    ),
+    'memo' => array(
+      'default' => '',
+    ),
 		'team_top',
 		'team_top_name',
 		'team_bottom',
@@ -34,13 +40,22 @@ class Model_Game extends \Orm\Model
 	);
 	protected static $_table_name = 'games';
 
-  protected static $_has_many = array('games' => array(
-    'model_to' => 'Model_Game',
-    'key_from' => 'id',
-    'key_to' => 'id',
-    'cascade_save' => true,
-    'cascade_delete' => false,
-  ));
+  protected static $_has_many = array(
+    'games_runningscores' => array(
+      'model_to' => 'Model_Games_Runningscore',
+      'key_from' => 'id',
+      'key_to' => 'game_id',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    ),
+    'stats_players' => array(
+      'model_to' => 'Model_Stats_Player',
+      'key_from' => 'id',
+      'key_to' => 'game_id',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    ),
+  );
 
   public static function createNewGame($data)
   {
@@ -62,7 +77,7 @@ class Model_Game extends \Orm\Model
       $game->save();
   
       // other table default value
-      Model_Games_Runningscore::createNewGame($game->id);
+      Model_Games_Runningscore::regist($game->id);
       Model_Stats_Player::createNewGame($game->id, $data['top']);
       Model_Stats_Player::createNewGame($game->id, $data['bottom']);
 
@@ -81,37 +96,32 @@ class Model_Game extends \Orm\Model
     return true;
   }
 
-  public static function getGameInfo($game_id)
+  public static function get_info()
   {
-    $query = self::_getGamesQuery();
+    // base query
+    $query = self::_get_info_query();
 
-    $query->where('games.id', $game_id);
-
-    return $query->execute()->as_array();
-  }
-
-  public static function getGames()
-  {
-    $query = self::_getGamesQuery();
-
-    // 自分が出場している試合かどうか
-    // サブクエリで取得する
-    $play = DB::select( DB::expr('COUNT(*)') )
-              ->from('stats_players')
-              ->where('game_id', DB::expr('games.id'))
-              ->where('player_id', Model_Player::getMyPlayerID());
-
-    $query->select(
-      '*',
-      array(DB::expr('('.$play->__toString().')'), 'play')
-    );
+    // 自分が出場している試合かどうかをサブクエリで取得する
+    // defaultがleft joinなので、join_onに条件追加
+    // 出場していない場合はnullとなる。
+    $query->related('stats_players', array(
+      'join_on' => array(
+        array('player_id', '=', Model_Player::get_my_player_id())
+      ),
+    ));
 
     // execute
-    $result = $query->execute()->as_array();
+    $result = $query->get();
 
     // add value
     foreach ( $result as $index => $res )
     {
+      // 自分が出場している試合
+      if ( $stats = $res->stats_players )
+      {
+        $result[$index]['play'] = true;
+      }
+
       // ログインしている場合、自分のチームの試合にflag
       // - 加えて、game.statusをセット
       $result[$index]['own'] = false;
@@ -122,7 +132,7 @@ class Model_Game extends \Orm\Model
         $result[$index]['status'] = $result[$index]['game_status'];
       }
 
-      if ( $team_id = Model_Player::getMyTeamId() )
+      if ( $team_id = Model_Player::get_my_team_id() )
       {
         if ( $res['team_top'] == $team_id ) 
         {
@@ -137,14 +147,21 @@ class Model_Game extends \Orm\Model
       }
       
       // 試合結果を配列に付与
-      if ( $res['tsum'] > $res['bsum'] )
+      $score = $res->games_runningscores;
+      $score = $score[$index];
+
+      // 合計
+      $result[$index]['tsum'] = $score['tsum'];
+      $result[$index]['bsum'] = $score['bsum'];
+
+      if ( $score['tsum'] > $score['bsum'] )
       {
         $result[$index]['top_result'] = '○';
         $result[$index]['bottom_result'] = '●';
           
         $result[$index]['result'] = $result[$index]['own'] === 'top' ? 'win' : 'lose';
       }
-      else if ( $res['tsum'] < $res['bsum'] )
+      else if ( $score['tsum'] < $score['bsum'] )
       {
         $result[$index]['top_result'] = '●';
         $result[$index]['bottom_result'] = '○';
@@ -164,35 +181,30 @@ class Model_Game extends \Orm\Model
     return $result;
   }
 
-  public static function getGamesOnlyMyTeam()
+  public static function get_info_by_team($team_id = null)
   {
-    $result = array();
+    if ( ! $team_id ) return array();
 
-    if ( Auth::check() && $team_id = Model_Player::getMyTeamId() )
+    // base query
+    $query  = self::_get_info_query();
+ 
+    // add where : 先攻後攻どちらかがチームIDだったら
+    $query->where_open();
+    $query->or_where('team_top', $team_id);
+    $query->or_where('team_bottom', $team_id);
+    $query->where_close();
+
+    $games = $query->get();
+
+    // scoreの合計を結果に
+    foreach ( $games as $id => $game )
     {
-      $query  = self::_getGamesQuery();
-
-      $query->where_open();
-      $query->or_where('team_top', $team_id);
-      $query->or_where('team_bottom', $team_id);
-      $query->where_close();
-
-      $result = $query->execute()->as_array();
+      $score = $game->games_runningscores;
+      $game->tsum = $score[$id]->tsum;
+      $game->bsum = $score[$id]->bsum;
     }
 
-    return $result;
-  }
-
-  private static function _getGamesQuery()
-  {
-    $query = DB::select()->from(self::$_table_name);
-
-    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.id');
-  
-    $query->where('game_status', '!=', -1);
-    $query->order_by('date', 'desc');
-    
-    return $query;
+    return $games;
   }
 
   public static function update_status_minimum($game_id, $status)
@@ -334,7 +346,7 @@ class Model_Game extends \Orm\Model
       { 
         $paths[] = "game/{$game_id}/batter/{$team_id}";
       }
-      
+
       // 投手成績のアラート
       if ( in_array('1', $player['position'] ) )
       {
@@ -348,5 +360,31 @@ class Model_Game extends \Orm\Model
       if (count($paths) !== 0)
         Common_Email::remind_game_stats($player_id, $paths);
     }
+  }
+
+  /**
+   * private function : return query for get game info
+   *
+   * @return : Queyry Builder object
+   */
+  private static function _get_info_query()
+  {
+    $query = self::query()
+      ->where('game_status', '!=', -1)
+      ->order_by('date', 'desc');
+
+    $query->related('games_runningscores', array(
+      'select' => array('tsum', 'bsum')
+    ));
+
+    return $query;
+    $query = DB::select()->from(self::$_table_name);
+
+    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.game_id');
+
+    $query->where('game_status', '!=', -1);
+    $query->order_by('date', 'desc');
+
+    return $query;
   }
 }

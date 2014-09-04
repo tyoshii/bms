@@ -55,7 +55,7 @@ require APPPATH.'bootstrap.php';
 try
 {
   // maintenance mode
-  if ( \Config::get('system.mode') === 'on' )
+  if ( \Config::get('bms.maintenance') === 'on' )
   {
     if ( Auth::has_access('admin.admin') )
     {

@@ -26,6 +26,16 @@ class Model_Stats_Player extends \Orm\Model
 	);
 	protected static $_table_name = 'stats_players';
 
+  protected static $_belongs_to = array(
+    'games' => array(
+      'model_to' => 'Model_Game',
+      'key_from' => 'game_id',
+      'key_to' => 'id',
+      'cascade_save' => true,
+      'cascade_delete' => false,
+    ),
+  );
+
   public static function getStarter( $game_id, $team_id )
   {
     $query = DB::select()->from(array(self::$_table_name, 'player'));

@@ -14,14 +14,25 @@ class Controller_Game extends Controller_Base
     }
   }
 
-  public function action_summary($game_id)
+  public function action_add()
   {
+    echo "新規ゲーム追加";
+  }
+
+  public function action_summary()
+  {
+    $game_id = $this->param('game_id');
+
     $view = View::forge('game/summary.twig');
 
     $info = Model_Game::find($game_id);
+    if ( ! $info )
+    {
+      return Response::redirect('_404_');
+    }
 
     $view->info  = $info;
-    $view->score = Model_Games_Runningscore::find($game_id);
+    $view->score = Model_Games_Runningscore::find_by_game_id($game_id);
 
     // stats
     $view->player_top    = Model_Stats_Player::getStarter($game_id, $info['team_top']); 
@@ -30,11 +41,17 @@ class Controller_Game extends Controller_Base
     $view->hitting_top    = Model_Stats_Hitting::get_stats($game_id, $info['team_top']);
     $view->hitting_bottom = Model_Stats_Hitting::get_stats($game_id, $info['team_bottom']);
 
-    $view->pitching_top    = Model_Stats_Pitching::get_stats($game_id, $info['team_top']);
-    $view->pitching_bottom = Model_Stats_Pitching::get_stats($game_id, $info['team_bottom']);
+    $view->pitching_top    = Model_Stats_Pitching::get_stats(array(
+      'game_id' => $game_id,
+      'team_id' => $info['team_top'],
+    ));
+    $view->pitching_bottom = Model_Stats_Pitching::get_stats(array(
+      'game_id' => $game_id,
+      'team_id' => $info['team_bottom'],
+    ));
 
     // other
-    $view->my_team_id = Model_Player::getMyTeamId();
+    $view->my_team_id = Model_Player::get_my_team_id();
 
     return Response::forge($view);
   }
@@ -46,8 +63,8 @@ class Controller_Game extends Controller_Base
     $form = self::_get_addgame_form();
     $view->set_safe('form', $form->build(Uri::current()));
 
-    $view->games   = Model_Game::getGames();
-    $view->team_id = Model_Player::getMyTeamId() ?: 0;
+    $view->games   = Model_Game::get_info();
+    $view->team_id = Model_Player::get_my_team_id() ?: 0;
     
     return Response::forge($view);
   } 
@@ -77,13 +94,18 @@ class Controller_Game extends Controller_Base
 
     $view = View::forge('game/list.twig');
     $view->set_safe('form', $form->build(Uri::current()));
-    $view->games = Model_Game::getGames();
+    $view->games = Model_Game::get_info();
     
     return Response::forge($view);
   }
 
-  public function action_edit($game_id = null, $kind = '', $team_id = null)
+  public function action_edit()
   {
+    // get param
+    $game_id = $this->param('game_id', null);
+    $team_id = $this->param('team_id', null);
+    $kind    = $this->param('kind', '');
+
     // error check
     if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
     {
@@ -101,14 +123,13 @@ class Controller_Game extends Controller_Base
 
     // team_idが空の時は、ログイン中ユーザーの所属チームIDを
     if ( ! $team_id )
-      $team_id = Model_Player::getMyTeamId();
+      $team_id = Model_Player::get_my_team_id();
 
     // 所属選手
-    // - TODO: 変数名をmembersからplayersへ変更したい。
-    $view->members = Model_Player::get_players($team_id);
-    $view->players = $view->members;
+    $view->players = Model_Player::get_players($team_id);
 
-    // players
+    // 出場選手
+    // TODO: metumという変数は微妙だな・・・playeds ?
     $view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
 
     // game_status
@@ -118,11 +139,6 @@ class Controller_Game extends Controller_Base
     {
       case 'score':
 
-        // TODO: scoresをスマホ対応のために新しく追加
-        // PC版もscoresの方へいつかマージします。
-        $view->score = Model_Games_Runningscore::find($game_id, array(
-          'related' => array('games'),
-        ));
         list($view->scores, $view->tsum, $view->bsum)
           = Model_Games_Runningscore::get_score($game_id);
         
@@ -136,8 +152,7 @@ class Controller_Game extends Controller_Base
         $view->metum = self::_filter_only_pitcher($view->metum);
 
         // 成績
-        $where = array( 'game_id' => $game_id );
-        $view->stats = Model_Stat::getStats('stats_pitchings', $where, 'player_id');
+        $view->stats = Model_Stats_Pitching::get_stats(array('game_id' => $game_id));
         break;
 
       case 'batter':
@@ -159,6 +174,7 @@ class Controller_Game extends Controller_Base
         break;
 
       case 'other':
+        // TODO: いつか消す
         $stat = Model_Games_Stat::query()
                         ->where('game_id', $game_id)
                         ->where('team_id', $team_id)
@@ -178,7 +194,9 @@ class Controller_Game extends Controller_Base
     $view->team_name = Model_Team::find($team_id)->name;
 
     // 試合情報
+    // TODO: gameinfo としてまとめたい
     $game = Model_Game::find($game_id);
+    $view->gameinfo = $game;
 
     // チーム名
     $view->team_top    = $game->team_top_name;
@@ -186,6 +204,13 @@ class Controller_Game extends Controller_Base
 
     // 試合日
     $view->date = $game->date;
+        
+    // 表彰
+    // TODO: 試合概要だけにあればよいが、othersでも使っていたためここで
+    $award = Model_Stats_Award::get_stats($game_id, $team_id);
+    $view->mvp        = $award->mvp_player_id;
+    $view->second_mvp = $award->second_mvp_player_id;
+
 
     return Response::forge($view);
   }
@@ -220,7 +245,7 @@ class Controller_Game extends Controller_Base
 
     // - 先攻
     $form->add('top', '先攻', $attrs + array(
-      'value'            => Model_Player::getMyTeamId(), // デフォルトで自分のチーム
+      'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
       'data-placeholder' => 'チームを選択',
     ))
       ->add_rule('in_array', array_keys($teams));
@@ -279,7 +304,7 @@ class Controller_Game extends Controller_Base
     // 自分の試合かどうか
     if ( ! Auth::has_access('admin.admin') )
     {
-      $team_id = Model_Player::getMyTeamId();
+      $team_id = Model_Player::get_my_team_id();
 
       if ( Input::post('top') != $team_id && Input::post('bottom') != $team_id )
       {
@@ -293,7 +318,7 @@ class Controller_Game extends Controller_Base
 
   private static function _filter_only_loginuser($players)
   {
-    $myid = Model_Player::getMyPlayerId(); 
+    $myid = Model_Player::get_my_player_id(); 
 
     $res = array();
     foreach ( $players as $player )
@@ -307,7 +332,7 @@ class Controller_Game extends Controller_Base
 
   private static function _filter_only_pitcher($players)
   {
-    $myid = Model_Player::getMyPlayerId(); 
+    $myid = Model_Player::get_my_player_id(); 
 
     $res = array();
     foreach ( $players as $index => $player )

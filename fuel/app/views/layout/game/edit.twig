@@ -37,18 +37,18 @@
 {%endif%}
 
 <ul class="nav nav-tabs">
-    <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
+    <li {%if uri_segment(3)=="batter" and input_get('type')!='all'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/batter/{{team_id}}">野手成績</a>
     </li>
-    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+    <li {%if uri_segment(3)=='pitcher' and input_get('type')!='all'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/pitcher/{{team_id}}">投手成績</a>
     </li>
 
 {% if auth_has_access('moderator.moderator') %}
-    <li {%if uri_segment(3)=="batter"%}class="active"{%endif%}>
+    <li {%if uri_segment(3)=="batter" and input_get('type')=='all'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/batter/{{team_id}}?type=all">全野手</a>
     </li>
-    <li {%if uri_segment(3)=='pitcher'%}class="active"{%endif%}>
+    <li {%if uri_segment(3)=='pitcher' and input_get('type')=='all'%}class="active"{%endif%}>
       <a href="/game/{{game_id}}/pitcher/{{team_id}}?type=all">全投手</a>
     </li>
 {% endif %}

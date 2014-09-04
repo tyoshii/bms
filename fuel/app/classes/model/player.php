@@ -140,4 +140,23 @@ class Model_Player extends \Orm\Model
       return false;
     }
   }
+
+  public static function get_player_email($player_id)
+  {
+    $user = DB::select()
+      ->from( array(self::$_table_name, 'p') )
+      ->join( array('users', 'u') )->on('p.username', '=', 'u.username')
+      ->where('p.id', $player_id)
+      ->limit(1)
+      ->execute()->as_array();
+
+    $user = $user[0];
+
+    if ( $user['username'] === '' )
+    {
+      return '';
+    }
+
+    return $user['email'];
+  }
 }

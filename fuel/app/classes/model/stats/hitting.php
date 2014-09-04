@@ -192,4 +192,14 @@ class Model_Stats_Hitting extends \Orm\Model
   {
     return Model_Stat::getStats(self::$_table_name, $where);
   }
+
+  public static function get_status( $game_id, $player_id )
+  {
+    $s = self::query()->where(array(
+      'game_id'   => $game_id,
+      'player_id' => $player_id,
+    ))->get_one();
+
+    return $s ? $s->status : '0';
+  }
 }

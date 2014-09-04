@@ -15,25 +15,41 @@
 <thead>
 <tr>
 <th></th>
+<th></th>
 <th>打順</th>
 <th>名前</th>
 <th>背番号</th>
+<th></th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>
 {%if not loop.first%}
-<span class="glyphicon glyphicon-chevron-left" role="switch-batter" type="prev"></span>{%endif%}
+<td>
+<span class="glyphicon glyphicon-backward" role="switch-batter" type="first"></span>
 </td>
+<td>
+<span class="glyphicon glyphicon-chevron-left" role="switch-batter" type="prev"></span>
+</td>
+{%else%}
+<td><span class="glyphicon"></span></td>
+<td><span class="glyphicon"></span></td>
+{%endif%}
 <td>{{batter.order}}</td>
 <td>{{batter.name}}</td>
 <td>{{batter.number}}</td>
-<td>
 {%if not loop.last%}
-<span class="glyphicon glyphicon-chevron-right" role="switch-batter" type="next"></span>{%endif%}
+<td>
+<span class="glyphicon glyphicon-chevron-right" role="switch-batter" type="next"></span>
 </td>
+<td>
+<span class="glyphicon glyphicon-forward" role="switch-batter" type="last"></span>
+</td>
+{%else%}
+<td><span class="glyphicon"></span></td>
+<td><span class="glyphicon"></span></td>
+{%endif%}
 </tr>
 </tbody>
 </table>
@@ -139,16 +155,3 @@
 {%endif%}
 
 {% endblock content %}
-
-
-{% block js %}
-{{ parent() }}
-<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
-{% endblock %}
-
-
-{%block css%}
-{{parent()}}
-
-<link rel="stylesheet" type="text/css" href="/css/bms_mobile.css">
-{%endblock css%}

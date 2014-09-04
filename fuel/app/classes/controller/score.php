@@ -2,8 +2,19 @@
 
 class Controller_Score extends Controller_Base
 {
+  public function before()
+  {
+    parent::before();
+  }
+
   public function action_record_team()
   {
+    // 所属チームがなければエラーページ
+    if ( is_null(Model_Player::getMyTeamId()) )
+    {
+      return Response::forge(View::forge('score/not_belong_team.twig'));
+    }
+
     $view = View::forge('score/record_team.twig');
 
     $view->stat = Model_Score_Team::getTeamScore();
@@ -15,6 +26,7 @@ class Controller_Score extends Controller_Base
 
     return Response::forge( $view );
   }
+
   public function action_record_self()
   {
     $view = View::forge('score/record_self.twig');

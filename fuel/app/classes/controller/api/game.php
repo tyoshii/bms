@@ -184,7 +184,7 @@ class Controller_Api_Game extends Controller_Rest
     $ids = self::_getIds();
 
     // insert(old json format)
-    $other = Input::post('other');
+    $other = Input::post('stats');
 
     $game = Model_Games_Stat::query()
               ->where('game_id', $ids['game_id'])

@@ -153,8 +153,8 @@ class Controller_Game extends Controller_Base
 
       case 'pitcher':
         // ピッチャーだけにフィルター
-        if ( $type !== 'all' )
-          $view->metum = self::_filter_only_pitcher($view->metum);
+        // type=allの時は全員 / それ意外のときは自分だけ
+        $view->metum = self::_filter_only_pitcher($view->metum, $type);
 
         // 成績
         $view->stats = Model_Stats_Pitching::get_stats(array('game_id' => $game_id));
@@ -335,7 +335,7 @@ class Controller_Game extends Controller_Base
     return $res;
   }
 
-  private static function _filter_only_pitcher($players)
+  private static function _filter_only_pitcher($players, $type)
   {
     $myid = Model_Player::get_my_player_id(); 
 
@@ -343,7 +343,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      if ( $type !== 'all' and $player['player_id'] !== $myid )
       {
         continue;
       }

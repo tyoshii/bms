@@ -2,10 +2,14 @@
 
 abstract class Test_Base extends \TestCase
 {
+  protected function setUp()
+  {
+    parent::setUp();
+    Auth::logout();
+  }
   protected function tearDown()
   {
     parent::tearDown();
-    Auth::logout();
   }
 
   public function get_property($class_name, $prop_name)

@@ -7,7 +7,7 @@
  * @group Controller
  * @group Controller_Top
  */
-class Test_Controller_Top extends \TestCase
+class Test_Controller_Top extends Test_Base
 {
   protected function setUp()
   {

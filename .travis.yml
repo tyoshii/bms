@@ -4,10 +4,17 @@ php:
   - 5.3
 
 before_script:
+  - mkdir -p build/logs
   - mysql -e 'create database bms;'
+  - FUEL_ENV=test php composer.phar install
 
 script:
-  - FUEL_ENV=test php composer.phar install
   - FUEL_ENV=test php oil r migrate
+  - php oil t --coverage-clover=./build/logs/clover.xml
 
-#- phpunit --coverage-text -c fuel/core/phpunit.xml
+after_script:
+  - php fuel/vendor/bin/coveralls -v --config="../.coveralls.yml"
+
+notifications:
+  email:
+    - tyoshii716+bms@gmail.com

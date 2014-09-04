@@ -197,8 +197,14 @@ $("span[role=switch-batter]").click(function(){
   if ( type === 'next' ) {
     show_index = parseInt(hide_index) + 1;
   }
-  else {
+  else if ( type === 'prev' ) {
     show_index = parseInt(hide_index) - 1;
+  }
+  else if ( type === 'first' ) {
+    show_index = 1;
+  }
+  else if ( type === 'last' ) {
+    show_index = $("div.stats-container:last").attr('index');
   }
 
   $("div[index="+hide_index+"]").hide();
@@ -348,4 +354,16 @@ $("div.stats-post[role=hitting] button").click(function(){
   console.log(STATS.data);
 
   STATS.post.ajax('updateBatter');
+});
+
+$("div.stats-post[role=other] button").click(function() {
+  STATS.data = {
+    mip2:   $("select#mip2").val(),
+    mip1:   $("select#mip1").val(),
+    place:  $("input#place").val(),
+    memo:   $("textarea#memo").val(),
+    status: $("select#status").val()
+  };
+
+  STATS.post.ajax('updateOther');
 });

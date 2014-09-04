@@ -2,11 +2,6 @@
 
 class Controller_Top extends Controller_Base
 {
-  public function action_test()
-  {
-    return Response::forge(View::forge('test.twig'));
-  }
-
 	public function action_index()
 	{
     $view = Theme::instance()->view('top.twig');
@@ -38,7 +33,7 @@ class Controller_Top extends Controller_Base
   public function action_login()
   {
     if ( Auth::check() )
-      Response::redirect('/');
+      return Response::redirect('/');
 
     if ( Input::get('url') )
       Session::set('redirect_to', Input::get('url'));
@@ -52,6 +47,11 @@ class Controller_Top extends Controller_Base
   public function action_logout()
   {
     Auth::logout();
-    Response::redirect(Uri::create('/'));
+    return Response::redirect(Uri::create('/'));
+  }
+
+  public function action_404()
+  {
+    return Response::forge(View::forge('errors/404.twig'), 404);
   }
 }

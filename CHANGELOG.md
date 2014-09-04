@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Version 0.0.9
+
+* 成績入力のリマインドメール送信機能
+* relation TravisCI / Coveralls
+* Fixed : 成績閲覧
+
+## Version 0.0.8
+
+* Fixed : 打者成績入力
+
 ## Version 0.0.7
 
 * mobile : 成績入力のヘッダータブを修正

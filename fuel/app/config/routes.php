@@ -22,6 +22,7 @@ return array(
   
   'api/game/(:segment)'  => 'api/game/$1',
   'api/deploy'           => 'api/deploy/index',
+  'api/mail/remind'      => 'api/mail/remind',
 
   'score'               => 'score/record_team',
   'score/record_self'   => 'score/record_self',
@@ -31,8 +32,5 @@ return array(
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',
 
-//  '_root_'  => 'welcome/index',  // The default route
-  '_404_'   => 'welcome/404',    // The main 404 route
-
-  'hello(/:name)?' => array('welcome/hello', 'name' => 'hello'),
+  '_404_'   => 'top/404',
 );

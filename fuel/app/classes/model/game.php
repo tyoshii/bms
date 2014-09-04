@@ -62,6 +62,11 @@ class Model_Game extends \Orm\Model
     try {
       DB::start_transaction();
 
+      // init
+      // TODO: createNewGameの見直しのときに一緒に
+      if ( ! array_key_exists('top_name',    $data) ) $data['top_name']    = null;
+      if ( ! array_key_exists('bottom_name', $data) ) $data['bottom_name'] = null;
+
       // チーム名
       $team_top_name    = $data['top_name'] ?: Model_Team::find($data['top'])->name;
       $team_bottom_name = $data['bottom_name'] ?: Model_Team::find($data['bottom'])->name;

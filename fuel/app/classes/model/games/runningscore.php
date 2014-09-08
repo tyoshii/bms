@@ -483,8 +483,14 @@ class Model_Games_Runningscore extends \Orm\Model
 
     $score = self::find_by_game_id($game_id);
 
+    // 初回のスコアは必ず必要
     $return = array();
+    $return[] = array(
+      'top'    => $score->t1,
+      'bottom' => $score->t1,
+    );
 
+    // 2回から
     for ( $i = 2; $i <= 12; $i++ )
     {
       $tkey = 't'.$i;

@@ -115,7 +115,7 @@ class Controller_Api_Game extends Controller_Rest
 
     // stats_pitchingsへのinsert
     $pitcher = Input::post('stats');
-    $status = Input::post('complete') ? 1 : 0;
+    $status = Input::post('complete') === 'true' ? 1 : 0;
 
     if ( Auth::has_access('admin.admin') )
     {
@@ -135,7 +135,7 @@ class Controller_Api_Game extends Controller_Rest
 
     // satasへの登録
     $batter = Input::post('stats');
-    $status = Input::post('complete') ? 1 : 0;
+    $status = Input::post('complete') === 'true' ? 1 : 0;
 
     if ( Auth::has_access('admin.admin') )
     {

@@ -70,6 +70,7 @@ return array(
         61 => '063_add_stadium_to_games',
         62 => '064_add_memo_to_games',
         63 => '065_add_game_id_to_games_runningscores',
+        64 => '066_create_games_teams',
       ),
     ),
     'module' => 

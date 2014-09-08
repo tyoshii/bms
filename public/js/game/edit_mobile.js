@@ -323,7 +323,7 @@ $("div.stats-post[role=hitting] button").click(function(){
       detail: detail,
     };
   });
-  console.log(STATS.data);
+  // console.log(STATS.data);
 
   STATS.post.ajax('updateBatter');
 });

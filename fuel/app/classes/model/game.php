@@ -152,8 +152,7 @@ class Model_Game extends \Orm\Model
       }
       
       // 試合結果を配列に付与
-      $score = $res->games_runningscores;
-      $score = $score[$index];
+      $score = reset($res->games_runningscores);
 
       // 合計
       $result[$index]['tsum'] = $score['tsum'];
@@ -204,9 +203,10 @@ class Model_Game extends \Orm\Model
     // scoreの合計を結果に
     foreach ( $games as $id => $game )
     {
-      $score = $game->games_runningscores;
-      $game->tsum = $score[$id]->tsum;
-      $game->bsum = $score[$id]->bsum;
+      $score = reset($game->games_runningscores);
+
+      $game->tsum = $score->tsum;
+      $game->bsum = $score->bsum;
     }
 
     return $games;
@@ -381,14 +381,6 @@ class Model_Game extends \Orm\Model
     $query->related('games_runningscores', array(
       'select' => array('tsum', 'bsum')
     ));
-
-    return $query;
-    $query = DB::select()->from(self::$_table_name);
-
-    $query->join('games_runningscores')->on('games.id', '=', 'games_runningscores.game_id');
-
-    $query->where('game_status', '!=', -1);
-    $query->order_by('date', 'desc');
 
     return $query;
   }

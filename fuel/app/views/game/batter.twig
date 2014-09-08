@@ -8,7 +8,7 @@
 <table id="batter" class="table">
 <thead>
 <tr>
-<th class="member-id disable">member_id</th>
+<th class="player-id disable">player_id</th>
 <th class="order">打順</th>
 <th class="name">名前</th>
 <th class="number">＃</th>
@@ -32,7 +32,7 @@
 
 {% for batter in metum %}
 <tr class="result result-{{loop.index}}">
-<td class="member-id disable">{{batter.player_id|default(0)}}</td>
+<td class="player-id disable">{{batter.player_id|default(0)}}</td>
 <td class="order">{%if batter.order != 0%}{{batter.order}}{%endif%}</td>
 <td class="name">{{batter.name}}</td>
 <td class="number">{{batter.number}}</td>

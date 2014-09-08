@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 0.0.10
+
+* スコアとその他をあわせて、試合概要とした
+* 成績入力に全野手/全投手を追加
+* MailAPI implement ACL
+* Some refactor
+
 ## Version 0.0.9
 
 * 成績入力のリマインドメール送信機能

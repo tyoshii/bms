@@ -15,10 +15,14 @@ return array(
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
 
-  'game'                                  => 'game/list',
-  'game/(:segment)'                       => 'game/summary/$1',
-  'game/(:segment)/(:segment)'            => 'game/edit/$1/$2',
-  'game/(:segment)/(:segment)/(:segment)' => 'game/edit/$1/$2/$3',
+  // game
+  'game'     => 'game/list',
+  'game/add' => 'game/add',
+
+  // game stats
+  'game/(:game_id)/(:kind)/(:team_id)' => 'game/edit',
+  'game/(:game_id)/(:kind)'            => 'game/edit',
+  'game/(:game_id)'                    => 'game/summary',
   
   'api/game/(:segment)'  => 'api/game/$1',
   'api/deploy'           => 'api/deploy/index',
@@ -32,5 +36,6 @@ return array(
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',
 
+  'error/(:status_code)' => 'base/error',
   '_404_'   => 'top/404',
 );

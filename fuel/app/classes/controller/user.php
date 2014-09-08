@@ -30,7 +30,7 @@ class Controller_User extends Controller_Base
 
     if ( $val->run() )
     {
-      $id       = Input::post('member_id');
+      $id       = Input::post('player_id');
       $username = Auth::get_screen_name();
       $props    = array(
         'team'     => Input::post('team'),
@@ -214,7 +214,7 @@ class Controller_User extends Controller_Base
       $number = $player->number;
 
       // player_id を type=hiddenでセット
-      $form->add('member_id', '', array(
+      $form->add('player_id', '', array(
         'type' => 'hidden',
         'value' => $player->id,
       ))

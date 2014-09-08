@@ -15,8 +15,8 @@ class Controller_Base extends Controller
     {
       View::set_global('induct_each_env', true);
     }
-    if ( Model_Player::get_my_team_name() === 'レジャーズ' )
-    {
+    if ( in_array(Model_Player::get_my_team_id(), Config::get('bms.moderator_team_ids')) )
+    { 
       View::set_global('induct_each_env', true);
     }
 
@@ -35,7 +35,7 @@ class Controller_Base extends Controller
         $auth = Auth::instance();
         if ( $auth->login(Input::post('username'), Input::post('password')) )
         {
-          Session::set_flash('info', 'ログインに成功しました！こんにちわ');
+          Session::set_flash('info', 'ログインに成功しました！');
 
           $redirect_to = Session::get('redirect_to', '/');
           Session::delete('redirect_to');
@@ -49,6 +49,20 @@ class Controller_Base extends Controller
     }
   }
 
+  /**
+   * error common function
+   */
+  public function action_error()
+  {
+    $code = $this->param('status_code');
+    $view = View::forge('errors/index.twig');
+
+    return Response::forge($view, $code);
+  }
+
+  /**
+   * login form Fieldset::forge()
+   */
   static public function _get_login_form ()
   {
     // login form

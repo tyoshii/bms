@@ -2,6 +2,18 @@
 
 class Controller_Api_Mail extends Controller_Rest
 {
+  public function before()
+  {
+    parent::before();
+
+    // acl
+    if ( ! Auth::has_access('moderator.moderator') )
+    {
+      Session::set_flash('error', '権限がありません');      
+      return Response::redirect('error/403');
+    }
+  }
+  
   public function post_remind()
   {
     // validate
@@ -9,7 +21,8 @@ class Controller_Api_Mail extends Controller_Rest
     $val->add('game_id', 'game_id')->add_rule('required');
     $val->add('team_id', 'team_id')->add_rule('required');
 
-    if ( ! $val->run() ) {
+    if ( ! $val->run() )
+    {
       Log::warning($val->show_errors());
       return Response::forge('不正なアクセスです。', 400);
     }

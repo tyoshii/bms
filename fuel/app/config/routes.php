@@ -36,5 +36,6 @@ return array(
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',
 
+  'error/(:status_code)' => 'base/error',
   '_404_'   => 'top/404',
 );

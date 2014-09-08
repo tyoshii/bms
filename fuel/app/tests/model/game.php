@@ -32,17 +32,22 @@ class Test_Model_Game extends \Test_Model_Base
   {
     $games = Model_Game::get_info();
 
-    foreach ( $games as $game )
+    foreach ( $games as $game_id => $game )
     {
       // returnの型
-      $this->assertTrue(is_array($game));
+      $this->assertSame('Model_Game', get_class($game));
 
       // DBからの戻り値以外で付与した属性があるかどうか
-      $this->assertTrue(array_key_exists('play',          $game));
-      $this->assertTrue(array_key_exists('own',           $game));
-      $this->assertTrue(array_key_exists('top_result',    $game));
-      $this->assertTrue(array_key_exists('bottom_result', $game));
-      $this->assertTrue(array_key_exists('result',        $game));
+      $this->assertTrue(isset($game->tsum));
+      $this->assertTrue(isset($game->bsum));
+      $this->assertTrue(isset($game->own));
+      $this->assertTrue(isset($game->top_result));
+      $this->assertTrue(isset($game->bottom_result));
+      $this->assertTrue(isset($game->result));
+
+      // relationのデータ
+      $this->assertSame('Model_Games_Runningscore', get_class($game->games_runningscores[$game_id]));
+      $this->assertTrue(isset($game->stats_players));
     }
   }
 

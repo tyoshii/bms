@@ -155,6 +155,7 @@ class Dbinit
     // game
     // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
     $data = array(
+      'id'     => 1,
       'date'   => date('Y-m-d'),
       'top'    => $team1_id,
       'bottom' => $team2_id,

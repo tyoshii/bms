@@ -60,7 +60,7 @@ class Model_Game extends \Orm\Model
   public static function createNewGame($data)
   {
     try {
-      DB::start_transaction();
+      Mydb::begin();
 
       // init
       // TODO: createNewGameの見直しのときに一緒に
@@ -90,10 +90,9 @@ class Model_Game extends \Orm\Model
       // - TODO なくしたい
       Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
   
-      DB::commit_transaction();
-
+      Mydb::commit();
     } catch ( Exception $e ) {
-      DB::rollback_transaction();
+      Mydb::rollback();
       Session::set_flash('error', '内部処理エラー:'.$e->getMessage() );
       return false;
     }

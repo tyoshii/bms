@@ -103,27 +103,31 @@ class Controller_Game extends Controller_Base
   {
     // get param
     $game_id = $this->param('game_id', null);
-    $team_id = $this->param('team_id', null);
+    $team_id = $this->param('team_id', Model_Player::get_my_team_id());
     $kind    = $this->param('kind', '');
-
+    
     // error check
-    if ( ! is_int($game_id+0) || ! is_int($team_id+0) )
+    if ( ! is_numeric($game_id) || ! is_numeric($team_id) )
     {
-      Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game'));
+      Session::set_flash('error', '不正なURLです。試合一覧に戻されました。');
+      return Response::redirect(Uri::create('/game'));
     }
     if ( ! in_array($kind, array('score', 'player','pitcher','batter','other')) )
     {
-      Session::set_flash('error', '試合一覧に戻されました');
-      Response::redirect(Uri::create('/game'));
+      Session::set_flash('error', '不正なURLです。試合一覧に戻されました。');
+      return Response::redirect(Uri::create('/game'));
+    }
+
+    // type check
+    $type = Input::get('type');
+    if ( $type === 'all' and ! Auth::has_access('moderator.moderator') )
+    {
+      Session::set_flash('error', '権限がありません');
+      return Response::redirect(Uri::create('/game'));
     }
 
     // view load
     $view = Theme::instance()->view("game/{$kind}.twig");
-
-    // team_idが空の時は、ログイン中ユーザーの所属チームIDを
-    if ( ! $team_id )
-      $team_id = Model_Player::get_my_team_id();
 
     // 所属選手
     $view->players = Model_Player::get_players($team_id);
@@ -149,7 +153,8 @@ class Controller_Game extends Controller_Base
 
       case 'pitcher':
         // ピッチャーだけにフィルター
-        $view->metum = self::_filter_only_pitcher($view->metum);
+        // type=allの時は全員 / それ意外のときは自分だけ
+        $view->metum = self::_filter_only_pitcher($view->metum, $type);
 
         // 成績
         $view->stats = Model_Stats_Pitching::get_stats(array('game_id' => $game_id));
@@ -160,7 +165,7 @@ class Controller_Game extends Controller_Base
         $view->results = Model_Batter_Result::getAll();
 
         // ログイン中ユーザのデータだけにフィルタ
-        if ( ! Auth::has_access('admin.admin') )
+        if ( $type !== 'all' )
           $view->metum = self::_filter_only_loginuser($view->metum);
 
         // 成績
@@ -330,7 +335,7 @@ class Controller_Game extends Controller_Base
     return $res;
   }
 
-  private static function _filter_only_pitcher($players)
+  private static function _filter_only_pitcher($players, $type)
   {
     $myid = Model_Player::get_my_player_id(); 
 
@@ -338,7 +343,7 @@ class Controller_Game extends Controller_Base
     foreach ( $players as $index => $player )
     {
       // 権限を持っていない場合は自分の成績のみupdate可能
-      if ( ! Auth::has_access('admin.admin') and $player['player_id'] !== $myid )
+      if ( $type !== 'all' and $player['player_id'] !== $myid )
       {
         continue;
       }

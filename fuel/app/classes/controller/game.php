@@ -2,6 +2,8 @@
 
 class Controller_Game extends Controller_Base
 {
+  static private $_cache_form = null;
+
   public function before()
   {
     parent::before();
@@ -16,7 +18,56 @@ class Controller_Game extends Controller_Base
 
   public function action_add()
   {
-    echo "新規ゲーム追加";
+    $view = View::forge('game/add.twig');
+
+    // form
+    $form = self::$_cache_form ?: self::_get_addgame_form2();
+    $view->set_safe('form', $form->build(Uri::current()));
+
+    return Response::forge($view);
+  }
+
+  public function post_add()
+  {
+    // team_id
+    // TODO: url_pathからonlyに
+    // TODO: beforeにいれてもいいかも。
+		if ( $url_path = $this->param('url_path') )
+		{
+			$team_id = Model_Team::find_by_url_path($url_path)->id;
+		}
+		else
+		{
+    	$team_id = Model_Player::get_my_team_id();
+		}
+
+    // form / validation
+    $form = self::_get_addgame_form2();
+    $val  = $form->validation();
+
+    if ( $val->run() )
+    {
+      if ( Model_Game::regist(Input::post() + array('team_id' => $team_id)) )
+      {
+        Session::set_flash('info', '新規ゲームを追加しました');
+        return Response::redirect(Uri::create('/team/'.$url_path));
+      }
+      else
+      {
+        Session::set_flash('error', 'システムエラーが発生しました。');
+        return Response::redirect('error/500');
+      }
+    }
+    else
+    {
+      Session::set_flash('error', $val->show_errors());
+    } 
+
+    $form->repopulate();
+
+    self::$_cache_form = $form;
+    
+    return self::action_add();
   }
 
   public function action_summary()
@@ -218,6 +269,72 @@ class Controller_Game extends Controller_Base
 
 
     return Response::forge($view);
+  }
+
+  /**
+   * 新規ゲーム登録専用ページ /game/add
+   */
+  static private function _get_addgame_form2()
+  {
+    $config = array('form_attributes' => array('class' => 'form',));
+    $form   = Fieldset::forge('addgame', $config);
+
+    // 試合実施日
+    $form->add('date', '試合実施日', array(
+      'type'             => 'text',
+      'class'            => 'form-control form-datepicker',
+      'value'            => date('Y-m-d'),
+      'data-date-format' => 'yyyy-mm-dd',
+    ))
+      ->add_rule('required')
+      ->add_rule('trim');
+
+    // - 試合開始時間
+    $form->add('start_time', '試合開始時間', array(
+      'type'  => 'text',
+      'class' => 'form-control',
+    ))
+      ->add_rule('trim');
+
+    // - 対戦チーム名
+    $form->add('opponent_team_name', '対戦チーム名', array(
+      'type'  => 'text',
+      'class' => 'form-control',
+    ))
+      ->add_rule('required')
+      ->add_rule('trim');
+
+    // - 先攻/後攻
+    $form->add('order', '先攻/後攻', array(
+      'type'    => 'select',
+      'class'   => 'form-control',
+      'options' => array('top' => '先攻', 'bottom' => '後攻'),
+    ))
+      ->add_rule('required')
+      ->add_rule('in_array', array('top', 'bottom'));
+
+    // - 球場
+    $form->add('stadium', '球場', array(
+      'type'  => 'text',
+      'class' => 'form-control',
+    ))
+      ->add_rule('trim');
+    
+    // - メモ
+    $form->add('memo', '試合コメント/メモ', array(
+      'type'  => 'textarea',
+      'class' => 'form-control',
+    ))
+      ->add_rule('trim');
+
+    // submit
+    $form->add('submit', '', array(
+      'type'  => 'submit',
+      'value' => '登録',
+      'class' => 'btn btn-success',
+    ));
+
+    return $form;
   }
 
   static private function _get_addgame_form()

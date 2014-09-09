@@ -71,6 +71,9 @@ return array(
         62 => '064_add_memo_to_games',
         63 => '065_add_game_id_to_games_runningscores',
         64 => '066_create_games_teams',
+        65 => '071_add_url_path_to_teams',
+        66 => '072_add_opponent_team_name_to_games_teams',
+        67 => '073_rename_field_team_to_team_id_in_players',
       ),
     ),
     'module' => 

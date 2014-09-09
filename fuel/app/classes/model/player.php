@@ -4,7 +4,7 @@ class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'team',
+		'team_id',
 		'name',
 		'number',
     'username',
@@ -29,10 +29,10 @@ class Model_Player extends \Orm\Model
 
   protected static $_belongs_to = array(
     'teams' => array(
-      'model_to' => 'Model_Team',
-      'key_from' => 'team',
-      'key_to' => 'id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Team',
+      'key_from'       => 'team_id',
+      'key_to'         => 'id',
+      'cascade_save'   => true,
       'cascade_delete' => false,
     ));
 
@@ -66,7 +66,7 @@ class Model_Player extends \Orm\Model
   public static function get_my_team_id()
   {
     if ( $res = self::find_by_username(Auth::get_screen_name()) )
-      return $res->team;
+      return $res->team_id;
       
     return null;
   }
@@ -75,40 +75,42 @@ class Model_Player extends \Orm\Model
   {
     $query = DB::select('p.*', array('teams.name', 'teamname'))
               ->from(array(self::$_table_name, 'p'))
-              ->join('teams', 'LEFT')->on('p.team', '=', 'teams.id')
+              ->join('teams', 'LEFT')->on('p.team_id', '=', 'teams.id')
               ->where('p.status', '!=', -1) 
               ->order_by( DB::expr('CAST(p.number as SIGNED)') );
 
     if ( $team_id )
-      $query->where('p.team', $team_id);
+      $query->where('p.team_id', $team_id);
 
     return $query->execute()->as_array();
   }
 
+	/**
+	 * 選手登録
+	 * @param array properties
+	 * - team_id
+	 * - name
+	 * - number
+	 * - username
+	 */
   public static function regist($props, $id = null)
   {
     try {
       $player = $id ? self::find($id) : self::forge();
 
       // 既に登録されたusernameかチェック
-      if ( $props['username'] and 
-           $props['username'] !== $player->username and
-           self::find_by_username($props['username']) )
-      {
-        throw new Exception('そのユーザーは既に他の選手に紐づいています');
-      }
+      if ( $props['username'] and $props['username'] !== $player->username )
+			{
+				$player = self::query()->where(array(
+					array('username', $props['username']),
+					array('team_id', $props['team_id']),
+				))->get();
 
-      // 背番号のダブリをチェック
-      if ( $props['number'] !== $player->number )
-      {
-        if ( self::query()
-              ->where('team', $props['team'])
-              ->where('number', $props['number'])
-              ->get_one() )
-        {
-          throw new Exception('その背番号は既に使われています');
-        }
-      }
+				if ( $player )
+      	{
+        	throw new Exception('そのユーザーは既に他の選手に紐づいています');
+      	}
+			}
   
       // 登録/更新
       $player->set($props);

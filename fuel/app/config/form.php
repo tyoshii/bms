@@ -34,7 +34,7 @@ return array(
 	'multi_field_template'       => "\t\t<tr>\n\t\t\t<td class=\"{error_class}\">{group_label}{required}</td>\n\t\t\t<td class=\"{error_class}\">{fields}\n\t\t\t\t{field} {label}<br />\n{fields}<span>{description}</span>\t\t\t{error_msg}\n\t\t\t</td>\n\t\t</tr>\n",
 	'error_template'             => '<span>{error_msg}</span>',
 	'group_label'	             => '<span>{label}</span>',
-	'required_mark'              => '',
+	'required_mark'              => '&nbsp;<span class="red">*</span>',
 	'inline_errors'              => false,
 	'error_class'                => null,
 	'label_class'                => null,

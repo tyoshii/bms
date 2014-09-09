@@ -149,8 +149,17 @@ class Dbinit
   public function insert_data_for_travis()
   {
     // team
-    $team1_id = \Model_Team::regist('テストチーム1');
-    $team2_id = \Model_Team::regist('テストチーム2');
+		$props = array(
+			'name'     => 'テストチーム1',
+			'url_path' => 'test1',
+		);
+    $team1_id = \Model_Team::regist($props);
+		
+		$props = array(
+			'name'     => 'テストチーム2',
+			'url_path' => 'test2',
+		);
+    $team2_id = \Model_Team::regist($props);
 
     // game
     // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり

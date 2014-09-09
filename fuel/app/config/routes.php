@@ -15,9 +15,32 @@ return array(
   'admin/team'    => 'admin/team',
   'admin/league'  => 'admin/league',
 
+	// team
+	'team'        => 'team/search',
+	'team/regist' => 'team/regist',
+
+	// team/game
+	'team/(:url_path)/game/add'                     => 'game/add',
+	'team/(:url_path)/game/(:game_id)'              => 'game/summary',
+	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'game/edit',
+
+	// team/stats team/player
+	'team/(:url_path)/players/(:player_id)' => 'team/player',
+	'team/(:url_path)/players'              => 'team/player',
+	'team/(:url_path)/stats'                => 'team/stats',
+
+	// team/config
+	'team/(:url_path)/config/(:player_id)' => 'stats/player',
+	'team/(:url_path)/config'              => 'stats/team',
+
+	// team/offer
+	'team/(:url_path)/offer' => 'team/offer',
+
+	// team/index
+	'team/(:url_path)' => 'team/index',
+
   // game
   'game'     => 'game/list',
-  'game/add' => 'game/add',
 
   // game stats
   'game/(:game_id)/(:kind)/(:team_id)' => 'game/edit',
@@ -36,6 +59,6 @@ return array(
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',
 
-  'error/(:status_code)' => 'base/error',
-  '_404_'   => 'top/404',
+  'error/(:status_code)' => 'error/index',
+  '_404_'                => 'error/error404',
 );

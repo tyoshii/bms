@@ -8,13 +8,33 @@
 
 <div class="col-md-6">
 
-{# ログインしてない場合はこちら #}
-{%if auth_check() %}
+{% if auth_check() %}
 
-{%if no_belong_team and not auth_has_access('admin.admin')%}
-<h3>所属しているチームがありません</h3>
-<a href="/user/team">所属チームを設定しましょう！</a>
-{%else%}
+{% for team in teams %}
+
+{% if loop.first %}
+<table class="table">
+<thead>
+<tr>
+<th>所属チーム名</th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+
+<tr>
+<td><a href="/team/{{ team.url_path }}">{{ team.name }}</a></td>
+</tr>
+
+{% if loop.last %}
+</tbody>
+</table>
+{% endif %}
+
+{% else %}
+<h3>所属しているチームがありません！</h3>
+<a href="/team/add">新しくチームを作る</a>
+{% endfor %}
 
 {%if alert_games|length > 0%}
 <div class="panel panel-warning">
@@ -31,24 +51,6 @@
 </div>
 {%endif%}
 
-<h3>最近の試合</h3>
-
-{%if games|length == 0 %}
-まだ試合がありません
-{%else%}
-
-<table class="table games">
-{%for game in games%}
-<tr>
-<td>{{game.team_top_name}}</td>
-<td><a href="/game/{{game.id}}">{{game.tsum}} - {{game.bsum}}</a></td>
-<td>{{game.team_bottom_name}}</td>
-</tr>
-{%endfor%}
-{%endif%}
-</table>
-
-{%endif%}{#if no_belong_team#}
 
 {%else%}
 

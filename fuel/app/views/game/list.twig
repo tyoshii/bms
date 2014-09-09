@@ -6,22 +6,12 @@
 
 {% block content %}
 
-<div class="row">
-
-<div class="col-md-3">
 {%if auth_has_access('game.create')%}
-<h3>新規ゲーム追加</h3>
-{{ form }}
-{%else%}
-{%if auth_check()%}
-新規ゲームを追加できる権限をもっていません。
-{%else%}
-新規ゲームを追加する場合は<a href="/login?url=/game">ログイン</a>してください。
-{%endif%}
-{%endif%}
+<div class="pull-right">
+<a href="/game/add" class="btn btn-info">新規ゲーム登録</a>
 </div>
+{%endif%}
 
-<div class="col-md-9">
 
 <form class="form form-inline" onsubmit="return false;">
 <div class="form-group">
@@ -123,9 +113,6 @@
 </tbody>
 </table>
 
-</div>
-
-</div>
 
 {% endblock %}
 

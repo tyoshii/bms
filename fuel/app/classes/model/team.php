@@ -4,12 +4,37 @@ class Model_Team extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'name',
+		'name' => array(
+			'date_type' => 'varchar',
+      'form' => array(
+        'class' => 'form-control',
+        'type'  => 'text',
+      ),
+			'label' => 'チーム名',
+      'validation' => array(
+        'required',
+        'max_length' => array(64),
+      ),
+    ),
+    'url_path' => array(
+			'date_type' => 'varchar',
+			'form' => array(
+				'class'       => 'form-control',
+				'type'        => 'text',
+			),
+			'label' => '英語名（URLになります）',
+      'validation' => array(
+        'required',
+        'max_length'   => array(64),
+        'valid_string' => array('alpha', 'numeric', 'dashes'),
+      ),
+    ),
     'status' => array(
       'default' => 0,
+			'form' => array('type' => false),
     ),
-		'created_at',
-		'updated_at',
+		'created_at' => array('form' => array('type' => false)),
+		'updated_at' => array('form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
@@ -25,24 +50,63 @@ class Model_Team extends \Orm\Model
 	protected static $_table_name = 'teams';
 
   protected static $_has_many = array(
-    'teams' => array(
-      'model_to' => 'Model_Player',
-      'key_from' => 'id',
-      'key_to' => 'team',
-      'cascade_save' => true,
+    'players' => array(
+      'model_to'       => 'Model_Player',
+      'key_from'       => 'id',
+      'key_to'         => 'team_id',
+      'cascade_save'   => true,
       'cascade_delete' => false,
     )
   );
 
-  public static function regist($name = null)
+	/**
+	 * 新規チーム登録
+   * @param array properties
+	 * - name     : チーム名
+	 * - url_path :
+	 */
+  public static function regist($props)
   {
-    if ( ! $name ) return false;
+		extract($props);
 
-    $team = Model_Team::forge(array('name' => $name));
+		// validation
+		if ( ! isset($name) or ! isset($url_path) )
+		{
+			Log::error('name/url_pathが指定されていません');
+			return false;
+		}
+
+		// duplicate check
+		if ( Model_Team::find_by_url_path($url_path) )
+		{
+			Session::set_flash('error', 'そのURLは既に使われています。');
+			return false;
+		}
+
+		// チーム登録
+    $team = Model_Team::forge($props);
     $team->save();
+
+		// チーム登録したユーザーをプレイヤーとして登録
+		$props = array(
+			'team_id'  => $team->id,
+			'name'     => Common::get_dispname(),
+			'number'   => 0,
+			'username' => Auth::get('username'),
+		);
+		Model_Player::regist($props);
 
     return $team->id;
   }
+
+	public static function get_belong_team()
+	{
+		return self::query()->related('players', array(
+			'where' => array(
+				array('username', Auth::get_screen_name()),
+			),
+		))->get();
+	}
 
   public static function get_teams()
   {

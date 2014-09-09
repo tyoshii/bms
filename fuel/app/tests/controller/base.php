@@ -106,7 +106,7 @@ class Test_Controller_Base extends Test_Base
   {
     // モデレーターチーム所属の選手でログイン
     $ids = Config::get('bms.moderator_team_ids');
-    $username = Model_Player::find_by_team($ids[0])->username;
+    $username = Model_Player::find_by_team_id($ids[0])->username;
     $user_id  = Model_User::find_by_username($username)->id;
 
     Auth::force_login($user_id);

@@ -11,6 +11,9 @@ class Model_Player extends \Orm\Model
     'status' => array(
       'default' => 1,
     ),
+		'role' => array(
+			'default' => 'user',
+		),
 		'created_at',
 		'updated_at',
 	);
@@ -161,4 +164,20 @@ class Model_Player extends \Orm\Model
 
     return $user['email'];
   }
+
+	/**
+	 * チームの管理者権限をもっているかどうか
+	 * @param string team_id
+	 *
+	 * @return boolean
+	 */
+	public static function has_team_admin($team_id)
+	{
+		$res = self::query()->where(array(
+			array('username', Auth::get_screen_name()),
+			array('team_id', $team_id)
+		))->get_one();
+
+		return $res and $res->role === 'admin';
+	}
 }

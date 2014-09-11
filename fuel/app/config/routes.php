@@ -20,18 +20,17 @@ return array(
 	'team/regist' => 'team/regist',
 
 	// team/game
-	'team/(:url_path)/game/add'                     => 'game/add',
-	'team/(:url_path)/game/(:game_id)'              => 'game/summary',
-	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'game/edit',
+	'team/(:url_path)/game/add'                     => 'team/game/add',
+	'team/(:url_path)/game/(:game_id)'              => 'team/game/summary',
+	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'team/game/edit',
 
 	// team/stats team/player
-	'team/(:url_path)/players/(:player_id)' => 'team/player',
-	'team/(:url_path)/players'              => 'team/player',
+	'team/(:url_path)/player/(:player_id)' => 'team/player',
+	'team/(:url_path)/player'              => 'team/player',
 	'team/(:url_path)/stats'                => 'team/stats',
 
 	// team/config
-	'team/(:url_path)/config/(:player_id)' => 'stats/player',
-	'team/(:url_path)/config'              => 'stats/team',
+	'team/(:url_path)/config/(:kind)' => 'team/config',
 
 	// team/offer
 	'team/(:url_path)/offer' => 'team/offer',

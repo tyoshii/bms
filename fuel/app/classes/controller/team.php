@@ -2,6 +2,41 @@
 
 class Controller_Team extends Controller_Base
 {
+	public static $_team;
+	public static $_player;
+	public static $_team_admin;
+
+	public function before()
+	{
+		parent::before();
+
+		// team 情報
+		if ( $url_path = $this->param('url_path') )
+		{
+			if ( ! self::$_team = Model_Team::find_by_url_path($url_path) )
+			{
+				Session::set_flash('error', '正しいチーム情報が取得できませんでした。');
+				return Response::redirect('error/404');
+			}
+
+			View::set_global('team', self::$_team);
+		}
+
+		// チーム管理者権限があるかどうか
+		if ( Model_Player::has_team_admin(self::$_team->id) )
+		{
+			self::$_team_admin = true;
+			View::set_global('team_admin', true);
+		}
+
+		// ログイン中ユーザーの選手情報
+		self::$_player = Model_Player::query()->where(array(
+			array('team_id', self::$_team->id),
+			array('username', Auth::get('username')),
+		))->get_one();
+		View::set_global('player', self::$_player);
+	}
+
 	/**
 	 * チームページトップ
    */
@@ -9,16 +44,9 @@ class Controller_Team extends Controller_Base
 	{
 		$view = View::forge('team/index.twig');
 
-		if ( ! $team = Model_Team::find_by_url_path($this->param('url_path')) )
-		{
-			Session::set_flash('error', '存在しないチームURLです。');
-			return Response::redirect('error/404');
-		}
-
 		// set view
-		$view->team    = $team;
-		$view->games   = Model_Game::get_info_by_team_id($team->id);
-		$view->players = Model_Player::query()->where('team_id', $team->id)->get();
+		$view->games   = Model_Game::get_info_by_team_id(self::$_team->id);
+		$view->players = Model_Player::query()->where('team_id', self::$_team->id)->get();
 
 		return Response::forge($view);
 	}
@@ -97,5 +125,92 @@ class Controller_Team extends Controller_Base
 		));
 
 		return $form;
+	}
+
+	/**
+	 * 設定アクション
+	 */
+	public function action_config()
+	{
+		$kind = $this->param('kind');
+
+		// 特定のconfigはチーム管理者専門
+		if ( in_array($kind, array('info', 'player', 'delete')) )
+		{
+			if ( ! self::$_team_admin )
+			{
+				Session::get_flash('error', '権限がありません');
+				return Response::forge('/team/'.self::$_team->url_path);
+			}
+		}
+
+		// profile編集はチーム参加者本人とチーム管理者のみ
+		if ( $kind === 'profile' )
+		{
+			if ( ! self::$_player and ! self::$_team_admin )
+			{
+				Session::get_flash('error', '権限がありません');
+				return Response::forge('/team/'.self::$_team->url_path);
+			}
+		}
+
+		// action
+		$action = 'action_config_'.$kind;
+		return $this->$action();
+	}
+
+	/**
+	 * チーム基本情報の設定
+	 */
+	public function action_config_info()
+	{
+		$view = View::forge('team/config/info.twig');
+
+		// Fieldset
+		$config = array('form_attribute' => array('class' => 'form'));
+		$form   = Fieldset::forge('team_config_info', $config);
+
+		// add_model
+		$form->add_model(Model_Team::forge());
+
+		// set value
+		$form->field('name')->set_value(self::$_team->name);
+		$form->field('url_path')->set_value(self::$_team->url_path);
+
+		// hidden url_path
+		$form->field('url_path')->set_type('hidden');
+
+		// add submit
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
+
+		// 更新処理
+		if ( Input::post() )
+		{
+			$val = $form->validation();
+
+			if ( $val->run() )
+			{
+				self::$_team->name = Input::post('name');
+				self::$_team->save();
+
+				Session::set_flash('info', 'チーム情報を更新しました');
+				return Response::redirect(Uri::current());
+			}
+			else
+			{
+				Session::set_flash('error', $val->show_errors());
+			}
+
+			$form->repopulate();
+		}
+
+		// set view
+		$view->set_safe('form', $form->build());
+
+		return Response::forge($view);
 	}
 }

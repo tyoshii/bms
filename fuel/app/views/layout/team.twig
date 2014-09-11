@@ -7,11 +7,40 @@
 <div class="col-md-3">
 <h1>{{ team.name }}</h1>
 
-<ul class="nav nav-pills nav-stacked">
-<li><a href="">試合</a></li>
-<li><a href="">所属選手</a></li>
-<li><a href="">成績</a></li>
+{% if player %}
+<table class="table">
+<tr>
+<td>{{ player.name}}</td>
+<td>背番号：{{ player.number }}</td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+<a href="/team/{{ team.url_path }}/config/profile">プロフィール編集</a>
+</td>
+</tr>
+
+</table>
+{% else %}
+<a href="/team/{{ team.url_path }}/offer">このチームに入りたい！</a>
+{% endif %}
+
+<ul class="nav nav-pills nav-stacked" role="menu">
+<label>チーム情報</label>
+<li><a href="/team/{{ team.url_path }}/game">試合一覧</a></li>
+<li><a href="/team/{{ team.url_path }}/player">所属選手</a></li>
+<li><a href="/team/{{ team.url_path }}/stats">成績</a></li>
+{% if team_admin %}
+<hr>
+<label>管理者メニュー</label>
+<li><a href="/team/{{ team.url_path }}/game/add">新規試合追加</a></li>
+<li><a href="/team/{{ team.url_path }}/config/player">選手管理</a></li>
+<li><a href="/team/{{ team.url_path }}/config/info">チーム基本情報</a></li>
+<li><a href="/team/{{ team.url_path }}/config/delete">チーム削除</a></li>
+{% endif %}
 </ul>
+
 </div>
 
 <div class="col-md-9">
@@ -20,3 +49,25 @@
 </div>
 </div>
 {% endblock content %}
+
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$("ul[role=menu] li").each(function() {
+
+		var href = $(this).children("a").attr("href");
+
+		if ( href === location.pathname ) {
+			$(this).addClass("active");
+			return false;
+		}
+	});
+
+});
+</script>
+{% endblock %}

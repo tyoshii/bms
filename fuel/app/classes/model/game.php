@@ -20,6 +20,11 @@ class Model_Game extends \Orm\Model
     'bottom_status' => array(
       'default' => 1,
     ),
+		// TODO:削除
+		'team_top'         => array('default' => 0),
+		'team_top_name'    => array('default' => 0),
+		'team_bottom'      => array('default' => 0),
+		'team_bottom_name' => array('default' => 0),
 		'created_at',
 		'updated_at',
 	);
@@ -87,6 +92,8 @@ class Model_Game extends \Orm\Model
       // stats_players(starter)
       Model_Stats_Player::createNewGame($game->id, $posts['team_id']);
 
+			return $game;
+
       // opponent_team_idがteamsに登録されているものであればこちらも登録
       // TODO: conventionが実装されたら
       if ( array_key_exists('opponent_team_id', $posts) )
@@ -110,8 +117,6 @@ class Model_Game extends \Orm\Model
       Log::error('内部処理エラー:'.$e->getMessage() );
       return false;
     }
-
-    return true;
   }
 
   public static function createNewGame($data)

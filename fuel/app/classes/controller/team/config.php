@@ -147,4 +147,10 @@ class Controller_Team_Config extends Controller_Team
 		$view = View::forge('team/config/delete.twig');
 		return Response::forge($view);
 	}
+
+	public function action_profile()
+	{
+		$view = View::forge('team/config/profile.twig');
+		return Response::forge($view);
+	}
 }

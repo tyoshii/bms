@@ -1,5 +1,146 @@
 {% extends 'layout/team.twig' %}
 
 {% block main %}
-試合詳細
+
+<div class="pull-right">
+
+{% if global.team %}
+<ol class="breadcrumb">
+
+{% if global.team_admin %}
+<li><a href="{{ current_url() }}/edit/score">試合概要</a></li>
+<li><a href="{{ current_url() }}/edit/player">出場選手</a></li>
+<li><a href="{{ current_url() }}/edit/other">その他</a></li>
+{%endif%}
+
+<li><a href="{{ current_url() }}/edit/batter">野手成績</a></li>
+<li><a href="{{ current_url() }}/edit/pitcher">投手成績</a></li>
+
+</ol>
+{% endif %}
+</div>
+
+
+<h3>試合スコア</h3>
+<table class="table" data-type="score">
+
+<tr>
+<th>チーム</th>
+{%for i in range(1,12)%}
+<th>{{i}}</th>
+{%endfor%}
+<th>合計</th>
+</tr>
+
+<tr>
+<td>{{ team_top }}</td>
+{%for i in range(1,12)%}
+<td>{{score['t'~i]}}</td>
+{%endfor%}
+<td>{{score.tsum}}</td>
+</tr>
+
+<tr>
+<td>{{ team_bottom }}</td>
+{%for i in range(1,12)%}
+<td>{{score['b'~i]}}</td>
+{%endfor%}
+<td>{{score.bsum}}</td>
+</tr>
+
+</table>
+
+  <div class="alert alert-warning">
+  成績が入力されていません。
+  </div>
+
+<h4>野手成績</h4>
+
+<table class="table table-striped" data-type="hitting">
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>＃</th>
+<th>打席数</th>
+<th>打数</th>
+<th>安打</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+<th>三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>犠飛</th>
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+<th>エラー</th>
+</tr>
+
+{%for player in stats.player %}
+<tr>
+<td>{% if player.order != 0 %}{{player.order}}{% endif %}</td>
+<td>{{player.name}}</td>
+<td>{{player.number}}</td>
+<td>{{stats[player.player_id]['TPA']}}</td>
+<td>{{stats[player.player_id]['AB']}}</td>
+<td>{{stats[player.player_id]['H']}}</td>
+<td>{{stats[player.player_id]['2B']}}</td>
+<td>{{stats[player.player_id]['3B']}}</td>
+<td>{{stats[player.player_id]['HR']}}</td>
+<td>{{stats[player.player_id]['SO']}}</td>
+<td>{{stats[player.player_id]['BB']}}</td>
+<td>{{stats[player.player_id]['HBP']}}</td>
+<td>{{stats[player.player_id]['SAC']}}</td>
+<td>{{stats[player.player_id]['SF']}}</td>
+<td>{{stats[player.player_id]['RBI']}}</td>
+<td>{{stats[player.player_id]['R']}}</td>
+<td>{{stats[player.player_id]['SB']}}</td>
+<td></td>
+</tr>
+{%endfor%}
+</table>
+
+<h4>投手成績</h4>
+
+<table class="table table-striped" data-type="pitching">
+<tr>
+<th>名前</th>
+<th>＃</th>
+<th>勝敗</th>
+<th>投球回</th>
+<th>被安打</th>
+<th>奪三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>自責点</th>
+<th>失点</th>
+</tr>
+
+{%for player in players if stats[player.player_id] %}
+
+<tr>
+<td>{{player.name}}</td>
+<td>{{player.number}}</td>
+<td>
+{%if stats[player.player_id]['W']   == 1%}勝{%endif%}
+{%if stats[player.player_id]['L']   == 1%}負{%endif%}
+{%if stats[player.player_id]['HLD'] == 1%}ホールド{%endif%}
+{%if stats[player.player_id]['SV']  == 1%}セーブ{%endif%}
+</td>
+<td>
+{{ stats[player.player_id]['IP'] }} {{stats[player.player_id]['IP_frac']}}
+</td>
+<td>{{stats[player.player_id]['H']}}</td>
+<td>{{stats[player.player_id]['SO']}}</td>
+<td>{{stats[player.player_id]['BB']}}</td>
+<td>{{stats[player.player_id]['HB']}}</td>
+<td>{{stats[player.player_id]['ER']}}</td>
+<td>{{stats[player.player_id]['R']}}</td>
+</tr>
+{%endfor%}
+</table>
+
+
 {% endblock main %}

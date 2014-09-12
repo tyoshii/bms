@@ -47,7 +47,6 @@ class Controller_Team extends Controller_Base
 
 		// set view
 		$view->games   = Model_Game::get_info_by_team_id($this->_team->id);
-		$view->players = Model_Player::query()->where('team_id', $this->_team->id)->get();
 
 		return Response::forge($view);
 	}
@@ -126,5 +125,23 @@ class Controller_Team extends Controller_Base
 		));
 
 		return $form;
+	}
+
+	/**
+	 * 選手一覧
+	 */
+	public function action_player()
+	{
+		$view = View::forge('team/player.twig');
+		return Response::forge($view);
+	}
+	
+	/**
+	 * 成績
+	 */
+	public function action_stats()
+	{
+		$view = View::forge('team/stats.twig');
+		return Response::forge($view);
 	}
 }

@@ -20,9 +20,10 @@ return array(
 	'team/regist' => 'team/regist',
 
 	// team/game
+	'team/(:url_path)/game'                         => 'team/game/index',
 	'team/(:url_path)/game/add'                     => 'team/game/add',
-	'team/(:url_path)/game/(:game_id)'              => 'team/game/detail',
 	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'team/game/edit',
+	'team/(:url_path)/game/(:game_id)'              => 'team/game/detail',
 
 	// team/stats team/player
 	'team/(:url_path)/player/(:player_id)' => 'team/player',

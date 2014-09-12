@@ -21,16 +21,16 @@ return array(
 
 	// team/game
 	'team/(:url_path)/game/add'                     => 'team/game/add',
-	'team/(:url_path)/game/(:game_id)'              => 'team/game/summary',
+	'team/(:url_path)/game/(:game_id)'              => 'team/game/detail',
 	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'team/game/edit',
 
 	// team/stats team/player
 	'team/(:url_path)/player/(:player_id)' => 'team/player',
 	'team/(:url_path)/player'              => 'team/player',
-	'team/(:url_path)/stats'                => 'team/stats',
+	'team/(:url_path)/stats'               => 'team/stats',
 
 	// team/config
-	'team/(:url_path)/config/(:kind)' => 'team/config',
+	'team/(:url_path)/config/(:kind)' => 'team/config/index',
 
 	// team/offer
 	'team/(:url_path)/offer' => 'team/offer',

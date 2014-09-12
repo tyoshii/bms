@@ -2,42 +2,43 @@
 
 {% block content %}
 
+<h1><a href="/team/{{ global.team.url_path }}/">{{ global.team.name }}</a></h1>
+
 <div class="row">
 
 <div class="col-md-3">
-<h1>{{ team.name }}</h1>
 
-{% if player %}
+{% if global.player %}
 <table class="table">
 <tr>
-<td>{{ player.name}}</td>
-<td>背番号：{{ player.number }}</td>
+<td>{{ global.player.name}}</td>
+<td>背番号：{{ global.player.number }}</td>
 </tr>
 
 <tr>
 <td></td>
 <td>
-<a href="/team/{{ team.url_path }}/config/profile">プロフィール編集</a>
+<a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a>
 </td>
 </tr>
 
 </table>
 {% else %}
-<a href="/team/{{ team.url_path }}/offer">このチームに入りたい！</a>
+<a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a>
 {% endif %}
 
 <ul class="nav nav-pills nav-stacked" role="menu">
 <label>チーム情報</label>
-<li><a href="/team/{{ team.url_path }}/game">試合一覧</a></li>
-<li><a href="/team/{{ team.url_path }}/player">所属選手</a></li>
-<li><a href="/team/{{ team.url_path }}/stats">成績</a></li>
-{% if team_admin %}
+<li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
+<li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>
+<li><a href="/team/{{ global.team.url_path }}/stats">成績</a></li>
+{% if global.team_admin %}
 <hr>
 <label>管理者メニュー</label>
-<li><a href="/team/{{ team.url_path }}/game/add">新規試合追加</a></li>
-<li><a href="/team/{{ team.url_path }}/config/player">選手管理</a></li>
-<li><a href="/team/{{ team.url_path }}/config/info">チーム基本情報</a></li>
-<li><a href="/team/{{ team.url_path }}/config/delete">チーム削除</a></li>
+<li><a href="/team/{{ global.team.url_path }}/game/add">新規試合追加</a></li>
+<li><a href="/team/{{ global.team.url_path }}/config/admin">管理者設定</a></li>
+<li><a href="/team/{{ global.team.url_path }}/config/info">チーム基本情報</a></li>
+<li><a href="/team/{{ global.team.url_path }}/config/delete">チーム削除</a></li>
 {% endif %}
 </ul>
 

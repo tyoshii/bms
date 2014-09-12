@@ -1,0 +1,58 @@
+{% extends 'layout/team.twig' %}
+
+{% block main %}
+
+<h3>管理者設定</h3>
+
+{% for player in players %}
+
+{% if loop.first %}
+<table class="table">
+<thead>
+<tr>
+<th>名前</th>
+<th>背番号</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+
+{# 権限をもっている自分自身は操作出来ない #}
+{% if player.id != global.player.id %}
+<tr>
+<td>{{ player.name }}</td>
+<td>{{ player.number }}</td>
+<td>
+<select class="form-control"  onChange="update_role({{ player.id }}, this);">
+<option value="user">メンバー</option>
+<option value="admin" {% if player.role == 'admin' %}selected{% endif %}>管理者</option>
+</select>
+</td>
+</tr>
+{% endif %}
+
+{% if loop.last %}
+</tbody>
+</table>
+{% endif %}
+
+{% endfor %}
+
+
+{% endblock main %}
+
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+
+function update_role(id, self) {
+	var role = $(self).val();
+
+	location.href = location.pathname + '?player_id=' + id
+																    + '&role=' + role;
+}
+</script>
+{% endblock js %}

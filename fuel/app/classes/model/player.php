@@ -180,4 +180,37 @@ class Model_Player extends \Orm\Model
 
 		return $res and $res->role === 'admin';
 	}
+	
+	/**
+	 * player.roleを更新
+	 * @param string team_id
+	 * @param string player_id
+	 * @param string role
+	 *
+	 * @return boolean
+	 */
+	public static function update_role($team_id, $player_id, $role)
+	{
+		$player = self::find($player_id, array(
+			'where' => array(array('team_id', $team_id)),
+		));
+
+		if ( ! $player )
+		{
+			Log::error('選手が存在しません');
+			return false;
+		}
+
+		if ( ! in_array($role, array('user', 'admin')) )
+		{
+			Log::error('存在しないroleです');
+			return false;
+		}
+
+		// update
+		$player->role = $role;
+		$player->save();
+
+		return true;
+	}
 }

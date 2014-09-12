@@ -2,6 +2,7 @@
 
 class Controller_Base extends Controller
 {
+	public $_global = array();
   protected $_login_form = '';
 
   public function before()
@@ -48,6 +49,21 @@ class Controller_Base extends Controller
       $this->_login_form->repopulate();
     }
   }
+
+	public function after($res)
+	{
+		View::set_global('global', $this->_global);
+		return $res;
+	}
+
+	public function get_global($key)
+	{
+		return array_key_exists($key, $this->_global) ? $this->_global[$key] : null;
+	}
+	public function set_global($key, $val)
+	{
+		$this->_global[$key] = $val;	
+	}
 
   /**
    * login form Fieldset::forge()

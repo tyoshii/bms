@@ -21,7 +21,7 @@ class Test_Controller_Error extends Test_Base
   /**
    *
    */
-  public function test_エラーページの表示
+  public function test_エラーページの表示()
   {
     $res = Request::forge('/error/500')->execute()->response();
 

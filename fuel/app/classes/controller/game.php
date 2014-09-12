@@ -154,7 +154,7 @@ class Controller_Game extends Controller_Base
   {
     // get param
     $game_id = $this->param('game_id', null);
-    $team_id = $this->param('team_id', Model_Player::get_my_team_id());
+		$team_id = $this->param('team_id', Model_Player::get_my_team_id());
     $kind    = $this->param('kind', '');
     
     // error check

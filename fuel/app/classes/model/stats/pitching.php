@@ -38,8 +38,17 @@ class Model_Stats_Pitching extends Model_Base
 	);
 	protected static $_table_name = 'stats_pitchings';
 
-  public static function get_stats($where)
+	/**
+	 * 投手成績を取得
+	 * @parma string game_id
+	 * @parma string team_id
+	 */
+  public static function get_stats($game_id, $team_id)
   {
+		$where = array(
+			'game_id' => $game_id,
+			'team_id' => $team_id,
+		);
     return self::select_as_array(self::$_table_name, $where, 'player_id');
   }
 

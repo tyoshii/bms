@@ -8,26 +8,16 @@
 
 <div class="col-md-3">
 
-{% if global.player %}
-<table class="table">
-<tr>
-<td>{{ global.player.name}}</td>
-<td>背番号：{{ global.player.number }}</td>
-</tr>
+<ul class="nav nav-pills nav-stacked" role="menu">
 
-<tr>
-<td></td>
-<td>
-<a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a>
-</td>
-</tr>
-
-</table>
-{% else %}
+{% if not global.player %}
 <a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a>
 {% endif %}
 
-<ul class="nav nav-pills nav-stacked" role="menu">
+<hr>
+<label>個人情報</label>
+<li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
+<hr>
 <label>チーム情報</label>
 <li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
 <li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>

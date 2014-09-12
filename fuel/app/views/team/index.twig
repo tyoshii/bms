@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<h2>試合一覧</h2>
+<h2>最近の試合</h2>
 
 {% for game in games %}
 
@@ -20,6 +20,7 @@
 <tbody>
 {% endif %}
 
+{% if loop.index <= 5 %}
 <tr>
 <td>{{ game.date }}</td>
 <td>{{ game.games_teams.opponent_team_name }}</td>
@@ -31,45 +32,18 @@
 {% endif %}
 </td>
 <td>{{ game.result }}</td> 
-<td><a href="/team/{{ team.url_path }}/game/{{ game.id }}">詳細</a></td>
+<td><a href="/team/{{ global.team.url_path }}/game/{{ game.id }}">詳細</a></td>
 </tr>
+{% endif %}
 
 {% if loop.last %}
 </tbody>
-
-<tfoot>
-<tr>
-<td colspan="5">
-<div class="pull-right">
-<a href="/team/{{ team.url_path }}/game/add" class="btn btn-info">新規試合追加</a>
-</div>
-</td>
-</tr>
-</tfoot>
 
 </table>
 {% endif %}
 
 {% else %}
 まだ試合がありません。
-{% endfor %}
-
-<h2>所属選手一覧</h2>
-
-<table class="table">
-<thead>
-<tr>
-<th>名前</th>
-<th>背番号</th>
-</tr>
-</thead>
-<tbody>
-
-{% for player in players %}
-<tr>
-<td>{{ player.name }}</td>
-<td>{{ player.number }}</td>
-</tr>
 {% endfor %}
 
 </tbody>

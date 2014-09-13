@@ -2,6 +2,9 @@
 
 {% block content %}
 
+<h2>チーム検索</h2>
+<hr>
+
 <form class="form-inline" role="search" method="GET">
 <div class="form-group">
 <input class="form-control" type="text" name="query" value="{{ input_get('query') }}"> 
@@ -13,25 +16,31 @@
 
 </form>
 
-<table class="table">
+{% for team in teams %}
 
+{% if loop.first %}
+<table class="table">
 <thead>
 <tr>
 <th>チーム名</th>
 </tr>
 </thead>
-
 <tbody>
-{% for team in teams %}
+{% endif %}
+
 <tr>
 <td><a href="/team/{{ team.url_path }}">{{ team.name }}</a></td>
 </tr>
-{% endfor %}
+
+{% if loop.last %}
 </tbody>
-
-<tfoot>
-</tfoot>
-
 </table>
+{% endif %}
+
+{% else %}
+<div class="alert alert-warning">
+チームが見つかりませんでした。
+</div>
+{% endfor %}
 
 {% endblock %}

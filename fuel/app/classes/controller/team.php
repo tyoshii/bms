@@ -21,16 +21,19 @@ class Controller_Team extends Controller_Base
 		}
 
 		// チーム管理者権限があるかどうか
-		if ( Model_Player::has_team_admin($this->_team->id) )
+		if ( $this->_team and Model_Player::has_team_admin($this->_team->id) )
 		{
 			$this->_team_admin = true;
 		}
 
 		// ログイン中ユーザーの選手情報
-		$this->_player = Model_Player::query()->where(array(
-			array('team_id', $this->_team->id),
-			array('username', Auth::get('username')),
-		))->get_one();
+		if ( Auth::check() and $this->_team )
+		{
+			$this->_player = Model_Player::query()->where(array(
+				array('team_id', $this->_team->id),
+				array('username', Auth::get('username')),
+			))->get_one();
+		}
 
 		// set_global
 		$this->set_global('team', $this->_team);

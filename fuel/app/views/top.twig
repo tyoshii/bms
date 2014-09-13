@@ -4,7 +4,32 @@
 
 <h3>BMS - Baseball Management System</h3>
 
+<hr>
+
 <div class="row">
+
+<div class="col-md-6">
+<div class="panel panel-info">
+<div class="panel-heading"><strong>野球の成績入力を分担しよう！</strong></div>
+<div class="panel-body">
+<p>
+野球の成績管理ができるサイトはいくつかありますが、チームの代表/マネージャー/担当の方などが成績の入力をする形だと思います。
+</p>
+<p>
+このサイトでは、チームの所属選手一人ひとりがアカウントを持つことが可能となっていて、
+自分の成績を自分で入力することが出来ます。
+</p>
+
+</div>
+</div>
+
+<pre class="alert alert-warning">
+機能改善やバグ報告など、
+何でもフィードバックいただけるとうれしいです。
+
+<a href="mailto:tyoshii716@gmail.com">tyoshii716@gmail.com</a>
+</pre>
+</div>
 
 <div class="col-md-6">
 
@@ -54,6 +79,18 @@
 
 {%else%}
 
+<h3>登録チーム検索</h3>
+<form class="form-inline" action="/team">
+<div class="form-group">
+<input class="form-control" type="text" name="query">
+</div>
+<div class="form-group">
+<input class="btn btn-success" type="submit" value="検索">
+</div>
+</form>
+
+<hr>
+
 <h3>Login</h3>
 {{login_form}}
 
@@ -63,25 +100,6 @@
 {%endif%}
 </div>
 
-<div class="col-md-6">
-<pre class="alert alert-info">
-野球の成績管理ができるシステムです。
-
-今までの成績管理では、
-チームの代表/マネージャー/担当の人がスコア入力をしていたと思いますが、
-思ったよりも負荷が高く、それなりに熱意を持った人でも三日坊主になりがちでした。
-
-このシステムでは所属選手一人ひとりがアカウントを持つことが可能となっていて、
-自分の成績を自分で入力することが可能となっています。
-</pre>
-
-<pre class="alert alert-warning">
-機能改善やバグ報告など、
-何でもフィードバックいただけるとうれしいです。
-
-<a href="mailto:tyoshii716@gmail.com">tyoshii716@gmail.com</a>
-</pre>
-</div>
 
 </div>
 

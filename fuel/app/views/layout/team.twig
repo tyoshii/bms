@@ -10,13 +10,15 @@
 
 <ul class="nav nav-pills nav-stacked" role="menu">
 
-{% if not global.player %}
-<a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a>
-{% endif %}
-
 <hr>
+
+{% if global.player %}
 <label>個人情報</label>
 <li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
+{% else %}
+<label>オファー</label>
+<li><a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a></li>
+{% endif %}
 <hr>
 <label>チーム情報</label>
 <li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>

@@ -2,34 +2,9 @@
 
 {% block content %}
 
-<h3>BMS - Baseball Management System</h3>
-
-<hr>
 
 <div class="row">
 
-<div class="col-md-6">
-<div class="panel panel-info">
-<div class="panel-heading"><strong>野球の成績入力を分担しよう！</strong></div>
-<div class="panel-body">
-<p>
-野球の成績管理ができるサイトはいくつかありますが、チームの代表/マネージャー/担当の方などが成績の入力をする形だと思います。
-</p>
-<p>
-このサイトでは、チームの所属選手一人ひとりがアカウントを持つことが可能となっていて、
-自分の成績を自分で入力することが出来ます。
-</p>
-
-</div>
-</div>
-
-<pre class="alert alert-warning">
-機能改善やバグ報告など、
-何でもフィードバックいただけるとうれしいです。
-
-<a href="mailto:tyoshii716@gmail.com">tyoshii716@gmail.com</a>
-</pre>
-</div>
 
 <div class="col-md-6">
 
@@ -58,15 +33,29 @@
 
 {% else %}
 <h3>所属しているチームがありません！</h3>
-<a href="/team/add">新しくチームを作る</a>
+<div>
+<a href="/team/regist">新しくチームを作る</a>
+</div>
+
+<hr>
+
+<label>または、登録されているチームを検索</label>
+<form class="form-inline" action="/team">
+<div class="form-group">
+<input class="form-control input-sm" type="text" name="query">
+</div>
+<div class="form-group">
+<input class="btn btn-success btn-sm" type="submit" value="検索">
+</div>
+</form>
 {% endfor %}
 
 {%if alert_games|length > 0%}
 <div class="panel panel-warning">
-  <div class="panel-heading">
-    <h3 class="panel-title">成績入力の完了していない試合があります！</h3>
-  </div>
-  <div class="panel-body">
+<div class="panel-heading">
+<strong>成績入力の完了していない試合があります！</strong>
+</div>
+<div class="panel-body">
 <ul>
 {%for game in alert_games%}
 <li><a href="/game/{{game.id}}/{{game.kind}}/">{{game.team_top_name}} vs {{game.team_bottom_name}}</a>
@@ -79,19 +68,7 @@
 
 {%else%}
 
-<h3>登録チーム検索</h3>
-<form class="form-inline" action="/team">
-<div class="form-group">
-<input class="form-control" type="text" name="query">
-</div>
-<div class="form-group">
-<input class="btn btn-success" type="submit" value="検索">
-</div>
-</form>
-
-<hr>
-
-<h3>Login</h3>
+<h3>ユーザーログイン</h3>
 {{login_form}}
 
 <p><a href="/register">新規ユーザー登録はこちら</a></p>
@@ -100,6 +77,22 @@
 {%endif%}
 </div>
 
+<div class="col-md-6">
+<div class="panel panel-info">
+<div class="panel-heading"><strong>野球の成績入力を分担しよう！</strong></div>
+<div class="panel-body">
+<p>
+野球の成績管理ができるサイトはいくつかありますが、チームの代表/マネージャー/担当の方などが成績の入力をする形だと思います。
+</p>
+<p>
+このサイトでは、チームの所属選手一人ひとりがアカウントを持つことが可能となっていて、
+自分の成績を自分で入力することが出来ます。
+</p>
+
+</div>
+</div>
+
+</div>
 
 </div>
 

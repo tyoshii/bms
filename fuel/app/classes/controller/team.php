@@ -49,7 +49,7 @@ class Controller_Team extends Controller_Base
 		$view = View::forge('team/index.twig');
 
 		// set view
-		$view->games   = Model_Game::get_info_by_team_id($this->_team->id);
+		$view->games = Model_Game::get_info_by_team_id($this->_team->id);
 
 		return Response::forge($view);
 	}

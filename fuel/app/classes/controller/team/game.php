@@ -28,6 +28,9 @@ class Controller_Team_Game extends Controller_Team
 	public function action_index()
   {
     $view = View::forge('team/game/index.twig');
+
+		$view->games = Model_Game::get_info_by_team_id($this->_team->id);
+
     return Response::forge($view);
   }
 

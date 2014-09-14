@@ -20,10 +20,16 @@ class Controller_Team extends Controller_Base
 			}
 		}
 
-		// チーム管理者権限があるかどうか
-		if ( $this->_team and Model_Player::has_team_admin($this->_team->id) )
+		if ( $this->_team )
 		{
-			$this->_team_admin = true;
+			// チーム管理者権限があるかどうか
+			if ( Model_Player::has_team_admin($this->_team->id) )
+			{
+				$this->_team_admin = true;
+			}
+
+			// チームページへのURL
+			$this->_team->href = '/team/'.$this->_team->url_path;
 		}
 
 		// ログイン中ユーザーの選手情報
@@ -131,11 +137,28 @@ class Controller_Team extends Controller_Base
 	}
 
 	/**
-	 * 選手一覧
+	 * 選手一覧/個人
 	 */
 	public function action_player()
 	{
-		$view = View::forge('team/player.twig');
+
+		if ( $player_id = $this->param('player_id') )
+		{
+			// 個人
+			$view = View::forge('team/player/personal.twig');
+			if ( ! $view->player = Model_Player::find($player_id) )
+			{
+				Session::get_error('選手情報が取得できませんでした');
+				return Response::redirect('team/'.$this->_team->url_path);
+			}
+		}
+		else
+		{
+			// 選手一覧
+			$view = View::forge('team/player/list.twig');
+			$view->players = Model_Player::get_players($this->_team->id);
+		}
+
 		return Response::forge($view);
 	}
 	

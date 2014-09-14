@@ -1,0 +1,37 @@
+{% extends 'layout/team.twig' %}
+
+{% block main %}
+
+<div class="pull-right">
+<a href="{{ global.team.href }}/player">選手一覧へ戻る</a>
+</div>
+
+<h3>基本情報</h3>
+
+<table class="table">
+<tbody>
+
+<tr>
+<td rowspan="2">
+<img />イメージ
+</td>
+<th>名前</th>
+<td>{{ player.name }}</td>
+</tr>
+
+<tr>
+<th>背番号</th>
+<td>{{ player.number }}</td>
+</tr>
+
+</tbody>
+</table>
+
+
+<h3>成績</h3>
+comming soon ...
+
+<h3>最近の試合</h3>
+comming soon ...
+
+{% endblock %}

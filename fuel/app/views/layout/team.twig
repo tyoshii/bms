@@ -15,11 +15,9 @@
 {% if global.player %}
 <label>個人情報</label>
 <li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
-{% else %}
-<label>オファー</label>
-<li><a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a></li>
-{% endif %}
 <hr>
+{% endif %}
+
 <label>チーム情報</label>
 <li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
 <li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>
@@ -32,6 +30,13 @@
 <li><a href="/team/{{ global.team.url_path }}/config/info">チーム基本情報</a></li>
 <li><a href="/team/{{ global.team.url_path }}/config/delete">チーム削除</a></li>
 {% endif %}
+
+{% if not global.player %}
+<hr>
+<label>オファー</label>
+<li><a href="/team/{{ global.team.url_path }}/offer">このチームに入りたい！</a></li>
+{% endif %}
+
 </ul>
 
 </div>

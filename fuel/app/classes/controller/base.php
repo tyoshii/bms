@@ -78,16 +78,16 @@ class Controller_Base extends Controller
       ),
     ));
 
-    $form->add('username', 'ユーザー名', array('class' => 'form-control', 'placeholder' => 'Username'))
+    $form->add('username', 'ユーザー名', array('class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 40);
 
-    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
+    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('min_length', 8)
       ->add_rule('max_length', 250);
 
-    $form->add('login', '', array('type' => 'submit', 'value' => 'Login', 'class' => 'btn btn-success'));
+    $form->add('login', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
 
     return $form;
   }

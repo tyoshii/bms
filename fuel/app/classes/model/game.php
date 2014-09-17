@@ -92,8 +92,6 @@ class Model_Game extends \Orm\Model
       // stats_players(starter)
       Model_Stats_Player::createNewGame($game->id, $posts['team_id']);
 
-			return $game;
-
       // opponent_team_idがteamsに登録されているものであればこちらも登録
       // TODO: conventionが実装されたら
       if ( array_key_exists('opponent_team_id', $posts) )
@@ -112,6 +110,9 @@ class Model_Game extends \Orm\Model
       }
 
       Mydb::commit();
+			
+			return $game;
+
     } catch ( Exception $e ) {
       Mydb::rollback();
       Log::error('内部処理エラー:'.$e->getMessage() );

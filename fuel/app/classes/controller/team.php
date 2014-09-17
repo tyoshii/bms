@@ -177,4 +177,13 @@ class Controller_Team extends Controller_Base
 
 		return Response::forge($view);
 	}
+
+	/**
+	 * このチームに入る、っていうオファー
+	 */
+	public function action_offer()
+	{
+		$view = View::forge('team/offer.twig');
+		return Response::forge($view);
+	}
 }

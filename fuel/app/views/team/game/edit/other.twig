@@ -1,0 +1,76 @@
+{% extends "layout/game/edit.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6">
+&nbsp;
+
+<table class="table">
+<tbody>
+
+{# 試合ステータス #}
+<tr>
+<th>試合ステータス</th>
+<td>
+<select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{gameinfo.id}}, {{team_id}});"> 
+<option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
+<option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
+<option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
+</select>
+</td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
+{#div class="col-md-6"#}</div>
+<div class="col-md-3"></div>
+{#div class="row"#}</div>
+
+<hr>
+
+<ul>
+<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+</ul>
+
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+
+{# changeGameStatusのためだけに読んでいる #}
+<script type="text/javascript" src="/js/game/list.js"></script>
+
+<script type="text/javascript">
+var remind_mail = function() {
+
+  if ( confirm("成績入力の完了していない人にメールを送信します。") ) {
+    $.ajax({
+      url: "/api/mail/remind",
+      type: "POST",
+      data: {
+        game_id: $("data#game_id").text(),
+        team_id: $("data#team_id").text(),
+      },
+      success: function() {
+        alert("メールを送信しました。");
+      },
+      error: function(res) {
+        var text = res.responseText;
+        if ( text ) {
+          alert(text);
+        } else {
+          alert("システムエラーが発生しました。");
+        }
+      }
+    });
+  }
+};
+</script>
+{% endblock %}

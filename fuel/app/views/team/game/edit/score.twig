@@ -1,0 +1,183 @@
+{% extends 'layout/team/game/edit.twig' %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+<div class="row">
+
+{# score #}
+<div class="col-md-6">
+
+<h3>スコア&nbsp;<small><button class="btn btn-info btn-xs">先攻後攻入れ替え</button></small></h3>
+
+<table class="table table-bordered" role="score">
+
+<thead>
+<tr>
+<th class="width-20">
+<th class="width-40"><p>先攻</p>
+{% if games_teams.order == 'top' %}{{ global.team.name }}
+{% else %}{{ games_teams.opponent_team_name }}
+{% endif %}
+</th>
+<th class="width-40"><p>後攻</p>
+{% if games_teams.order == 'bottom' %}{{ global.team.name }}
+{% else %}{{ games_teams.opponent_team_name }}
+{% endif %}
+</th>
+</tr>
+</thead>
+
+<tbody>
+{% for score in scores %} 
+<tr>
+<th data-type="inning">{{loop.index}}</th>
+<td>
+<select data-type="score_top">
+<option></option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if score.top == i~''%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+<td>
+<select data-type="score_bottom">
+<option></option>
+{%for i in range(0,40)%}
+<option value="{{i}}" {%if score.bottom == i~''%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+{%endfor%}
+</tbody>
+
+<tfoot>
+
+{# スコア追加/削除ボタン #}
+<tr>
+<td colspan="3">
+<div class="btn-group">
+<button type="score-add" class="btn btn-info btn-xs">追加</button>
+<button type="score-del" class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+</tr>
+
+<tr class="active">
+<th>R</th>
+<th data-type="score_top_sum">{{ global.game.tsum }}</th>
+<th data-type="score_bottom_sum">{{ global.game.bsum }}</th>
+</tr>
+</tfoot>
+</table>
+
+<div class="stats-post" role="score">
+<button type="button" class="btn btn-success">登録</button>
+</div>
+
+
+</div>{# <div class="col-md-6"> #}
+
+
+{# other #}
+<div class="col-md-6">
+
+<h3>試合情報</h3>
+
+<table class="table">
+
+<thead>
+</thead>
+
+<tbody>
+
+{# 試合日時 #}
+<tr>
+<th>試合日</th>
+<td><input type="text" class="form-control" name="date" value="{{ global.game.date }}"></td>
+</tr>
+<tr>
+<th>開始時間</th>
+<td><input type="text" class="form-control" readonly></td>
+</tr>
+
+{# 球場 #}
+<tr>
+<th>球場</th>
+<td><input type="text" class="form-control" id="stadium" value="{{ global.game.stadium }}"></td>
+<td></td>
+</tr>
+
+{# memo #}
+<tr>
+<th>メモ</th>
+<td><textarea class="form-control" id="memo" rows="4">{{ global.game.memo }}</textarea></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
+
+<h3>表彰選手</h3>
+<table class="table">
+
+<thead></thead>
+
+<tbody>
+
+<tr>
+<th>MVP</th>
+
+<td class="MVP">
+<select id="mvp" name="mvp" class="select2">
+<option value="0">--------------------</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if awards.mvp_player_id == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+
+<tr>
+<th>準MVP</th>
+
+<td class="MVP">
+<select id="second_mvp" name="second_mvp" class="select2">
+<option value="0">--------------------</option>
+{% for player in players %}
+<option value="{{player.id}}" {%if awards.second_mvp_player_id == player.id%}selected{%endif%}>{{player.number}}:{{player.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+
+<div class="stats-post" role="other">
+<button class="btn btn-success">登録</button>
+</div>
+
+</div>{# <div class="col-md-6"> #}
+
+</div>{# <div class="row"> #}
+
+{% endblock content %}
+
+
+{% block js %}
+{{parent()}}
+<script type="text/javascript" src="/js/game/score.js"></script>
+
+{# post-statsのメソッドのみ使っている #}
+{# TODO: PCとスマホでpost-stats周りのメソッドをあわせる #}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+{% endblock %}

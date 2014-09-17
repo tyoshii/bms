@@ -47,19 +47,19 @@
 </thead>
 
 <tbody>
-{% for meta in metum %}
-<tr class="player-tr" {%if meta.order != 0%}played="starter"{%endif%}>
+{% for played in playeds %}
+<tr class="player-tr" {%if played.order != 0%}played="starter"{%endif%}>
 <td class="change">
 <button onClick="add_order(this);" class="btn btn-info btn-xs add-order">交代</button>
-{% if meta.order == 0 or ( meta.order > 9 and loop.last ) %}
+{% if played.order == 0 or ( played.order > 9 and loop.last ) %}
 <button onClick="delete_order(this, '{{loop.last}}');" class="btn btn-danger btn-xs delete-order">削除</button>
 {% endif %}
 </td>
-<td class="order">{%if meta.order != 0%}{{- meta.order -}}{%endif%}</td>
-<td class="player_id">{{_self.name_select(players, meta.player_id)}}</td>
-<td class="number">{{ meta.number }}</td>
+<td class="order">{%if played.order != 0%}{{- played.order -}}{%endif%}</td>
+<td class="player_id">{{_self.name_select(players, played.player_id)}}</td>
+<td class="number">{{ played.number }}</td>
 {%for i in 0..5%}
-{%set pos = meta.position[i]%}
+{%set pos = played.position[i]%}
 <td class="position">{{_self.position_select(pos)}}</td>
 {%endfor%}
 </tr>
@@ -80,7 +80,7 @@
 </tbody>
 </table>
 
-{# 背番号データ #}
+{# 背番号データ TODO: いる？ #}
 {% for player in players %}
 <data id="number-{{player.id}}" class="disable">{{player.number}}</data>
 {% endfor %}

@@ -18,6 +18,12 @@ class Controller_Team_Game extends Controller_Team
 			}
 		}
 
+		// 試合概要のURL
+		if ( $this->_game )
+		{
+			$this->_game->href = $this->_team->href.'/game/'.$this->_game->id;
+		}
+
 		// set global
 		$this->set_global('game', $this->_game);
 	}
@@ -99,11 +105,15 @@ class Controller_Team_Game extends Controller_Team
 
 	public function action_edit()
 	{
-		$view = View::forge('team/game/edit.twig');
-
 		$game_id = $this->_game->id;
 		$team_id = $this->_team->id;
 		$kind    = $this->param('kind');
+
+		// team_idが捕れない場合はログインさせる
+		if ( ! $team_id )
+		{
+			return Response::redirect('/login?url='.Uri::current());
+		}
 
 		// kind validation
 		if ( ! in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher')) )
@@ -112,21 +122,40 @@ class Controller_Team_Game extends Controller_Team
 			return Response::redirect('team/'.$this->_team->url_path);
 		}
 
-		// 所属選手
-		$view->players = Model_Player::get_player($team_id);
-
-		// 出場選手
-		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
-
-		// game_status
-		// TODO: input_status に切り替える
-		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
+		// view load
+		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// stats data
 		switch ( $kind )
 		{
 			case 'score':
-				$view->score = reset($this->_game->games_runningscores);
+				// award
+				$view->awards = Model_Stats_Award::find_by_game_id($this->_game->id);
+
+				// score
+				$score = reset($this->_game->games_runningscores);
+
+				// 初回は必ず必要
+				$view->scores = array( array(
+					'top'    => $score->t1,
+					'bottom' => $score->b1,
+				) );
+
+				// ２回以降
+				for ( $i = 2; $i <=18; $i++ )
+				{
+					if ( $score['t'.$i] === null and $score['b'.$i] === null )
+						break;
+
+					$view->scores[] = array(
+						'top'    => $score['t'.$i],
+						'bottom' => $score['b'.$i],
+					);
+				}
+
+				// 合計
+				$this->_game->tsum = $score->tsum;
+				$this->_game->bsum = $score->bsum;
 
 			break;
 
@@ -141,6 +170,19 @@ class Controller_Team_Game extends Controller_Team
 			default:
 			break;
 		}
+
+		// 所属選手
+		$view->players = Model_Player::get_players($team_id);
+
+		// 出場選手
+		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
+
+		// 対戦相手
+		$view->games_teams = reset($this->_game->games_teams);
+
+		// game_status
+		// TODO: input_status に切り替える
+		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
 
 		return Response::forge($view);
 	}

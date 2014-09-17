@@ -157,28 +157,20 @@ class Controller_Api_Game extends Controller_Rest
 
     $ids = self::_getIds();
 
-    // insert(old json format)
-    $other = Input::post('stats');
-
-    $game = Model_Games_Stat::query()
-              ->where('game_id', $ids['game_id'])
-              ->where('team_id', $ids['team_id'])
-              ->get_one();
-
-    $game->others = json_encode($other); 
-    $game->save();
+		// stats
+    $stats = Input::post('stats');
 
     // update games(stadium/memo)
     // TODO: stadiumとmemoのvalidation
     $game = Model_Game::find($ids['game_id']);
-    $game->stadium = $other['stadium'];
-    $game->memo    = $other['memo'];
+    $game->stadium = $stats['stadium'];
+    $game->memo    = $stats['memo'];
     $game->save();
 
     // update award(mvp)
     $stats = array(
-      'mvp_player_id'        => $other['mvp'],
-      'second_mvp_player_id' => $other['second_mvp'],
+      'mvp_player_id'        => $stats['mvp'],
+      'second_mvp_player_id' => $stats['second_mvp'],
     );
     Model_Stats_Award::regist($ids['game_id'], $ids['team_id'], $stats);
 

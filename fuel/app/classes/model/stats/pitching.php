@@ -38,6 +38,36 @@ class Model_Stats_Pitching extends Model_Base
 	);
 	protected static $_table_name = 'stats_pitchings';
 
+  /**
+   * 出場選手に従って投手成績取得
+   *
+   * @param string game_id
+   * @param string team_id
+   * @param string player_id
+   *
+   * player_idは任意。指定するとその選手だけのデータを取得
+   * 指定が無い場合は出場した選手全員のデータを取得
+   *
+   * @return array
+	 */
+	public static function get_stats_by_playeds($game_id, $team_id, $player_id = null)
+	{
+		$query = Model_Stats_Player::get_query($game_id, $team_id, $player_id);
+
+		// join
+		$query->join(self::$_table_name, 'LEFT')
+			->on(self::$_table_name.'.player_id', '=', 'p.player_id')
+			->and_on(self::$_table_name.'.game_id', '=', 'p.game_id')
+			->and_on(self::$_table_name.'.team_id', '=', 'p.team_id');
+
+		// positionに1が含まれている場合のみ取得
+		$query->where('p.position', 'LIKE', '%1%');
+
+		$result = $query->execute()->as_array();
+
+		return $result;
+	}
+
 	/**
 	 * 投手成績を取得
 	 * @parma string game_id

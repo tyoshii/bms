@@ -17,7 +17,7 @@
 <tr>
 <th>試合ステータス</th>
 <td>
-<select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{gameinfo.id}}, {{team_id}});"> 
+<select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{global.game.id}}, {{global.team.id}});"> 
 <option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
 <option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
 <option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>

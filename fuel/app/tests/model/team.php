@@ -46,9 +46,10 @@ class Test_Model_Team extends \Test_Model_Base
     $team = Model_Team::find($id);
 
     $this->assertSame($id,   $team->id);
-    $this->assertSame($name, $team->name);
+    $this->assertSame($props['name'], $team->name);
 
 		// clean up
-		$this->assertTrue($team->delete);
+		unset($team->players);
+		$this->assertTrue(is_object($team->delete()));
   }
 }

@@ -54,7 +54,7 @@ class Model_Team extends \Orm\Model
       'model_to'       => 'Model_Player',
       'key_from'       => 'id',
       'key_to'         => 'team_id',
-      'cascade_save'   => true,
+      'cascade_save'   => false,
       'cascade_delete' => false,
     )
   );
@@ -65,7 +65,7 @@ class Model_Team extends \Orm\Model
 	 * - name     : チーム名
 	 * - url_path :
 	 */
-  public static function regist($props)
+  public static function regist($props = array())
   {
 		extract($props);
 

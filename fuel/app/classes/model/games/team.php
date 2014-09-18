@@ -40,7 +40,7 @@ class Model_Games_Team extends \Orm\Model
       'model_to'       => 'Model_Game',
       'key_from'       => 'game_id',
       'key_to'         => 'id',
-      'cascade_save'   => true,
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
 	);

@@ -28,10 +28,10 @@ class Model_Stats_Player extends \Orm\Model
 
   protected static $_belongs_to = array(
     'games' => array(
-      'model_to' => 'Model_Game',
-      'key_from' => 'game_id',
-      'key_to' => 'id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Game',
+      'key_from'       => 'game_id',
+      'key_to'         => 'id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
   );

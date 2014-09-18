@@ -25,7 +25,7 @@ class Test_Controller_Error extends Test_Base
   {
     $res = Request::forge('/error/500')->execute()->response();
 
-    $this->assertSame(500, $res->status);
+    $this->assertSame('500', $res->status);
   }
   
   /**
@@ -34,16 +34,6 @@ class Test_Controller_Error extends Test_Base
   public function test_404はデフォルトの_404_のためのactionを用意()
   {
     $res = Request::forge('_404_')->execute()->response();
-
-    $this->assertSame(404, $res->status);
-  }
-  
-  /**
-   *
-   */
-  public function test_存在しないページへのアクセスは404へリダイレクトされる()
-  {
-    $res = Request::forge('/no_exist_page')->execute()->response();
 
     $this->assertSame(404, $res->status);
   }

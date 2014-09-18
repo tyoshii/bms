@@ -35,7 +35,7 @@ class Model_Player extends \Orm\Model
       'model_to'       => 'Model_Team',
       'key_from'       => 'team_id',
       'key_to'         => 'id',
-      'cascade_save'   => true,
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ));
 
@@ -104,12 +104,12 @@ class Model_Player extends \Orm\Model
       // 既に登録されたusernameかチェック
       if ( $props['username'] and $props['username'] !== $player->username )
 			{
-				$player = self::query()->where(array(
+				$already = self::query()->where(array(
 					array('username', $props['username']),
 					array('team_id', $props['team_id']),
 				))->get();
 
-				if ( $player )
+				if ( $already )
       	{
         	throw new Exception('そのユーザーは既に他の選手に紐づいています');
       	}

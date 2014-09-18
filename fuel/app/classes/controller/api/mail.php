@@ -2,16 +2,16 @@
 
 class Controller_Api_Mail extends Controller_Rest
 {
-  public function before()
+  public function router($resource, $arguments)
   {
-    parent::before();
-
     // acl
     if ( ! Model_Player::has_team_admin(Input::post('team_id')) )
     {
       Log::warning('権限の無い、不正アクセス');
       return Response::redirect('error/403');
     }
+
+		parent::router($resource, $arguments);
   }
   
   public function post_remind()

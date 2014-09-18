@@ -151,15 +151,20 @@ class Dbinit
     // team
 		$props = array(
 			'name'     => 'テストチーム1',
-			'url_path' => 'test1',
+			'url_path' => time().rand(),
 		);
     $team1_id = \Model_Team::regist($props);
 		
 		$props = array(
 			'name'     => 'テストチーム2',
-			'url_path' => 'test2',
+			'url_path' => time().rand(),
 		);
     $team2_id = \Model_Team::regist($props);
+
+		if ( ! $team1_id or ! $team2_id )
+		{
+			throw new \Exception('Failed to create テストチーム.');
+		}
 
     // game
     // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
@@ -173,7 +178,7 @@ class Dbinit
 
     // player
     $props = array(
-      'team'     => $team1_id,
+      'team_id'  => $team1_id,
       'name'     => '選手A',
       'number'   => 1,
       'username' => 'player1',

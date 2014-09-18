@@ -72,10 +72,11 @@ class Test_Model_Game extends \Test_Model_Base
 
     $this->assertTrue(is_array($games));
 
-    // 先攻か後攻のどちらかに$idが含まれていることを確認
-    foreach ( $games as $game )
-    {
-      $this->assertTrue($game['team_top'] === $id or $game['team_bottom'] === $id);
-    }
+		// チーム情報が$idであること
+		foreach ( $games as $game )
+		{
+			$games_teams = $game->games_teams;
+			$this->assertSame($games_teams->team_id, $id);
+		}
   }
 }

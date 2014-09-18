@@ -29,4 +29,9 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
   {
     $this->timeouts()->implicitWait(10000);
   }
+
+	public function assertTitle()
+	{
+		$this->assertSame('Baseball Management System', $this->title());
+	}
 }

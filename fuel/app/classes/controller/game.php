@@ -224,6 +224,8 @@ class Controller_Game extends Controller_Base
           'game_id' => $game_id,
           'team_id' => $team_id,
         );
+
+				// TODO: Model_Statsから汎用的に取得したい。
         $view->hittings  = Model_Stats_Hitting::getStats($where);
         $view->details   = Model_Stats_Hittingdetail::getStats($where); 
         $view->fieldings = Model_Stats_Fielding::getStats($where);

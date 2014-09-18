@@ -5,6 +5,9 @@
 {# header #}
 {{ parent() }}
 
+{% for batter in batters %}
+
+{% if loop.first %}
 <table id="batter" class="table">
 <thead>
 <tr>
@@ -29,8 +32,9 @@
 <th>盗塁</th>
 <th>エラー</th>
 </thead>
+<tbody>
+{% endif %}
 
-{% for batter in metum %}
 <tr class="result result-{{loop.index}}">
 <td class="player-id disable">{{batter.player_id|default(0)}}</td>
 <td class="order">{%if batter.order != 0%}{{batter.order}}{%endif%}</td>
@@ -48,25 +52,22 @@
 </td>
 {%endif%}
 
-{% set hitting = hittings[batter.player_id] %}
-{% set detail  = details[batter.player_id]  %}
+<td class="seiseki daseki">{{batter.TPA}}</td>
+<td class="seiseki dasuu">{{batter.AB}}</td>
+<td class="seiseki anda">{{batter.H}}</td>
+<td class="seiseki niruida">{{batter['2B']}}</td>
+<td class="seiseki sanruida">{{batter['3B']}}</td>
+<td class="seiseki honruida">{{batter.HR}}</td>
+<td class="seiseki sanshin">{{batter.SO}}</td>
+<td class="seiseki yontama">{{batter.BB}}</td>
+<td class="seiseki shikyuu">{{batter.HBP}}</td>
+<td class="seiseki gida">{{batter.SAC}}</td>
+<td class="seiseki gihi">{{batter.SF}}</td>
 
-<td class="seiseki daseki">{{hitting.TPA}}</td>
-<td class="seiseki dasuu">{{hitting.AB}}</td>
-<td class="seiseki anda">{{hitting.H}}</td>
-<td class="seiseki niruida">{{hitting['2B']}}</td>
-<td class="seiseki sanruida">{{hitting['3B']}}</td>
-<td class="seiseki honruida">{{hitting.HR}}</td>
-<td class="seiseki sanshin">{{hitting.SO}}</td>
-<td class="seiseki yontama">{{hitting.BB}}</td>
-<td class="seiseki shikyuu">{{hitting.HBP}}</td>
-<td class="seiseki gida">{{hitting.SAC}}</td>
-<td class="seiseki gihi">{{hitting.SF}}</td>
-
-<td class="RBI"><input type="number" value="{{hitting.RBI}}" min="0"></td>
-<td class="R"><input type="number" class="" value="{{hitting.R}}" min="0"></td>
-<td class="SB"><input type="number" class="" value="{{hitting.SB}}" min="0"></td>
-<td class="E"><input type="number" class="" value="{{fieldings[batter.player_id].E}}" min="0"></td>
+<td class="RBI"><input type="number" value="{{batter.RBI}}" min="0"></td>
+<td class="R"><input type="number" class="" value="{{batter.R}}" min="0"></td>
+<td class="SB"><input type="number" class="" value="{{batter.SB}}" min="0"></td>
+<td class="E"><input type="number" class="" value="{{batter.E}}" min="0"></td>
 </tr>
 
 
@@ -82,7 +83,7 @@
 {% import 'batter-detail-macro.twig' as detail_macro %}
 
 {# 打席情報がなければ #}
-{% if detail|length == 0 %}
+{% if batter.details|length == 0 %}
 <tr class="result disable detail detail-{{loop.index}}">
 {{ detail_macro.meta(batter.player_id, 1, true) }}
 {{ detail_macro.direction(0) }}
@@ -92,7 +93,7 @@
 </tr>
 {% else %}
   {# 打席情報があればループ #}
-  {% for d in detail %}
+  {% for d in batter.details %}
   <tr class="result disable detail detail-{{loop.parent.loop.index}}">
   {{ detail_macro.meta(batter.player_id, loop.index, loop.last) }}
   {{ detail_macro.direction(d.direction) }}
@@ -104,7 +105,8 @@
 
 {% endif %}
 
-{% endfor %}
+{% if loop.last %}
+</tbody>
 </table>
 
 {%if game_status == 2%}
@@ -115,5 +117,14 @@
 <button class="btn btn-default" onClick="post_batter(true);">保存</button>
 <button class="btn btn-success" onClick="post_batter(true, true);">决定</button>
 {%endif%}
+
+{% endif %}
+
+{# for batter in batters #}
+{% else %}
+<div class="alert alert-warning">
+<p>成績入力する情報がありません。</p>
+</div>
+{% endfor %}
 
 {% endblock content %}

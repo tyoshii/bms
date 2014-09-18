@@ -96,7 +96,7 @@ class Controller_Team_Game extends Controller_Team
 		$view->score       = reset($this->_game->games_runningscores);
 		$view->stats       = array(
 			'player'   => Model_Stats_Player::getStarter($this->_game->id, $this->_team->id),
-			'hitting'  => ModeL_Stats_Hitting::get_stats($this->_game->id, $this->_team->id),
+			'hitting'  => Model_Stats_Hitting::get_stats($this->_game->id, $this->_team->id),
 			'pitching' => Model_Stats_Pitching::get_stats($this->_game->id, $this->_team->id),
 		);
 
@@ -108,9 +108,10 @@ class Controller_Team_Game extends Controller_Team
 		$game_id = $this->_game->id;
 		$team_id = $this->_team->id;
 		$kind    = $this->param('kind');
+		$type    = Input::get('type');
 
-		// team_idが捕れない場合はログインさせる
-		if ( ! $team_id )
+		// playerが捕れない場合はログインさせる
+		if ( ! $this->_player )
 		{
 			return Response::redirect('/login?url='.Uri::current());
 		}
@@ -119,11 +120,26 @@ class Controller_Team_Game extends Controller_Team
 		if ( ! in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher')) )
 		{
 			Session::set_flash('error', '不正なURLです。');
-			return Response::redirect('team/'.$this->_team->url_path);
+			return Response::redirect($this->_team->href);
+		}
+
+		// team_admin 権限チェック
+		if ( in_array($kind, array('score', 'player', 'other')) and ! $this->_team_admin )
+		{
+			Session::set_flash('error', '権限がありません。');
+			return Response::redirect($this->_game->href);
+		}
+		if ( $type === 'all' and ! $this->_team_admin )
+		{
+			Session::set_flash('error', '権限がありません。');
+			return Response::redirect($this->_game->href);
 		}
 
 		// view load
 		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
+		
+		// 出場選手
+		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
 
 		// stats data
 		switch ( $kind )
@@ -164,8 +180,35 @@ class Controller_Team_Game extends Controller_Team
 			case 'other':
 			break;
 			case 'batter':
+				// 出場選手と成績
+				if ( $type === 'all' )
+				{
+					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
+															$game_id, $team_id);
+				}
+				else
+				{
+					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
+															$game_id, $team_id, $this->_player->id);
+				}
+
+				// 打席結果一覧
+				$view->results = Model_Batter_Result::getAll();
+
 			break;
 			case 'pitcher':
+				// 出場選手と成績
+				if ( $type === 'all' )
+				{
+					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
+																$game_id, $team_id);
+				}
+				else
+				{
+					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
+																$game_id, $team_id, $this->_player->id);
+				}
+
 			break;
 			default:
 			break;
@@ -173,9 +216,6 @@ class Controller_Team_Game extends Controller_Team
 
 		// 所属選手
 		$view->players = Model_Player::get_players($team_id);
-
-		// 出場選手
-		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
 
 		// 対戦相手
 		$view->games_teams = reset($this->_game->games_teams);

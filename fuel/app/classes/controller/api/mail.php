@@ -7,9 +7,9 @@ class Controller_Api_Mail extends Controller_Rest
     parent::before();
 
     // acl
-    if ( ! Auth::has_access('moderator.moderator') )
+    if ( ! Model_Player::has_team_admin(Input::post('team_id')) )
     {
-      Session::set_flash('error', '権限がありません');      
+      Log::warning('権限の無い、不正アクセス');
       return Response::redirect('error/403');
     }
   }
@@ -25,13 +25,6 @@ class Controller_Api_Mail extends Controller_Rest
     {
       Log::warning($val->show_errors());
       return Response::forge('不正なアクセスです。', 400);
-    }
-
-    // moderator権限のみが送信可能
-    if ( ! Auth::has_access('moderator.moderator') )
-    {
-      Log::warning('権限がありません');
-      return Response::forge('不正なアクセスです。権限がありません。', 403);
     }
 
     // parameter

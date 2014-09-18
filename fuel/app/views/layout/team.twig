@@ -2,7 +2,9 @@
 
 {% block content %}
 
+<div id="team-name">
 <h1><a href="/team/{{ global.team.url_path }}/">{{ global.team.name }}</a></h1>
+</div>
 
 <div class="row">
 
@@ -13,18 +15,18 @@
 <hr>
 
 {% if global.player %}
-<label>個人情報</label>
+<label id="menu-profile">個人情報</label>
 <li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
 <hr>
 {% endif %}
 
-<label>チーム情報</label>
+<label id="menu-team-info">チーム情報</label>
 <li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
 <li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>
 <li><a href="/team/{{ global.team.url_path }}/stats">成績</a></li>
 {% if global.team_admin %}
 <hr>
-<label>管理者メニュー</label>
+<label id="menu-admin">管理者メニュー</label>
 <li><a href="/team/{{ global.team.url_path }}/game/add">新規試合追加</a></li>
 <li><a href="/team/{{ global.team.url_path }}/config/admin">管理者設定</a></li>
 <li><a href="/team/{{ global.team.url_path }}/config/info">チーム基本情報</a></li>
@@ -33,7 +35,7 @@
 
 {% if not global.player %}
 <hr>
-<label>オファー</label>
+<label id="menu-offer">オファー</label>
 <li><a href="/team/{{ global.team.url_path }}/offer">入部</a></li>
 {% endif %}
 

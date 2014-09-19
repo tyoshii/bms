@@ -55,6 +55,11 @@ __QUERY__;
 
 	public static function give_stats(&$stats)
 	{
+		if ( ! $stats )
+		{
+			return $stats = array();
+		}
+
 		// 成績追加
 		// - total base : 塁打
 		$stats['TB'] = $stats['H'] + 1*$stats['2B'] + 2*$stats['3B'] + 3*$stats['HR'];

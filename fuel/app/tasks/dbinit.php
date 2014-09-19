@@ -148,7 +148,27 @@ class Dbinit
    */
   public function insert_data_for_travis()
   {
-    // team
+    // user
+    $data = array(
+      # username  => group
+      'admin'     => 100,
+      'moderator' => 50,
+      'user'      => 1,
+      'banned'    => -1,
+      'player1'   => 1,
+    );
+
+    foreach ( $data as $username => $group )
+    {
+      \Auth::delete_user($username);
+      \Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
+    }
+
+		// login
+		$id = \Model_User::find_by_username('player1')->id;
+		\Auth::force_login($id);
+		
+    // team/player
 		$props = array(
 			'name'     => 'テストチーム1',
 			'url_path' => time().rand(),
@@ -176,36 +196,11 @@ class Dbinit
     );
     \Model_Game::createNewGame($data);
 
-    // player
-    $props = array(
-      'team_id'  => $team1_id,
-      'name'     => '選手A',
-      'number'   => 1,
-      'username' => 'player1',
-    );
-    \Model_Player::regist($props);
-
-    // user
-    $data = array(
-      # username  => group
-      'admin'     => 100,
-      'moderator' => 50,
-      'user'      => 1,
-      'banned'    => -1,
-      'player1'   => 1,
-    );
-
-    foreach ( $data as $username => $group )
-    {
-      \Auth::delete_user($username);
-      \Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
-    }
-
     // config
     $ids = \Config::get('bms.moderator_team_ids');
     if ( count($ids) === 0 )
     {
-      \Config::set('bms.moderator_team_ids', array(1));
+      \Config::set('bms.moderator_team_ids', array($team1_id));
       \Config::save('bms', 'bms');
     }
   }

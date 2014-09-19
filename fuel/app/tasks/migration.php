@@ -33,8 +33,10 @@ class Migration
 
 		$games = \DB::select()->from('games')->execute();
 
-		foreach ( $games as $game_id => $game )
+		foreach ( $games as $index => $game )
 		{
+			$game_id = $game['id'];
+
 			if ( \Model_Games_Team::find_by_game_id($game_id) )
 			{
 				echo 'Skip : '.$game_id."\n";

@@ -108,11 +108,11 @@ class Common_Form
     return $this;
   }
 
-  public function team($value = '')
+  public function team_id($value = '')
   {
     $teams = Model_Team::get_teams_key_value();
 
-    $this->form->add('team', '所属チーム', array(
+    $this->form->add('team_id', '所属チーム', array(
       'type' => 'select',
       'options' => array(''=>'') + $teams,
       'value' => $value,

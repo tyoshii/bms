@@ -1,0 +1,130 @@
+{% extends "layout/team/game/edit.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+{% for batter in batters %}
+
+{% if loop.first %}
+<table id="batter" class="table">
+<thead>
+<tr>
+<th class="player-id disable">player_id</th>
+<th class="order">打順</th>
+<th class="name">名前</th>
+<th class="number">＃</th>
+<th class="detail"><button class="btn btn-default btn-xs" onClick="toggle_detail('all');">全て開く/閉じる</button></th>
+<th>打席数</th>
+<th>打数</th>
+<th>単打</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+<th>三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>犠飛</th>
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+<th>エラー</th>
+</thead>
+<tbody>
+{% endif %}
+
+<tr class="result result-{{loop.index}}">
+<td class="player-id disable">{{batter.player_id|default(0)}}</td>
+<td class="order">{%if batter.order != 0%}{{batter.order}}{%endif%}</td>
+<td class="name">{{batter.name}}</td>
+<td class="number">{{batter.number}}</td>
+
+{# 打席詳細入力のtoggleボタン #}
+{%if batter.number == '' %}
+<td class="detail"></td>
+{%else%}
+<td class="detail">
+<button class="btn btn-info btn-sm" onclick="toggle_detail({{loop.index}});">
+打席詳細入力
+</button>
+</td>
+{%endif%}
+
+<td class="seiseki daseki">{{batter.TPA}}</td>
+<td class="seiseki dasuu">{{batter.AB}}</td>
+<td class="seiseki anda">{{batter.H}}</td>
+<td class="seiseki niruida">{{batter['2B']}}</td>
+<td class="seiseki sanruida">{{batter['3B']}}</td>
+<td class="seiseki honruida">{{batter.HR}}</td>
+<td class="seiseki sanshin">{{batter.SO}}</td>
+<td class="seiseki yontama">{{batter.BB}}</td>
+<td class="seiseki shikyuu">{{batter.HBP}}</td>
+<td class="seiseki gida">{{batter.SAC}}</td>
+<td class="seiseki gihi">{{batter.SF}}</td>
+
+<td class="RBI"><input type="number" value="{{batter.RBI}}" min="0"></td>
+<td class="R"><input type="number" class="" value="{{batter.R}}" min="0"></td>
+<td class="SB"><input type="number" class="" value="{{batter.SB}}" min="0"></td>
+<td class="E"><input type="number" class="" value="{{batter.E}}" min="0"></td>
+</tr>
+
+
+<tr class="disable detail detail-{{loop.index}}">
+<th colspan="4"></th>
+<th colspan="3">方向</th>
+<th colspan="3">種類</th>
+<th colspan="3">結果</th>
+<th colspan="6"></th>
+</tr>
+
+{# 打席詳細の中身 #}
+{% import 'batter-detail-macro.twig' as detail_macro %}
+
+{# 打席情報がなければ #}
+{% if batter.details|length == 0 %}
+<tr class="result disable detail detail-{{loop.index}}">
+{{ detail_macro.meta(batter.player_id, 1, true) }}
+{{ detail_macro.direction(0) }}
+{{ detail_macro.kind(0) }}
+{{ detail_macro.result(results, 0) }}
+<td colspan="6"></td>
+</tr>
+{% else %}
+  {# 打席情報があればループ #}
+  {% for d in batter.details %}
+  <tr class="result disable detail detail-{{loop.parent.loop.index}}">
+  {{ detail_macro.meta(batter.player_id, loop.index, loop.last) }}
+  {{ detail_macro.direction(d.direction) }}
+  {{ detail_macro.kind(d.kind) }}
+  {{ detail_macro.result(results, d.result_id) }}
+  <td colspan="6"></td>
+  </tr>
+  {% endfor %}
+
+{% endif %}
+
+{% if loop.last %}
+</tbody>
+</table>
+
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
+<button class="btn btn-default" onClick="post_batter(true);">保存</button>
+<button class="btn btn-success" onClick="post_batter(true, true);">决定</button>
+{%endif%}
+
+{% endif %}
+
+{# for batter in batters #}
+{% else %}
+<div class="alert alert-warning">
+<p>成績入力する情報がありません。</p>
+</div>
+{% endfor %}
+
+{% endblock content %}

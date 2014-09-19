@@ -75,8 +75,11 @@ Switching each env :
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bms-navbar">
     <ul class="nav navbar-nav">
+      {%block li_team %}<li>{%endblock%}<a href="/team">チーム一覧</a></li>
+{% if auth_has_access('moderator.moderator') %}
       {%block li_game %}<li>{%endblock%}<a href="/game">試合一覧</a></li>
       {%block li_score%}<li>{%endblock%}<a href="/score">成績</a></li>
+{% endif %}
 <!--
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<b class="caret"></b></a>
@@ -108,6 +111,8 @@ Switching each env :
       {% if auth_check() %}
         <li><a href="/user/info"><img id="user-icon" src="{{usericon}}" height="32" width="32"></a></li>
         <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
+			{% else %}
+				<li><a href="/login?url={{ current_url() }}">ログイン</a></li>
       {% endif %}
     </ul>
 <!--
@@ -153,8 +158,11 @@ Switching each env :
 {# footer #}
 <div id="footer">
 <hr>
-<div>System Version {{config('system.version')}} updated at {{config('system.update_at')}}</div>
+<div><b>BMS - Baseball Management System</b></div>
+<div>System Version {{config('system.version')}} / Updated at {{config('system.update_at')}}</div>
+<div>&nbsp;</div>
 <a href="mailto:tyoshii716@gmail.com">お問い合わせ / フィードバック</a> | <a href="https://github.com/tyoshii/bms">GitHub</a>
+<div>&nbsp;</div>
 </div>
 
 </body>

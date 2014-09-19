@@ -8,12 +8,13 @@ class Controller_Top extends Controller_Base
 
     if ( Auth::check() )
     {
+			// 所属チーム
+			$view->teams = Model_Team::get_belong_team();
+
       if ( $player = Model_Player::find_by_username(Auth::get_screen_name()) )
       {
         // アラート
         $view->alert_games = Model_Game::get_incomplete_gameids($player->id);
-        // 最近の試合
-        $view->games = Model_Game::get_info_by_team(Model_Player::get_my_team_id());
       }
       else
       {

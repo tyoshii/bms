@@ -443,10 +443,10 @@ class Model_Games_Runningscore extends \Orm\Model
 
   protected static $_belongs_to = array(
     'games' => array(
-      'model_to' => 'Model_Game',
-      'key_from' => 'game_id',
-      'key_to' => 'id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Game',
+      'key_from'       => 'game_id',
+      'key_to'         => 'id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
   );

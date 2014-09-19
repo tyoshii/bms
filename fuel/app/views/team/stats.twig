@@ -1,0 +1,182 @@
+{% extends 'layout/team.twig' %}
+
+{% block main %}
+
+<h1>チーム成績</h1>
+
+<h3>戦績</h3>
+
+<table class="table table-bordered">
+<thead>
+<tr class="active">
+<th>試合数</th>
+<th>勝</th>
+<th>負</th>
+<th>分</th>
+<th>勝率</th>
+<th>得点</th>
+<th>失点</th>
+<th>得失点差</th>
+</tr>
+</thead>
+
+<tbody>
+<td>{{ result.games }}</td>
+<td>{{ result.win }}</td>
+<td>{{ result.lose }}</td>
+<td>{{ result.draw }}</td>
+<td>{{ result.rate.win }}</td>
+<td></td>
+<td></td>
+<td></td>
+</tbody>
+</table>
+
+
+<h3>野手成績</h3>
+
+<table class="table table-bordered">
+<thead>
+<tr class="active">
+<th>打席数</th>
+<th>打数</th>
+<th>単打</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+<th>打点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>{{ stats.teams.TPA }}</td>
+<td>{{ stats.teams.AB }}</td>
+<td>{{ stats.teams.H }}</td>
+<td>{{ stats.teams['2B'] }}</td>
+<td>{{ stats.teams['3B'] }}</td>
+<td>{{ stats.teams.HR }}</td>
+<td>{{ stats.teams.RBI }}</td>
+</tr>
+</tbody>
+
+<thead>
+<tr class="active">
+<th>三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>犠飛</th>
+<th>盗塁</th>
+<th>失策</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>{{ stats.teams.SO }}</td>
+<td>{{ stats.teams.BB }}</td>
+<td>{{ stats.teams.HBP }}</td>
+<td>{{ stats.teams.SAC }}</td>
+<td>{{ stats.teams.SF }}</td>
+<td>{{ stats.teams.SB }}</td>
+<td>{{ stats.teams.E }}</td>
+</tr>
+</tbody>
+
+<thead>
+<tr class="active">
+<th>打率</th>
+<th>出塁率</th>
+<th>長打率</th>
+<th>ＯＰＳ</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>{{ stats.teams.rate.AVG }}</td>
+<td>{{ stats.teams.rate.OBP }}</td>
+<td>{{ stats.teams.rate.SLG }}</td>
+<td>{{ stats.teams.rate.OPS}}</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+<h3>投手成績</h3>
+comming soon ...
+
+<h3>個人成績</h3>
+
+<div id="datatable-wrapper">
+<table id="datatable-stats-self" class="table table-hover">
+<thead>
+<tr>
+<th>名前</th>
+<th>試合数</th>
+<th>打席数</th>
+<th>打数</th>
+<th>安打数</th>
+<th>四死球</th>
+<th>打点</th>
+<th>三振</th>
+<th>犠打飛</th>
+<th>打率</th>
+<th>出塁率</th>
+<th>盗塁</th>
+<th>失策</th>
+</tr>
+</thead>
+<tbody>
+
+{% for stats in stats.selfs %}
+<tr>
+<td class="min-width-100"><a href="{{ global.team.href }}/player/{{ stats.player_id }}">{{ stats.name }}</a></td>
+<td>{{ stats.G }}</td>
+<td>{{ stats.TPA }}</td>
+<td>{{ stats.AB }}</td>
+<td>{{ stats.H + stats['2B'] + stats['3B'] + stats.HR }}</td>
+<td>{{ stast.BB + stats.HBP }}</td>
+<td>{{ stats.RBI }}</td>
+<td>{{ stats.SO }}</td>
+<td>{{ stats.SAC + stats.SF }}</td>
+<td>{{ stats.rate.AVG }}</td>
+<td>{{ stats.rate.OBP }}</td>
+<td>{{ stats.SB }}</td>
+<td>{{ stats.E }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+
+</table>
+</div>
+{% endblock main %}
+
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#datatable-stats-self").dataTable({
+    "order": [[1, "desc"]]
+  });
+});
+</script>
+{% endblock js %}
+
+{% block css %}
+{{ parent() }}
+
+<style>
+#datatable-wrapper {
+  width: 100%;
+}
+</style>
+{% endblock css %}

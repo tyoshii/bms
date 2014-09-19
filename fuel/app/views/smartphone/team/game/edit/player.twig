@@ -1,0 +1,91 @@
+{% extends "layout/game/edit_mobile.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+<div class="stats-container">
+
+<table class="table player-table">
+
+<thead>
+<tr>
+<th>打順</th>
+<th>守備</th>
+<th>名前</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+
+{%for player in metum%}
+{# 交代された選手かどうかはorderで判断している #}
+<tr order="{{player.order}}" {%if player.order != 0%}played="starter"{%endif%}>
+
+{# 打順 #}
+<td role="order">{%if player.order != 0%}{{player.order}}{%endif%}</td>
+
+{# 守備 #}
+<td>
+{%for position in player.position%}
+<div class="player-position" index="{{loop.index}}" {%if loop.last%}index_attr="last"{%endif%}>
+<select role="position">
+{%for i in ['',1,2,3,4,5,6,7,8,9,'D','H','R']%}
+<option value="{{i}}" {%if position == i%}selected{%endif%}>{{i}}</option>
+{%endfor%}
+</select>
+</div>
+{%endfor%}
+</td>
+
+{# 名前 #}
+<td>
+<select class="select2" role="player_id">
+<option value="0">--------------------</option>
+{%for p in players%}
+<option value="{{p.id}}" {%if p.id == player.id%}selected{%endif%}>{{p.number}}:{{p.name}}</option>
+{%endfor%}
+</select>
+</td>
+
+{# 交代/削除ボタン #}
+<td>
+<div role="switch-player">
+<button class="btn btn-info btn-xs">交代</button>
+</div>
+{# 交代された選手かどうかはorderで判断している #}
+<div role="delete-player" class="{%if player.order != 0%}disable{%endif%}">
+<button class="btn btn-danger btn-xs">削除</button>
+</div>
+</td>
+
+</tr>
+{%endfor%}
+
+<tbody>
+</table>
+
+{# 選手の追加/削除 #}
+<div class="btn-group pull-right">
+<button role="player-add" class="btn btn-info btn-xs">追加</button>
+<button role="player-del" class="btn btn-danger btn-xs">削除</button>
+</div>
+
+<hr>
+<br><br>
+
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
+<div class="stats-post" role="player">
+<button class="btn btn-success">登録</button>
+</div>
+{%endif%}
+
+</div>
+
+{% endblock %}

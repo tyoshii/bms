@@ -62,6 +62,56 @@ class Model_Stats_Hitting extends Model_Base
     Common::db_clean(self::$_table_name, $where);
   }
 
+	/**
+	 * 出場選手に従って打撃成績取得
+	 *
+	 * @param string game_id
+	 * @param string team_id
+	 * @param string player_id
+	 *
+	 * player_idは任意。指定するとその選手だけのデータを取得
+	 * 指定が無い場合は出場した選手全員のデータを取得
+	 *
+	 * @return array
+	 */
+	public static function get_stats_by_playeds($game_id, $team_id, $player_id = null)
+	{
+		$query = Model_Stats_Player::get_query($game_id, $team_id, $player_id);
+
+		// join table
+		$join_tables = array(
+			self::$_table_name,
+			'stats_fieldings',
+		);
+
+		foreach ( $join_tables as $table )
+		{
+			$query->join($table, 'LEFT')
+				->on($table.'.player_id', '=', 'p.player_id')
+				->and_on($table.'.game_id', '=', 'p.game_id')
+				->and_on($table.'.team_id', '=', 'p.team_id');
+		}
+
+		$result = $query->execute()->as_array();
+
+		// add hittingdetails
+		foreach ( $result as $index => $res )
+		{
+			$query = DB::select()->from('stats_hittingdetails')
+				->where('game_id',   $res['game_id'])
+				->where('team_id',   $res['team_id'])
+				->where('player_id', $res['player_id'])
+				->order_by('bat_times');
+
+			$result[$index]['details'] = $query->execute()->as_array();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 成績取得
+	 */
   public static function get_stats($game_id, $team_id)
   {
     return DB::select()->from(self::$_table_name)

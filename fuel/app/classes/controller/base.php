@@ -2,6 +2,7 @@
 
 class Controller_Base extends Controller
 {
+	public $_global = array();
   protected $_login_form = '';
 
   public function before()
@@ -49,16 +50,20 @@ class Controller_Base extends Controller
     }
   }
 
-  /**
-   * error common function
-   */
-  public function action_error()
-  {
-    $code = $this->param('status_code');
-    $view = View::forge('errors/index.twig');
+	public function after($res)
+	{
+		View::set_global('global', $this->_global);
+		return $res;
+	}
 
-    return Response::forge($view, $code);
-  }
+	public function get_global($key)
+	{
+		return array_key_exists($key, $this->_global) ? $this->_global[$key] : null;
+	}
+	public function set_global($key, $val)
+	{
+		$this->_global[$key] = $val;	
+	}
 
   /**
    * login form Fieldset::forge()
@@ -73,16 +78,16 @@ class Controller_Base extends Controller
       ),
     ));
 
-    $form->add('username', 'ユーザー名', array('class' => 'form-control', 'placeholder' => 'Username'))
+    $form->add('username', 'ユーザー名', array('class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('max_length', 40);
 
-    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
+    $form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
       ->add_rule('required')
       ->add_rule('min_length', 8)
       ->add_rule('max_length', 250);
 
-    $form->add('login', '', array('type' => 'submit', 'value' => 'Login', 'class' => 'btn btn-success'));
+    $form->add('login', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
 
     return $form;
   }

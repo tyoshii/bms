@@ -111,16 +111,6 @@ class Test_Controller_Top extends Test_Base
     $this->assertFalse(Auth::check());
     $this->assertSame(302, $res->status);
   }
-  
-  /**
-   * 
-   */
-  public function test_404ページのテスト()
-  {
-    $res = Request::forge('_404_')->execute()->response();
-    
-    $this->assertSame(404, $res->status);
-  }
 
   /**
    * login_formのテスト

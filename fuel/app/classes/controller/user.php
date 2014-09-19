@@ -33,7 +33,7 @@ class Controller_User extends Controller_Base
       $id       = Input::post('player_id');
       $username = Auth::get_screen_name();
       $props    = array(
-        'team'     => Input::post('team'),
+        'team_id'  => Input::post('team_id'),
         'number'   => Input::post('number'),
         'name'     => Common::get_dispname(),
         'username' => $username,
@@ -62,7 +62,7 @@ class Controller_User extends Controller_Base
       {
         // かぶりチェック
         $already = Model_Player::query()
-          ->where('team', $props['team'])
+          ->where('team_id', $props['team_id'])
           ->where('number', $props['number'])
           ->get_one();
 
@@ -210,8 +210,8 @@ class Controller_User extends Controller_Base
 
     if ( $player )
     {
-      $team   = $player->team;
-      $number = $player->number;
+      $team_id = $player->team_id;
+      $number  = $player->number;
 
       // player_id を type=hiddenでセット
       $form->add('player_id', '', array(
@@ -228,10 +228,10 @@ class Controller_User extends Controller_Base
     $default = array('' => '');
     $teams = Model_Team::get_teams_key_value();
 
-    $form->add('team', '所属チーム', array(
+    $form->add('team_id', '所属チーム', array(
       'type' => 'select',
       'options' => $default + $teams,
-      'value' => $team,
+      'value' => $team_id,
       'class' => 'select2',
       'data-placeholder' => 'Select Team',
     ))

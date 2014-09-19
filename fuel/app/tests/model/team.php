@@ -30,17 +30,26 @@ class Test_Model_Team extends \Test_Model_Base
    */
   public function test_新規チーム登録()
   {
-    // チーム名を与えない場合はfalse
+    // パラメーターが足りない場合はfalse
     $this->assertFalse(Model_Team::regist());
+    $this->assertFalse(Model_Team::regist(array('name'     => 'name'    )));
+    $this->assertFalse(Model_Team::regist(array('url_path' => 'url_path')));
 
     // 新規登録
-    $name = rand();
-    $id = Model_Team::regist($name);
+		$props = array(
+    	'name' 		 => rand(),
+			'url_path' => rand(),
+		);
+    $id = Model_Team::regist($props);
 
     // 登録したチームのモデル
     $team = Model_Team::find($id);
 
     $this->assertSame($id,   $team->id);
-    $this->assertSame($name, $team->name);
+    $this->assertSame($props['name'], $team->name);
+
+		// clean up
+		unset($team->players);
+		$this->assertTrue(is_object($team->delete()));
   }
 }

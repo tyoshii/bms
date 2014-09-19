@@ -25,6 +25,51 @@ class Migration
 		 **************************/
 	}
 
+	public function games2games_teams()
+	{
+		echo "\n===========================================";
+		echo "\nRunning task [migration:runningscore_id2game_id]";
+		echo "\n-------------------------------------------\n\n";
+
+		$games = \DB::select()->from('games')->execute();
+
+		foreach ( $games as $index => $game )
+		{
+			$game_id = $game['id'];
+
+			if ( \Model_Games_Team::find_by_game_id($game_id) )
+			{
+				echo 'Skip : '.$game_id."\n";
+				continue;
+			}
+
+			$props = array('game_id' => $game_id);
+
+			if ( $game['team_top'] === '0' )
+			{
+				$props = $props + array(
+					'team_id' => $game['team_bottom'],
+					'order'   => 'bottom',
+					'opponent_team_name' => $game['team_top_name'],
+				);
+			}
+			else
+			{
+				$props = $props + array(
+					'team_id' => $game['team_top'],
+					'order'   => 'top',
+					'opponent_team_name' => $game['team_bottom_name'],
+				);
+			}
+
+			\Model_Games_Team::regist($props);
+
+			echo 'migration : '.$game_id."\n";
+		} 
+
+		echo "DONE";
+	}
+
   public function runningscore_id2game_id()
   {
 		echo "\n===========================================";

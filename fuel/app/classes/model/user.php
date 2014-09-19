@@ -115,7 +115,7 @@ class Model_User extends \Orm\Model
     if ( ! $team_id ) return array();
 
     $players = Model_Player::query()
-                  ->where('team', $team_id)
+                  ->where('team_id', $team_id)
                   ->where('username', '!=', '')
                   ->get();
 

@@ -148,29 +148,6 @@ class Dbinit
    */
   public function insert_data_for_travis()
   {
-    // team
-    $team1_id = \Model_Team::regist('テストチーム1');
-    $team2_id = \Model_Team::regist('テストチーム2');
-
-    // game
-    // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
-    $data = array(
-      'id'     => 1,
-      'date'   => date('Y-m-d'),
-      'top'    => $team1_id,
-      'bottom' => $team2_id,
-    );
-    \Model_Game::createNewGame($data);
-
-    // player
-    $props = array(
-      'team'     => $team1_id,
-      'name'     => '選手A',
-      'number'   => 1,
-      'username' => 'player1',
-    );
-    \Model_Player::regist($props);
-
     // user
     $data = array(
       # username  => group
@@ -187,11 +164,43 @@ class Dbinit
       \Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
     }
 
+		// login
+		$id = \Model_User::find_by_username('player1')->id;
+		\Auth::force_login($id);
+		
+    // team/player
+		$props = array(
+			'name'     => 'テストチーム1',
+			'url_path' => time().rand(),
+		);
+    $team1_id = \Model_Team::regist($props);
+		
+		$props = array(
+			'name'     => 'テストチーム2',
+			'url_path' => time().rand(),
+		);
+    $team2_id = \Model_Team::regist($props);
+
+		if ( ! $team1_id or ! $team2_id )
+		{
+			throw new \Exception('Failed to create テストチーム.');
+		}
+
+    // game
+    // TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
+    $data = array(
+      'id'     => 1,
+      'date'   => date('Y-m-d'),
+      'top'    => $team1_id,
+      'bottom' => $team2_id,
+    );
+    \Model_Game::createNewGame($data);
+
     // config
     $ids = \Config::get('bms.moderator_team_ids');
     if ( count($ids) === 0 )
     {
-      \Config::set('bms.moderator_team_ids', array(1));
+      \Config::set('bms.moderator_team_ids', array($team1_id));
       \Config::save('bms', 'bms');
     }
   }

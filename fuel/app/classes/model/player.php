@@ -4,13 +4,16 @@ class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'team',
+		'team_id',
 		'name',
 		'number',
     'username',
     'status' => array(
       'default' => 1,
     ),
+		'role' => array(
+			'default' => 'user',
+		),
 		'created_at',
 		'updated_at',
 	);
@@ -29,10 +32,10 @@ class Model_Player extends \Orm\Model
 
   protected static $_belongs_to = array(
     'teams' => array(
-      'model_to' => 'Model_Team',
-      'key_from' => 'team',
-      'key_to' => 'id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Team',
+      'key_from'       => 'team_id',
+      'key_to'         => 'id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ));
 
@@ -66,7 +69,7 @@ class Model_Player extends \Orm\Model
   public static function get_my_team_id()
   {
     if ( $res = self::find_by_username(Auth::get_screen_name()) )
-      return $res->team;
+      return $res->team_id;
       
     return null;
   }
@@ -75,40 +78,42 @@ class Model_Player extends \Orm\Model
   {
     $query = DB::select('p.*', array('teams.name', 'teamname'))
               ->from(array(self::$_table_name, 'p'))
-              ->join('teams', 'LEFT')->on('p.team', '=', 'teams.id')
+              ->join('teams', 'LEFT')->on('p.team_id', '=', 'teams.id')
               ->where('p.status', '!=', -1) 
               ->order_by( DB::expr('CAST(p.number as SIGNED)') );
 
     if ( $team_id )
-      $query->where('p.team', $team_id);
+      $query->where('p.team_id', $team_id);
 
     return $query->execute()->as_array();
   }
 
+	/**
+	 * 選手登録
+	 * @param array properties
+	 * - team_id
+	 * - name
+	 * - number
+	 * - username
+	 */
   public static function regist($props, $id = null)
   {
     try {
       $player = $id ? self::find($id) : self::forge();
 
       // 既に登録されたusernameかチェック
-      if ( $props['username'] and 
-           $props['username'] !== $player->username and
-           self::find_by_username($props['username']) )
-      {
-        throw new Exception('そのユーザーは既に他の選手に紐づいています');
-      }
+      if ( $props['username'] and $props['username'] !== $player->username )
+			{
+				$already = self::query()->where(array(
+					array('username', $props['username']),
+					array('team_id', $props['team_id']),
+				))->get();
 
-      // 背番号のダブリをチェック
-      if ( $props['number'] !== $player->number )
-      {
-        if ( self::query()
-              ->where('team', $props['team'])
-              ->where('number', $props['number'])
-              ->get_one() )
-        {
-          throw new Exception('その背番号は既に使われています');
-        }
-      }
+				if ( $already )
+      	{
+        	throw new Exception('そのユーザーは既に他の選手に紐づいています');
+      	}
+			}
   
       // 登録/更新
       $player->set($props);
@@ -159,4 +164,53 @@ class Model_Player extends \Orm\Model
 
     return $user['email'];
   }
+
+	/**
+	 * チームの管理者権限をもっているかどうか
+	 * @param string team_id
+	 *
+	 * @return boolean
+	 */
+	public static function has_team_admin($team_id)
+	{
+		$res = self::query()->where(array(
+			array('username', Auth::get_screen_name()),
+			array('team_id', $team_id)
+		))->get_one();
+
+		return $res and $res->role === 'admin';
+	}
+	
+	/**
+	 * player.roleを更新
+	 * @param string team_id
+	 * @param string player_id
+	 * @param string role
+	 *
+	 * @return boolean
+	 */
+	public static function update_role($team_id, $player_id, $role)
+	{
+		$player = self::find($player_id, array(
+			'where' => array(array('team_id', $team_id)),
+		));
+
+		if ( ! $player )
+		{
+			Log::error('選手が存在しません');
+			return false;
+		}
+
+		if ( ! in_array($role, array('user', 'admin')) )
+		{
+			Log::error('存在しないroleです');
+			return false;
+		}
+
+		// update
+		$player->role = $role;
+		$player->save();
+
+		return true;
+	}
 }

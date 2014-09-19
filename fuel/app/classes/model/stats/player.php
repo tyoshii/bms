@@ -28,28 +28,41 @@ class Model_Stats_Player extends \Orm\Model
 
   protected static $_belongs_to = array(
     'games' => array(
-      'model_to' => 'Model_Game',
-      'key_from' => 'game_id',
-      'key_to' => 'id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Game',
+      'key_from'       => 'game_id',
+      'key_to'         => 'id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
   );
 
-  public static function getStarter( $game_id, $team_id )
-  {
-    $query = DB::select()->from(array(self::$_table_name, 'player'));
+	public static function get_query($game_id, $team_id, $player_id = null)
+	{
+		$query = DB::select('*', 'p.player_id')->from(array('stats_players', 'p'));
 
-    $query->join('players', 'LEFT')->on('player.player_id', '=', 'players.id');
+		$query->where('p.game_id', $game_id);
+		$query->where('p.team_id', $team_id);
 
-    $query->where(array(
-      'player.game_id' => $game_id,
-      'player.team_id' => $team_id,
-    ));
+		if ( $player_id )
+		{
+			$query->where('p.player_id', $player_id);
+		}
 
-    $query->order_by('player.disp_order');
+		$query->order_by('p.disp_order');
 
-    $result = $query->execute()->as_array();
+    // players
+		$query->join(array('players', 'pl'), 'LEFT OUTER')
+			->on('p.player_id', '=', 'pl.id')
+			->and_on('p.team_id', '=', 'pl.team_id');
+
+		return $query;
+	}
+
+	public static function getStarter( $game_id, $team_id )
+	{
+		$query = self::get_query($game_id, $team_id);
+
+		$result = $query->execute()->as_array();
 
     foreach ( $result as $index => $res )
     {

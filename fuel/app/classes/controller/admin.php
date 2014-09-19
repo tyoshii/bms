@@ -147,7 +147,7 @@ class Controller_Admin extends Controller_Base
       $props = array(
         'name'     => Input::post('name'),
         'number'   => Input::post('number'),
-        'team'     => Input::post('team'),
+        'team_id'  => Input::post('team_id'),
         'username' => Input::post('username') ?: '',
       );
 
@@ -225,7 +225,7 @@ class Controller_Admin extends Controller_Base
       $props = array(
         'name'     => Input::post('name'),
         'number'   => Input::post('number'),
-        'team'     => Input::post('team'),
+        'team_id'  => Input::post('team_id'),
         'username' => Input::post('username') ?: '',
       );
 
@@ -365,7 +365,7 @@ class Controller_Admin extends Controller_Base
     // default value
     $form->field('name')->set_value($player->name);
     $form->field('number')->set_value($player->number);
-    $form->field('team')->set_value($player->team);
+    $form->field('team_id')->set_value($player->team_id);
     $form->field('submit')->set_value('更新');
     
     if ( Auth::has_access('admin.admin') )
@@ -501,7 +501,7 @@ class Controller_Admin extends Controller_Base
 
     $form->name()
          ->number()
-         ->team()
+         ->team_id()
          ->submit('登録');
 
     $form = $form->form;
@@ -512,11 +512,11 @@ class Controller_Admin extends Controller_Base
       $team_id   = Model_Player::get_my_team_id();
       $team_name = Model_Player::get_my_team_name();
 
-      $team = $form->field('team');
+      $team_field = $form->field('team_id');
 
-      $team->set_options(array($team_id => $team_name), '', true);
-      $team->set_value($team_id);
-      $team->add_rule('match_value', $team_id, true);
+      $team_field->set_options(array($team_id => $team_name), '', true);
+      $team_field->set_value($team_id);
+      $team_field->add_rule('match_value', $team_id, true);
     }
 
     // 紐付けユーザー(admin.adminのみ

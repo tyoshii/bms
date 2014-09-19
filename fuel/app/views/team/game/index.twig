@@ -1,0 +1,46 @@
+{% extends 'layout/team.twig' %}
+
+{% block main %}
+
+<h1>試合一覧</h1>
+
+{% for game in games %}
+
+{% if loop.first %}
+<table class="table">
+<thead>
+<tr>
+<th>日付</th>
+<th>対戦相手</th>
+<th>スコア</th>
+<th>勝敗</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+
+<tr>
+<td>{{ game.date }}</td>
+<td>{{ game.games_teams.opponent_team_name }}</td>
+<td>
+{% if game.games_teams.order == 'top' %}
+{{ game.tsum }} - {{ game.bsum }}
+{% else %}
+{{ game.bsum }} - {{ game.tsum }}
+{% endif %}
+</td>
+<td>{{ game.result }}</td>
+<td><a href="/team/{{ global.team.url_path }}/game/{{ game.id }}">詳細</a></td>
+
+{% if loop.last %}
+</tbody>
+</table>
+{% endif %}
+
+{% else %}
+<div class="alert alert-warning">
+まだ試合がありません。
+</div>
+{% endfor%}
+{% endblock main %}

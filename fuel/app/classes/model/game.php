@@ -11,10 +11,6 @@ class Model_Game extends \Orm\Model
     'memo' => array(
       'default' => '',
     ),
-		'team_top',
-		'team_top_name',
-		'team_bottom',
-		'team_bottom_name',
 		'game_status' => array(
       'default' => 0,
     ),
@@ -24,6 +20,11 @@ class Model_Game extends \Orm\Model
     'bottom_status' => array(
       'default' => 1,
     ),
+		// TODO:削除
+		'team_top'         => array('default' => 0),
+		'team_top_name'    => array('default' => 0),
+		'team_bottom'      => array('default' => 0),
+		'team_bottom_name' => array('default' => 0),
 		'created_at',
 		'updated_at',
 	);
@@ -41,26 +42,88 @@ class Model_Game extends \Orm\Model
 	protected static $_table_name = 'games';
 
   protected static $_has_many = array(
+		'games_teams' => array(
+      'model_to'       => 'Model_Games_Team',
+      'key_from'       => 'id',
+      'key_to'         => 'game_id',
+      'cascade_save'   => false,
+      'cascade_delete' => false,
+		),
     'games_runningscores' => array(
-      'model_to' => 'Model_Games_Runningscore',
-      'key_from' => 'id',
-      'key_to' => 'game_id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Games_Runningscore',
+      'key_from'       => 'id',
+      'key_to'         => 'game_id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
     'stats_players' => array(
-      'model_to' => 'Model_Stats_Player',
-      'key_from' => 'id',
-      'key_to' => 'game_id',
-      'cascade_save' => true,
+      'model_to'       => 'Model_Stats_Player',
+      'key_from'       => 'id',
+      'key_to'         => 'game_id',
+      'cascade_save'   => false,
       'cascade_delete' => false,
     ),
   );
 
+  public static function regist($posts)
+  {
+    try {
+      Mydb::begin();
+
+      // gamesテーブルへの保存
+      $game = self::forge(array(
+        'date'       => $posts['date'],
+        'start_time' => $posts['start_time'],
+        'stadium'    => $posts['stadium'],
+        'memo'       => $posts['memo'],
+      ));
+      $game->save();
+      
+      // games_runningscores
+      Model_Games_Runningscore::regist($game->id);
+
+      // games_teamsへの保存
+      // TODO : team_id / opponent_team_id / opponent_team_name のパラメータをPOSTしてもらう
+      if ( ! Model_Games_Team::regist($posts + array('game_id' => $game->id)) )
+      {
+        throw new Exception('新規ゲーム登録に失敗しました。');
+      }
+
+      // stats_players(starter)
+      Model_Stats_Player::createNewGame($game->id, $posts['team_id']);
+
+      // opponent_team_idがteamsに登録されているものであればこちらも登録
+      // TODO: conventionが実装されたら
+      if ( array_key_exists('opponent_team_id', $posts) )
+      {
+/*
+        // games_teamsへの保存
+        Model_Games_Team::regist(
+          $game->id,
+          $posts['opponent_team_id'],
+          $posts['team_id']
+        );
+  
+        // stats_players(starter)
+        Model_Stats_Player::createNewGame($game->id, $posts['opponent_team_id']);
+*/
+      }
+
+      Mydb::commit();
+			
+			return $game;
+
+    } catch ( Exception $e ) {
+      Mydb::rollback();
+      Log::error('内部処理エラー:'.$e->getMessage() );
+      return false;
+    }
+  }
+
   public static function createNewGame($data)
   {
     try {
-      DB::start_transaction();
+      Mydb::begin();
 
       // init
       // TODO: createNewGameの見直しのときに一緒に
@@ -90,10 +153,9 @@ class Model_Game extends \Orm\Model
       // - TODO なくしたい
       Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
   
-      DB::commit_transaction();
-
+      Mydb::commit();
     } catch ( Exception $e ) {
-      DB::rollback_transaction();
+      Mydb::rollback();
       Session::set_flash('error', '内部処理エラー:'.$e->getMessage() );
       return false;
     }
@@ -105,6 +167,9 @@ class Model_Game extends \Orm\Model
   {
     // base query
     $query = self::_get_info_query();
+
+		// 対戦相手
+		$query->related('games_teams');
 
     // 自分が出場している試合かどうかをサブクエリで取得する
     // defaultがleft joinなので、join_onに条件追加
@@ -139,6 +204,7 @@ class Model_Game extends \Orm\Model
 
       if ( $team_id = Model_Player::get_my_team_id() )
       {
+/*
         if ( $res['team_top'] == $team_id ) 
         {
           $result[$index]['own']    = 'top';
@@ -149,6 +215,7 @@ class Model_Game extends \Orm\Model
           $result[$index]['own']    = 'bottom';
           $result[$index]['status'] = $result[$index]['bottom_status'];
         }
+*/
       }
       
       // 試合結果を配列に付与
@@ -185,28 +252,49 @@ class Model_Game extends \Orm\Model
     return $result;
   }
 
-  public static function get_info_by_team($team_id = null)
+  public static function get_info_by_team_id($team_id = null)
   {
     if ( ! $team_id ) return array();
 
     // base query
     $query  = self::_get_info_query();
  
-    // add where : 先攻後攻どちらかがチームIDだったら
-    $query->where_open();
-    $query->or_where('team_top', $team_id);
-    $query->or_where('team_bottom', $team_id);
-    $query->where_close();
+		// related games_teams
+		$query->related('games_teams', array(
+			'where' => array(
+				array('team_id', '=', $team_id),
+			),
+		));
 
     $games = $query->get();
 
-    // scoreの合計を結果に
     foreach ( $games as $id => $game )
     {
+    	// scoreの合計を結果に
       $score = reset($game->games_runningscores);
-
+			$game->games_runningscores = $score;
       $game->tsum = $score->tsum;
       $game->bsum = $score->bsum;
+
+			// games_teams
+			$team = reset($game->games_teams);
+			$game->games_teams = $team;
+
+			// result
+			if ( $team->order === 'top' )
+			{
+				$my_score   = $score->tsum;
+				$oppo_score = $score->bsum;
+			}
+			else
+			{
+				$my_score   = $score->bsum;
+				$oppo_score = $score->tsum;
+			}
+
+			if ( $my_score === $oppo_score ) $game->result = '△';
+			if ( $my_score  >  $oppo_score ) $game->result = '○';
+			if ( $my_score  <  $oppo_score ) $game->result = '●';
     }
 
     return $games;
@@ -242,11 +330,14 @@ class Model_Game extends \Orm\Model
     // チームIDの指定がない
     if ( ! $team_id ) return null;
 
+		$games_teams = reset($game->games_teams);
+		if ( ! $games_teams ) return null;
+
     // 先攻 or 後攻
-    if ( $game->team_top == $team_id )
+    if ( $games_teams->order === 'top' )
       return $game->top_status;
 
-    if ( $game->team_bottom == $team_id )
+    if ( $games_teams->order === 'bottom' )
       return $game->bottom_status;
 
     // 該当なし
@@ -296,7 +387,7 @@ class Model_Game extends \Orm\Model
 
   public static function get_incomplete_gameids($player_id)
   {
-    $team_id = Model_Player::find($player_id)->team;
+    $team_id = Model_Player::find($player_id)->team_id;
     $play_game_ids = self::get_play_game($player_id);
 
     $alert_games = array();

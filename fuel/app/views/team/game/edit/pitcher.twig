@@ -1,0 +1,116 @@
+{% extends "layout/team/game/edit.twig" %}
+
+{% block content %}
+
+{# header #}
+{{ parent() }}
+
+
+{% for pitcher in pitchers %}
+
+{% if loop.first %}
+<table id="pitcher" class="table">
+<thead>
+<tr>
+<th class="name">名前</th>
+<th class="number">＃</th>
+<th class="result">勝敗</th>
+<th class="IP" colspan="2">投球回</th>
+<th class="H">被安打</th>
+<th class="SO">奪三振</th>
+<th class="BB">四球</th>
+<th class="HB">死球</th>
+<th class="ER">自責点</th>
+<th class="R">失点</th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+
+{% set already = [] %}
+
+<tr>
+<td class="name">
+<span>{{pitcher.name}}</span>
+<data class="disable" data-type="player-id">{{pitcher.player_id}}</data>
+</td>
+<td class="number">{{pitcher.number}}</td>
+
+{# 勝敗 #}
+<td class="result">
+<select class="result">
+<option value="">--</option>
+<option value="win"  {%if pitcher.W   %}selected{%endif%}>勝</option>
+<option value="lose" {%if pitcher.L   %}selected{%endif%}>負</option>
+<option value="save" {%if pitcher.SV  %}selected{%endif%}>Ｓ</option>
+<option value="hold" {%if pitcher.HLD %}selected{%endif%}>Ｈ</option>
+</select>
+</td>
+
+{# 投球回 #}
+<td class="IP">
+<input class="IP" min="0" type="number" value="{{pitcher.IP|default(0)}}">
+</td>
+
+{# 投球回 0/3 1/3 2/3 #}
+<td class="IP_frac">
+<select class="IP IP_frac">
+<option value="0">--</option>
+<option value="0/3" {%if pitcher.IP_frac == '0/3'%}selected{%endif%}>0/3</option>
+<option value="1/3" {%if pitcher.IP_frac == '1/3'%}selected{%endif%}>1/3</option>
+<option value="2/3" {%if pitcher.IP_frac == '2/3'%}selected{%endif%}>2/3</option>
+</select>
+</td>
+
+{# 被安打 #}
+<td class="H">
+<input class="H" type="number" min="0" value="{{pitcher.H|default(0)}}">
+</td>
+
+{# 奪三振 #}
+<td class="SO">
+<input class="SO" type="number" min="0" value="{{pitcher.SO|default(0)}}">
+</td>
+
+{# 与四死球 #}
+<td class="BB">
+<input class="BB" type="number" min="0" value="{{pitcher.BB|default(0)}}">
+</td>
+<td class="HB">
+<input class="HB" type="number" min="0" value="{{pitcher.HB|default(0)}}">
+</td>
+
+{# 自責点 #}
+<td class="ER">
+<input class="ER" type="number" min="0" value="{{pitcher.ER|default(0)}}">
+</td>
+
+{# 失点 #}
+<td class="R">
+<input class="R" type="number" min="0" value="{{pitcher.R|default(0)}}">
+</td>
+</tr>
+
+{% if loop.last %}
+</tbody>
+</table>
+
+{%if game_status == 2%}
+<div class="alert alert-success">
+成績入力を完了している試合です。
+</div>
+{%else%}
+<button class="btn btn-default" onClick="post_pitcher(true);">保存</button>
+<button class="btn btn-success" onClick="post_pitcher(true, true);">完了</button>
+{%endif%}
+
+{% endif %}
+
+{# for player in pitchers #}
+{% else %}
+<div class="alert alert-warning">
+<p>成績入力する情報がありません。</p>
+</div>
+{% endfor %}
+
+{% endblock content %}

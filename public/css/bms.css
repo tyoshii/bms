@@ -1,5 +1,6 @@
 html,
 body {
+	overflow-x: hidden;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -174,4 +175,7 @@ table#batter td.E input {
 }
 .red {
   color: red;
+}
+.min-width-100 {
+	min-width: 100px;
 }

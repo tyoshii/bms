@@ -6,3 +6,17 @@
 {{form}}
 
 {% endblock main %}
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+//datepicker
+$('input.form-datepicker').each(function() {
+  $self = $(this);
+  $self.datepicker().on('changeDate', function(ev) {
+    $self.datepicker('hide');
+  });
+});
+</script>
+{% endblock js %}

@@ -2,100 +2,102 @@
 
 class Controller_Team_Config extends Controller_Team
 {
-  public function before()
-  {
-    parent::before();
-  }
+	public function before()
+	{
+		parent::before();
+	}
 
-  /**
-   * 設定アクション
-   */
-  public function action_index()
-  {
-    $kind = $this->param('kind');
+	/**
+	 * 設定アクション
+	 */
+	public function action_index()
+	{
+		$kind = $this->param('kind');
 
-    // 特定のconfigはチーム管理者専門
-    if (in_array($kind, array('info', 'player', 'delete')))
-    {
-      if (!$this->_team_admin)
-      {
-        Session::get_flash('error', '権限がありません');
-        return Response::forge('/team/' . $this->_team->url_path);
-      }
-    }
+		// 特定のconfigはチーム管理者専門
+		if ( in_array($kind, array('info', 'player', 'delete')) )
+		{
+			if ( ! $this->_team_admin )
+			{
+				Session::get_flash('error', '権限がありません');
+				return Response::forge('/team/'.$this->_team->url_path);
+			}
+		}
 
-    // profile編集はチーム参加者本人とチーム管理者のみ
-    if ($kind === 'profile')
-    {
-      if (!$this->_player and !$this->_team_admin)
-      {
-        Session::get_flash('error', '権限がありません');
-        return Response::forge('/team/' . $this->_team->url_path);
-      }
-    }
+		// profile編集はチーム参加者本人とチーム管理者のみ
+		if ( $kind === 'profile' or $kind === 'leave' )
+		{
+			if ( ! $this->_player and ! $this->_team_admin )
+			{
+				Session::get_flash('error', '権限がありません');
+				return Response::forge('/team/'.$this->_team->url_path);
+			}
+		}
 
-    // action
-    $action = 'action_' . $kind;
-    return $this->$action();
-  }
+		// action
+		$action = 'action_'.$kind;
+		return $this->$action();
+	}
 
-  /**
-   * チーム基本情報の設定
-   */
-  public function action_info()
-  {
-    $view = View::forge('team/config/info.twig');
+	/**
+	 * チーム基本情報の設定
+	 */
+	public function action_info()
+	{
+		$view = View::forge('team/config/info.twig');
 
-    // Fieldset
-    $config = array('form_attribute' => array('class' => 'form'));
-    $form = Fieldset::forge('team_config_info', $config);
+		// Fieldset
+		$config = array('form_attribute' => array('class' => 'form'));
+		$form   = Fieldset::forge('team_config_info', $config);
 
-    // add_model
-    $form->add_model(Model_Team::forge());
+		// add_model
+		$form->add_model(Model_Team::forge());
 
-    // set value
-    $form->field('name')->set_value($this->_team->name);
-    $form->field('url_path')->set_value($this->_team->url_path);
+		// set value
+		$form->field('name')->set_value($this->_team->name);
+		$form->field('url_path')->set_value($this->_team->url_path);
 
-    // hidden url_path
-    $form->field('url_path')->set_type('hidden');
+		// hidden url_path
+		$form->field('url_path')->set_type('hidden');
 
-    // add submit
-    $form->add('submit', '', array(
-        'type'  => 'submit',
-        'value' => '更新',
-        'class' => 'btn btn-success',
-    ));
+		// add submit
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
 
-    // 更新処理
-    if (Input::post())
-    {
-      $val = $form->validation();
+		// 更新処理
+		if ( Input::post() )
+		{
+			$val = $form->validation();
 
-      if ($val->run())
-      {
-        // 今はチーム名だけ編集可能
-        $this->_team->name = Input::post('name');
-        $this->_team->save();
+			if ( $val->run() )
+			{
+				// 今はチーム名だけ編集可能
+				$this->_team->name = Input::post('name');
+				$this->_team->save();
 
-        Session::set_flash('info', 'チーム情報を更新しました');
-        return Response::redirect(Uri::current());
-      } else
-      {
-        Session::set_flash('error', $val->show_errors());
-      }
+				Session::set_flash('info', 'チーム情報を更新しました');
+				return Response::redirect(Uri::current());
+			}
+			else
+			{
+				Session::set_flash('error', $val->show_errors());
+			}
 
-      $form->repopulate();
-    }
+			$form->repopulate();
+		}
 
-    // set view
-    $view->set_safe('form', $form->build());
+		// set view
+		$view->set_safe('form', $form->build());
 
-    return Response::forge($view);
-  }
+		return Response::forge($view);
+	}
 
-  /**
-   * 選手管理（今使ってない
+	/**
+	 * 選手管理（今使ってない
+>>>>>>> staging
    */
   public function action_player()
   {
@@ -137,18 +139,30 @@ class Controller_Team_Config extends Controller_Team
     return Response::forge($view);
   }
 
-  /**
-   * チーム削除
-   */
-  public function action_delete()
-  {
-    $view = View::forge('team/config/delete.twig');
-    return Response::forge($view);
-  }
+	/**
+	 * チーム削除
+	 */
+	public function action_delete()
+	{
+		$view = View::forge('team/config/delete.twig');
+		return Response::forge($view);
+	}
 
-  public function action_profile()
-  {
-    $view = View::forge('team/config/profile.twig');
-    return Response::forge($view);
-  }
+	/**
+	 * プロフィール編集
+	 */
+	public function action_profile()
+	{
+		$view = View::forge('team/config/profile.twig');
+		return Response::forge($view);
+	}
+	
+	/**
+	 * チーム脱退
+	 */
+	public function action_leave()
+	{
+		$view = View::forge('team/config/leave.twig');
+		return Response::forge($view);
+	}
 }

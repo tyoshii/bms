@@ -24,9 +24,19 @@ abstract class Test_Base extends \TestCase
     return $prop->getValue($orig);
   }
 
-  public function assertRedirect($res, $location, $code = 302)
-  {
-    $this->assertSame($code, $res->status);
-    $this->assertSame($location, $res->headers['Location']);
-  }
+	public function assertRedirect($res, $location, $code = 302)
+	{
+		$this->assertSame($code, $res->status);
+		$this->assertSame($location, $res->headers['Location']);
+	}
+
+	public function assertException($func)
+	{
+		try {
+			$func();
+			$this->assertTrue(false);
+		} catch ( Exception $e ) {
+			$this->assertTrue(true);
+		}
+	}
 }

@@ -78,7 +78,6 @@ Switching each env :
       {%block li_team %}<li>{%endblock%}<a href="/team">チーム一覧</a></li>
 {% if auth_has_access('moderator.moderator') %}
       {%block li_game %}<li>{%endblock%}<a href="/game">試合一覧</a></li>
-      {%block li_score%}<li>{%endblock%}<a href="/score">成績</a></li>
 {% endif %}
 <!--
       <li class="dropdown">
@@ -110,7 +109,7 @@ Switching each env :
     <ul class="nav navbar-nav navbar-right">
       {% if auth_check() %}
         <li><a href="/user/info"><img id="user-icon" src="{{usericon}}" height="32" width="32"></a></li>
-        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;ログアウト</a></li>
 			{% else %}
 				<li><a href="/login?url={{ current_url() }}">ログイン</a></li>
       {% endif %}

@@ -8,18 +8,10 @@ class Controller_Top extends Controller_Base
 
     if (Auth::check())
     {
-      // 所属チーム
-      $view->teams = Model_Team::get_belong_team();
-
-      if ($player = Model_Player::find_by_username(Auth::get_screen_name()))
-      {
-        // アラート
-        $view->alert_games = Model_Game::get_incomplete_gameids($player->id);
-      } else
-      {
-        $view->no_belong_team = true;
-      }
-    } else
+			// 所属チーム
+			$view->teams = Model_Team::get_belong_team();
+    }
+    else
     {
       Auth::logout();
       $this->_login_form->repopulate();

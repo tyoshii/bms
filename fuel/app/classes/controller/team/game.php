@@ -40,187 +40,197 @@ class Controller_Team_Game extends Controller_Team
     return Response::forge($view);
   }
 
-  public function action_add()
-  {
-    $view = View::forge('team/game/add.twig');
+	public function action_add()
+	{
+		$view = View::forge('team/game/add.twig');
 
-    $form = self::_addgame_form();
+		$form = self::_addgame_form();
 
-    if (Input::post())
-    {
-      $val = $form->validation();
-      if ($val->run())
-      {
-        $props = Input::post() + array('team_id' => $this->_team->id);
-        if (Model_Game::regist($props))
-        {
-          Session::set_flash('info', '新規ゲームを追加しました');
-          return Response::redirect('team/' . $this->_team->url_path);
-        } else
-        {
-          Session::set_flash('error', 'システムエラーが発生しました。');
-        }
-      } else
-      {
-        Session::set_flash('error', $val->show_errors());
-      }
+		if ( Input::post() )
+		{
+			$val = $form->validation();
+			if ( $val->run() )
+			{
+				$props = Input::post() + array('team_id' => $this->_team->id);
+				if ( Model_Game::regist($props) )
+				{
+					Session::set_flash('info', '新規ゲームを追加しました');
+					return Response::redirect('team/'.$this->_team->url_path); 
+				}
+				else
+				{
+					Session::set_flash('error', 'システムエラーが発生しました。');
+				}
+			}
+			else
+			{
+				Session::set_flash('error', $val->show_errors());
+			}
 
-      $form->repopulate();
-    }
+			$form->repopulate();
+		}
 
-    $view->set_safe('form', $form->build());
+		$view->set_safe('form', $form->build());
 
-    return Response::forge($view);
-  }
+		return Response::forge($view);
+	}
 
-  public function action_detail()
-  {
-    $view = View::forge('team/game/detail.twig');
+	public function action_detail()
+	{
+		$view = View::forge('team/game/detail.twig');
 
-    // チーム情報
-    $games_teams = reset($this->_game->games_teams);
+		// チーム情報
+		$games_teams = reset($this->_game->games_teams);
 
-    if ($games_teams->order === 'top')
-    {
-      $view->team_top = $this->_team->name;
-      $view->team_bottom = $games_teams->opponent_team_name;
-    } else
-    {
-      $view->team_top = $games_teams->opponent_team_name;
-      $view->team_bottom = $this->_team->name;
-    }
+		if ( $games_teams->order === 'top' )
+		{
+			$view->team_top    = $this->_team->name;
+			$view->team_bottom = $games_teams->opponent_team_name;
+		}
+		else
+		{
+			$view->team_top    = $games_teams->opponent_team_name;
+			$view->team_bottom = $this->_team->name;
+		}
 
-    $view->score = reset($this->_game->games_runningscores);
-    $view->stats = array(
-        'player'   => Model_Stats_Player::getStarter($this->_game->id, $this->_team->id),
-        'hitting'  => Model_Stats_Hitting::get_stats($this->_game->id, $this->_team->id),
-        'pitching' => Model_Stats_Pitching::get_stats($this->_game->id, $this->_team->id),
-    );
+		$view->score = reset($this->_game->games_runningscores);
+		$view->stats = array(
+			'hitting' => array(
+				'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => Model_Stats_Hitting::get_stats_total($this->_game->id, $this->_team->id),
+			),
+			'pitching' => array(
+				'players' => Model_Stats_Pitching::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => array(),
+			),
+		);
 
-    return Response::forge($view);
-  }
+		return Response::forge($view);
+	}
 
-  public function action_edit()
-  {
-    $game_id = $this->_game->id;
-    $team_id = $this->_team->id;
-    $kind = $this->param('kind');
-    $type = Input::get('type');
+	public function action_edit()
+	{
+		$game_id = $this->_game->id;
+		$team_id = $this->_team->id;
+		$kind    = $this->param('kind');
+		$type    = Input::get('type');
 
-    // playerが捕れない場合はログインさせる
-    if (!$this->_player)
-    {
-      return Response::redirect('/login?url=' . Uri::current());
-    }
+		// playerが捕れない場合はログインさせる
+		if ( ! $this->_player )
+		{
+			return Response::redirect('/login?url='.Uri::current());
+		}
 
-    // kind validation
-    if (!in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher')))
-    {
-      Session::set_flash('error', '不正なURLです。');
-      return Response::redirect($this->_team->href);
-    }
+		// kind validation
+		if ( ! in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher')) )
+		{
+			Session::set_flash('error', '不正なURLです。');
+			return Response::redirect($this->_team->href);
+		}
 
-    // team_admin 権限チェック
-    if (in_array($kind, array('score', 'player', 'other')) and !$this->_team_admin)
-    {
-      Session::set_flash('error', '権限がありません。');
-      return Response::redirect($this->_game->href);
-    }
-    if ($type === 'all' and !$this->_team_admin)
-    {
-      Session::set_flash('error', '権限がありません。');
-      return Response::redirect($this->_game->href);
-    }
+		// team_admin 権限チェック
+		if ( in_array($kind, array('score', 'player', 'other')) and ! $this->_team_admin )
+		{
+			Session::set_flash('error', '権限がありません。');
+			return Response::redirect($this->_game->href);
+		}
+		if ( $type === 'all' and ! $this->_team_admin )
+		{
+			Session::set_flash('error', '権限がありません。');
+			return Response::redirect($this->_game->href);
+		}
 
-    // view load
-    $view = Theme::instance()->view('team/game/edit/' . $kind . '.twig');
+		// view load
+		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
+		
+		// 出場選手
+		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
 
-    // 出場選手
-    $view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
+		// stats data
+		switch ( $kind )
+		{
+			case 'score':
+				// award
+				$view->awards = Model_Stats_Award::find_by_game_id($this->_game->id);
 
-    // stats data
-    switch ($kind)
-    {
-      case 'score':
-        // award
-        $view->awards = Model_Stats_Award::find_by_game_id($this->_game->id);
+				// score
+				$score = reset($this->_game->games_runningscores);
 
-        // score
-        $score = reset($this->_game->games_runningscores);
+				// 初回は必ず必要
+				$view->scores = array( array(
+					'top'    => $score->t1,
+					'bottom' => $score->b1,
+				) );
 
-        // 初回は必ず必要
-        $view->scores = array(array(
-            'top'    => $score->t1,
-            'bottom' => $score->b1,
-        ));
+				// ２回以降
+				for ( $i = 2; $i <=18; $i++ )
+				{
+					if ( $score['t'.$i] === null and $score['b'.$i] === null )
+						break;
 
-        // ２回以降
-        for ($i = 2; $i <= 18; $i++)
-        {
-          if ($score['t' . $i] === null and $score['b' . $i] === null)
-            break;
+					$view->scores[] = array(
+						'top'    => $score['t'.$i],
+						'bottom' => $score['b'.$i],
+					);
+				}
 
-          $view->scores[] = array(
-              'top'    => $score['t' . $i],
-              'bottom' => $score['b' . $i],
-          );
-        }
+				// 合計
+				$this->_game->tsum = $score->tsum;
+				$this->_game->bsum = $score->bsum;
 
-        // 合計
-        $this->_game->tsum = $score->tsum;
-        $this->_game->bsum = $score->bsum;
+			break;
 
-        break;
+			case 'player':
+			break;
+			case 'other':
+			break;
+			case 'batter':
+				// 出場選手と成績
+				if ( $type === 'all' )
+				{
+					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
+															$game_id, $team_id);
+				}
+				else
+				{
+					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
+															$game_id, $team_id, $this->_player->id);
+				}
 
-      case 'player':
-        break;
-      case 'other':
-        break;
-      case 'batter':
-        // 出場選手と成績
-        if ($type === 'all')
-        {
-          $view->batters = Model_Stats_Hitting::get_stats_by_playeds(
-              $game_id, $team_id);
-        } else
-        {
-          $view->batters = Model_Stats_Hitting::get_stats_by_playeds(
-              $game_id, $team_id, $this->_player->id);
-        }
+				// 打席結果一覧
+				$view->results = Model_Batter_Result::getAll();
 
-        // 打席結果一覧
-        $view->results = Model_Batter_Result::getAll();
+			break;
+			case 'pitcher':
+				// 出場選手と成績
+				if ( $type === 'all' )
+				{
+					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
+																$game_id, $team_id);
+				}
+				else
+				{
+					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
+																$game_id, $team_id, $this->_player->id);
+				}
 
-        break;
-      case 'pitcher':
-        // 出場選手と成績
-        if ($type === 'all')
-        {
-          $view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
-              $game_id, $team_id);
-        } else
-        {
-          $view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
-              $game_id, $team_id, $this->_player->id);
-        }
+			break;
+			default:
+			break;
+		}
 
-        break;
-      default:
-        break;
-    }
+		// 所属選手
+		$view->players = Model_Player::get_players($team_id);
 
-    // 所属選手
-    $view->players = Model_Player::get_players($team_id);
+		// 対戦相手
+		$view->games_teams = reset($this->_game->games_teams);
 
-    // 対戦相手
-    $view->games_teams = reset($this->_game->games_teams);
+		// game_status
+		// TODO: input_status に切り替える
+		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
 
-    // game_status
-    // TODO: input_status に切り替える
-    $view->game_status = Model_Game::get_game_status($game_id, $team_id);
-
-    return Response::forge($view);
-  }
+		return Response::forge($view);
+	}
 
   static private function _addgame_form()
   {

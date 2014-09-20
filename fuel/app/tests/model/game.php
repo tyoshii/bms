@@ -32,7 +32,7 @@ class Test_Model_Game extends \Test_Model_Base
   {
     $games = Model_Game::get_info();
 
-    foreach ( $games as $game_id => $game )
+    foreach ($games as $game_id => $game)
     {
       // returnの型
       $this->assertSame('Model_Game', get_class($game));
@@ -72,11 +72,11 @@ class Test_Model_Game extends \Test_Model_Base
 
     $this->assertTrue(is_array($games));
 
-		// チーム情報が$idであること
-		foreach ( $games as $game )
-		{
-			$games_teams = $game->games_teams;
-			$this->assertSame($games_teams->team_id, $id);
-		}
+    // チーム情報が$idであること
+    foreach ($games as $game)
+    {
+      $games_teams = $game->games_teams;
+      $this->assertSame($games_teams->team_id, $id);
+    }
   }
 }

@@ -6,7 +6,7 @@ class Mydb
 
   public static function begin()
   {
-    if ( DB::in_transaction() )
+    if (DB::in_transaction())
     {
       self::$_already = true;
       return false;
@@ -17,13 +17,13 @@ class Mydb
 
   public static function commit()
   {
-    if ( self::$_already )
+    if (self::$_already)
     {
       self::$_already = false;
       return false;
     }
 
-    if ( DB::in_transaction() )
+    if (DB::in_transaction())
       return DB::commit_transaction();
 
     return false;
@@ -31,13 +31,13 @@ class Mydb
 
   public static function rollback()
   {
-    if ( self::$_already )
+    if (self::$_already)
     {
       self::$_already = false;
       return false;
     }
 
-    if ( DB::in_transaction() )
+    if (DB::in_transaction())
       return DB::rollback_transaction();
 
     return false;

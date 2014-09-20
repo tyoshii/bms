@@ -13,6 +13,7 @@ class Test_Controller_Base extends Test_Base
   {
     parent::setUp();
   }
+
   protected function tearDown()
   {
     parent::tearDown();
@@ -27,7 +28,7 @@ class Test_Controller_Base extends Test_Base
 
     $this->assertSame(Fuel::$env, $res->body->env);
     $this->assertSame(Common::get_usericon_url(), $res->body->usericon);
-  } 
+  }
 
   /**
    *
@@ -37,7 +38,7 @@ class Test_Controller_Base extends Test_Base
     $res = Request::forge('/')->execute()->response();
 
     $this->assertFalse(Auth::check());
-  } 
+  }
 
   /**
    *
@@ -46,7 +47,7 @@ class Test_Controller_Base extends Test_Base
   {
     $id = Model_User::find('first')->id;
     Auth::force_login($id);
-    
+
     $res = Request::forge('/')->execute()->response();
 
     $this->assertTrue(Auth::check());
@@ -68,34 +69,35 @@ class Test_Controller_Base extends Test_Base
     $this->assertSame('ログインに失敗しました', Session::get_flash('error'));
   }
 
-  /**
-   *
-   */
-  public function test_ログインに成功したらトップページへリダイレクト()
-  {
-    InputEx::reset();
+/**
+ *
+ */
+public
+function test_ログインに成功したらトップページへリダイレクト()
+{
+  InputEx::reset();
 
-    // create user for test
-    $rand = rand(1000,9999).rand(1000,9999);
-    $username = 'test_'.$rand;
-    $password = $rand;
-    $email    = $rand.'@yahoo.co.jp';
+  // create user for test
+  $rand = rand(1000, 9999) . rand(1000, 9999);
+  $username = 'test_' . $rand;
+  $password = $rand;
+  $email = $rand . '@yahoo.co.jp';
 
-    Auth::create_user($username, $password, $email);
+  Auth::create_user($username, $password, $email);
 
-    // login
-    $_POST['username'] = $username;
-    $_POST['password'] = $password;
+  // login
+  $_POST['username'] = $username;
+  $_POST['password'] = $password;
 
-    $res = Request::forge('/')->set_method('POST')->execute()->response();
-    
-    $this->assertTrue(Auth::check());
-    $this->assertSame('ログインに成功しました！', Session::get_flash('info'));
+  $res = Request::forge('/')->set_method('POST')->execute()->response();
 
-    // logout
-    Auth::logout();
+  $this->assertTrue(Auth::check());
+  $this->assertSame('ログインに成功しました！', Session::get_flash('info'));
 
-    // delete user
-    Auth::delete_user($username);
-  }
+  // logout
+  Auth::logout();
+
+  // delete user
+  Auth::delete_user($username);
+}
 }

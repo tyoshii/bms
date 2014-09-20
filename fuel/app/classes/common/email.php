@@ -23,9 +23,9 @@ __FOOTER__;
     $email->from('no-reply@bm-s.info');
     $email->to($to);
 
-    $email->subject(self::$_subject_header.$subject);
+    $email->subject(self::$_subject_header . $subject);
 
-    $email->body(self::$_body_header.$body.self::$_body_footer);
+    $email->body(self::$_body_header . $body . self::$_body_footer);
 
     $email->send();
   }
@@ -45,18 +45,18 @@ $username 様
 
 {$url}reset_password/?u={$username}&t={$time}&c={$crypt}
 __BODY__;
-    
+
     self::sendmail($email, $subject, $body);
   }
 
   public static function remind_game_stats($player_id, $paths)
   {
-    $name  = Model_Player::find($player_id)->name;
+    $name = Model_Player::find($player_id)->name;
     $email = Model_Player::get_player_email($player_id);
-    if ( ! $email )
+    if ( ! $email)
       return false;
 
-    $subject = '成績入力のお願い'; 
+    $subject = '成績入力のお願い';
     $body = <<<__BODY__
 
 {$name} さん
@@ -67,9 +67,9 @@ __BODY__;
 __BODY__;
 
     $url = Uri::base(false);
-    foreach ( $paths as $path )
+    foreach ($paths as $path)
     {
-      $body .= $url.$path."\n";
+      $body .= $url . $path . "\n";
     }
 
     self::sendmail($email, $subject, $body);

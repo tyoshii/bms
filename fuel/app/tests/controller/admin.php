@@ -12,7 +12,7 @@ class Test_Controller_Admin extends \TestCase
   protected function setUp()
   {
     parent::setUp();
-    
+
     // login
     $id = Model_User::find_by_username('admin')->id;
     Auth::force_login($id);
@@ -64,45 +64,45 @@ class Test_Controller_Admin extends \TestCase
   private function _assert_admin_header($html)
   {
     $matcher = array(
-      'tag'        => 'div',
-      'attributes' => array('class' => 'page-header'),
+        'tag'        => 'div',
+        'attributes' => array('class' => 'page-header'),
     );
     $this->assertTag($matcher, $html);
-    
+
     $matcher = array(
-      'tag'        => 'ul',
-      'attributes' => array('class' => 'nav nav-pills'),
-      'children'   => array(
-        'count' => 3,
-        'only'  => array('tag' => 'li'),
-      ),
+        'tag'        => 'ul',
+        'attributes' => array('class' => 'nav nav-pills'),
+        'children'   => array(
+            'count' => 3,
+            'only'  => array('tag' => 'li'),
+        ),
     );
     $this->assertTag($matcher, $html);
-    
+
     $matcher = array(
-      'tag'   => 'li',
-      'child' => array(
-        'tag' => 'a',
-        'attributes' => array('href' => '/admin/user'),
-      ),
-    );
-    $this->asserttag($matcher, $html);
-    
-    $matcher = array(
-      'tag'   => 'li',
-      'child' => array(
-        'tag' => 'a',
-        'attributes' => array('href' => '/admin/player'),
-      ),
+        'tag'   => 'li',
+        'child' => array(
+            'tag'        => 'a',
+            'attributes' => array('href' => '/admin/user'),
+        ),
     );
     $this->asserttag($matcher, $html);
 
     $matcher = array(
-      'tag'   => 'li',
-      'child' => array(
-        'tag' => 'a',
-        'attributes' => array('href' => '/admin/team'),
-      ),
+        'tag'   => 'li',
+        'child' => array(
+            'tag'        => 'a',
+            'attributes' => array('href' => '/admin/player'),
+        ),
+    );
+    $this->asserttag($matcher, $html);
+
+    $matcher = array(
+        'tag'   => 'li',
+        'child' => array(
+            'tag'        => 'a',
+            'attributes' => array('href' => '/admin/team'),
+        ),
     );
     $this->asserttag($matcher, $html);
   }

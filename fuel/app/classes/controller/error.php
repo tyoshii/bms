@@ -18,6 +18,6 @@ class Controller_Error extends Controller
    */
   public function action_error404()
   {
-    return Response::forge(View::forge('errors/index.twig'), 404);    
+    return Response::forge(View::forge('errors/index.twig'), 404);
   }
 }

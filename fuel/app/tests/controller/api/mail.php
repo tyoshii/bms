@@ -13,6 +13,7 @@ class Test_Controller_Api_Mail extends Test_Base
   {
     parent::setUp();
   }
+
   protected function tearDown()
   {
     parent::tearDown();
@@ -24,6 +25,6 @@ class Test_Controller_Api_Mail extends Test_Base
   public function test_未ログイン状態で権限なしテスト()
   {
     $res = Request::forge('/api/mail/remind')->set_method('post')->execute()->response();
-		$this->assertRedirect($res, 'error/403');
+    $this->assertRedirect($res, 'error/403');
   }
 }

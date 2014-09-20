@@ -10,9 +10,9 @@
  * @link        http://fuelphp.com
  */
 
-return array (
-  'crypto_key' => 'crypto_key_value',
-  'crypto_iv' => 'crypto_iv_value',
-  'crypto_hmac' => 'crypto_hmac',
+return array(
+    'crypto_key'  => 'crypto_key_value',
+    'crypto_iv'   => 'crypto_iv_value',
+    'crypto_hmac' => 'crypto_hmac',
 );
 

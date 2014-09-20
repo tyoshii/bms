@@ -5,36 +5,38 @@ namespace Fuel\Tasks;
 class Sendmail
 {
 
-	/**
-	 * This method gets ran when a valid method name is not used in the command.
-	 *
-	 * Usage (from command line):
-	 *
-	 * php oil r sendmail
-	 *
-	 * @return string
-	 */
-	public function run($args = NULL)
-	{
-		echo "\n===========================================";
-		echo "\nRunning DEFAULT task [Sendmail:Run]";
-		echo "\n-------------------------------------------\n\n";
+  /**
+   * This method gets ran when a valid method name is not used in the command.
+   *
+   * Usage (from command line):
+   *
+   * php oil r sendmail
+   *
+   * @param null $args
+   *
+   * @return string
+   */
+  public function run($args = NULL)
+  {
+    echo "\n===========================================";
+    echo "\nRunning DEFAULT task [Sendmail:Run]";
+    echo "\n-------------------------------------------\n\n";
 
-		/***************************
-		 Put in TASK DETAILS HERE
-		 **************************/
-	}
+    /***************************
+     * Put in TASK DETAILS HERE
+     **************************/
+  }
 
-	public function test($to = false)
-	{
-		echo "\n===========================================";
-		echo "\nRunning task [Sendmail:test]";
-		echo "\n-------------------------------------------\n\n";
+  public function test($to = false)
+  {
+    echo "\n===========================================";
+    echo "\nRunning task [Sendmail:test]";
+    echo "\n-------------------------------------------\n\n";
 
-		/***************************
-		 Put in TASK DETAILS HERE
-		 **************************/
-    if ( ! $to )
+    /***************************
+     * Put in TASK DETAILS HERE
+     **************************/
+    if ( ! $to)
       die('第一引数にテストメール送信先を指定してください');
 
     $email = \Email::forge();
@@ -42,7 +44,7 @@ class Sendmail
     $email->to($to);
 
     $email->subject('bm-s.infoからのテストメール');
-$body = <<<__BODY__
+    $body = <<<__BODY__
 ※このメールはシステムから自動的に送信されています。
 
 BMS - Baseball Management System
@@ -64,23 +66,22 @@ http://bm-s.info
 __BODY__;
     $email->body($body);
 
-    try {
+    try
+    {
       $email->send();
-    }
-catch(\EmailValidationFailedException $e)
-{
+    } catch (\EmailValidationFailedException $e)
+    {
       echo "hoge";
       echo $e->getMessage();
-}
-catch(\EmailSendingFailedException $e)
-{
-  
+    } catch (\EmailSendingFailedException $e)
+    {
+
       echo "hoge";
       echo $e->getMessage();
     }
 
     echo "メール送信テスト完了";
-	}
+  }
 
 }
 /* End of file tasks/sendmail.php */

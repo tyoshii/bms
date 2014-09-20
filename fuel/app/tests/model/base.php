@@ -5,7 +5,7 @@ abstract class Test_Model_Base extends Test_Base
   public function assertSchema($class_name = null)
   {
     // class_nameの自動取得
-    if ( is_null($class_name) )
+    if (is_null($class_name))
     {
       $class_name = str_replace('Test_', '', get_class($this));
     }
@@ -29,17 +29,16 @@ abstract class Test_Model_Base extends Test_Base
   private static function _trim_props($props)
   {
     $return = array();
-    foreach ( $props as $key => $val )
+    foreach ($props as $key => $val)
     {
-      if ( is_array($val) )
+      if (is_array($val))
       {
         $return[] = $key;
-      }
-      else
+      } else
       {
         $return[] = $val;
       }
-    } 
+    }
 
     return $return;
   }
@@ -47,11 +46,11 @@ abstract class Test_Model_Base extends Test_Base
   private static function _get_columns_from_db($table)
   {
     $result = \Database_Connection::instance()
-                ->query(\DB::SELECT, "desc {$table}", false)
-                ->as_array();
+        ->query(\DB::SELECT, "desc {$table}", false)
+        ->as_array();
 
     $return = array();
-    foreach ( $result as $res )
+    foreach ($result as $res)
       $return[] = $res['Field'];
 
     return $return;

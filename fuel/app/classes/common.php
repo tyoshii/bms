@@ -2,14 +2,14 @@
 
 class Common
 {
-  public static function db_clean( $table, $where )
+  public static function db_clean($table, $where)
   {
     $query = DB::delete($table);
 
-    if ( $where )
+    if ($where)
       $query->where($where);
 
-    $query->execute(); 
+    $query->execute();
   }
 
   public static function debug($v)
@@ -22,7 +22,7 @@ class Common
   public static function redirect($uri)
   {
     $redirect_to = Session::get('redirect_to');
-    if ( ! $redirect_to )
+    if ( ! $redirect_to)
       $redirect_to = $uri ? $uri : Uri::current();
 
     Response::redirect(Uri::create($redirect));
@@ -32,7 +32,7 @@ class Common
   {
     $info = Auth::get_profile_fields();
     $name = isset($info['dispname']) ? $info['dispname']
-                                     : Auth::get_screen_name();
+        : Auth::get_screen_name();
 
     return $name;
   }
@@ -41,7 +41,7 @@ class Common
   {
     $info = Auth::get_profile_fields();
 
-    foreach ( $props as $key => $val )
+    foreach ($props as $key => $val)
       $info[$key] = $val;
 
     Auth::update_user($info, Auth::get_screen_name());
@@ -52,7 +52,7 @@ class Common
     $email = md5(Auth::get_email());
 
     $gravatar_url = "http://www.gravatar.com/avatar/{$email}.jpg";
-    $bms_url = Uri::base(false).'image/usericon/default.jpg';
+    $bms_url = Uri::base(false) . 'image/usericon/default.jpg';
 
     return sprintf('%s?d=%s', $gravatar_url, $bms_url);
   }

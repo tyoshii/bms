@@ -13,6 +13,7 @@ class Test_Controller_Top extends Test_Base
   {
     parent::setUp();
   }
+
   protected function tearDown()
   {
     parent::tearDown();
@@ -28,7 +29,7 @@ class Test_Controller_Top extends Test_Base
     // login_form
     $this->_assert_login_form($res->body->login_form);
   }
-  
+
   /**
    *
    */
@@ -41,18 +42,19 @@ class Test_Controller_Top extends Test_Base
     $res = Request::forge('/')->execute()->response();
 
     // login_form はない
-    try {
+    try
+    {
       $res->body->login_form;
       $this->assertTrue(false);
-    }
-    catch ( Exception $e ) {
+    } catch (Exception $e)
+    {
       $this->assertTrue(true);
     }
 
     // logout
     Auth::logout();
   }
-  
+
   /**
    *
    */
@@ -69,7 +71,7 @@ class Test_Controller_Top extends Test_Base
     // logout
     Auth::logout();
   }
-  
+
   /**
    *
    */
@@ -93,14 +95,14 @@ class Test_Controller_Top extends Test_Base
     Auth::logout();
 
     // parameter
-    $url  = 'http://bm-s.info/test';
+    $url = 'http://bm-s.info/test';
     $_GET = array('url' => $url);
-    
+
     $res = Request::forge('login')->execute()->response();
 
     $this->assertSame($url, Session::get('redirect_to'));
   }
-  
+
   /**
    *
    */
@@ -118,24 +120,24 @@ class Test_Controller_Top extends Test_Base
   private function _assert_login_form($html)
   {
     $matcher = array(
-      'tag' => 'input',
-      'id'  => 'form_username', 
-      'attributes' => array('type' => 'text'),
+        'tag'        => 'input',
+        'id'         => 'form_username',
+        'attributes' => array('type' => 'text'),
     );
     $this->assertTag($matcher, $html);
 
     $matcher = array(
-      'tag' => 'input',
-      'id'  => 'form_password', 
-      'attributes' => array('type' => 'password'),
+        'tag'        => 'input',
+        'id'         => 'form_password',
+        'attributes' => array('type' => 'password'),
     );
     $this->assertTag($matcher, $html);
 
     $matcher = array(
-      'tag' => 'input',
-      'id'  => 'form_login', 
-      'attributes' => array('type' => 'submit'),
+        'tag'        => 'input',
+        'id'         => 'form_login',
+        'attributes' => array('type' => 'submit'),
     );
     $this->assertTag($matcher, $html);
-  } 
+  }
 }

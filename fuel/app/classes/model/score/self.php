@@ -1,12 +1,13 @@
 <?php
+
 class Model_Score_Self
 {
   public static function getSelfScores($team_id = null)
   {
-		if ( ! $team_id )
-		{
-			$team_id = Model_Player::get_my_team_id();
-		}
+    if (!$team_id)
+    {
+      $team_id = Model_Player::get_my_team_id();
+    }
 
     $query = <<<__QUERY__
 SELECT
@@ -56,11 +57,11 @@ __QUERY__;
 
     $result = DB::query($query)->execute()->as_array();
 
-		foreach ( $result as $index => $res )
-		{
-			Model_Score_Team::give_stats($res);
-			$result[$index] = $res;	
-		}
+    foreach ($result as $index => $res)
+    {
+      Model_Score_Team::give_stats($res);
+      $result[$index] = $res;
+    }
 
     return $result;
   }

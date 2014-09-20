@@ -13,6 +13,7 @@ class Test_Controller_Error extends Test_Base
   {
     parent::setUp();
   }
+
   protected function tearDown()
   {
     parent::tearDown();
@@ -27,7 +28,7 @@ class Test_Controller_Error extends Test_Base
 
     $this->assertSame('500', $res->status);
   }
-  
+
   /**
    *
    */

@@ -23,110 +23,110 @@
 
 return array(
 
-    /**
-     * DB connection, leave null to use default
-     */
-    'db_connection' => null,
+  /**
+   * DB connection, leave null to use default
+   */
+    'db_connection'     => null,
 
-    /**
-     * DB table name for the user table
-     */
-    'table_name' => 'users',
+  /**
+   * DB table name for the user table
+   */
+    'table_name'        => 'users',
 
-    /**
-     * Choose which columns are selected, must include: username, password, email, last_login,
-     * login_hash, group & profile_fields
-     */
-    'table_columns' => array('*'),
+  /**
+   * Choose which columns are selected, must include: username, password, email, last_login,
+   * login_hash, group & profile_fields
+   */
+    'table_columns'     => array('*'),
 
-    /**
-     * This will allow you to use the group & acl driver for non-logged in users
-     */
-    'guest_login' => true,
+  /**
+   * This will allow you to use the group & acl driver for non-logged in users
+   */
+    'guest_login'       => true,
 
-    /**
-     * This will allow the same user to be logged in multiple times.
-     *
-     * Note that this is less secure, as session hijacking countermeasures have to
-     * be disabled for this to work!
-     */
-    'multiple_logins' => false,
+  /**
+   * This will allow the same user to be logged in multiple times.
+   *
+   * Note that this is less secure, as session hijacking countermeasures have to
+   * be disabled for this to work!
+   */
+    'multiple_logins'   => false,
 
-    /**
-     * Remember-me functionality
-     */
-    'remember_me' => array(
-        /**
-         * Whether or not remember me functionality is enabled
-         */
-        'enabled' => false,
+  /**
+   * Remember-me functionality
+   */
+    'remember_me'       => array(
+      /**
+       * Whether or not remember me functionality is enabled
+       */
+        'enabled'     => false,
 
-        /**
-         * Name of the cookie used to record this functionality
-         */
+      /**
+       * Name of the cookie used to record this functionality
+       */
         'cookie_name' => 'rmcookie',
 
-        /**
-         * Remember me expiration (default: 31 days)
-         */
-        'expiration' => 86400 * 31,
+      /**
+       * Remember me expiration (default: 31 days)
+       */
+        'expiration'  => 86400 * 31,
     ),
 
-    /**
-     * Groups as id => array(name => <string>, roles => <array>)
-     */
-    'groups' => array(
-        -1   => array('name' => 'Banned', 'roles' => array('banned')),
-        0    => array('name' => 'Guests', 'roles' => array()),
-        1    => array('name' => '一般', 'roles' => array('user')),
-        50   => array('name' => 'チーム管理者', 'roles' => array('user', 'moderator')),
-        100  => array('name' => 'システム管理者', 'roles' => array('user', 'moderator', 'admin')),
+  /**
+   * Groups as id => array(name => <string>, roles => <array>)
+   */
+    'groups'            => array(
+        -1  => array('name' => 'Banned', 'roles' => array('banned')),
+        0   => array('name' => 'Guests', 'roles' => array()),
+        1   => array('name' => '一般', 'roles' => array('user')),
+        50  => array('name' => 'チーム管理者', 'roles' => array('user', 'moderator')),
+        100 => array('name' => 'システム管理者', 'roles' => array('user', 'moderator', 'admin')),
     ),
 
-    /**
-     * Roles as name => array(location => rights)
-     */
-    'roles' => array(
-        'admin' => array(
-          'admin' => array('admin'),
-          'game'  => array('ban'),
+  /**
+   * Roles as name => array(location => rights)
+   */
+    'roles'             => array(
+        'admin'     => array(
+            'admin' => array('admin'),
+            'game'  => array('ban'),
         ),
         'moderator' => array(
-          'moderator' => array('moderator'),
-          'game' => array('create', 'editall', 'status'),
+            'moderator' => array('moderator'),
+            'game'      => array('create', 'editall', 'status'),
         ),
-        /**
-         * Examples
-         * ---
-         *
-         * Regular example with role "user" given create & read rights on "comments":
-         *   'user'  => array('comments' => array('create', 'read')),
-         * And similar additional rights for moderators:
-         *   'moderator'  => array('comments' => array('update', 'delete')),
-         *
-         * Wildcard # role (auto assigned to all groups):
-         *   '#'  => array('website' => array('read'))
-         *
-         * Global disallow by assigning false to a role:
-         *   'banned' => false,
-         *
-         * Global allow by assigning true to a role (use with care!):
-         *   'super' => true,
-         */
+      /**
+       * Examples
+       * ---
+       *
+       * Regular example with role "user" given create & read rights on "comments":
+       *   'user'  => array('comments' => array('create', 'read')),
+       * And similar additional rights for moderators:
+       *   'moderator'  => array('comments' => array('update', 'delete')),
+       *
+       * Wildcard # role (auto assigned to all groups):
+       *   '#'  => array('website' => array('read'))
+       *
+       * Global disallow by assigning false to a role:
+       *   'banned' => false,
+       *
+       * Global allow by assigning true to a role (use with care!):
+       *   'super' => true,
+       */
     ),
 
-    /**
-     * Salt for the login hash
-     */
-    'login_hash_salt' => Config::get('salt.simpleauth'),
+  /**
+   * Salt for the login hash
+   */
+    'login_hash_salt'   => Config::get('salt.simpleauth'),
 
-    /**
-     * $_POST key for login username
-     */
+  /**
+   * $_POST key for login username
+   */
     'username_post_key' => 'username',
 
-    /**
-     * $_POST key for login password
-     */
+  /**
+   * $_POST key for login password
+   */
     'password_post_key' => 'password',
 );

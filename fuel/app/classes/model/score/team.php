@@ -1,13 +1,14 @@
 <?php
+
 class Model_Score_Team
 {
 
   public static function getTeamScore($team_id = null)
   {
-		if ( ! $team_id )
-		{
-    	$team_id = Model_Player::get_my_team_id();
-		}
+    if (!$team_id)
+    {
+      $team_id = Model_Player::get_my_team_id();
+    }
 
     $query = <<<__QUERY__
 SELECT
@@ -46,58 +47,58 @@ GROUP BY
 __QUERY__;
 
     $result = DB::query($query)->execute()->as_array();
-		$result = reset($result);
+    $result = reset($result);
 
-		self::give_stats($result);
+    self::give_stats($result);
 
-		return $result;
-	}
+    return $result;
+  }
 
-	public static function give_stats(&$stats)
-	{
-		if ( ! $stats )
-		{
-			return $stats = array();
-		}
+  public static function give_stats(&$stats)
+  {
+    if (!$stats)
+    {
+      return $stats = array();
+    }
 
-		// 成績追加
-		// - total base : 塁打
-		$stats['TB'] = $stats['H'] + 1*$stats['2B'] + 2*$stats['3B'] + 3*$stats['HR'];
+    // 成績追加
+    // - total base : 塁打
+    $stats['TB'] = $stats['H'] + 1 * $stats['2B'] + 2 * $stats['3B'] + 3 * $stats['HR'];
 
-		// 合計
-		// - total hit : 安打数
-		$stats['total']['TH'] = $stats['H'] + $stats['2B'] + $stats['3B'] + $stats['HR'];
-		// - total bb : 四死球数
-		$stats['total']['TBB'] = $stats['BB'] + $stats['HBP'];
-		// - total on-base : 出塁した記録
-		$stats['total']['TOB'] = $stats['total']['TH'] + $stats['total']['TBB'];
-		// - total hitting appearance : 打撃機会
-		$stats['total']['THA'] = $stats['AB'] + $stats['total']['TBB'] + $stats['SF'];
+    // 合計
+    // - total hit : 安打数
+    $stats['total']['TH'] = $stats['H'] + $stats['2B'] + $stats['3B'] + $stats['HR'];
+    // - total bb : 四死球数
+    $stats['total']['TBB'] = $stats['BB'] + $stats['HBP'];
+    // - total on-base : 出塁した記録
+    $stats['total']['TOB'] = $stats['total']['TH'] + $stats['total']['TBB'];
+    // - total hitting appearance : 打撃機会
+    $stats['total']['THA'] = $stats['AB'] + $stats['total']['TBB'] + $stats['SF'];
 
-		// 率計算
-		$stats['rate'] = array(
-			'AVG' => '0.000', // 打率
-			'OBP' => '0.000', // 出塁率
-			'SLG' => '0.000', // 長打率
-			'OPS' => '0.000',
-		);
+    // 率計算
+    $stats['rate'] = array(
+        'AVG' => '0.000', // 打率
+        'OBP' => '0.000', // 出塁率
+        'SLG' => '0.000', // 長打率
+        'OPS' => '0.000',
+    );
 
-		if ( $stats['AB'] !== 0 and $stats['AB'] !== '0' )
-		{
-			$stats['rate']['AVG'] = sprintf('%.3f', $stats['total']['TH'] / $stats['AB']);
-			$stats['rate']['OBP'] = sprintf('%.3f', ($stats['total']['TH'] + $stats['total']['TBB']) / $stats['total']['THA']);
-			$stats['rate']['SLG'] = sprintf('%.3f', $stats['TB'] / $stats['AB']);
-			$stats['rate']['OPS'] = sprintf('%.3f', $stats['rate']['OBP'] + $stats['rate']['SLG']);
-		};
+    if ($stats['AB'] !== 0 and $stats['AB'] !== '0')
+    {
+      $stats['rate']['AVG'] = sprintf('%.3f', $stats['total']['TH'] / $stats['AB']);
+      $stats['rate']['OBP'] = sprintf('%.3f', ($stats['total']['TH'] + $stats['total']['TBB']) / $stats['total']['THA']);
+      $stats['rate']['SLG'] = sprintf('%.3f', $stats['TB'] / $stats['AB']);
+      $stats['rate']['OPS'] = sprintf('%.3f', $stats['rate']['OBP'] + $stats['rate']['SLG']);
+    };
   }
 
   public static function getTeamGameInfo($team_id = null)
-	{
-		if ( ! $team_id )
-		{
-			$team_id = Model_Player::get_my_team_id();
-		}
-    
+  {
+    if (!$team_id)
+    {
+      $team_id = Model_Player::get_my_team_id();
+    }
+
     $query = <<<__QUERY__
 SELECT
   g.id,gr.tsum,gr.bsum,g.team_top,g.team_bottom,g.game_status,g.team_top_name,g.team_bottom_name,g.date
@@ -114,58 +115,56 @@ ORDER BY
 ;
 __QUERY__;
 
-    $result= DB::query($query)->execute()->as_array();
+    $result = DB::query($query)->execute()->as_array();
 
     return $result;
   }
 
-	// TODO: 引数のinfosはいらない
-  public static function getTeamWinLose($team_id,$infos)
-	{
-		$infos = self::getTeamGameInfo($team_id);
+  // TODO: 引数のinfosはいらない
+  public static function getTeamWinLose($team_id, $infos)
+  {
+    $infos = self::getTeamGameInfo($team_id);
 
     $ret = array(
-			'games' => count($infos),
-			'win'   => 0,
-			'lose'  => 0,
-			'draw'  => 0,
-			'rate'  => array(
-				'win'  => 0.000,
-				'lose' => 0.000,
-			),
-		);
+        'games' => count($infos),
+        'win'   => 0,
+        'lose'  => 0,
+        'draw'  => 0,
+        'rate'  => array(
+            'win'  => 0.000,
+            'lose' => 0.000,
+        ),
+    );
 
-		// 勝敗
+    // 勝敗
     foreach ($infos as $info)
-		{
-      if($info['tsum'] > $info['bsum'])
-			{
-        if($info['team_top'] == $team_id)
+    {
+      if ($info['tsum'] > $info['bsum'])
+      {
+        if ($info['team_top'] == $team_id)
           ++$ret['win'];
-				else
+        else
           ++$ret['lose'];
 
-      }
-			else if($info['tsum'] < $info['bsum'])
-			{
-				if($info['team_top'] == $team_id)
+      } else if ($info['tsum'] < $info['bsum'])
+      {
+        if ($info['team_top'] == $team_id)
           ++$ret['lose'];
         else
           ++$ret['win'];
 
-      }
-			else
-			{
+      } else
+      {
         ++$ret['draw'];
       }
     }
 
-		// 勝率計算
-		if ( $ret['games'] !== 0 )
-		{
-			$ret['rate']['win']  = sprintf('%.3f', $ret['win']  / $ret['games']);
-			$ret['rate']['lose'] = sprintf('%.3f', $ret['lose'] / $ret['games']);
-		}
+    // 勝率計算
+    if ($ret['games'] !== 0)
+    {
+      $ret['rate']['win'] = sprintf('%.3f', $ret['win'] / $ret['games']);
+      $ret['rate']['lose'] = sprintf('%.3f', $ret['lose'] / $ret['games']);
+    }
 
     return $ret;
   }

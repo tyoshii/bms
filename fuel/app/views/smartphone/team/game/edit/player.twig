@@ -1,4 +1,4 @@
-{% extends "layout/game/edit_mobile.twig" %}
+{% extends "layout/team/game/edit_mobile.twig" %}
 
 {% block content %}
 
@@ -20,7 +20,7 @@
 
 <tbody>
 
-{%for player in metum%}
+{% for player in playeds %}
 {# 交代された選手かどうかはorderで判断している #}
 <tr order="{{player.order}}" {%if player.order != 0%}played="starter"{%endif%}>
 

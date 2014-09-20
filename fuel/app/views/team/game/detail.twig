@@ -53,6 +53,7 @@
 <h4>野手成績</h4>
 
 <table class="table table-striped" data-type="hitting">
+<thead>
 <tr>
 <th>打順</th>
 <th>名前</th>
@@ -73,29 +74,54 @@
 <th>盗塁</th>
 <th>エラー</th>
 </tr>
+</thead>
 
-{%for player in stats.player %}
+<tbody>
+{%for player in stats.hitting.players %}
 <tr>
 <td>{% if player.order != 0 %}{{player.order}}{% endif %}</td>
-<td>{{player.name}}</td>
+<td><a href="{{ global.team.href }}/player/{{ player.player_id }}">{{player.name}}</a></td>
 <td>{{player.number}}</td>
-<td>{{stats.hitting[player.player_id]['TPA']}}</td>
-<td>{{stats.hitting[player.player_id]['AB']}}</td>
-<td>{{stats.hitting[player.player_id]['H']}}</td>
-<td>{{stats.hitting[player.player_id]['2B']}}</td>
-<td>{{stats.hitting[player.player_id]['3B']}}</td>
-<td>{{stats.hitting[player.player_id]['HR']}}</td>
-<td>{{stats.hitting[player.player_id]['SO']}}</td>
-<td>{{stats.hitting[player.player_id]['BB']}}</td>
-<td>{{stats.hitting[player.player_id]['HBP']}}</td>
-<td>{{stats.hitting[player.player_id]['SAC']}}</td>
-<td>{{stats.hitting[player.player_id]['SF']}}</td>
-<td>{{stats.hitting[player.player_id]['RBI']}}</td>
-<td>{{stats.hitting[player.player_id]['R']}}</td>
-<td>{{stats.hitting[player.player_id]['SB']}}</td>
+<td>{{player['TPA']}}</td>
+<td>{{player['AB']}}</td>
+<td>{{player['H']}}</td>
+<td>{{player['2B']}}</td>
+<td>{{player['3B']}}</td>
+<td>{{player['HR']}}</td>
+<td>{{player['SO']}}</td>
+<td>{{player['BB']}}</td>
+<td>{{player['HBP']}}</td>
+<td>{{player['SAC']}}</td>
+<td>{{player['SF']}}</td>
+<td>{{player['RBI']}}</td>
+<td>{{player['R']}}</td>
+<td>{{player['SB']}}</td>
 <td></td>
 </tr>
 {%endfor%}
+</tbody>
+
+<tfoot>
+<tr class="active">
+<th></th>
+<th>計</th>
+<th></th>
+<th>{{stats.hitting.total['TPA']}}</th>
+<th>{{stats.hitting.total['AB']}}</th>
+<th>{{stats.hitting.total['H']}}</th>
+<th>{{stats.hitting.total['2B']}}</th>
+<th>{{stats.hitting.total['3B']}}</th>
+<th>{{stats.hitting.total['HR']}}</th>
+<th>{{stats.hitting.total['SO']}}</th>
+<th>{{stats.hitting.total['BB']}}</th>
+<th>{{stats.hitting.total['HBP']}}</th>
+<th>{{stats.hitting.total['SAC']}}</th>
+<th>{{stats.hitting.total['SF']}}</th>
+<th>{{stats.hitting.total['RBI']}}</th>
+<th>{{stats.hitting.total['R']}}</th>
+<th>{{stats.hitting.total['SB']}}</th>
+<th></th>
+</tfoot>
 </table>
 
 <h4>投手成績</h4>
@@ -114,31 +140,28 @@
 <th>失点</th>
 </tr>
 
-{%for player in stats.player %}
-
-{% if stats.pitching[player.player_id] %}
+{%for player in stats.pitching.players %}
 
 <tr>
-<td>{{player.name}}</td>
+<td><a href="{{ global.team.href }}/player/{{ player.player_id }}">{{player.name}}</a></td>
 <td>{{player.number}}</td>
 <td>
-{%if stats.pitching[player.player_id]['W']   == 1%}勝{%endif%}
-{%if stats.pitching[player.player_id]['L']   == 1%}負{%endif%}
-{%if stats.pitching[player.player_id]['HLD'] == 1%}ホールド{%endif%}
-{%if stats.pitching[player.player_id]['SV']  == 1%}セーブ{%endif%}
+{%if player['W']   == 1%}勝{%endif%}
+{%if player['L']   == 1%}負{%endif%}
+{%if player['HLD'] == 1%}ホールド{%endif%}
+{%if player['SV']  == 1%}セーブ{%endif%}
 </td>
 <td>
-{{ stats.pitching[player.player_id]['IP'] }} {{stats[player.player_id]['IP_frac']}}
+{{ player['IP'] }} {{player['IP_frac']}}
 </td>
-<td>{{stats.pitching[player.player_id]['H']}}</td>
-<td>{{stats.pitching[player.player_id]['SO']}}</td>
-<td>{{stats.pitching[player.player_id]['BB']}}</td>
-<td>{{stats.pitching[player.player_id]['HB']}}</td>
-<td>{{stats.pitching[player.player_id]['ER']}}</td>
-<td>{{stats.pitching[player.player_id]['R']}}</td>
+<td>{{player['H']}}</td>
+<td>{{player['SO']}}</td>
+<td>{{player['BB']}}</td>
+<td>{{player['HB']}}</td>
+<td>{{player['ER']}}</td>
+<td>{{player['R']}}</td>
 </tr>
 
-{% endif %}
 {%endfor%}
 </table>
 

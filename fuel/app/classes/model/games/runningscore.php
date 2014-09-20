@@ -453,7 +453,7 @@ class Model_Games_Runningscore extends \Orm\Model
 
   public static function regist($game_id = null, $stats = array())
   {
-    if (!$game_id) return false;
+    if ( ! $game_id) return false;
 
     if (count($stats) === 0)
     {
@@ -479,7 +479,7 @@ class Model_Games_Runningscore extends \Orm\Model
 
   public static function get_score($game_id = null)
   {
-    if (!$game_id) return false;
+    if ( ! $game_id) return false;
 
     $score = self::find_by_game_id($game_id);
 

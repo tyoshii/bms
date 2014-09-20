@@ -84,7 +84,7 @@ class Model_Stats_Player extends \Orm\Model
 
   public static function createNewGame($game_id, $team_id)
   {
-    if (!$team_id) return false;
+    if ( ! $team_id) return false;
 
     $ids = array(
         'game_id' => $game_id,
@@ -116,7 +116,7 @@ class Model_Stats_Player extends \Orm\Model
       // regist new data
       foreach ($players as $disp_order => $player)
       {
-        if (!$player) continue;
+        if ( ! $player) continue;
 
         $player = self::forge($ids + array(
                 'disp_order' => $disp_order,

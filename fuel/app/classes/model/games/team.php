@@ -62,27 +62,27 @@ class Model_Games_Team extends \Orm\Model
     extract($props);
 
     // validation
-    if (!isset($game_id))
+    if ( ! isset($game_id))
     {
       Log::error('game_idが指定されていません');
       return false;
     }
 
-    if (!isset($team_id))
+    if ( ! isset($team_id))
     {
       Log::error('team_idが指定されていません');
       return false;
     }
 
     // opponent
-    if (!isset($opponent_team_id) and !isset($opponent_team_name))
+    if ( ! isset($opponent_team_id) and !isset($opponent_team_name))
     {
       Log::error('opponent_team_id / opponent_team_name はどちらかを指定してください');
       return false;
     }
 
     // team_id is available ?
-    if (!Model_Team::find($team_id))
+    if ( ! Model_Team::find($team_id))
     {
       Log::error('指定されたteam_idが存在しないidです。');
       return false;

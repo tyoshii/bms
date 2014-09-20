@@ -11,7 +11,7 @@ class Controller_Team_Game extends Controller_Team
     // game 情報
     if ($game_id = $this->param('game_id'))
     {
-      if (!$this->_game = Model_Game::find($game_id))
+      if ( ! $this->_game = Model_Game::find($game_id))
       {
         Session::set_flash('error', '試合情報が取得できませんでした。');
         return Response::redirect('team/' . self::$_team->url_path);

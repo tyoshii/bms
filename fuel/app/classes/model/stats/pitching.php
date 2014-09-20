@@ -110,14 +110,14 @@ class Model_Stats_Pitching extends Model_Base
       // regist new data
       foreach ($stats as $player_id => $stat)
       {
-        if (!$stat) continue;
+        if ( ! $stat) continue;
 
         # get model
         $pitch = self::query()->where($ids + array(
                 'player_id' => $player_id,
             ))->get_one();
 
-        if (!$pitch)
+        if ( ! $pitch)
           $pitch = self::forge($ids + array(
                   'player_id' => $player_id,
               ));
@@ -152,7 +152,7 @@ class Model_Stats_Pitching extends Model_Base
       // regist new data
       foreach ($stats as $player_id => $stat)
       {
-        if (!$stat) continue;
+        if ( ! $stat) continue;
 
         $props = self::_get_insert_props($stat);
         $pitch = self::forge($ids + $props + array('player_id' => $player_id));

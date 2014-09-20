@@ -202,7 +202,7 @@ class Model_Stats_Hitting extends Model_Base
       // functionの引数変えたほうがいいかも
       foreach ($datas as $player_id => $data)
       {
-        if (!$data) continue;
+        if ( ! $data) continue;
 
         // set value
         $detail = array_key_exists('detail', $data) ? $data['detail'] : null;
@@ -227,7 +227,7 @@ class Model_Stats_Hitting extends Model_Base
 
         // insert stats_hittings
         $hit = self::query()->where($ids + array('player_id' => $player_id,))->get_one();
-        if (!$hit)
+        if ( ! $hit)
           $hit = self::forge($ids + array('player_id' => $player_id));
 
         $hit->set($stats);

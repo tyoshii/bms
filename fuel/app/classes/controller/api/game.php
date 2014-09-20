@@ -14,7 +14,7 @@ class Controller_Api_Game extends Controller_Rest
     $val->add('game_id', 'game_id')->add_rule('required');
     $val->add('team_id', 'team_id')->add_rule('required');
 
-    if (!$val->run())
+    if ( ! $val->run())
     {
       throw new Exception($val->show_errors());
     }
@@ -22,10 +22,10 @@ class Controller_Api_Game extends Controller_Rest
     $ids = $val->validated();
 
     // check acl if no admin
-    if (!Auth::has_access('admin.admin') and Auth::has_access('moderator.moderator'))
+    if ( ! Auth::has_access('admin.admin') and Auth::has_access('moderator.moderator'))
     {
       // has Moderators ?
-      if (!Auth::member('50'))
+      if ( ! Auth::member('50'))
       {
         throw new Exception('権限がありません');
       }
@@ -61,7 +61,7 @@ class Controller_Api_Game extends Controller_Rest
         Input::post('status')
     );
 
-    if (!$ret)
+    if ( ! $ret)
       throw new Exception('ステータスのアップデートに失敗しました');
 
     Session::set_flash('info', '試合ステータスを更新しました。');
@@ -71,7 +71,7 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updateScore()
   {
     // 権限チェック
-    if (!Auth::has_access('game.editall'))
+    if ( ! Auth::has_access('game.editall'))
       return Response::forge('スコアを編集する権限がありません', 403);
 
     $form = Fieldset::forge('score');
@@ -83,7 +83,7 @@ class Controller_Api_Game extends Controller_Rest
     // PCもいつかそっちによせる
     $stats = Input::post('stats') ? : Input::post();
 
-    if (!$val->run($stats, true))
+    if ( ! $val->run($stats, true))
       return Response::forge($val->show_errors(), 400);
 
     Model_Games_Runningscore::regist(Input::post('game_id'), $stats);
@@ -95,7 +95,7 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updatePlayer()
   {
     // 権限チェック
-    if (!Auth::has_access('game.editall'))
+    if ( ! Auth::has_access('game.editall'))
       return Response::forge('出場選手を編集する権限がありません', 403);
 
     $ids = self::_getIds();
@@ -151,7 +151,7 @@ class Controller_Api_Game extends Controller_Rest
   public function post_updateOther()
   {
     // 権限チェック
-    if (!Auth::has_access('game.editall'))
+    if ( ! Auth::has_access('game.editall'))
       return Response::forge('編集する権限がありません', 403);
 
     $ids = self::_getIds();

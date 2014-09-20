@@ -50,7 +50,7 @@ class Model_Stats_Hittingdetail extends \Orm\Model
     {
       $key = $res['player_id'];
 
-      if (!array_key_exists($key, $stats))
+      if ( ! array_key_exists($key, $stats))
         $stats[$key] = array();
 
       array_push($stats[$key], $res);

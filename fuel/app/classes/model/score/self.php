@@ -4,7 +4,7 @@ class Model_Score_Self
 {
   public static function getSelfScores($team_id = null)
   {
-    if (!$team_id)
+    if ( ! $team_id)
     {
       $team_id = Model_Player::get_my_team_id();
     }

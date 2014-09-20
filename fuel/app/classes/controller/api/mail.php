@@ -5,7 +5,7 @@ class Controller_Api_Mail extends Controller_Rest
   public function router($resource, $arguments)
   {
     // acl
-    if (!Model_Player::has_team_admin(Input::post('team_id')))
+    if ( ! Model_Player::has_team_admin(Input::post('team_id')))
     {
       Log::warning('権限の無い、不正アクセス');
       return Response::redirect('error/403');
@@ -21,7 +21,7 @@ class Controller_Api_Mail extends Controller_Rest
     $val->add('game_id', 'game_id')->add_rule('required');
     $val->add('team_id', 'team_id')->add_rule('required');
 
-    if (!$val->run())
+    if ( ! $val->run())
     {
       Log::warning($val->show_errors());
       return Response::forge('不正なアクセスです。', 400);

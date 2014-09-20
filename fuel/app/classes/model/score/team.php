@@ -5,7 +5,7 @@ class Model_Score_Team
 
   public static function getTeamScore($team_id = null)
   {
-    if (!$team_id)
+    if ( ! $team_id)
     {
       $team_id = Model_Player::get_my_team_id();
     }
@@ -56,7 +56,7 @@ __QUERY__;
 
   public static function give_stats(&$stats)
   {
-    if (!$stats)
+    if ( ! $stats)
     {
       return $stats = array();
     }
@@ -94,7 +94,7 @@ __QUERY__;
 
   public static function getTeamGameInfo($team_id = null)
   {
-    if (!$team_id)
+    if ( ! $team_id)
     {
       $team_id = Model_Player::get_my_team_id();
     }

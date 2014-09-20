@@ -9,7 +9,7 @@
 <div class="stats-container" index="{{loop.index}}">
 
 
-{%for player in metum%}
+{% for player in pitchers %}
 {%set stat = stats[player.player_id]%}
 
 <div class="panel panel-default">
@@ -38,23 +38,23 @@
 <td>
 <select role="result">
 <option value=""></option>
-<option value="win"  {%if stat.W  %}selected{%endif%}>勝</option>
-<option value="lose" {%if stat.L  %}selected{%endif%}>負</option>
-<option value="save" {%if stat.SV %}selected{%endif%}>Ｓ</option>
-<option value="hold" {%if stat.HLD%}selected{%endif%}>Ｈ</option>
+<option value="win"  {%if player.W  %}selected{%endif%}>勝</option>
+<option value="lose" {%if player.L  %}selected{%endif%}>負</option>
+<option value="save" {%if player.SV %}selected{%endif%}>Ｓ</option>
+<option value="hold" {%if player.HLD%}selected{%endif%}>Ｈ</option>
 </select>
 </td>
 <th>投球回</th>
 <td>
 <select role="IP">
 {%for i in 0..20%}
-<option value="{{i}}" {%if stat.IP == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.IP == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 <select role="IP_frac">
 <option value=""></option>
 {%for i in 0 .. 2%}
-<option value="{{i}}/3" {%if stat.IP_frac == i~'/3'%}selected{%endif%}>{{i}}/3</option>
+<option value="{{i}}/3" {%if player.IP_frac == i~'/3'%}selected{%endif%}>{{i}}/3</option>
 {%endfor%}
 </select>
 </td>
@@ -67,7 +67,7 @@
 <td>
 <select role="H">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.H == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.H == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -75,7 +75,7 @@
 <td>
 <select role="SO">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.SO == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.SO == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -86,7 +86,7 @@
 <td>
 <select role="BB">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.BB == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.BB == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -94,7 +94,7 @@
 <td>
 <select role="HB">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.HB == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.HB == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -105,7 +105,7 @@
 <td>
 <select role="ER">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.ER == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.ER == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>
@@ -113,7 +113,7 @@
 <td>
 <select role="R">
 {%for i in 0 .. 40%}
-<option value="{{i}}" {%if stat.R == i%}selected{%endif%}>{{i}}</option>
+<option value="{{i}}" {%if player.R == i%}selected{%endif%}>{{i}}</option>
 {%endfor%}
 </select>
 </td>

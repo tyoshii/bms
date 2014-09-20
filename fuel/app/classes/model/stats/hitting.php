@@ -63,6 +63,36 @@ class Model_Stats_Hitting extends Model_Base
   }
 
 	/**
+	 * 成績の合計を配列で返す
+	 * 
+	 * @param string game_id
+	 * @param string team_id
+	 *
+	 * @return array
+	 */
+	public static function get_stats_total($game_id, $team_id)
+	{
+		$query = DB::select()->from(self::$_table_name);
+
+		foreach ( self::$_properties as $key => $column )
+		{
+			if ( is_array($column) )
+			{
+				$column = $key;
+			}
+
+			$query->select(DB::expr('SUM('.$column.') as '.$column));
+		}
+
+		$query->where('game_id', $game_id);
+		$query->where('team_id', $team_id);
+
+		$result = $query->execute()->as_array();
+
+		return reset($result);
+	}
+
+	/**
 	 * 出場選手に従って打撃成績取得
 	 *
 	 * @param string game_id

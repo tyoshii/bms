@@ -93,11 +93,16 @@ class Controller_Team_Game extends Controller_Team
 			$view->team_bottom = $this->_team->name;
 		}
 
-		$view->score       = reset($this->_game->games_runningscores);
-		$view->stats       = array(
-			'player'   => Model_Stats_Player::getStarter($this->_game->id, $this->_team->id),
-			'hitting'  => Model_Stats_Hitting::get_stats($this->_game->id, $this->_team->id),
-			'pitching' => Model_Stats_Pitching::get_stats($this->_game->id, $this->_team->id),
+		$view->score = reset($this->_game->games_runningscores);
+		$view->stats = array(
+			'hitting' => array(
+				'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => Model_Stats_Hitting::get_stats_total($this->_game->id, $this->_team->id),
+			),
+			'pitching' => array(
+				'players' => Model_Stats_Pitching::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => array(),
+			),
 		);
 
 		return Response::forge($view);

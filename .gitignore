@@ -17,7 +17,8 @@ build
 nbproject/
 *.swp
 
-
 # Vagrant
 .vagrant
 
+# .local.vim
+.local.vim

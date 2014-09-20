@@ -10,16 +10,6 @@ class Controller_Top extends Controller_Base
     {
 			// 所属チーム
 			$view->teams = Model_Team::get_belong_team();
-
-      if ( $player = Model_Player::find_by_username(Auth::get_screen_name()) )
-      {
-        // アラート
-        $view->alert_games = Model_Game::get_incomplete_gameids($player->id);
-      }
-      else
-      {
-        $view->no_belong_team = true;
-      }
     }
     else
     {

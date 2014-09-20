@@ -50,22 +50,6 @@
 </form>
 {% endfor %}
 
-{%if alert_games|length > 0%}
-<div class="panel panel-warning">
-<div class="panel-heading">
-<strong>成績入力の完了していない試合があります！</strong>
-</div>
-<div class="panel-body">
-<ul>
-{%for game in alert_games%}
-<li><a href="/game/{{game.id}}/{{game.kind}}/">{{game.team_top_name}} vs {{game.team_bottom_name}}</a>
-{%endfor%}
-</ul>
-  </div>
-</div>
-{%endif%}
-
-
 {%else%}
 
 <h3>ユーザーログイン</h3>

@@ -101,14 +101,14 @@ class Controller_Admin extends Controller_Base
 			{
 				if (Model_User::disable(Input::post('username')))
 				{
-					Session::set_flash('info', Input::post('username') . 'を無効にしました。');
+					Session::set_flash('info', Input::post('username').'を無効にしました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
 			} else if (Input::post('submit') === '最有効')
 			{
 				if (Model_user::update_group(Input::post('username'), 1))
 				{
-					Session::set_flash('info', Input::post('username') . 'を有効にしました。');
+					Session::set_flash('info', Input::post('username').'を有効にしました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
 			} else

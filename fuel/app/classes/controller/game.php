@@ -49,7 +49,7 @@ class Controller_Game extends Controller_Base
       if (Model_Game::regist(Input::post() + array('team_id' => $team_id)))
       {
         Session::set_flash('info', '新規ゲームを追加しました');
-        return Response::redirect(Uri::create('/team/' . $url_path));
+        return Response::redirect(Uri::create('/team/'.$url_path));
       } else
       {
         Session::set_flash('error', 'システムエラーが発生しました。');

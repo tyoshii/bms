@@ -4,15 +4,15 @@
 require_once COREPATH . 'classes' . DIRECTORY_SEPARATOR . 'autoloader.php';
 
 if ( ! in_array('autoloader', get_declared_classes()))
-  class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
+	class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
 
 // Bootstrap the framework DO NOT edit this
 require_once COREPATH . 'bootstrap.php';
 
 
 Autoloader::add_classes(array(
-  // Add classes you want to override here
-  // Example: 'View' => APPPATH.'classes/view.php',
+	// Add classes you want to override here
+	// Example: 'View' => APPPATH.'classes/view.php',
 ));
 
 // Register the autoloader

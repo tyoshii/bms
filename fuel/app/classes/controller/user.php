@@ -13,92 +13,6 @@ class Controller_User extends Controller_Base
     }
   }
 
-  public function action_team()
-  {
-    $form = self::_get_team_form();
-    
-    $view = View::forge('user.twig');
-    $view->set_safe('form', $form->build(Uri::current()));
-    
-    return Response::forge($view);
-  }
-
-  public function post_team()
-  {
-    $form = self::_get_team_form();
-    $val = $form->validation();
-
-    if ( $val->run() )
-    {
-      $id       = Input::post('player_id');
-      $username = Auth::get_screen_name();
-      $props    = array(
-        'team_id'  => Input::post('team_id'),
-        'number'   => Input::post('number'),
-        'name'     => Common::get_dispname(),
-        'username' => $username,
-      );
-
-      // idが送られてくれば更新
-      if ( $player = Model_Player::find($id) )
-      {
-        // player_idの書き換えチェック
-        if ( $player->username !== $username )
-        {
-          Session::set_flash('error', '不正な処理が行われました。');
-          Response::redirect(Uri::current());
-        }
-
-        $player->set($props);
-        $player->save();
-        
-        // 権限リセット
-        Auth::update_user(array('group' => 1));
-
-        Session::set_flash('info', '所属チームの更新が成功しました。');
-        Response::redirect(Uri::current());
-      }
-      else // idが無ければ新規登録
-      {
-        // かぶりチェック
-        $already = Model_Player::query()
-          ->where('team_id', $props['team_id'])
-          ->where('number', $props['number'])
-          ->get_one();
-
-        if ( $already && $already->username )
-        {
-          Session::set_flash('error', 'その背番号はすでに使われています');
-        }
-        else
-        {
-          // user_id 取得
-          // 新規選手登録
-          $player = $already ?: Model_Player::forge();
-          $player->set($props);
-          $player->save();
-        
-          // 権限リセット
-          Auth::update_user(array('group' => 1));
-          
-          Session::set_flash('info', '新たに所属チームに登録されました。');
-          Response::redirect(Uri::current());
-        }
-      }
-    }
-    else
-    {
-      Session::set_flash('error', $val->show_errors());
-    }
-
-    $form->repopulate();
-
-    $view = View::forge('user.twig');
-    $view->set_safe('form', $form->build(Uri::current()));
-
-    return Response::forge($view);
-  }
-
   public function action_info()
   {
     $form = self::_get_info_form();
@@ -320,7 +234,12 @@ class Controller_User extends Controller_Base
       'disabled' => 'disabled',
     ));
 
-    $form->add('dispname', '表示名/選手名', array('value' => Common::get_dispname(), 'maxlength' => 16, 'class' => 'form-control'))
+		$form->add('dispname', '表示名', array(
+			'value'     => Common::get_dispname(),
+			'maxlength' => 16,
+			'class'     => 'form-control',
+			'description' => '※これとは別に、所属チームごとに選手名を設定できます。',
+		))
       ->add_rule('required')
       ->add_rule('max_length', 8);
 

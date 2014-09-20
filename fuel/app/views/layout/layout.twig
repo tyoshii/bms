@@ -78,7 +78,6 @@ Switching each env :
       {%block li_team %}<li>{%endblock%}<a href="/team">チーム一覧</a></li>
 {% if auth_has_access('moderator.moderator') %}
       {%block li_game %}<li>{%endblock%}<a href="/game">試合一覧</a></li>
-      {%block li_score%}<li>{%endblock%}<a href="/score">成績</a></li>
 {% endif %}
 <!--
       <li class="dropdown">

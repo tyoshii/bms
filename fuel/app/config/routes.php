@@ -51,10 +51,6 @@ return array(
   'api/deploy'           => 'api/deploy/index',
   'api/mail/remind'      => 'api/mail/remind',
 
-  'score'               => 'score/record_team',
-  'score/record_self'   => 'score/record_self',
-#  'score/record_league' => 'score/record_league',
-
   'register' => 'register/index',
   'forget_password' => 'register/forget_password',
   'reset_password'  => 'register/reset_password',

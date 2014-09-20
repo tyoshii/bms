@@ -25,7 +25,7 @@ class Controller_Team_Config extends Controller_Team
 		}
 
 		// profile編集はチーム参加者本人とチーム管理者のみ
-		if ( $kind === 'profile' )
+		if ( $kind === 'profile' or $kind === 'leave' )
 		{
 			if ( ! $this->_player and ! $this->_team_admin )
 			{
@@ -148,9 +148,21 @@ class Controller_Team_Config extends Controller_Team
 		return Response::forge($view);
 	}
 
+	/**
+	 * プロフィール編集
+	 */
 	public function action_profile()
 	{
 		$view = View::forge('team/config/profile.twig');
+		return Response::forge($view);
+	}
+	
+	/**
+	 * チーム脱退
+	 */
+	public function action_leave()
+	{
+		$view = View::forge('team/config/leave.twig');
 		return Response::forge($view);
 	}
 }

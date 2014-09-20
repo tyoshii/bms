@@ -13,17 +13,11 @@
 <ul class="nav nav-pills nav-stacked" role="menu">
 
 <hr>
-
-{% if global.player %}
-<label id="menu-profile">個人情報</label>
-<li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
-<hr>
-{% endif %}
-
 <label id="menu-team-info">チーム情報</label>
 <li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
 <li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>
 <li><a href="/team/{{ global.team.url_path }}/stats">成績</a></li>
+
 {% if global.team_admin %}
 <hr>
 <label id="menu-admin">管理者メニュー</label>
@@ -33,7 +27,12 @@
 <li><a href="/team/{{ global.team.url_path }}/config/delete">チーム削除</a></li>
 {% endif %}
 
-{% if not global.player %}
+{% if global.player %}
+<hr>
+<label id="menu-profile">個人設定</label>
+<li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
+<li><a href="/team/{{ global.team.url_path }}/config/leave">チーム退団</a></li>
+{% else %}
 <hr>
 <label id="menu-offer">オファー</label>
 <li><a href="/team/{{ global.team.url_path }}/offer">入部</a></li>

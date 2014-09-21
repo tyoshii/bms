@@ -1,6 +1,6 @@
 <?php
 
 return array(
-    'auth'       => 'salt',
-    'simpleauth' => 'salt',
+		'auth'       => 'salt',
+		'simpleauth' => 'salt',
 );

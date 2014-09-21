@@ -36,7 +36,7 @@ defined('FUEL_START_MEM') or define('FUEL_START_MEM', memory_get_usage());
 defined('VENDORPATH') or define('VENDORPATH', realpath(COREPATH . '..' . DS . 'vendor') . DS);
 if ( ! is_file(VENDORPATH . 'autoload.php'))
 {
-  die('Composer is not installed. Please run "php composer.phar update" in the project root to install Composer');
+	die('Composer is not installed. Please run "php composer.phar update" in the project root to install Composer');
 }
 require VENDORPATH . 'autoload.php';
 

@@ -9,26 +9,28 @@
  */
 class Test_Model_Stats_Hitting extends \Test_Model_Base
 {
-  public function setUp()
-  {
-  }
+	public function setUp()
+	{
+	}
 
-  public function tearDown()
-  {
-  }
+	public function tearDown()
+	{
+	}
 
-  public function test_スキーマチェック()
-  {
-    $this->assertSchema();
-  }
+	public function test_スキーマチェック()
+	{
+		$this->assertSchema();
+	}
 
 	public function test_関数get_stats_by_playeds()
 	{
 		// 引数の足らないエラー
-		$this->assertException( function() {
+		$this->assertException(function ()
+		{
 			Model_Stats_Hitting::get_stats_by_playeds();
 		});
-		$this->assertException( function() {
+		$this->assertException(function ()
+		{
 			Model_Stats_Hitting::get_stats_by_playeds('game_id');
 		});
 
@@ -43,10 +45,12 @@ class Test_Model_Stats_Hitting extends \Test_Model_Base
 	public function test_関数get_stats_total()
 	{
 		// 引数の足らないエラー
-		$this->assertException( function() {
+		$this->assertException(function ()
+		{
 			Model_Stats_Hitting::get_stats_total();
 		});
-		$this->assertException( function() {
+		$this->assertException(function ()
+		{
 			Model_Stats_Hitting::get_stats_total('game_id');
 		});
 

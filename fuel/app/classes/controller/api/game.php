@@ -121,7 +121,8 @@ class Controller_Api_Game extends Controller_Rest
 		if (Auth::has_access('admin.admin'))
 		{
 			Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
-		} else
+		}
+		else
 		{
 			Model_Stats_Pitching::regist($ids, $pitcher, $status);
 		}
@@ -140,7 +141,8 @@ class Controller_Api_Game extends Controller_Rest
 		if (Auth::has_access('admin.admin'))
 		{
 			Model_Stats_Hitting::replaceAll($ids, $batter, $status);
-		} else
+		}
+		else
 		{
 			Model_Stats_Hitting::regist($ids, $batter, $status);
 		}

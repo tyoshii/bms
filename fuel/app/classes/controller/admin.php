@@ -40,7 +40,8 @@ class Controller_Admin extends Controller_Base
 					Session::set_flash('info', 'ユーザー情報の更新に成功しました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
-			} else
+			}
+			else
 			{
 				Session::set_flash('error', $val->show_errors());
 			}
@@ -86,7 +87,8 @@ class Controller_Admin extends Controller_Base
 					Session::set_flash('info', 'ユーザーを追加しました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
-			} else if (Input::post('submit') == '更新')
+			}
+			else if (Input::post('submit') == '更新')
 			{
 				if (Model_User::update_group(Input::post('username'), Input::post('group')))
 				{
@@ -94,24 +96,27 @@ class Controller_Admin extends Controller_Base
 					Response::redirect(Uri::create('admin/user'));
 				}
 			}
-		} else // ! $val->run()
+		}
+		else // ! $val->run()
 		{
 			// ユーザーを無効/最有効にするボタンはvalidationが別
 			if (Input::post('submit') === '無効')
 			{
 				if (Model_User::disable(Input::post('username')))
 				{
-					Session::set_flash('info', Input::post('username').'を無効にしました。');
+					Session::set_flash('info', Input::post('username') . 'を無効にしました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
-			} else if (Input::post('submit') === '最有効')
+			}
+			else if (Input::post('submit') === '最有効')
 			{
 				if (Model_user::update_group(Input::post('username'), 1))
 				{
-					Session::set_flash('info', Input::post('username').'を有効にしました。');
+					Session::set_flash('info', Input::post('username') . 'を有効にしました。');
 					Response::redirect(Uri::create('admin/user'));
 				}
-			} else
+			}
+			else
 			{
 				// validation error
 				if ($error = $val->show_errors())
@@ -151,7 +156,8 @@ class Controller_Admin extends Controller_Base
 				Session::set_flash('info', '選手情報の更新に成功しました');
 				Response::redirect(Uri::create('admin/player'));
 			}
-		} else
+		}
+		else
 		{
 			Session::set_flash('error', $val->show_errors());
 		}
@@ -188,7 +194,8 @@ class Controller_Admin extends Controller_Base
 		if (Auth::has_access('admin.admin'))
 		{
 			$view->players = Model_Player::get_players();
-		} else if (Auth::has_access('moderator.moderator.'))
+		}
+		else if (Auth::has_access('moderator.moderator.'))
 		{
 			$team_id = Model_Player::get_my_team_id();
 			$view->players = Model_Player::get_players($team_id);
@@ -227,7 +234,8 @@ class Controller_Admin extends Controller_Base
 				Session::set_flash('info', '新しく選手を登録しました。');
 				Response::redirect(Uri::current());
 			}
-		} else
+		}
+		else
 		{
 			Session::set_flash('error', $val->show_errors());
 		}
@@ -272,7 +280,8 @@ class Controller_Admin extends Controller_Base
 				Session::set_flash('info', 'チームステータスを無効にしました。');
 				Response::redirect(Uri::current());
 
-			} catch (Exception $e)
+			}
+			catch (Exception $e)
 			{
 				throw new Exception($e->getMessage());
 			}
@@ -288,7 +297,8 @@ class Controller_Admin extends Controller_Base
 			$team->save();
 
 			Response::redirect(Uri::current());
-		} else
+		}
+		else
 		{
 			Session::set_flash('error', $val->show_errors());
 			$form->repopulate();
@@ -328,11 +338,13 @@ class Controller_Admin extends Controller_Base
 
 				Session::set_flash('info', '新規リーグを登録しました。');
 				Response::redirect(Uri::current());
-			} catch (Exception $e)
+			}
+			catch (Exception $e)
 			{
 				Session::set_flash('error', $e->getMessage());
 			}
-		} else
+		}
+		else
 		{
 			Session::set_flash('error', $val->show_errors());
 		}

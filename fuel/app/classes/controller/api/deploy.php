@@ -7,7 +7,7 @@ class Controller_Api_Deploy extends Controller
 		$data = json_decode(Input::post('payload'), true);
 
 		// debug
-		echo $data['ref']."\n";
+		echo $data['ref'] . "\n";
 
 		if ($data['ref'] === 'refs/heads/master')
 		{
@@ -61,7 +61,8 @@ class Controller_Api_Deploy extends Controller
 
 			echo "DEPLOY DONE";
 
-		} catch (Exception $e)
+		}
+		catch (Exception $e)
 		{
 			echo $e->getMessage();
 

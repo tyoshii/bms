@@ -46,7 +46,8 @@ class Test_Controller_Top extends Test_Base
 		{
 			$res->body->login_form;
 			$this->assertTrue(false);
-		} catch (Exception $e)
+		}
+		catch (Exception $e)
 		{
 			$this->assertTrue(true);
 		}

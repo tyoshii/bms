@@ -2,14 +2,14 @@
 
 class Model_Score_Self
 {
-  public static function getSelfScores($team_id = null)
-  {
-    if ( ! $team_id)
-    {
-      $team_id = Model_Player::get_my_team_id();
-    }
+	public static function getSelfScores($team_id = null)
+	{
+		if ( ! $team_id)
+		{
+			$team_id = Model_Player::get_my_team_id();
+		}
 
-    $query = <<<__QUERY__
+		$query = <<<__QUERY__
 SELECT
 		s.player_id,
     p.number,
@@ -55,14 +55,14 @@ ORDER BY
 ;
 __QUERY__;
 
-    $result = DB::query($query)->execute()->as_array();
+		$result = DB::query($query)->execute()->as_array();
 
-    foreach ($result as $index => $res)
-    {
-      Model_Score_Team::give_stats($res);
-      $result[$index] = $res;
-    }
+		foreach ($result as $index => $res)
+		{
+			Model_Score_Team::give_stats($res);
+			$result[$index] = $res;
+		}
 
-    return $result;
-  }
+		return $result;
+	}
 }

@@ -69,11 +69,13 @@ __BODY__;
 		try
 		{
 			$email->send();
-		} catch (\EmailValidationFailedException $e)
+		}
+		catch (\EmailValidationFailedException $e)
 		{
 			echo "hoge";
 			echo $e->getMessage();
-		} catch (\EmailSendingFailedException $e)
+		}
+		catch (\EmailSendingFailedException $e)
 		{
 
 			echo "hoge";

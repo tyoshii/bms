@@ -36,7 +36,8 @@ abstract class Test_Base extends \TestCase
 		{
 			$func();
 			$this->assertTrue(false);
-		} catch (Exception $e)
+		}
+		catch (Exception $e)
 		{
 			$this->assertTrue(true);
 		}

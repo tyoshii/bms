@@ -34,7 +34,7 @@ class Backup
 		$user = \Config::get("db.{$name}.backup.username");
 		$pass = \Config::get("db.{$name}.backup.password");
 
-		$backup_file = APPPATH . '/tmp/mysqldump_' . \Fuel::$env . '_' . date('Ymd');
+		$backup_file = APPPATH.'/tmp/mysqldump_'.\Fuel::$env.'_'.date('Ymd');
 		if (file_exists($backup_file))
 			die("バックアップ先のファイルが既にあります");
 

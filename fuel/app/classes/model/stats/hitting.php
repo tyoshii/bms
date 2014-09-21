@@ -81,7 +81,7 @@ class Model_Stats_Hitting extends Model_Base
 				$column = $key;
 			}
 
-			$query->select(DB::expr('SUM(' . $column . ') as ' . $column));
+			$query->select(DB::expr('SUM('.$column.') as '.$column));
 		}
 
 		$query->where('game_id', $game_id);
@@ -117,9 +117,9 @@ class Model_Stats_Hitting extends Model_Base
 		foreach ($join_tables as $table)
 		{
 			$query->join($table, 'LEFT')
-				->on($table . '.player_id', '=', 'p.player_id')
-				->and_on($table . '.game_id', '=', 'p.game_id')
-				->and_on($table . '.team_id', '=', 'p.team_id');
+				->on($table.'.player_id', '=', 'p.player_id')
+				->and_on($table.'.game_id', '=', 'p.game_id')
+				->and_on($table.'.team_id', '=', 'p.team_id');
 		}
 
 		$result = $query->execute()->as_array();

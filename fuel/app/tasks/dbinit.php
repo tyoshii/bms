@@ -173,13 +173,13 @@ class Dbinit
 		// team/player
 		$props = array(
 			'name'     => 'テストチーム1',
-			'url_path' => time() . rand(),
+			'url_path' => time().rand(),
 		);
 		$team1_id = \Model_Team::regist($props);
 
 		$props = array(
 			'name'     => 'テストチーム2',
-			'url_path' => time() . rand(),
+			'url_path' => time().rand(),
 		);
 		$team2_id = \Model_Team::regist($props);
 

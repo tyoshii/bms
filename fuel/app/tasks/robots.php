@@ -54,9 +54,9 @@ class Robots
 		return \Cli::color("
 					\"{$speech}\"
 			          _____     /
-			         /_____\\", 'blue') . "\n"
-		. \Cli::color("			    ____[\\", 'blue') . $eye . \Cli::color('---', 'blue') . $eye . \Cli::color('/]____', 'blue') . "\n"
-		. \Cli::color("			   /\\ #\\ \\_____/ /# /\\
+			         /_____\\", 'blue')."\n"
+		.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
+		.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
 			  /  \\# \\_.---._/ #/  \\
 			 /   /|\\  |   |  /|\\   \\
 			/___/ | | |   | | | \\___\\
@@ -90,9 +90,9 @@ class Robots
 		return \Cli::color("
 					\"PROTECT ALL HUMANS\"
 			          _____     /
-			         /_____\\", 'blue') . "\n"
-		. \Cli::color("			    ____[\\", 'blue') . $eye . \Cli::color('---', 'blue') . $eye . \Cli::color('/]____', 'blue') . "\n"
-		. \Cli::color("			   /\\ #\\ \\_____/ /# /\\
+			         /_____\\", 'blue')."\n"
+		.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
+		.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
 			  /  \\# \\_.---._/ #/  \\
 			 /   /|\\  |   |  /|\\   \\
 			/___/ | | |   | | | \\___\\

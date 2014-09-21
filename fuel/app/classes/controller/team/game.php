@@ -14,14 +14,14 @@ class Controller_Team_Game extends Controller_Team
 			if ( ! $this->_game = Model_Game::find($game_id))
 			{
 				Session::set_flash('error', '試合情報が取得できませんでした。');
-				return Response::redirect('team/' . self::$_team->url_path);
+				return Response::redirect('team/'.self::$_team->url_path);
 			}
 		}
 
 		// 試合概要のURL
 		if ($this->_game)
 		{
-			$this->_game->href = $this->_team->href . '/game/' . $this->_game->id;
+			$this->_game->href = $this->_team->href.'/game/'.$this->_game->id;
 		}
 
 		// set global
@@ -55,7 +55,7 @@ class Controller_Team_Game extends Controller_Team
 				if (Model_Game::regist($props))
 				{
 					Session::set_flash('info', '新規ゲームを追加しました');
-					return Response::redirect('team/' . $this->_team->url_path);
+					return Response::redirect('team/'.$this->_team->url_path);
 				}
 				else
 				{
@@ -118,7 +118,7 @@ class Controller_Team_Game extends Controller_Team
 		// playerが捕れない場合はログインさせる
 		if ( ! $this->_player)
 		{
-			return Response::redirect('/login?url=' . Uri::current());
+			return Response::redirect('/login?url='.Uri::current());
 		}
 
 		// kind validation
@@ -141,7 +141,7 @@ class Controller_Team_Game extends Controller_Team
 		}
 
 		// view load
-		$view = Theme::instance()->view('team/game/edit/' . $kind . '.twig');
+		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
 		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
@@ -165,12 +165,12 @@ class Controller_Team_Game extends Controller_Team
 				// ２回以降
 				for ($i = 2; $i <= 18; $i++)
 				{
-					if ($score['t' . $i] === null and $score['b' . $i] === null)
+					if ($score['t'.$i] === null and $score['b'.$i] === null)
 						break;
 
 					$view->scores[] = array(
-						'top'    => $score['t' . $i],
-						'bottom' => $score['b' . $i],
+						'top'    => $score['t'.$i],
+						'bottom' => $score['b'.$i],
 					);
 				}
 

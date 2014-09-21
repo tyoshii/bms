@@ -29,7 +29,7 @@ class Controller_Team extends Controller_Base
 			}
 
 			// チームページへのURL
-			$this->_team->href = '/team/' . $this->_team->url_path;
+			$this->_team->href = '/team/'.$this->_team->url_path;
 		}
 
 		// ログイン中ユーザーの選手情報
@@ -71,7 +71,7 @@ class Controller_Team extends Controller_Base
 
 		if ($q = Input::get('query'))
 		{
-			$query->where('name', 'LIKE', '%' . $q . '%');
+			$query->where('name', 'LIKE', '%'.$q.'%');
 		}
 
 		$view->teams = $query->get();
@@ -99,7 +99,7 @@ class Controller_Team extends Controller_Base
 				if (Model_Team::regist(Input::post()))
 				{
 					Session::set_flash('info', '新しくチームを作成しました。');
-					return Response::redirect(Uri::create('/team/' . Input::post('url_path')));
+					return Response::redirect(Uri::create('/team/'.Input::post('url_path')));
 				}
 			}
 			else
@@ -124,7 +124,7 @@ class Controller_Team extends Controller_Base
 		$form->add_model(Model_Team::forge());
 
 		// placeholder 追加
-		$form->field('url_path')->set_attribute('placeholder', Uri::base(false) . 'team/XXXX');
+		$form->field('url_path')->set_attribute('placeholder', Uri::base(false).'team/XXXX');
 
 		// submit
 		$form->add('regist', '', array(
@@ -149,7 +149,7 @@ class Controller_Team extends Controller_Base
 			if ( ! $view->player = Model_Player::find($player_id))
 			{
 				Session::get_error('選手情報が取得できませんでした');
-				return Response::redirect('team/' . $this->_team->url_path);
+				return Response::redirect('team/'.$this->_team->url_path);
 			}
 		}
 		else

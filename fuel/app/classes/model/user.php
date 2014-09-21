@@ -70,13 +70,13 @@ class Model_User extends \Orm\Model
 		}
 		catch (SimpleUserUpdateException $e)
 		{
-			Session::set_flash('error', 'アカウントの作成に失敗しました：' . $e->getMessage());
+			Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
 			return false;
 
 		}
 		catch (Exception $e)
 		{
-			Session::set_flash('error', 'アカウントの作成に失敗しました：' . $e->getMessage());
+			Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
 			return false;
 		}
 	}

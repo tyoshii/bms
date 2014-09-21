@@ -24,7 +24,7 @@ class Test_View_Team extends Test_View_Base
 
 		// チームのページへ
 		$team = Model_Team::find('first');
-		$this->url('/team/' . $team->url_path);
+		$this->url('/team/'.$team->url_path);
 
 		// チーム名
 		$team_name = $this->byCssSelector('div#team-name h1 a');
@@ -41,7 +41,7 @@ class Test_View_Team extends Test_View_Base
 		$base_url = $this->url();
 		foreach (array('game', 'player', 'stats') as $kind)
 		{
-			$url = $base_url . '/' . $kind;
+			$url = $base_url.'/'.$kind;
 			$this->url($url);
 			$this->assertSame($url, $this->url());
 			$this->assertTitle();

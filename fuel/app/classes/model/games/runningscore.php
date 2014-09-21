@@ -493,8 +493,8 @@ class Model_Games_Runningscore extends \Orm\Model
 		// 2回から
 		for ($i = 2; $i <= 12; $i++)
 		{
-			$tkey = 't' . $i;
-			$bkey = 'b' . $i;
+			$tkey = 't'.$i;
+			$bkey = 'b'.$i;
 
 			if ($score->$tkey === null and $score->$bkey === null)
 				break;

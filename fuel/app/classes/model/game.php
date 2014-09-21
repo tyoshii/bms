@@ -118,7 +118,7 @@ class Model_Game extends \Orm\Model
 		catch (Exception $e)
 		{
 			Mydb::rollback();
-			Log::error('内部処理エラー:' . $e->getMessage());
+			Log::error('内部処理エラー:'.$e->getMessage());
 			return false;
 		}
 	}
@@ -162,7 +162,7 @@ class Model_Game extends \Orm\Model
 		catch (Exception $e)
 		{
 			Mydb::rollback();
-			Session::set_flash('error', '内部処理エラー:' . $e->getMessage());
+			Session::set_flash('error', '内部処理エラー:'.$e->getMessage());
 			return false;
 		}
 

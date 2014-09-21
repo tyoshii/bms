@@ -25,8 +25,8 @@ class Version
 		/***************************
 		 * Put in TASK DETAILS HERE
 		 **************************/
-		echo "Version   : " . \Config::get('system.version') . "\n";
-		echo "Update At : " . \Config::get('system.update_at') . "\n";
+		echo "Version   : ".\Config::get('system.version')."\n";
+		echo "Update At : ".\Config::get('system.update_at')."\n";
 	}
 
 
@@ -47,7 +47,7 @@ class Version
 		echo "\nRunning task [Version:up]";
 		echo "\n-------------------------------------------\n\n";
 
-		$CHANGELOG = DOCROOT . '/CHANGELOG.md';
+		$CHANGELOG = DOCROOT.'/CHANGELOG.md';
 		$version = `cat $CHANGELOG | grep Version | head -1 | awk '{ print $3}'`;
 
 		\Config::set('system.version', trim($version));

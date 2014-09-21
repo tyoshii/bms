@@ -56,9 +56,9 @@ class Model_Stats_Pitching extends Model_Base
 
 		// join
 		$query->join(self::$_table_name, 'LEFT')
-			->on(self::$_table_name . '.player_id', '=', 'p.player_id')
-			->and_on(self::$_table_name . '.game_id', '=', 'p.game_id')
-			->and_on(self::$_table_name . '.team_id', '=', 'p.team_id');
+			->on(self::$_table_name.'.player_id', '=', 'p.player_id')
+			->and_on(self::$_table_name.'.game_id', '=', 'p.game_id')
+			->and_on(self::$_table_name.'.team_id', '=', 'p.team_id');
 
 		// positionに1が含まれている場合のみ取得
 		$query->where('p.position', 'LIKE', '%1%');

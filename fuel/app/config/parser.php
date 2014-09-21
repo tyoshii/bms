@@ -47,7 +47,7 @@ return array(
 	// MARKDOWN ( http://michelf.com/projects/php-markdown/ )
 	// ------------------------------------------------------------------------
 	'View_Markdown' => array(
-		'include'     => \Package::exists('parser') . 'vendor' . DS . 'markdown' . DS . 'markdown.php',
+		'include'     => \Package::exists('parser').'vendor'.DS.'markdown'.DS.'markdown.php',
 		'auto_encode' => true,
 		'allow_php'   => true,
 	),
@@ -55,9 +55,9 @@ return array(
 	// TWIG ( http://www.twig-project.org/documentation )
 	// ------------------------------------------------------------------------
 	'View_Twig'     => array(
-		'include'     => dirname(APPPATH) . DS . 'vendor' . DS . 'twig' . DS . 'twig' . DS . 'lib' . DS . 'Twig' . DS . 'Autoloader.php',
+		'include'     => dirname(APPPATH).DS.'vendor'.DS.'twig'.DS.'twig'.DS.'lib'.DS.'Twig'.DS.'Autoloader.php',
 		'auto_encode' => true,
-		'views_paths' => array(APPPATH . 'views'),
+		'views_paths' => array(APPPATH.'views'),
 		'delimiters'  => array(
 			'tag_block'    => array('left' => '{%', 'right' => '%}'),
 			'tag_comment'  => array('left' => '{#', 'right' => '#}'),
@@ -67,7 +67,7 @@ return array(
 			'debug'               => false,
 			'charset'             => 'utf-8',
 			'base_template_class' => 'Twig_Template',
-			'cache'               => APPPATH . 'cache' . DS . 'twig' . DS,
+			'cache'               => APPPATH.'cache'.DS.'twig'.DS,
 			'auto_reload'         => true,
 			'strict_variables'    => false,
 			'autoescape'          => false,
@@ -99,15 +99,15 @@ return array(
 	// DWOO ( http://wiki.dwoo.org/ )
 	// ------------------------------------------------------------------------
 	'View_Dwoo'     => array(
-		'include'     => APPPATH . 'vendor' . DS . 'Dwoo' . DS . 'dwooAutoload.php',
+		'include'     => APPPATH.'vendor'.DS.'Dwoo'.DS.'dwooAutoload.php',
 		'auto_encode' => true,
 		'delimiters'  => array('left' => '{{', 'right' => '}}'),
 		'environment' => array(
 			'autoescape'      => false,
 			'nested_comments' => false,
 			'allow_spaces'    => false,
-			'cache_dir'       => APPPATH . 'cache' . DS . 'dwoo' . DS,
-			'compile_dir'     => APPPATH . 'cache' . DS . 'dwoo' . DS . 'compiled' . DS,
+			'cache_dir'       => APPPATH.'cache'.DS.'dwoo'.DS,
+			'compile_dir'     => APPPATH.'cache'.DS.'dwoo'.DS.'compiled'.DS,
 			'cache_time'      => 0,
 
 			// Set what parser should do with PHP tags
@@ -124,7 +124,7 @@ return array(
 	'View_Mustache' => array(
 		'auto_encode' => true,
 		'environment' => array(
-			'cache_dir' => APPPATH . 'cache' . DS . 'mustache' . DS,
+			'cache_dir' => APPPATH.'cache'.DS.'mustache'.DS,
 			'partials'  => array(),
 			'helpers'   => array(),
 			'charset'   => 'UTF-8',
@@ -135,17 +135,17 @@ return array(
 	// See notes in /parser/classes/view/jade.php
 	// ------------------------------------------------------------------------
 	'View_Jade'     => array(
-		'include'     => APPPATH . 'vendor' . DS . 'Jade' . DS . 'autoload.php.dist',
+		'include'     => APPPATH.'vendor'.DS.'Jade'.DS.'autoload.php.dist',
 		'auto_encode' => true,
-		'cache_dir'   => APPPATH . 'cache' . DS . 'jade' . DS,
+		'cache_dir'   => APPPATH.'cache'.DS.'jade'.DS,
 	),
 
 	// HAML / PHAMLP ( http://code.google.com/p/phamlp/ )
 	// ------------------------------------------------------------------------
 	'View_Haml'     => array(
-		'include'     => APPPATH . 'vendor' . DS . 'Phamlp' . DS . 'haml' . DS . 'HamlParser.php',
+		'include'     => APPPATH.'vendor'.DS.'Phamlp'.DS.'haml'.DS.'HamlParser.php',
 		'auto_encode' => true,
-		'cache_dir'   => APPPATH . 'cache' . DS . 'haml' . DS,
+		'cache_dir'   => APPPATH.'cache'.DS.'haml'.DS,
 	),
 
 	// SMARTY ( http://www.smarty.net/documentation )
@@ -154,9 +154,9 @@ return array(
 		'auto_encode' => true,
 		'delimiters'  => array('left' => '{', 'right' => '}'),
 		'environment' => array(
-			'compile_dir'       => APPPATH . 'tmp' . DS . 'Smarty' . DS . 'templates_c' . DS,
-			'config_dir'        => APPPATH . 'tmp' . DS . 'Smarty' . DS . 'configs' . DS,
-			'cache_dir'         => APPPATH . 'cache' . DS . 'Smarty' . DS,
+			'compile_dir'       => APPPATH.'tmp'.DS.'Smarty'.DS.'templates_c'.DS,
+			'config_dir'        => APPPATH.'tmp'.DS.'Smarty'.DS.'configs'.DS,
+			'cache_dir'         => APPPATH.'cache'.DS.'Smarty'.DS,
 			'plugins_dir'       => array(),
 			'caching'           => false,
 			'cache_lifetime'    => 0,
@@ -171,9 +171,9 @@ return array(
 	// Phptal ( http://phptal.org/manual/en/ )
 	// ------------------------------------------------------------------------
 	'View_Phptal'   => array(
-		'include'             => APPPATH . 'vendor' . DS . 'PHPTAL' . DS . 'PHPTAL.php',
+		'include'             => APPPATH.'vendor'.DS.'PHPTAL'.DS.'PHPTAL.php',
 		'auto_encode'         => true,
-		'cache_dir'           => APPPATH . 'cache' . DS . 'PHPTAL' . DS,
+		'cache_dir'           => APPPATH.'cache'.DS.'PHPTAL'.DS,
 		'cache_lifetime'      => 0,
 		'encoding'            => 'UTF-8',
 		'output_mode'         => 'PHPTAL::XHTML',

@@ -20,7 +20,7 @@ class Controller_Team_Config extends Controller_Team
 			if ( ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
-				return Response::forge('/team/' . $this->_team->url_path);
+				return Response::forge('/team/'.$this->_team->url_path);
 			}
 		}
 
@@ -30,12 +30,12 @@ class Controller_Team_Config extends Controller_Team
 			if ( ! $this->_player and !$this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
-				return Response::forge('/team/' . $this->_team->url_path);
+				return Response::forge('/team/'.$this->_team->url_path);
 			}
 		}
 
 		// action
-		$action = 'action_' . $kind;
+		$action = 'action_'.$kind;
 		return $this->$action();
 	}
 

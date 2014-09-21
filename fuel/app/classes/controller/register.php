@@ -73,7 +73,7 @@ class Controller_Register extends Controller
 			else
 			{
 				$time = time();
-				$crypt = Crypt::encode($time . $user->username);
+				$crypt = Crypt::encode($time.$user->username);
 
 				Common_Email::reset_password($user->username, $user->email, $time, $crypt);
 				Session::set_flash('info', 'パスワードリセットのメールを登録メールに送付しました。');
@@ -104,7 +104,7 @@ class Controller_Register extends Controller
 		}
 
 		// cryptチェック
-		if (Crypt::decode($crypt) !== $time . $username)
+		if (Crypt::decode($crypt) !== $time.$username)
 		{
 			Session::set_flash('error', '不正なアクセスです。');
 			Response::redirect('/');

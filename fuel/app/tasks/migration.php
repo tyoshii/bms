@@ -41,7 +41,7 @@ class Migration
 
 			if (\Model_Games_Team::find_by_game_id($game_id))
 			{
-				echo 'Skip : ' . $game_id . "\n";
+				echo 'Skip : '.$game_id."\n";
 				continue;
 			}
 
@@ -66,7 +66,7 @@ class Migration
 
 			\Model_Games_Team::regist($props);
 
-			echo 'migration : ' . $game_id . "\n";
+			echo 'migration : '.$game_id."\n";
 		}
 
 		echo "DONE";

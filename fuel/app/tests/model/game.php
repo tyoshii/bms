@@ -46,7 +46,7 @@ class Test_Model_Game extends \Test_Model_Base
       $this->assertTrue(isset($game->result));
 
       // relationのデータ
-      $this->assertSame('Model_Games_Runningscore', get_class(reset($game->games_runningscores)));
+      $this->assertSame('Model_Games_Runningscore', get_class($game->games_runningscores));
       $this->assertTrue(isset($game->stats_players));
     }
   }

@@ -12,6 +12,19 @@ abstract class Test_Base extends \TestCase
     parent::tearDown();
   }
 
+	public function request($path, $method = 'GET', $param = array())
+	{
+		$req = Request::forge($path)->set_method($method);
+
+		if ($param)
+		{
+			InputEx::reset();
+			$method === 'POST' ? $_POST = $param : $_GET = $param;
+		}
+
+		return $req->execute()->response();
+	}
+
   public function get_property($class_name, $prop_name)
   {
     $class = new ReflectionClass($class_name);
@@ -22,6 +35,11 @@ abstract class Test_Base extends \TestCase
 
     return $prop->getValue($orig);
   }
+
+	public function assertSession($type, $message)
+	{
+		$this->assertSame($message, Session::get_flash($type));
+	}
 
 	public function assertRedirect($res, $location, $code = 302)
 	{

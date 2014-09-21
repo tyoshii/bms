@@ -2,6 +2,8 @@
 
 class Model_Game extends \Orm\Model
 {
+	protected static $_primary_key = array('id');
+
 	protected static $_properties = array(
 		'id',
 		'date',
@@ -36,19 +38,11 @@ class Model_Game extends \Orm\Model
 		),
 		'Orm\Observer_UpdatedAt' => array(
 			'events' => array('before_update'),
-			'mysql_timestamp' => false,
 		),
 	);
 	protected static $_table_name = 'games';
 
-  protected static $_has_many = array(
-		'games_teams' => array(
-      'model_to'       => 'Model_Games_Team',
-      'key_from'       => 'id',
-      'key_to'         => 'game_id',
-      'cascade_save'   => false,
-      'cascade_delete' => false,
-		),
+	protected static $_has_one = array(
     'games_runningscores' => array(
       'model_to'       => 'Model_Games_Runningscore',
       'key_from'       => 'id',
@@ -56,6 +50,16 @@ class Model_Game extends \Orm\Model
       'cascade_save'   => false,
       'cascade_delete' => false,
     ),
+		'games_teams' => array(
+      'model_to'       => 'Model_Games_Team',
+      'key_from'       => 'id',
+      'key_to'         => 'game_id',
+      'cascade_save'   => false,
+      'cascade_delete' => false,
+		),
+	);
+
+  protected static $_has_many = array(
     'stats_players' => array(
       'model_to'       => 'Model_Stats_Player',
       'key_from'       => 'id',
@@ -219,7 +223,7 @@ class Model_Game extends \Orm\Model
       }
       
       // 試合結果を配列に付与
-      $score = reset($res->games_runningscores);
+      $score = $res->games_runningscores;
 
       // 合計
       $result[$index]['tsum'] = $score['tsum'];
@@ -271,14 +275,12 @@ class Model_Game extends \Orm\Model
     foreach ( $games as $id => $game )
     {
     	// scoreの合計を結果に
-      $score = reset($game->games_runningscores);
-			$game->games_runningscores = $score;
+      $score = $game->games_runningscores;
       $game->tsum = $score->tsum;
       $game->bsum = $score->bsum;
 
 			// games_teams
-			$team = reset($game->games_teams);
-			$game->games_teams = $team;
+			$team = $game->games_teams;
 
 			// result
 			if ( $team->order === 'top' )
@@ -330,7 +332,7 @@ class Model_Game extends \Orm\Model
     // チームIDの指定がない
     if ( ! $team_id ) return null;
 
-		$games_teams = reset($game->games_teams);
+		$games_teams = $game->games_teams;
 		if ( ! $games_teams ) return null;
 
     // 先攻 or 後攻

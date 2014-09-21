@@ -2,6 +2,8 @@
 
 class Model_Games_Team extends \Orm\Model
 {
+	protected static $_primary_key = array('id');
+
 	protected static $_properties = array(
 		'id',
 		'game_id',

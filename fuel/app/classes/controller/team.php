@@ -99,7 +99,12 @@ class Controller_Team extends Controller_Base
 				if ( Model_Team::regist(Input::post()) )
 				{
 					Session::set_flash('info', '新しくチームを作成しました。');
-					return Response::redirect(Uri::create('/team/'.Input::post('url_path')));
+					return Response::redirect('/team/'.Input::post('url_path'));
+				}
+				else
+				{
+					Session::set_flash('error', 'システムエラーが発生しました。');
+					return Response::redirect('/');
 				}
 			}
 			else
@@ -148,15 +153,19 @@ class Controller_Team extends Controller_Base
 			$view = View::forge('team/player/personal.twig');
 			if ( ! $view->player = Model_Player::find($player_id) )
 			{
-				Session::get_error('選手情報が取得できませんでした');
-				return Response::redirect('team/'.$this->_team->url_path);
+				Session::set_flash('error', '選手情報が取得できませんでした');
+				return Response::redirect($this->_team->href);
 			}
 		}
 		else
 		{
 			// 選手一覧
 			$view = View::forge('team/player/list.twig');
-			$view->players = Model_Player::get_players($this->_team->id);
+			if ( ! $view->players = Model_Player::get_players($this->_team->id))
+			{
+				Session::set_flash('error', '選手情報が取得できませんでした');
+				return Response::redirect($this->_team->href);
+			}
 		}
 
 		return Response::forge($view);

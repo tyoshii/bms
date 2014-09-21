@@ -7,7 +7,7 @@ class Delete_pitchers_from_games
 	public function up()
 	{
 		\DBUtil::drop_fields('games', array(
-				'pitchers'
+			'pitchers'
 
 		));
 	}
@@ -15,7 +15,7 @@ class Delete_pitchers_from_games
 	public function down()
 	{
 		\DBUtil::add_fields('games', array(
-				'pitchers' => array('type' => 'text'),
+			'pitchers' => array('type' => 'text'),
 
 		));
 	}

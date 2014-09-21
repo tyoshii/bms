@@ -7,7 +7,7 @@ class Delete_league_from_teams
 	public function up()
 	{
 		\DBUtil::drop_fields('teams', array(
-				'league'
+			'league'
 
 		));
 	}
@@ -15,7 +15,7 @@ class Delete_league_from_teams
 	public function down()
 	{
 		\DBUtil::add_fields('teams', array(
-				'league' => array('constraint' => 11, 'type' => 'int'),
+			'league' => array('constraint' => 11, 'type' => 'int'),
 
 		));
 	}

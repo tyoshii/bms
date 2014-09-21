@@ -39,9 +39,9 @@ class Controller_Register extends Controller
 		$view = View::forge('forget_password.twig');
 
 		$form = Common_Form::forge()
-				->email()
-				->submit('送信')
-				->get_object();
+			->email()
+			->submit('送信')
+			->get_object();
 
 		$view->set_safe('form', $form->build(Uri::current()));
 
@@ -52,9 +52,9 @@ class Controller_Register extends Controller
 	{
 		// get form / validation object
 		$form = Common_Form::forge()
-				->email()
-				->submit('送信')
-				->get_object();
+			->email()
+			->submit('送信')
+			->get_object();
 		$val = $form->validation();
 
 		// valid
@@ -121,11 +121,11 @@ class Controller_Register extends Controller
 		$form = Common_Form::forge('regist_user');
 
 		$form->username()
-				->password()
-				->confirm()
-				->name()
-				->email()
-				->submit('登録');
+			->password()
+			->confirm()
+			->name()
+			->email()
+			->submit('登録');
 
 		$form = $form->form;
 

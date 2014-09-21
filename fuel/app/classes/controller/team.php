@@ -36,8 +36,8 @@ class Controller_Team extends Controller_Base
 		if (Auth::check() and $this->_team)
 		{
 			$this->_player = Model_Player::query()->where(array(
-					array('team_id', $this->_team->id),
-					array('username', Auth::get('username')),
+				array('team_id', $this->_team->id),
+				array('username', Auth::get('username')),
 			))->get_one();
 		}
 
@@ -128,9 +128,9 @@ class Controller_Team extends Controller_Base
 
 		// submit
 		$form->add('regist', '', array(
-				'type'  => 'submit',
-				'value' => '新規チーム登録',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '新規チーム登録',
+			'class' => 'btn btn-success',
 		));
 
 		return $form;
@@ -171,8 +171,8 @@ class Controller_Team extends Controller_Base
 
 		$view->result = Model_Score_Team::getTeamWinLose($this->_team->id, array());
 		$view->stats = array(
-				'teams' => Model_Score_Team::getTeamScore($this->_team->id),
-				'selfs' => Model_Score_Self::getSelfScores($this->_team->id),
+			'teams' => Model_Score_Team::getTeamScore($this->_team->id),
+			'selfs' => Model_Score_Self::getSelfScores($this->_team->id),
 		);
 
 		return Response::forge($view);

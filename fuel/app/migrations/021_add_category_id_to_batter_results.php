@@ -7,7 +7,7 @@ class Add_category_id_to_batter_results
 	public function up()
 	{
 		\DBUtil::add_fields('batter_results', array(
-				'category_id' => array('constraint' => 11, 'type' => 'int'),
+			'category_id' => array('constraint' => 11, 'type' => 'int'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_category_id_to_batter_results
 	public function down()
 	{
 		\DBUtil::drop_fields('batter_results', array(
-				'category_id'
+			'category_id'
 
 		));
 	}

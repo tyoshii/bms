@@ -7,7 +7,7 @@ class Add_team_top_name_to_games
 	public function up()
 	{
 		\DBUtil::add_fields('games', array(
-				'team_top_name' => array('constraint' => 128, 'type' => 'varchar'),
+			'team_top_name' => array('constraint' => 128, 'type' => 'varchar'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_team_top_name_to_games
 	public function down()
 	{
 		\DBUtil::drop_fields('games', array(
-				'team_top_name'
+			'team_top_name'
 
 		));
 	}

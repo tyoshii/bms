@@ -121,23 +121,23 @@ class Test_Controller_Top extends Test_Base
 	private function _assert_login_form($html)
 	{
 		$matcher = array(
-				'tag'        => 'input',
-				'id'         => 'form_username',
-				'attributes' => array('type' => 'text'),
+			'tag'        => 'input',
+			'id'         => 'form_username',
+			'attributes' => array('type' => 'text'),
 		);
 		$this->assertTag($matcher, $html);
 
 		$matcher = array(
-				'tag'        => 'input',
-				'id'         => 'form_password',
-				'attributes' => array('type' => 'password'),
+			'tag'        => 'input',
+			'id'         => 'form_password',
+			'attributes' => array('type' => 'password'),
 		);
 		$this->assertTag($matcher, $html);
 
 		$matcher = array(
-				'tag'        => 'input',
-				'id'         => 'form_login',
-				'attributes' => array('type' => 'submit'),
+			'tag'        => 'input',
+			'id'         => 'form_login',
+			'attributes' => array('type' => 'submit'),
 		);
 		$this->assertTag($matcher, $html);
 	}

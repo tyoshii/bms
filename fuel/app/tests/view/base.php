@@ -10,11 +10,11 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 					'port' => 4444,
 				),
 		*/
-			array(
-					'browserName' => 'firefox',
-					'host'        => 'localhost',
-					'port'        => 4444,
-			),
+		array(
+			'browserName' => 'firefox',
+			'host'        => 'localhost',
+			'port'        => 4444,
+		),
 	);
 
 	public static function setUpBeforeClass()

@@ -145,10 +145,10 @@ class Controller_Admin extends Controller_Base
 		if ($val->run())
 		{
 			$props = array(
-					'name'     => Input::post('name'),
-					'number'   => Input::post('number'),
-					'team_id'  => Input::post('team_id'),
-					'username' => Input::post('username') ? : '',
+				'name'     => Input::post('name'),
+				'number'   => Input::post('number'),
+				'team_id'  => Input::post('team_id'),
+				'username' => Input::post('username') ? : '',
 			);
 
 			if (Model_Player::regist($props, Input::post('id')))
@@ -223,10 +223,10 @@ class Controller_Admin extends Controller_Base
 		if ($val->run())
 		{
 			$props = array(
-					'name'     => Input::post('name'),
-					'number'   => Input::post('number'),
-					'team_id'  => Input::post('team_id'),
-					'username' => Input::post('username') ? : '',
+				'name'     => Input::post('name'),
+				'number'   => Input::post('number'),
+				'team_id'  => Input::post('team_id'),
+				'username' => Input::post('username') ? : '',
 			);
 
 			if (Model_Player::regist($props))
@@ -379,13 +379,13 @@ class Controller_Admin extends Controller_Base
 
 		// id
 		$form->add('id', 'プレイヤーID', array(
-				'type'  => 'hidden',
-				'value' => $id,
+			'type'  => 'hidden',
+			'value' => $id,
 		))
-				->add_rule('required')
-				->add_rule('trim')
-				->add_rule('match_value', array($id))
-				->add_rule('valid_string', array('numeric'));
+			->add_rule('required')
+			->add_rule('trim')
+			->add_rule('match_value', array($id))
+			->add_rule('valid_string', array('numeric'));
 
 		return $form;
 	}
@@ -393,15 +393,15 @@ class Controller_Admin extends Controller_Base
 	static private function _get_addleague_form()
 	{
 		$form = Fieldset::forge('league', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'search',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'search',
+			),
 		));
 
 		$form->add('name', '', array('class' => 'form-control', 'placeholder' => 'League Name'))
-				->add_rule('required')
-				->add_rule('max_length', 64);
+			->add_rule('required')
+			->add_rule('max_length', 64);
 
 		$form->add('submit', '', array('type' => 'submit', 'value' => 'Add League', 'class' => 'btn btn-success'));
 
@@ -412,24 +412,24 @@ class Controller_Admin extends Controller_Base
 	static private function _get_team_form()
 	{
 		$form = Fieldset::forge('regist_team', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'regist',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'regist',
+			),
 		));
 
 		$form->add('name', 'チーム名', array(
-				'class'       => 'form-control',
-				'placeholder' => 'TeamName',
-				'description' => '60文字以内',
+			'class'       => 'form-control',
+			'placeholder' => 'TeamName',
+			'description' => '60文字以内',
 		))
-				->add_rule('required')
-				->add_rule('max_length', 60);
+			->add_rule('required')
+			->add_rule('max_length', 60);
 
 		$form->add('submit', '', array(
-				'type'  => 'submit',
-				'value' => '登録',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '登録',
+			'class' => 'btn btn-success',
 		));
 
 		return $form;
@@ -456,19 +456,19 @@ class Controller_Admin extends Controller_Base
 	private static function _get_user_regist_form()
 	{
 		$form = Common_Form::forge('regist_user', array(
-				'form_attributes' => array(
-						'class' => 'form'
-				)
+			'form_attributes' => array(
+				'class' => 'form'
+			)
 		));
 
 		// 項目
 		$form->username()
-				->password()
-				->confirm()
-				->email()
-				->name()
-				->group()
-				->submit('登録');
+			->password()
+			->confirm()
+			->email()
+			->name()
+			->group()
+			->submit('登録');
 
 		return $form->form;
 	}
@@ -484,10 +484,10 @@ class Controller_Admin extends Controller_Base
 
 		// form
 		$form->username($info->username)
-				->email($info->email)
-				->name($name)
-				->group($info->group)
-				->submit('更新');
+			->email($info->email)
+			->name($name)
+			->group($info->group)
+			->submit('更新');
 
 		$form = $form->form;
 
@@ -504,9 +504,9 @@ class Controller_Admin extends Controller_Base
 		$form = Common_Form::forge('regist_player');
 
 		$form->name()
-				->number()
-				->team_id()
-				->submit('登録');
+			->number()
+			->team_id()
+			->submit('登録');
 
 		$form = $form->form;
 
@@ -529,11 +529,11 @@ class Controller_Admin extends Controller_Base
 			$users = array('' => '') + Model_User::get_username_list();
 
 			$form->add_before('username', '紐づけるユーザー名', array(
-					'type'    => 'select',
-					'options' => $users,
-					'class'   => 'select2',
+				'type'    => 'select',
+				'options' => $users,
+				'class'   => 'select2',
 			), array(), 'submit')
-					->add_rule('in_array', array_keys($users));
+				->add_rule('in_array', array_keys($users));
 		}
 
 		// required

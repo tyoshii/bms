@@ -23,9 +23,9 @@ __FOOTER__;
 		$email->from('no-reply@bm-s.info');
 		$email->to($to);
 
-		$email->subject(self::$_subject_header.$subject);
+		$email->subject(self::$_subject_header . $subject);
 
-		$email->body(self::$_body_header.$body.self::$_body_footer);
+		$email->body(self::$_body_header . $body . self::$_body_footer);
 
 		$email->send();
 	}
@@ -69,7 +69,7 @@ __BODY__;
 		$url = Uri::base(false);
 		foreach ($paths as $path)
 		{
-			$body .= $url.$path."\n";
+			$body .= $url . $path . "\n";
 		}
 
 		self::sendmail($email, $subject, $body);

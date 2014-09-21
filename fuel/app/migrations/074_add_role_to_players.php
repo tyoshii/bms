@@ -7,7 +7,7 @@ class Add_role_to_players
 	public function up()
 	{
 		\DBUtil::add_fields('players', array(
-				'role' => array('constraint' => '"user","admin"', 'type' => 'enum'),
+			'role' => array('constraint' => '"user","admin"', 'type' => 'enum'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_role_to_players
 	public function down()
 	{
 		\DBUtil::drop_fields('players', array(
-				'role'
+			'role'
 
 		));
 	}

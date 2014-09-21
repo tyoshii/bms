@@ -7,7 +7,7 @@ class Add_top_status_to_games
 	public function up()
 	{
 		\DBUtil::add_fields('games', array(
-				'top_status' => array('constraint' => 11, 'type' => 'int'),
+			'top_status' => array('constraint' => 11, 'type' => 'int'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_top_status_to_games
 	public function down()
 	{
 		\DBUtil::drop_fields('games', array(
-				'top_status'
+			'top_status'
 
 		));
 	}

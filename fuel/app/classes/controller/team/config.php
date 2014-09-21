@@ -62,9 +62,9 @@ class Controller_Team_Config extends Controller_Team
 
 		// add submit
 		$form->add('submit', '', array(
-				'type'  => 'submit',
-				'value' => '更新',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
 		));
 
 		// 更新処理
@@ -104,8 +104,8 @@ class Controller_Team_Config extends Controller_Team
 		$view = View::forge('team/config/player.twig');
 
 		$view->players = Model_Player::query()->where(array(
-				array('team_id', $this->_team->id),
-				array('status', '!=', -1),
+			array('team_id', $this->_team->id),
+			array('status', '!=', -1),
 		))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
 
 		return Response::forge($view);
@@ -133,8 +133,8 @@ class Controller_Team_Config extends Controller_Team
 		$view = View::forge('team/config/admin.twig');
 
 		$view->players = Model_Player::query()->where(array(
-				array('team_id', $this->_team->id),
-				array('status', '!=', -1),
+			array('team_id', $this->_team->id),
+			array('status', '!=', -1),
 		))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
 
 		return Response::forge($view);

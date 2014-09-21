@@ -93,12 +93,12 @@ class Controller_Game extends Controller_Base
 		$view->hitting_bottom = Model_Stats_Hitting::get_stats($game_id, $info['team_bottom']);
 
 		$view->pitching_top = Model_Stats_Pitching::get_stats(array(
-				'game_id' => $game_id,
-				'team_id' => $info['team_top'],
+			'game_id' => $game_id,
+			'team_id' => $info['team_top'],
 		));
 		$view->pitching_bottom = Model_Stats_Pitching::get_stats(array(
-				'game_id' => $game_id,
-				'team_id' => $info['team_bottom'],
+			'game_id' => $game_id,
+			'team_id' => $info['team_bottom'],
 		));
 
 		// other
@@ -195,7 +195,7 @@ class Controller_Game extends Controller_Base
 			case 'score':
 
 				list($view->scores, $view->tsum, $view->bsum)
-						= Model_Games_Runningscore::get_score($game_id);
+					= Model_Games_Runningscore::get_score($game_id);
 
 				break;
 
@@ -221,8 +221,8 @@ class Controller_Game extends Controller_Base
 
 				// 成績
 				$where = array(
-						'game_id' => $game_id,
-						'team_id' => $team_id,
+					'game_id' => $game_id,
+					'team_id' => $team_id,
 				);
 
 				// TODO: Model_Statsから汎用的に取得したい。
@@ -234,9 +234,9 @@ class Controller_Game extends Controller_Base
 			case 'other':
 				// TODO: いつか消す
 				$stat = Model_Games_Stat::query()
-						->where('game_id', $game_id)
-						->where('team_id', $team_id)
-						->get_one();
+					->where('game_id', $game_id)
+					->where('team_id', $team_id)
+					->get_one();
 
 				$view->others = json_decode($stat->others);
 
@@ -283,57 +283,57 @@ class Controller_Game extends Controller_Base
 
 		// 試合実施日
 		$form->add('date', '試合実施日', array(
-				'type'             => 'text',
-				'class'            => 'form-control form-datepicker',
-				'value'            => date('Y-m-d'),
-				'data-date-format' => 'yyyy-mm-dd',
+			'type'             => 'text',
+			'class'            => 'form-control form-datepicker',
+			'value'            => date('Y-m-d'),
+			'data-date-format' => 'yyyy-mm-dd',
 		))
-				->add_rule('required')
-				->add_rule('trim');
+			->add_rule('required')
+			->add_rule('trim');
 
 		// - 試合開始時間
 		$form->add('start_time', '試合開始時間', array(
-				'type'  => 'text',
-				'class' => 'form-control',
+			'type'  => 'text',
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// - 対戦チーム名
 		$form->add('opponent_team_name', '対戦チーム名', array(
-				'type'  => 'text',
-				'class' => 'form-control',
+			'type'  => 'text',
+			'class' => 'form-control',
 		))
-				->add_rule('required')
-				->add_rule('trim');
+			->add_rule('required')
+			->add_rule('trim');
 
 		// - 先攻/後攻
 		$form->add('order', '先攻/後攻', array(
-				'type'    => 'select',
-				'class'   => 'form-control',
-				'options' => array('top' => '先攻', 'bottom' => '後攻'),
+			'type'    => 'select',
+			'class'   => 'form-control',
+			'options' => array('top' => '先攻', 'bottom' => '後攻'),
 		))
-				->add_rule('required')
-				->add_rule('in_array', array('top', 'bottom'));
+			->add_rule('required')
+			->add_rule('in_array', array('top', 'bottom'));
 
 		// - 球場
 		$form->add('stadium', '球場', array(
-				'type'  => 'text',
-				'class' => 'form-control',
+			'type'  => 'text',
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// - メモ
 		$form->add('memo', '試合コメント/メモ', array(
-				'type'  => 'textarea',
-				'class' => 'form-control',
+			'type'  => 'textarea',
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// submit
 		$form->add('submit', '', array(
-				'type'  => 'submit',
-				'value' => '登録',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '登録',
+			'class' => 'btn btn-success',
 		));
 
 		return $form;
@@ -342,57 +342,57 @@ class Controller_Game extends Controller_Base
 	static private function _get_addgame_form()
 	{
 		$form = Fieldset::forge('addgame', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'search',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'search',
+			),
 		));
 
 		// 試合実施日
 		$form->add('date', '試合実施日', array(
-				'class'            => 'form-control form-datepicker',
-				'placeholder'      => '試合実施日',
-				'value'            => date('Y-m-d'),
-				'data-date-format' => 'yyyy-mm-dd',
+			'class'            => 'form-control form-datepicker',
+			'placeholder'      => '試合実施日',
+			'value'            => date('Y-m-d'),
+			'data-date-format' => 'yyyy-mm-dd',
 		))
-				->add_rule('required')
-				->add_rule('trim');
+			->add_rule('required')
+			->add_rule('trim');
 
 		// チーム選択
 		$teams = array('' => '') + Model_Team::get_teams_key_value();
 
 		$attrs = array(
-				'type'    => 'select',
-				'options' => $teams,
-				'class'   => 'select2',
+			'type'    => 'select',
+			'options' => $teams,
+			'class'   => 'select2',
 		);
 
 		// - 先攻
 		$form->add('top', '先攻', $attrs + array(
-						'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
-						'data-placeholder' => 'チームを選択',
-				))
-				->add_rule('in_array', array_keys($teams));
+				'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
+				'data-placeholder' => 'チームを選択',
+			))
+			->add_rule('in_array', array_keys($teams));
 
 		$form->add('top_name', '', array(
-				'type'        => 'text',
-				'class'       => 'form_control',
-				'placeholder' => 'or 直接入力',
+			'type'        => 'text',
+			'class'       => 'form_control',
+			'placeholder' => 'or 直接入力',
 		))
-				->add_rule('max_length', 100);
+			->add_rule('max_length', 100);
 
 		// - 後攻
 		$form->add('bottom', '後攻', $attrs + array(
-						'data-placeholder' => 'チームを選択',
-				))
-				->add_rule('in_array', array_keys($teams));
+				'data-placeholder' => 'チームを選択',
+			))
+			->add_rule('in_array', array_keys($teams));
 
 		$form->add('bottom_name', '', array(
-				'type'        => 'text',
-				'class'       => 'form_control',
-				'placeholder' => 'or 直接入力',
+			'type'        => 'text',
+			'class'       => 'form_control',
+			'placeholder' => 'or 直接入力',
 		))
-				->add_rule('max_length', 100);
+			->add_rule('max_length', 100);
 
 		// 先行後攻の入れ替え
 		/*
@@ -406,9 +406,9 @@ class Controller_Game extends Controller_Base
 
 		// submit
 		$form->add('addgame', '', array(
-				'type'  => 'submit',
-				'value' => '追加',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '追加',
+			'class' => 'btn btn-success',
 		));
 
 		return $form;
@@ -419,7 +419,7 @@ class Controller_Game extends Controller_Base
 	{
 		// 入力チェック
 		if (( ! Input::post('top') && !Input::post('top_name')) ||
-				( ! Input::post('bottom') && !Input::post('bottom_name'))
+			( ! Input::post('bottom') && !Input::post('bottom_name'))
 		)
 		{
 			Session::set_flash('error', 'リストからチームを選択するか直接入力してください。');

@@ -26,11 +26,11 @@ class Test_Controller_Game extends Test_Base
 	{
 		$urls = array(
 			// game_idとteam_idは数字じゃないと行けない
-				'/game/game_id/batter/1',
-				'/game/1/batter/team_id',
+			'/game/game_id/batter/1',
+			'/game/1/batter/team_id',
 
 			// kindが不正な値
-				'/game/1/dummy/1',
+			'/game/1/dummy/1',
 		);
 
 		foreach ($urls as $url)

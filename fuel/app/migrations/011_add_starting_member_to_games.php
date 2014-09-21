@@ -7,7 +7,7 @@ class Add_starting_member_to_games
 	public function up()
 	{
 		\DBUtil::add_fields('games', array(
-				'starting_member' => array('type' => 'text'),
+			'starting_member' => array('type' => 'text'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_starting_member_to_games
 	public function down()
 	{
 		\DBUtil::drop_fields('games', array(
-				'starting_member'
+			'starting_member'
 
 		));
 	}

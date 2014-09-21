@@ -32,7 +32,7 @@ class Common
 	{
 		$info = Auth::get_profile_fields();
 		$name = isset($info['dispname']) ? $info['dispname']
-				: Auth::get_screen_name();
+			: Auth::get_screen_name();
 
 		return $name;
 	}
@@ -52,7 +52,7 @@ class Common
 		$email = md5(Auth::get_email());
 
 		$gravatar_url = "http://www.gravatar.com/avatar/{$email}.jpg";
-		$bms_url = Uri::base(false).'image/usericon/default.jpg';
+		$bms_url = Uri::base(false) . 'image/usericon/default.jpg';
 
 		return sprintf('%s?d=%s', $gravatar_url, $bms_url);
 	}

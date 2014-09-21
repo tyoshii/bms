@@ -3,46 +3,46 @@
 class Model_Games_Team extends \Orm\Model
 {
 	protected static $_properties = array(
-			'id',
-			'game_id',
-			'team_id',
-			'order'              => array(
-					'default' => 'top',
-			),
-			'opponent_team_id'   => array(
-					'default' => 0,
-			),
-			'opponent_team_name' => array(
-					'default' => '',
-			),
-			'input_status'       => array(
-					'default' => 'save',
-			),
-			'created_at',
-			'updated_at',
+		'id',
+		'game_id',
+		'team_id',
+		'order'              => array(
+			'default' => 'top',
+		),
+		'opponent_team_id'   => array(
+			'default' => 0,
+		),
+		'opponent_team_name' => array(
+			'default' => '',
+		),
+		'input_status'       => array(
+			'default' => 'save',
+		),
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
-			'Orm\Observer_CreatedAt' => array(
-					'events'          => array('before_insert'),
-					'mysql_timestamp' => false,
-			),
-			'Orm\Observer_UpdatedAt' => array(
-					'events'          => array('before_update'),
-					'mysql_timestamp' => false,
-			),
+		'Orm\Observer_CreatedAt' => array(
+			'events'          => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events'          => array('before_update'),
+			'mysql_timestamp' => false,
+		),
 	);
 
 	protected static $_table_name = 'games_teams';
 
 	protected static $_belongs_to = array(
-			'games' => array(
-					'model_to'       => 'Model_Game',
-					'key_from'       => 'game_id',
-					'key_to'         => 'id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			),
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 	);
 
 	/**

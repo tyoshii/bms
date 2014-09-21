@@ -3,66 +3,66 @@
 class Model_Game extends \Orm\Model
 {
 	protected static $_properties = array(
-			'id',
-			'date',
-			'stadium'          => array(
-					'default' => '',
-			),
-			'memo'             => array(
-					'default' => '',
-			),
-			'game_status'      => array(
-					'default' => 0,
-			),
-			'top_status'       => array(
-					'default' => 1,
-			),
-			'bottom_status'    => array(
-					'default' => 1,
-			),
+		'id',
+		'date',
+		'stadium'          => array(
+			'default' => '',
+		),
+		'memo'             => array(
+			'default' => '',
+		),
+		'game_status'      => array(
+			'default' => 0,
+		),
+		'top_status'       => array(
+			'default' => 1,
+		),
+		'bottom_status'    => array(
+			'default' => 1,
+		),
 		// TODO:削除
-			'team_top'         => array('default' => 0),
-			'team_top_name'    => array('default' => 0),
-			'team_bottom'      => array('default' => 0),
-			'team_bottom_name' => array('default' => 0),
-			'created_at',
-			'updated_at',
+		'team_top'         => array('default' => 0),
+		'team_top_name'    => array('default' => 0),
+		'team_bottom'      => array('default' => 0),
+		'team_bottom_name' => array('default' => 0),
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
-			'Orm\Observer_CreatedAt' => array(
-					'events'          => array('before_insert'),
-					'mysql_timestamp' => false,
-			),
-			'Orm\Observer_UpdatedAt' => array(
-					'events'          => array('before_update'),
-					'mysql_timestamp' => false,
-			),
+		'Orm\Observer_CreatedAt' => array(
+			'events'          => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events'          => array('before_update'),
+			'mysql_timestamp' => false,
+		),
 	);
 	protected static $_table_name = 'games';
 
 	protected static $_has_many = array(
-			'games_teams'         => array(
-					'model_to'       => 'Model_Games_Team',
-					'key_from'       => 'id',
-					'key_to'         => 'game_id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			),
-			'games_runningscores' => array(
-					'model_to'       => 'Model_Games_Runningscore',
-					'key_from'       => 'id',
-					'key_to'         => 'game_id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			),
-			'stats_players'       => array(
-					'model_to'       => 'Model_Stats_Player',
-					'key_from'       => 'id',
-					'key_to'         => 'game_id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			),
+		'games_teams'         => array(
+			'model_to'       => 'Model_Games_Team',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'games_runningscores' => array(
+			'model_to'       => 'Model_Games_Runningscore',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'stats_players'       => array(
+			'model_to'       => 'Model_Stats_Player',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 	);
 
 	public static function regist($posts)
@@ -73,10 +73,10 @@ class Model_Game extends \Orm\Model
 
 			// gamesテーブルへの保存
 			$game = self::forge(array(
-					'date'       => $posts['date'],
-					'start_time' => $posts['start_time'],
-					'stadium'    => $posts['stadium'],
-					'memo'       => $posts['memo'],
+				'date'       => $posts['date'],
+				'start_time' => $posts['start_time'],
+				'stadium'    => $posts['stadium'],
+				'memo'       => $posts['memo'],
 			));
 			$game->save();
 
@@ -139,11 +139,11 @@ class Model_Game extends \Orm\Model
 			$team_bottom_name = $data['bottom_name'] ? : Model_Team::find($data['bottom'])->name;
 			// games insert
 			$game = self::forge(array(
-					'date'             => $data['date'],
-					'team_top'         => $data['top_name'] ? 0 : $data['top'],
-					'team_top_name'    => $team_top_name,
-					'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
-					'team_bottom_name' => $team_bottom_name,
+				'date'             => $data['date'],
+				'team_top'         => $data['top_name'] ? 0 : $data['top'],
+				'team_top_name'    => $team_top_name,
+				'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
+				'team_bottom_name' => $team_bottom_name,
 			));
 
 			$game->save();
@@ -181,9 +181,9 @@ class Model_Game extends \Orm\Model
 		// defaultがleft joinなので、join_onに条件追加
 		// 出場していない場合はnullとなる。
 		$query->related('stats_players', array(
-				'join_on' => array(
-						array('player_id', '=', Model_Player::get_my_player_id())
-				),
+			'join_on' => array(
+				array('player_id', '=', Model_Player::get_my_player_id())
+			),
 		));
 
 		// execute
@@ -267,9 +267,9 @@ class Model_Game extends \Orm\Model
 
 		// related games_teams
 		$query->related('games_teams', array(
-				'where' => array(
-						array('team_id', '=', $team_id),
-				),
+			'where' => array(
+				array('team_id', '=', $team_id),
+			),
 		));
 
 		$games = $query->get();
@@ -472,11 +472,11 @@ class Model_Game extends \Orm\Model
 	private static function _get_info_query()
 	{
 		$query = self::query()
-				->where('game_status', '!=', -1)
-				->order_by('date', 'desc');
+			->where('game_status', '!=', -1)
+			->order_by('date', 'desc');
 
 		$query->related('games_runningscores', array(
-				'select' => array('tsum', 'bsum')
+			'select' => array('tsum', 'bsum')
 		));
 
 		return $query;

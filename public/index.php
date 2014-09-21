@@ -57,20 +57,20 @@ try
   // maintenance mode
   if (\Config::get('bms.maintenance') === 'on')
   {
-    if (Auth::has_access('admin.admin'))
-    {
-      echo "現在、メンテナンスモードです";
-      $response = Request::forge()->execute()->response();
-    }
-    else
-    {
-      \Request::reset_request(true);
-      $response = Response::forge(View::forge('maintenance.twig'));
-    }
+	if (Auth::has_access('admin.admin'))
+	{
+	  echo "現在、メンテナンスモードです";
+	  $response = Request::forge()->execute()->response();
+	}
+	else
+	{
+	  \Request::reset_request(true);
+	  $response = Response::forge(View::forge('maintenance.twig'));
+	}
   }
   else
   {
-    $response = Request::forge()->execute()->response();
+	$response = Request::forge()->execute()->response();
   }
 } catch (HttpNotFoundException $e)
 {
@@ -80,20 +80,20 @@ try
 
   if ($route instanceof Closure)
   {
-    $response = $route();
+	$response = $route();
 
-    if (!$response instanceof Response)
-    {
-      $response = Response::forge($response);
-    }
+	if (!$response instanceof Response)
+	{
+	  $response = Response::forge($response);
+	}
   }
   elseif ($route)
   {
-    $response = Request::forge($route, false)->execute()->response();
+	$response = Request::forge($route, false)->execute()->response();
   }
   else
   {
-    throw $e;
+	throw $e;
   }
 }
 
@@ -106,11 +106,11 @@ if (strpos($response->body(), '{exec_time}') !== false or strpos($response->body
 {
   $bm = Profiler::app_total();
   $response->body(
-      str_replace(
-          array('{exec_time}', '{mem_usage}'),
-          array(round($bm[0], 4), round($bm[1] / pow(1024, 2), 3)),
-          $response->body()
-      )
+	  str_replace(
+		  array('{exec_time}', '{mem_usage}'),
+		  array(round($bm[0], 4), round($bm[1] / pow(1024, 2), 3)),
+		  $response->body()
+	  )
   );
 }
 

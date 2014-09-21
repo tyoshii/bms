@@ -6,7 +6,7 @@ class Controller_User extends Controller_Base
 	{
 		parent::before();
 
-		if (!Auth::check())
+		if ( ! Auth::check())
 		{
 			Session::set('redirect_to', Uri::current());
 			Response::redirect(Uri::create('/login'));

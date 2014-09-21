@@ -12,7 +12,7 @@ class Model_Score_Self
 		$query = <<<__QUERY__
 SELECT
 		s.player_id,
-    p.number,
+		p.number,
 		t.name as team,
 		p.name,
 		count(s.id) as G,
@@ -32,23 +32,23 @@ SELECT
 		sum(s.SB)  as SB,
 		(SELECT sum(E) from stats_fieldings where player_id = s.player_id) as E
 FROM
-    stats_hittings AS s
+		stats_hittings AS s
 
 LEFT JOIN
-    players AS p
+		players AS p
 ON
-    s.player_id = p.id
+		s.player_id = p.id
 
 LEFT JOIN
-    teams AS  t
+		teams AS  t
 ON
-    t.id = p.team_id
+		t.id = p.team_id
 
 WHERE
-    p.team_id = $team_id AND p.status != -1
+		p.team_id = $team_id AND p.status != -1
 
 GROUP BY
-    s.player_id
+		s.player_id
 
 ORDER BY
 		G DESC

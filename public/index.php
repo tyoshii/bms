@@ -17,11 +17,11 @@ error_reporting(-1);
 
 if (isset($_SERVER['FUEL_ENV']) && $_SERVER['FUEL_ENV'] !== 'production')
 {
-  ini_set('display_errors', 1);
+	ini_set('display_errors', 1);
 }
 else
 {
-  ini_set('display_errors', 0);
+	ini_set('display_errors', 0);
 }
 
 /**
@@ -54,47 +54,47 @@ require APPPATH.'bootstrap.php';
 // Generate the request, execute it and send the output.
 try
 {
-  // maintenance mode
-  if (\Config::get('bms.maintenance') === 'on')
-  {
-	if (Auth::has_access('admin.admin'))
+	// maintenance mode
+	if (\Config::get('bms.maintenance') === 'on')
 	{
-	  echo "現在、メンテナンスモードです";
-	  $response = Request::forge()->execute()->response();
+		if (Auth::has_access('admin.admin'))
+		{
+			echo "現在、メンテナンスモードです";
+			$response = Request::forge()->execute()->response();
+		}
+		else
+		{
+			\Request::reset_request(true);
+			$response = Response::forge(View::forge('maintenance.twig'));
+		}
 	}
 	else
 	{
-	  \Request::reset_request(true);
-	  $response = Response::forge(View::forge('maintenance.twig'));
+		$response = Request::forge()->execute()->response();
 	}
-  }
-  else
-  {
-	$response = Request::forge()->execute()->response();
-  }
 } catch (HttpNotFoundException $e)
 {
-  \Request::reset_request(true);
+	\Request::reset_request(true);
 
-  $route = array_key_exists('_404_', Router::$routes) ? Router::$routes['_404_']->translation : Config::get('routes._404_');
+	$route = array_key_exists('_404_', Router::$routes) ? Router::$routes['_404_']->translation : Config::get('routes._404_');
 
-  if ($route instanceof Closure)
-  {
-	$response = $route();
-
-	if (!$response instanceof Response)
+	if ($route instanceof Closure)
 	{
-	  $response = Response::forge($response);
+		$response = $route();
+
+		if (!$response instanceof Response)
+		{
+			$response = Response::forge($response);
+		}
 	}
-  }
-  elseif ($route)
-  {
-	$response = Request::forge($route, false)->execute()->response();
-  }
-  else
-  {
-	throw $e;
-  }
+	elseif ($route)
+	{
+		$response = Request::forge($route, false)->execute()->response();
+	}
+	else
+	{
+		throw $e;
+	}
 }
 
 // Render the output
@@ -104,14 +104,14 @@ $response->body((string)$response);
 // Comment this out if you don't use it.
 if (strpos($response->body(), '{exec_time}') !== false or strpos($response->body(), '{mem_usage}') !== false)
 {
-  $bm = Profiler::app_total();
-  $response->body(
-	  str_replace(
-		  array('{exec_time}', '{mem_usage}'),
-		  array(round($bm[0], 4), round($bm[1] / pow(1024, 2), 3)),
-		  $response->body()
-	  )
-  );
+	$bm = Profiler::app_total();
+	$response->body(
+			str_replace(
+					array('{exec_time}', '{mem_usage}'),
+					array(round($bm[0], 4), round($bm[1] / pow(1024, 2), 3)),
+					$response->body()
+			)
+	);
 }
 
 $response->send(true);

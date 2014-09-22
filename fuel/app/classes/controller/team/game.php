@@ -81,8 +81,6 @@ class Controller_Team_Game extends Controller_Team
 
 		// チーム情報
 		$games_teams = $this->_game->games_teams;
-		if (is_array($games_teams))
-			$games_teams = reset($games_teams);
 
 		if ( $games_teams->order === 'top' )
 		{

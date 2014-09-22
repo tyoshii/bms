@@ -7,7 +7,7 @@ class Add_memo_to_games
 	public function up()
 	{
 		\DBUtil::add_fields('games', array(
-				'memo' => array('type' => 'text'),
+			'memo' => array('type' => 'text'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_memo_to_games
 	public function down()
 	{
 		\DBUtil::drop_fields('games', array(
-				'memo'
+			'memo'
 
 		));
 	}

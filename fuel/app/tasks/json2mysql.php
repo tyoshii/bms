@@ -33,8 +33,8 @@ class Json2mysql
 
 				// award
 				$awards = array(
-						'mvp_player_id'        => $stats['mip2'],
-						'second_mvp_player_id' => $stats['mip1'],
+					'mvp_player_id'        => $stats['mip2'],
+					'second_mvp_player_id' => $stats['mip1'],
 				);
 				\Model_Stats_Award::regist($game_id, $team_id, $awards);
 
@@ -73,15 +73,15 @@ class Json2mysql
 		{
 			// ミラー対象のデータを取得
 			$results = \DB::select('game_id', 'team_id', 'players', 'pitchers', 'batters')
-					->from('games_stats')
-					->execute()->as_array();
+				->from('games_stats')
+				->execute()->as_array();
 
 			// 1つずつパースしてregist
 			foreach ($results as $result)
 			{
 				$ids = array(
-						'game_id' => $result['game_id'],
-						'team_id' => $result['team_id'],
+					'game_id' => $result['game_id'],
+					'team_id' => $result['team_id'],
 				);
 
 				// players
@@ -101,10 +101,10 @@ class Json2mysql
 				if ($stats = json_decode($result['pitchers'], true))
 				{
 					$require_keys = array(
-							'result',
-							'inning_int', 'inning_frac',
-							'hianda', 'sanshin', 'shishikyuu',
-							'earned_runs', 'runs',
+						'result',
+						'inning_int', 'inning_frac',
+						'hianda', 'sanshin', 'shishikyuu',
+						'earned_runs', 'runs',
 					);
 
 					// データ整形

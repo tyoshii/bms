@@ -7,7 +7,7 @@ class Delete_updated_at_from_users
 	public function up()
 	{
 		\DBUtil::drop_fields('users', array(
-				'updated_at'
+			'updated_at'
 
 		));
 	}
@@ -15,7 +15,7 @@ class Delete_updated_at_from_users
 	public function down()
 	{
 		\DBUtil::add_fields('users', array(
-				'updated_at' => array('constraint' => 11, 'type' => 'int'),
+			'updated_at' => array('constraint' => 11, 'type' => 'int'),
 
 		));
 	}

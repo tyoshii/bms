@@ -74,20 +74,20 @@ class Controller_Base extends Controller
 	{
 		// login form
 		$form = Fieldset::forge('login', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'login',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'login',
+			),
 		));
 
 		$form->add('username', 'ユーザー名', array('class' => 'form-control'))
-				->add_rule('required')
-				->add_rule('max_length', 40);
+			->add_rule('required')
+			->add_rule('max_length', 40);
 
 		$form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
-				->add_rule('required')
-				->add_rule('min_length', 8)
-				->add_rule('max_length', 250);
+			->add_rule('required')
+			->add_rule('min_length', 8)
+			->add_rule('max_length', 250);
 
 		$form->add('login', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
 

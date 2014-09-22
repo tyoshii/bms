@@ -14,14 +14,14 @@ class Controller_Team_Game extends Controller_Team
 			if ( ! $this->_game = Model_Game::find($game_id))
 			{
 				Session::set_flash('error', '試合情報が取得できませんでした。');
-				return Response::redirect('team/' . self::$_team->url_path);
+				return Response::redirect('team/'.self::$_team->url_path);
 			}
 		}
 
 		// 試合概要のURL
 		if ($this->_game)
 		{
-			$this->_game->href = $this->_team->href . '/game/' . $this->_game->id;
+			$this->_game->href = $this->_team->href.'/game/'.$this->_game->id;
 		}
 
 		// set global
@@ -55,7 +55,7 @@ class Controller_Team_Game extends Controller_Team
 				if (Model_Game::regist($props))
 				{
 					Session::set_flash('info', '新規ゲームを追加しました');
-					return Response::redirect('team/' . $this->_team->url_path);
+					return Response::redirect('team/'.$this->_team->url_path);
 				}
 				else
 				{
@@ -95,14 +95,14 @@ class Controller_Team_Game extends Controller_Team
 
 		$view->score = reset($this->_game->games_runningscores);
 		$view->stats = array(
-				'hitting'  => array(
-						'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),
-						'total'   => Model_Stats_Hitting::get_stats_total($this->_game->id, $this->_team->id),
-				),
-				'pitching' => array(
-						'players' => Model_Stats_Pitching::get_stats_by_playeds($this->_game->id, $this->_team->id),
-						'total'   => array(),
-				),
+			'hitting'  => array(
+				'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => Model_Stats_Hitting::get_stats_total($this->_game->id, $this->_team->id),
+			),
+			'pitching' => array(
+				'players' => Model_Stats_Pitching::get_stats_by_playeds($this->_game->id, $this->_team->id),
+				'total'   => array(),
+			),
 		);
 
 		return Response::forge($view);
@@ -118,7 +118,7 @@ class Controller_Team_Game extends Controller_Team
 		// playerが捕れない場合はログインさせる
 		if ( ! $this->_player)
 		{
-			return Response::redirect('/login?url=' . Uri::current());
+			return Response::redirect('/login?url='.Uri::current());
 		}
 
 		// kind validation
@@ -141,7 +141,7 @@ class Controller_Team_Game extends Controller_Team
 		}
 
 		// view load
-		$view = Theme::instance()->view('team/game/edit/' . $kind . '.twig');
+		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
 		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
@@ -158,19 +158,19 @@ class Controller_Team_Game extends Controller_Team
 
 				// 初回は必ず必要
 				$view->scores = array(array(
-						'top'    => $score->t1,
-						'bottom' => $score->b1,
+					'top'    => $score->t1,
+					'bottom' => $score->b1,
 				));
 
 				// ２回以降
 				for ($i = 2; $i <= 18; $i++)
 				{
-					if ($score['t' . $i] === null and $score['b' . $i] === null)
+					if ($score['t'.$i] === null and $score['b'.$i] === null)
 						break;
 
 					$view->scores[] = array(
-							'top'    => $score['t' . $i],
-							'bottom' => $score['b' . $i],
+						'top'    => $score['t'.$i],
+						'bottom' => $score['b'.$i],
 					);
 				}
 
@@ -189,12 +189,12 @@ class Controller_Team_Game extends Controller_Team
 				if ($type === 'all')
 				{
 					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
-							$game_id, $team_id);
+						$game_id, $team_id);
 				}
 				else
 				{
 					$view->batters = Model_Stats_Hitting::get_stats_by_playeds(
-							$game_id, $team_id, $this->_player->id);
+						$game_id, $team_id, $this->_player->id);
 				}
 
 				// 打席結果一覧
@@ -206,12 +206,12 @@ class Controller_Team_Game extends Controller_Team
 				if ($type === 'all')
 				{
 					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
-							$game_id, $team_id);
+						$game_id, $team_id);
 				}
 				else
 				{
 					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
-							$game_id, $team_id, $this->_player->id);
+						$game_id, $team_id, $this->_player->id);
 				}
 
 				break;
@@ -239,57 +239,57 @@ class Controller_Team_Game extends Controller_Team
 
 		// 試合実施日
 		$form->add('date', '試合実施日', array(
-				'type'             => 'text',
-				'class'            => 'form-control form-datepicker',
-				'value'            => date('Y-m-d'),
-				'data-date-format' => 'yyyy-mm-dd',
+			'type'             => 'text',
+			'class'            => 'form-control form-datepicker',
+			'value'            => date('Y-m-d'),
+			'data-date-format' => 'yyyy-mm-dd',
 		))
-				->add_rule('required')
-				->add_rule('trim');
+			->add_rule('required')
+			->add_rule('trim');
 
 		// - 試合開始時間
 		$form->add('start_time', '試合開始時間', array(
-				'type'  => 'hidden', // 未実装
-				'class' => 'form-control',
+			'type'  => 'hidden', // 未実装
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// - 対戦チーム名
 		$form->add('opponent_team_name', '対戦チーム名', array(
-				'type'  => 'text',
-				'class' => 'form-control',
+			'type'  => 'text',
+			'class' => 'form-control',
 		))
-				->add_rule('required')
-				->add_rule('trim');
+			->add_rule('required')
+			->add_rule('trim');
 
 		// - 先攻/後攻
 		$form->add('order', '先攻/後攻', array(
-				'type'    => 'select',
-				'class'   => 'form-control',
-				'options' => array('top' => '先攻', 'bottom' => '後攻'),
+			'type'    => 'select',
+			'class'   => 'form-control',
+			'options' => array('top' => '先攻', 'bottom' => '後攻'),
 		))
-				->add_rule('required')
-				->add_rule('in_array', array('top', 'bottom'));
+			->add_rule('required')
+			->add_rule('in_array', array('top', 'bottom'));
 
 		// - 球場
 		$form->add('stadium', '球場', array(
-				'type'  => 'text',
-				'class' => 'form-control',
+			'type'  => 'text',
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// - メモ
 		$form->add('memo', '試合コメント/メモ', array(
-				'type'  => 'textarea',
-				'class' => 'form-control',
+			'type'  => 'textarea',
+			'class' => 'form-control',
 		))
-				->add_rule('trim');
+			->add_rule('trim');
 
 		// submit
 		$form->add('submit', '', array(
-				'type'  => 'submit',
-				'value' => '登録',
-				'class' => 'btn btn-success',
+			'type'  => 'submit',
+			'value' => '登録',
+			'class' => 'btn btn-success',
 		));
 
 		return $form;

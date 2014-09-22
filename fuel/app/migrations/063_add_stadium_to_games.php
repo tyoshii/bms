@@ -7,7 +7,7 @@ class Add_stadium_to_games
 	public function up()
 	{
 		\DBUtil::add_fields('games', array(
-				'stadium' => array('constraint' => 64, 'type' => 'varchar'),
+			'stadium' => array('constraint' => 64, 'type' => 'varchar'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_stadium_to_games
 	public function down()
 	{
 		\DBUtil::drop_fields('games', array(
-				'stadium'
+			'stadium'
 
 		));
 	}

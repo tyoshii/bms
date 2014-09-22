@@ -78,10 +78,10 @@ function test_ログインに成功したらトップページへリダイレク
 	InputEx::reset();
 
 	// create user for test
-	$rand = rand(1000, 9999) . rand(1000, 9999);
-	$username = 'test_' . $rand;
+	$rand = rand(1000, 9999).rand(1000, 9999);
+	$username = 'test_'.$rand;
 	$password = $rand;
-	$email = $rand . '@yahoo.co.jp';
+	$email = $rand.'@yahoo.co.jp';
 
 	Auth::create_user($username, $password, $email);
 

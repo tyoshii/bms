@@ -3,452 +3,452 @@
 class Model_Games_Runningscore extends \Orm\Model
 {
 	protected static $_properties = array(
-			'id',
-			'game_id',
-			't1'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		'id',
+		'game_id',
+		't1'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't2'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't3'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't2'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't4'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't5'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't3'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't6'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't7'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't4'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't8'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't9'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't5'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't10'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't11'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't6'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't12'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't13'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't7'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't14'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't15'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't8'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't16'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			't17'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't9'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			't18'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'tsum' => array(
-					'data_type'  => 'int',
-					'default'    => 0,
-					'validation' => array(
-							'required',
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't10'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b1'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b2'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't11'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b3'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b4'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't12'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b5'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b6'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't13'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b7'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b8'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't14'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b9'   => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b10'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't15'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b11'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b12'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't16'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b13'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b14'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't17'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b15'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b16'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		't18'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
 			),
-			'b17'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'b18'  => array(
-					'data_type'  => 'int',
-					'default'    => null,
-					'validation' => array(
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+		),
+		'tsum' => array(
+			'data_type'  => 'int',
+			'default'    => 0,
+			'validation' => array(
+				'required',
+				'valid_string' => array('numeric'),
 			),
-			'bsum' => array(
-					'data_type'  => 'int',
-					'default'    => 0,
-					'validation' => array(
-							'required',
-							'valid_string' => array('numeric'),
-					),
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'created_at',
-			'updated_at',
+		),
+		'b1'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b2'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b3'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b4'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b5'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b6'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b7'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b8'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b9'   => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b10'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b11'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b12'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b13'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b14'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b15'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b16'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b17'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'b18'  => array(
+			'data_type'  => 'int',
+			'default'    => null,
+			'validation' => array(
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'bsum' => array(
+			'data_type'  => 'int',
+			'default'    => 0,
+			'validation' => array(
+				'required',
+				'valid_string' => array('numeric'),
+			),
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+		),
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
-			'Orm\Observer_CreatedAt' => array(
-					'events'          => array('before_insert'),
-					'mysql_timestamp' => false,
-			),
-			'Orm\Observer_UpdatedAt' => array(
-					'events'          => array('before_update'),
-					'mysql_timestamp' => false,
-			),
+		'Orm\Observer_CreatedAt' => array(
+			'events'          => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events'          => array('before_update'),
+			'mysql_timestamp' => false,
+		),
 	);
 	protected static $_table_name = 'games_runningscores';
 
 	protected static $_belongs_to = array(
-			'games' => array(
-					'model_to'       => 'Model_Game',
-					'key_from'       => 'game_id',
-					'key_to'         => 'id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			),
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 	);
 
 	public static function regist($game_id = null, $stats = array())
@@ -486,22 +486,22 @@ class Model_Games_Runningscore extends \Orm\Model
 		// 初回のスコアは必ず必要
 		$return = array();
 		$return[] = array(
-				'top'    => $score->t1,
-				'bottom' => $score->t1,
+			'top'    => $score->t1,
+			'bottom' => $score->t1,
 		);
 
 		// 2回から
 		for ($i = 2; $i <= 12; $i++)
 		{
-			$tkey = 't' . $i;
-			$bkey = 'b' . $i;
+			$tkey = 't'.$i;
+			$bkey = 'b'.$i;
 
 			if ($score->$tkey === null and $score->$bkey === null)
 				break;
 
 			$return[] = array(
-					'top'    => $score->$tkey,
-					'bottom' => $score->$bkey,
+				'top'    => $score->$tkey,
+				'bottom' => $score->$bkey,
 			);
 		}
 

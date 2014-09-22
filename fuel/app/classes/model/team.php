@@ -3,60 +3,60 @@
 class Model_Team extends \Orm\Model
 {
 	protected static $_properties = array(
-			'id',
-			'name'       => array(
-					'date_type'  => 'varchar',
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
-					'label'      => 'チーム名',
-					'validation' => array(
-							'required',
-							'max_length' => array(64),
-					),
+		'id',
+		'name'       => array(
+			'date_type'  => 'varchar',
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'url_path'   => array(
-					'date_type'  => 'varchar',
-					'form'       => array(
-							'class' => 'form-control',
-							'type'  => 'text',
-					),
-					'label'      => '英語名（URLになります）',
-					'validation' => array(
-							'required',
-							'max_length'   => array(64),
-							'valid_string' => array('alpha', 'numeric', 'dashes'),
-					),
+			'label'      => 'チーム名',
+			'validation' => array(
+				'required',
+				'max_length' => array(64),
 			),
-			'status'     => array(
-					'default' => 0,
-					'form'    => array('type' => false),
+		),
+		'url_path'   => array(
+			'date_type'  => 'varchar',
+			'form'       => array(
+				'class' => 'form-control',
+				'type'  => 'text',
 			),
-			'created_at' => array('form' => array('type' => false)),
-			'updated_at' => array('form' => array('type' => false)),
+			'label'      => '英語名（URLになります）',
+			'validation' => array(
+				'required',
+				'max_length'   => array(64),
+				'valid_string' => array('alpha', 'numeric', 'dashes'),
+			),
+		),
+		'status'     => array(
+			'default' => 0,
+			'form'    => array('type' => false),
+		),
+		'created_at' => array('form' => array('type' => false)),
+		'updated_at' => array('form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
-			'Orm\Observer_CreatedAt' => array(
-					'events'          => array('before_insert'),
-					'mysql_timestamp' => false,
-			),
-			'Orm\Observer_UpdatedAt' => array(
-					'events'          => array('before_update'),
-					'mysql_timestamp' => false,
-			),
+		'Orm\Observer_CreatedAt' => array(
+			'events'          => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events'          => array('before_update'),
+			'mysql_timestamp' => false,
+		),
 	);
 	protected static $_table_name = 'teams';
 
 	protected static $_has_many = array(
-			'players' => array(
-					'model_to'       => 'Model_Player',
-					'key_from'       => 'id',
-					'key_to'         => 'team_id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			)
+		'players' => array(
+			'model_to'       => 'Model_Player',
+			'key_from'       => 'id',
+			'key_to'         => 'team_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		)
 	);
 
 	/**
@@ -92,10 +92,10 @@ class Model_Team extends \Orm\Model
 
 		// チーム登録したユーザーをプレイヤーとして登録
 		$props = array(
-				'team_id'  => $team->id,
-				'name'     => Common::get_dispname(),
-				'number'   => 0,
-				'username' => Auth::get('username'),
+			'team_id'  => $team->id,
+			'name'     => Common::get_dispname(),
+			'number'   => 0,
+			'username' => Auth::get('username'),
 		);
 		Model_Player::regist($props);
 
@@ -105,18 +105,18 @@ class Model_Team extends \Orm\Model
 	public static function get_belong_team()
 	{
 		return self::query()->related('players', array(
-				'where' => array(
-						array('username', Auth::get_screen_name()),
-				),
+			'where' => array(
+				array('username', Auth::get_screen_name()),
+			),
 		))->get();
 	}
 
 	public static function get_teams()
 	{
 		return DB::select()
-				->from(self::$_table_name)
-				->where('status', '!=', '-1')
-				->execute()->as_array('id');
+			->from(self::$_table_name)
+			->where('status', '!=', '-1')
+			->execute()->as_array('id');
 	}
 
 	public static function get_teams_key_value()

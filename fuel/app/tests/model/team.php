@@ -37,8 +37,8 @@ class Test_Model_Team extends \Test_Model_Base
 
 		// 新規登録
 		$props = array(
-				'name'     => rand(),
-				'url_path' => rand(),
+			'name'     => rand(),
+			'url_path' => rand(),
 		);
 		$id = Model_Team::regist($props);
 

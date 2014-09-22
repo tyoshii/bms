@@ -77,10 +77,10 @@ __QUERY__;
 
 		// 率計算
 		$stats['rate'] = array(
-				'AVG' => '0.000', // 打率
-				'OBP' => '0.000', // 出塁率
-				'SLG' => '0.000', // 長打率
-				'OPS' => '0.000',
+			'AVG' => '0.000', // 打率
+			'OBP' => '0.000', // 出塁率
+			'SLG' => '0.000', // 長打率
+			'OPS' => '0.000',
 		);
 
 		if ($stats['AB'] !== 0 and $stats['AB'] !== '0')
@@ -126,14 +126,14 @@ __QUERY__;
 		$infos = self::getTeamGameInfo($team_id);
 
 		$ret = array(
-				'games' => count($infos),
-				'win'   => 0,
-				'lose'  => 0,
-				'draw'  => 0,
-				'rate'  => array(
-						'win'  => 0.000,
-						'lose' => 0.000,
-				),
+			'games' => count($infos),
+			'win'   => 0,
+			'lose'  => 0,
+			'draw'  => 0,
+			'rate'  => array(
+				'win'  => 0.000,
+				'lose' => 0.000,
+			),
 		);
 
 		// 勝敗

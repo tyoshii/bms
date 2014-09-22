@@ -7,7 +7,7 @@ class Add_category_to_batter_results
 	public function up()
 	{
 		\DBUtil::add_fields('batter_results', array(
-				'category' => array('constraint' => 32, 'type' => 'varchar'),
+			'category' => array('constraint' => 32, 'type' => 'varchar'),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_category_to_batter_results
 	public function down()
 	{
 		\DBUtil::drop_fields('batter_results', array(
-				'category'
+			'category'
 
 		));
 	}

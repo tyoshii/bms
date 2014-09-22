@@ -39,9 +39,9 @@ class Controller_Register extends Controller
 		$view = View::forge('forget_password.twig');
 
 		$form = Common_Form::forge()
-				->email()
-				->submit('送信')
-				->get_object();
+			->email()
+			->submit('送信')
+			->get_object();
 
 		$view->set_safe('form', $form->build(Uri::current()));
 
@@ -52,9 +52,9 @@ class Controller_Register extends Controller
 	{
 		// get form / validation object
 		$form = Common_Form::forge()
-				->email()
-				->submit('送信')
-				->get_object();
+			->email()
+			->submit('送信')
+			->get_object();
 		$val = $form->validation();
 
 		// valid
@@ -73,7 +73,7 @@ class Controller_Register extends Controller
 			else
 			{
 				$time = time();
-				$crypt = Crypt::encode($time . $user->username);
+				$crypt = Crypt::encode($time.$user->username);
 
 				Common_Email::reset_password($user->username, $user->email, $time, $crypt);
 				Session::set_flash('info', 'パスワードリセットのメールを登録メールに送付しました。');
@@ -104,7 +104,7 @@ class Controller_Register extends Controller
 		}
 
 		// cryptチェック
-		if (Crypt::decode($crypt) !== $time . $username)
+		if (Crypt::decode($crypt) !== $time.$username)
 		{
 			Session::set_flash('error', '不正なアクセスです。');
 			Response::redirect('/');
@@ -121,11 +121,11 @@ class Controller_Register extends Controller
 		$form = Common_Form::forge('regist_user');
 
 		$form->username()
-				->password()
-				->confirm()
-				->name()
-				->email()
-				->submit('登録');
+			->password()
+			->confirm()
+			->name()
+			->email()
+			->submit('登録');
 
 		$form = $form->form;
 

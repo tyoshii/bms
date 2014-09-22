@@ -47,8 +47,8 @@ abstract class Test_Model_Base extends Test_Base
 	private static function _get_columns_from_db($table)
 	{
 		$result = \Database_Connection::instance()
-				->query(\DB::SELECT, "desc {$table}", false)
-				->as_array();
+			->query(\DB::SELECT, "desc {$table}", false)
+			->as_array();
 
 		$return = array();
 		foreach ($result as $res)

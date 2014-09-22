@@ -56,9 +56,9 @@ class Controller_Api_Game extends Controller_Rest
 		$ids = self::_getIds();
 
 		$ret = Model_Game::update_status(
-				$ids['game_id'],
-				$ids['team_id'],
-				Input::post('status')
+			$ids['game_id'],
+			$ids['team_id'],
+			Input::post('status')
 		);
 
 		if ( ! $ret)
@@ -170,8 +170,8 @@ class Controller_Api_Game extends Controller_Rest
 
 		// update award(mvp)
 		$stats = array(
-				'mvp_player_id'        => $stats['mvp'],
-				'second_mvp_player_id' => $stats['second_mvp'],
+			'mvp_player_id'        => $stats['mvp'],
+			'second_mvp_player_id' => $stats['second_mvp'],
 		);
 		Model_Stats_Award::regist($ids['game_id'], $ids['team_id'], $stats);
 

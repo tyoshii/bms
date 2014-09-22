@@ -7,24 +7,24 @@ class Controller_Api_Deploy extends Controller
 		$data = json_decode(Input::post('payload'), true);
 
 		// debug
-		echo $data['ref'] . "\n";
+		echo $data['ref']."\n";
 
 		if ($data['ref'] === 'refs/heads/master')
 		{
 			self::_deploy(
-					'/home/tyoshii/git/tyoshii/bms/',
-					'master',
-					'production',
-					'bms.list'
+				'/home/tyoshii/git/tyoshii/bms/',
+				'master',
+				'production',
+				'bms.list'
 			);
 		}
 		if ($data['ref'] === 'refs/heads/staging')
 		{
 			self::_deploy(
-					'/home/tyoshii/git/tyoshii/bms_staging/',
-					'staging',
-					'staging',
-					'bms_staging.list'
+				'/home/tyoshii/git/tyoshii/bms_staging/',
+				'staging',
+				'staging',
+				'bms_staging.list'
 			);
 		}
 	}

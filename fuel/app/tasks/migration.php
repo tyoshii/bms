@@ -50,18 +50,18 @@ class Migration
 			if ($game['team_top'] === '0')
 			{
 				$props = $props + array(
-								'team_id'            => $game['team_bottom'],
-								'order'              => 'bottom',
-								'opponent_team_name' => $game['team_top_name'],
-						);
+						'team_id'            => $game['team_bottom'],
+						'order'              => 'bottom',
+						'opponent_team_name' => $game['team_top_name'],
+					);
 			}
 			else
 			{
 				$props = $props + array(
-								'team_id'            => $game['team_top'],
-								'order'              => 'top',
-								'opponent_team_name' => $game['team_bottom_name'],
-						);
+						'team_id'            => $game['team_top'],
+						'order'              => 'top',
+						'opponent_team_name' => $game['team_bottom_name'],
+					);
 			}
 
 			\Model_Games_Team::regist($props);
@@ -147,11 +147,11 @@ class Migration
 		foreach ($games as $game)
 		{
 			$props = array(
-					'game_id'  => $game['id'],
-					'players'  => $game['players'],
-					'pitchers' => $game['pitchers'],
-					'batters'  => $game['batters'],
-					'others'   => '',
+				'game_id'  => $game['id'],
+				'players'  => $game['players'],
+				'pitchers' => $game['pitchers'],
+				'batters'  => $game['batters'],
+				'others'   => '',
 			);
 
 			foreach (array('top' => $game['team_top'], 'bottom' => $game['team_bottom']) as $order => $team_id)

@@ -32,7 +32,7 @@ class Common
 	{
 		$info = Auth::get_profile_fields();
 		$name = isset($info['dispname']) ? $info['dispname']
-				: Auth::get_screen_name();
+			: Auth::get_screen_name();
 
 		return $name;
 	}

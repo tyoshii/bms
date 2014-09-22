@@ -3,41 +3,41 @@
 class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
-			'id',
-			'team_id',
-			'name',
-			'number',
-			'username',
-			'status' => array(
-					'default' => 1,
-			),
-			'role'   => array(
-					'default' => 'user',
-			),
-			'created_at',
-			'updated_at',
+		'id',
+		'team_id',
+		'name',
+		'number',
+		'username',
+		'status' => array(
+			'default' => 1,
+		),
+		'role'   => array(
+			'default' => 'user',
+		),
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
-			'Orm\Observer_CreatedAt' => array(
-					'events'          => array('before_insert'),
-					'mysql_timestamp' => false,
-			),
-			'Orm\Observer_UpdatedAt' => array(
-					'events'          => array('before_update'),
-					'mysql_timestamp' => false,
-			),
+		'Orm\Observer_CreatedAt' => array(
+			'events'          => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events'          => array('before_update'),
+			'mysql_timestamp' => false,
+		),
 	);
 	protected static $_table_name = 'players';
 
 	protected static $_belongs_to = array(
-			'teams' => array(
-					'model_to'       => 'Model_Team',
-					'key_from'       => 'team_id',
-					'key_to'         => 'id',
-					'cascade_save'   => false,
-					'cascade_delete' => false,
-			));
+		'teams' => array(
+			'model_to'       => 'Model_Team',
+			'key_from'       => 'team_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		));
 
 	public static function get_name_by_username($username = null)
 	{
@@ -77,10 +77,10 @@ class Model_Player extends \Orm\Model
 	public static function get_players($team_id = null)
 	{
 		$query = DB::select('p.*', array('teams.name', 'teamname'))
-				->from(array(self::$_table_name, 'p'))
-				->join('teams', 'LEFT')->on('p.team_id', '=', 'teams.id')
-				->where('p.status', '!=', -1)
-				->order_by(DB::expr('CAST(p.number as SIGNED)'));
+			->from(array(self::$_table_name, 'p'))
+			->join('teams', 'LEFT')->on('p.team_id', '=', 'teams.id')
+			->where('p.status', '!=', -1)
+			->order_by(DB::expr('CAST(p.number as SIGNED)'));
 
 		if ($team_id)
 			$query->where('p.team_id', $team_id);
@@ -110,8 +110,8 @@ class Model_Player extends \Orm\Model
 			if ($props['username'] and $props['username'] !== $player->username)
 			{
 				$already = self::query()->where(array(
-						array('username', $props['username']),
-						array('team_id', $props['team_id']),
+					array('username', $props['username']),
+					array('team_id', $props['team_id']),
 				))->get();
 
 				if ($already)
@@ -159,11 +159,11 @@ class Model_Player extends \Orm\Model
 	public static function get_player_email($player_id)
 	{
 		$user = DB::select()
-				->from(array(self::$_table_name, 'p'))
-				->join(array('users', 'u'))->on('p.username', '=', 'u.username')
-				->where('p.id', $player_id)
-				->limit(1)
-				->execute()->as_array();
+			->from(array(self::$_table_name, 'p'))
+			->join(array('users', 'u'))->on('p.username', '=', 'u.username')
+			->where('p.id', $player_id)
+			->limit(1)
+			->execute()->as_array();
 
 		$user = $user[0];
 
@@ -185,8 +185,8 @@ class Model_Player extends \Orm\Model
 	public static function has_team_admin($team_id)
 	{
 		$res = self::query()->where(array(
-				array('username', Auth::get_screen_name()),
-				array('team_id', $team_id)
+			array('username', Auth::get_screen_name()),
+			array('team_id', $team_id)
 		))->get_one();
 
 		return $res and $res->role === 'admin';
@@ -204,7 +204,7 @@ class Model_Player extends \Orm\Model
 	public static function update_role($team_id, $player_id, $role)
 	{
 		$player = self::find($player_id, array(
-				'where' => array(array('team_id', $team_id)),
+			'where' => array(array('team_id', $team_id)),
 		));
 
 		if ( ! $player)

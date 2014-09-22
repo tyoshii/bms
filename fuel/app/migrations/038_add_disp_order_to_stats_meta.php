@@ -7,7 +7,7 @@ class Add_disp_order_to_stats_meta
 	public function up()
 	{
 		\DBUtil::add_fields('stats_meta', array(
-				'disp_order' => array('type' => 'tinyint', 'unsigned' => true),
+			'disp_order' => array('type' => 'tinyint', 'unsigned' => true),
 
 		));
 	}
@@ -15,7 +15,7 @@ class Add_disp_order_to_stats_meta
 	public function down()
 	{
 		\DBUtil::drop_fields('stats_meta', array(
-				'disp_order'
+			'disp_order'
 
 		));
 	}

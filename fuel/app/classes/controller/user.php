@@ -33,8 +33,8 @@ class Controller_User extends Controller_Base
 		{
 			// user情報更新
 			Common::update_user(array(
-					'email'    => Input::post('email'),
-					'dispname' => Input::post('dispname'),
+				'email'    => Input::post('email'),
+				'dispname' => Input::post('dispname'),
 			));
 
 			// player情報更新
@@ -110,9 +110,9 @@ class Controller_User extends Controller_Base
 	public function _get_team_form()
 	{
 		$form = Fieldset::forge('team', array(
-				'form_attributes' => array(
-						'class' => 'form',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+			),
 		));
 
 		// デフォルト
@@ -129,13 +129,13 @@ class Controller_User extends Controller_Base
 
 			// player_id を type=hiddenでセット
 			$form->add('player_id', '', array(
-					'type'  => 'hidden',
-					'value' => $player->id,
+				'type'  => 'hidden',
+				'value' => $player->id,
 			))
-					->add_rule('required')
-					->add_rule('trim')
-					->add_rule('valid_string', array('numeric'))
-					->add_rule('match_value', array($player->id));
+				->add_rule('required')
+				->add_rule('trim')
+				->add_rule('valid_string', array('numeric'))
+				->add_rule('match_value', array($player->id));
 		}
 
 		// 所属チーム
@@ -143,24 +143,24 @@ class Controller_User extends Controller_Base
 		$teams = Model_Team::get_teams_key_value();
 
 		$form->add('team_id', '所属チーム', array(
-				'type'             => 'select',
-				'options'          => $default + $teams,
-				'value'            => $team_id,
-				'class'            => 'select2',
-				'data-placeholder' => 'Select Team',
+			'type'             => 'select',
+			'options'          => $default + $teams,
+			'value'            => $team_id,
+			'class'            => 'select2',
+			'data-placeholder' => 'Select Team',
 		))
-				->add_rule('in_array', array_keys($teams));
+			->add_rule('in_array', array_keys($teams));
 
 		// 背番号
 		$form->add('number', '背番号', array(
-				'type'  => 'number',
-				'value' => $number,
-				'class' => 'form-control',
-				'min'   => '0',
+			'type'  => 'number',
+			'value' => $number,
+			'class' => 'form-control',
+			'min'   => '0',
 		))
-				->add_rule('trim')
-				->add_rule('valid_string', array('numeric'))
-				->add_rule('required');
+			->add_rule('trim')
+			->add_rule('valid_string', array('numeric'))
+			->add_rule('required');
 
 		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
 
@@ -170,26 +170,26 @@ class Controller_User extends Controller_Base
 	public function _get_password_form()
 	{
 		$form = Fieldset::forge('password', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'search',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'search',
+			),
 		));
 
 		$form->add('original', '今のパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
-				->add_rule('required')
-				->add_rule('min_length', 8)
-				->add_rule('max_length', 250);
+			->add_rule('required')
+			->add_rule('min_length', 8)
+			->add_rule('max_length', 250);
 
 		$form->add('password1', '新しいパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
-				->add_rule('required')
-				->add_rule('min_length', 8)
-				->add_rule('max_length', 250);
+			->add_rule('required')
+			->add_rule('min_length', 8)
+			->add_rule('max_length', 250);
 
 		$form->add('password2', '同じものを', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
-				->add_rule('required')
-				->add_rule('min_length', 8)
-				->add_rule('max_length', 250);
+			->add_rule('required')
+			->add_rule('min_length', 8)
+			->add_rule('max_length', 250);
 
 		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '変更'));
 
@@ -199,49 +199,49 @@ class Controller_User extends Controller_Base
 	public function _get_info_form()
 	{
 		$form = Fieldset::forge('user', array(
-				'form_attributes' => array(
-						'class' => 'form',
-						'role'  => 'search',
-				),
+			'form_attributes' => array(
+				'class' => 'form',
+				'role'  => 'search',
+			),
 		));
 
 		$info = Auth::get_profile_fields();
 
 		$form->add('username', '', array(
-				'value' => Auth::get_screen_name(),
-				'type'  => 'hidden'
+			'value' => Auth::get_screen_name(),
+			'type'  => 'hidden'
 		))
-				->add_rule('required')
-				->add_rule('match_value', array(Auth::get_screen_name()));
+			->add_rule('required')
+			->add_rule('match_value', array(Auth::get_screen_name()));
 
 		$form->add('email', '', array(
-				'value' => Auth::get_email(),
-				'type'  => 'hidden'
+			'value' => Auth::get_email(),
+			'type'  => 'hidden'
 		))
-				->add_rule('required')
-				->add_rule('valid_email')
-				->add_rule('match_value', array(Auth::get_email()));
+			->add_rule('required')
+			->add_rule('valid_email')
+			->add_rule('match_value', array(Auth::get_email()));
 
 		$form->add('dummy-username', 'ユーザーID', array(
-				'value'    => Auth::get_screen_name(),
-				'class'    => 'form-control',
-				'disabled' => 'disabled',
+			'value'    => Auth::get_screen_name(),
+			'class'    => 'form-control',
+			'disabled' => 'disabled',
 		));
 
 		$form->add('dummy-email', 'Eメール', array(
-				'value'    => Auth::get_email(),
-				'class'    => 'form-control',
-				'disabled' => 'disabled',
+			'value'    => Auth::get_email(),
+			'class'    => 'form-control',
+			'disabled' => 'disabled',
 		));
 
 		$form->add('dispname', '表示名', array(
-				'value'       => Common::get_dispname(),
-				'maxlength'   => 16,
-				'class'       => 'form-control',
-				'description' => '※これとは別に、所属チームごとに選手名を設定できます。',
+			'value'       => Common::get_dispname(),
+			'maxlength'   => 16,
+			'class'       => 'form-control',
+			'description' => '※これとは別に、所属チームごとに選手名を設定できます。',
 		))
-				->add_rule('required')
-				->add_rule('max_length', 8);
+			->add_rule('required')
+			->add_rule('max_length', 8);
 
 		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
 

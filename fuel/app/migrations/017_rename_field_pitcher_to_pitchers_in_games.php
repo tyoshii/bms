@@ -13,7 +13,7 @@ class Rename_field_pitcher_to_pitchers_in_games
 
 	public function down()
 	{
-	\DBUtil::modify_fields('games', array(
+		\DBUtil::modify_fields('games', array(
 			'pitchers' => array('name' => 'pitcher', 'type' => 'text')
 		));
 	}

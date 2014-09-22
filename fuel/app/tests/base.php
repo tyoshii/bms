@@ -2,26 +2,27 @@
 
 abstract class Test_Base extends \TestCase
 {
-  protected function setUp()
-  {
-    parent::setUp();
-    Auth::logout();
-  }
-  protected function tearDown()
-  {
-    parent::tearDown();
-  }
+	protected function setUp()
+	{
+		parent::setUp();
+		Auth::logout();
+	}
 
-  public function get_property($class_name, $prop_name)
-  {
-    $class = new ReflectionClass($class_name);
-    $prop  = $class->getProperty($prop_name);
-    $prop->setAccessible(true);
+	protected function tearDown()
+	{
+		parent::tearDown();
+	}
 
-    $orig = new $class_name;
+	public function get_property($class_name, $prop_name)
+	{
+		$class = new ReflectionClass($class_name);
+		$prop = $class->getProperty($prop_name);
+		$prop->setAccessible(true);
 
-    return $prop->getValue($orig);
-  }
+		$orig = new $class_name;
+
+		return $prop->getValue($orig);
+	}
 
 	public function assertRedirect($res, $location, $code = 302)
 	{
@@ -31,10 +32,13 @@ abstract class Test_Base extends \TestCase
 
 	public function assertException($func)
 	{
-		try {
+		try
+		{
 			$func();
 			$this->assertTrue(false);
-		} catch ( Exception $e ) {
+		}
+		catch (Exception $e)
+		{
 			$this->assertTrue(true);
 		}
 	}

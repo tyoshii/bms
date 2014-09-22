@@ -12,6 +12,8 @@ class Database
 	 *
 	 * php oil r database
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function run($args = NULL)
@@ -21,10 +23,9 @@ class Database
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
 	}
-
 
 
 	/**
@@ -33,6 +34,8 @@ class Database
 	 * Usage (from command line):
 	 *
 	 * php oil r database:test "arguments"
+	 *
+	 * @param null $args
 	 *
 	 * @return string
 	 */
@@ -43,12 +46,12 @@ class Database
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
 
-    \DB::query('SHOW TABLES')->execute();
+		\DB::query('SHOW TABLES')->execute();
 
-    echo "Database Connection OK";
+		echo "Database Connection OK";
 	}
 
 }

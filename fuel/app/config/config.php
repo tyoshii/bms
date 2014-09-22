@@ -63,22 +63,22 @@ return array(
 	// 'ob_callback'  => null,
 
 	// 'errors'  => array(
-		// Which errors should we show, but continue execution? You can add the following:
-		// E_NOTICE, E_WARNING, E_DEPRECATED, E_STRICT to mimic PHP's default behaviour
-		// (which is to continue on non-fatal errors). We consider this bad practice.
-		// 'continue_on'  => array(),
-		// How many errors should we show before we stop showing them? (prevents out-of-memory errors)
-		// 'throttle'     => 10,
-		// Should notices from Error::notice() be shown?
-		// 'notices'      => true,
-		// Render previous contents or show it as HTML?
-		// 'render_prior' => false,
+	// Which errors should we show, but continue execution? You can add the following:
+	// E_NOTICE, E_WARNING, E_DEPRECATED, E_STRICT to mimic PHP's default behaviour
+	// (which is to continue on non-fatal errors). We consider this bad practice.
+	// 'continue_on'  => array(),
+	// How many errors should we show before we stop showing them? (prevents out-of-memory errors)
+	// 'throttle'     => 10,
+	// Should notices from Error::notice() be shown?
+	// 'notices'      => true,
+	// Render previous contents or show it as HTML?
+	// 'render_prior' => false,
 	// ),
 
 	/**
 	 * Localization & internationalization settings
 	 */
-    'language'           => 'ja', // Default language
+	'language'         => 'ja', // Default language
 	// 'language_fallback'  => 'en', // Fallback language when file isn't available for default language
 	// 'locale'             => 'en_US', // PHP set_locale() setting, null to not set
 
@@ -90,11 +90,11 @@ return array(
 	/**
 	 * DateTime settings
 	 *
-	 * server_gmt_offset	in seconds the server offset from gmt timestamp when time() is used
-	 * default_timezone		optional, if you want to change the server's default timezone
+	 * server_gmt_offset    in seconds the server offset from gmt timestamp when time() is used
+	 * default_timezone        optional, if you want to change the server's default timezone
 	 */
 	// 'server_gmt_offset'  => 0,
-    'default_timezone'   => 'Asia/Tokyo',
+	'default_timezone' => 'Asia/Tokyo',
 
 	/**
 	 * Logging Threshold.  Can be set to any of the following:
@@ -113,7 +113,7 @@ return array(
 	/**
 	 * Security settings
 	 */
-	'security' => array(
+	'security'         => array(
 		// 'csrf_autoload'    => false,
 		// 'csrf_token_key'   => 'fuel_csrf_token',
 		// 'csrf_expiration'  => 0,
@@ -137,7 +137,7 @@ return array(
 		 * WARNING: Using xss_clean will cause a performance hit.
 		 * How much is dependant on how much input data there is.
 		 */
-		'uri_filter'       => array('htmlentities'),
+		'uri_filter'          => array('htmlentities'),
 
 		/**
 		 * This input filter can be any normal PHP function as well as 'xss_clean'
@@ -153,7 +153,7 @@ return array(
 		 * WARNING: Using xss_clean will cause a performance hit.
 		 * How much is dependant on how much input data there is.
 		 */
-		'output_filter'  => array('Security::htmlentities'),
+		'output_filter'       => array('Security::htmlentities'),
 
 		/**
 		 * Encoding mechanism to use on htmlentities()
@@ -186,46 +186,46 @@ return array(
 	 * Cookie settings
 	 */
 	// 'cookie' => array(
-		// Number of seconds before the cookie expires
-		// 'expiration'  => 0,
-		// Restrict the path that the cookie is available to
-		// 'path'        => '/',
-		// Restrict the domain that the cookie is available to
-		// 'domain'      => null,
-		// Only transmit cookies over secure connections
-		// 'secure'      => false,
-		// Only transmit cookies over HTTP, disabling Javascript access
-		// 'http_only'   => false,
+	// Number of seconds before the cookie expires
+	// 'expiration'  => 0,
+	// Restrict the path that the cookie is available to
+	// 'path'        => '/',
+	// Restrict the domain that the cookie is available to
+	// 'domain'      => null,
+	// Only transmit cookies over secure connections
+	// 'secure'      => false,
+	// Only transmit cookies over HTTP, disabling Javascript access
+	// 'http_only'   => false,
 	// ),
 
 	/**
 	 * Validation settings
 	 */
 	// 'validation' => array(
-		/**
-		 * Wether to fallback to global when a value is not found in the input array.
-		 */
-		// 'global_input_fallback' => true,
+	/**
+	 * Wether to fallback to global when a value is not found in the input array.
+	 */
+	// 'global_input_fallback' => true,
 	// ),
 
 	/**
 	 * Controller class prefix
 	 */
-	 // 'controller_prefix' => 'Controller_',
+	// 'controller_prefix' => 'Controller_',
 
 	/**
 	 * Routing settings
 	 */
 	// 'routing' => array(
-		/**
-		 * Whether URI routing is case sensitive or not
-		 */
-		// 'case_sensitive' => true,
+	/**
+	 * Whether URI routing is case sensitive or not
+	 */
+	// 'case_sensitive' => true,
 
-		/**
-		 *  Wether to strip the extension
-		 */
-		// 'strip_extension' => true,
+	/**
+	 *  Wether to strip the extension
+	 */
+	// 'strip_extension' => true,
 	// ),
 
 	/**
@@ -249,7 +249,7 @@ return array(
 	 *
 	 * Paths MUST end with a directory separator (the DS constant)!
 	 */
-	'package_paths' => array(
+	'package_paths'    => array(
 		PKGPATH
 	),
 
@@ -257,7 +257,7 @@ return array(
 	/**************************************************************************/
 	/* Always Load                                                            */
 	/**************************************************************************/
-	 'always_load'  => array(
+	'always_load'      => array(
 
 		/**
 		 * These packages are loaded on Fuel's startup.
@@ -267,15 +267,15 @@ return array(
 		 *
 		 * // Use this format to specify the path to the package explicitly
 		 * array(
-		 *     array('auth'	=> PKGPATH.'auth/')
+		 *     array('auth'    => PKGPATH.'auth/')
 		 * );
 		 */
-		 'packages'  => array(
-      'orm',
-      'parser',
-      'auth',
-      'email',
-		 ),
+		'packages' => array(
+			'orm',
+			'parser',
+			'auth',
+			'email',
+		),
 
 		/**
 		 * These modules are always loaded on Fuel's startup. You can specify them
@@ -300,12 +300,12 @@ return array(
 		 * add it like 'session' => 'auth'.
 		 * If you don't want the config in a group use null as groupname.
 		 */
-		'config'  => array(
-      'system'     => true,
-      'bms'        => true,
-      'password'   => true,
-      'simpleauth' => true, 
-    ),
+		'config'   => array(
+			'system'     => true,
+			'bms'        => true,
+			'password'   => true,
+			'simpleauth' => true,
+		),
 
 		/**
 		 * Language files to autoload
@@ -316,6 +316,6 @@ return array(
 		 * If you don't want the lang in a group use null as groupname.
 		 */
 		// 'language'  => array(),
-	 ),
+	),
 
 );

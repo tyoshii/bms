@@ -12,6 +12,8 @@ class Version
 	 *
 	 * php oil r version
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function run($args = NULL)
@@ -21,12 +23,11 @@ class Version
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
-    echo "Version   : ".\Config::get('system.version')."\n";
-    echo "Update At : ".\Config::get('system.update_at')."\n";
+		echo "Version   : ".\Config::get('system.version')."\n";
+		echo "Update At : ".\Config::get('system.update_at')."\n";
 	}
-
 
 
 	/**
@@ -36,6 +37,8 @@ class Version
 	 *
 	 * php oil r version:index "arguments"
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function up($args = NULL)
@@ -44,15 +47,15 @@ class Version
 		echo "\nRunning task [Version:up]";
 		echo "\n-------------------------------------------\n\n";
 
-    $CHANGELOG = DOCROOT.'/CHANGELOG.md';
-    $version = `cat $CHANGELOG | grep Version | head -1 | awk '{ print $3}'`;
-    
-    \Config::set('system.version', trim($version)); 
-    \Config::set('system.update_at', date('Y/m/d H:i:s'));
+		$CHANGELOG = DOCROOT.'/CHANGELOG.md';
+		$version = `cat $CHANGELOG | grep Version | head -1 | awk '{ print $3}'`;
 
-    \Config::save('system', 'system');
+		\Config::set('system.version', trim($version));
+		\Config::set('system.update_at', date('Y/m/d H:i:s'));
 
-    echo "version up done. config/system.php update";
+		\Config::save('system', 'system');
+
+		echo "version up done. config/system.php update";
 	}
 
 }

@@ -12,6 +12,8 @@ class Game
 	 *
 	 * php oil r game
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function run($args = NULL)
@@ -21,10 +23,9 @@ class Game
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
 	}
-
 
 
 	/**
@@ -38,20 +39,20 @@ class Game
 	 */
 	public function updateTeamName()
 	{
-    $games = \Model_Game::query()->get();
+		$games = \Model_Game::query()->get();
 
-    foreach ( $games as $game )
-    {
-      if ( ! $game->team_top_name )
-        $game->team_top_name = \Model_Team::find($game->team_top)->name;
-      
-      if ( ! $game->team_bottom_name )
-        $game->team_bottom_name = \Model_Team::find($game->team_bottom)->name;
+		foreach ($games as $game)
+		{
+			if ( ! $game->team_top_name)
+				$game->team_top_name = \Model_Team::find($game->team_top)->name;
 
-      $game->save();
-    }
+			if ( ! $game->team_bottom_name)
+				$game->team_bottom_name = \Model_Team::find($game->team_bottom)->name;
 
-    echo "DONE !!";
+			$game->save();
+		}
+
+		echo "DONE !!";
 	}
 
 }

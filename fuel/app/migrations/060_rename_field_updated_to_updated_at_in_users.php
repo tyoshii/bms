@@ -13,7 +13,7 @@ class Rename_field_updated_to_updated_at_in_users
 
 	public function down()
 	{
-	\DBUtil::modify_fields('users', array(
+		\DBUtil::modify_fields('users', array(
 			'updated_at' => array('name' => 'updated', 'type' => 'int', 'constraint' => 11, 'default' => 0)
 		));
 	}

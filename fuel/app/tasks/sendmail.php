@@ -12,6 +12,8 @@ class Sendmail
 	 *
 	 * php oil r sendmail
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function run($args = NULL)
@@ -21,7 +23,7 @@ class Sendmail
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
 	}
 
@@ -32,17 +34,17 @@ class Sendmail
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
-    if ( ! $to )
-      die('第一引数にテストメール送信先を指定してください');
+		if ( ! $to)
+			die('第一引数にテストメール送信先を指定してください');
 
-    $email = \Email::forge();
-    $email->from('no-reply@bm-s.info');
-    $email->to($to);
+		$email = \Email::forge();
+		$email->from('no-reply@bm-s.info');
+		$email->to($to);
 
-    $email->subject('bm-s.infoからのテストメール');
-$body = <<<__BODY__
+		$email->subject('bm-s.infoからのテストメール');
+		$body = <<<__BODY__
 ※このメールはシステムから自動的に送信されています。
 
 BMS - Baseball Management System
@@ -62,24 +64,25 @@ http://bm-s.info
 
 チームの成績管理ならBMSへ！
 __BODY__;
-    $email->body($body);
+		$email->body($body);
 
-    try {
-      $email->send();
-    }
-catch(\EmailValidationFailedException $e)
-{
-      echo "hoge";
-      echo $e->getMessage();
-}
-catch(\EmailSendingFailedException $e)
-{
-  
-      echo "hoge";
-      echo $e->getMessage();
-    }
+		try
+		{
+			$email->send();
+		}
+		catch (\EmailValidationFailedException $e)
+		{
+			echo "hoge";
+			echo $e->getMessage();
+		}
+		catch (\EmailSendingFailedException $e)
+		{
 
-    echo "メール送信テスト完了";
+			echo "hoge";
+			echo $e->getMessage();
+		}
+
+		echo "メール送信テスト完了";
 	}
 
 }

@@ -22,8 +22,8 @@
  */
 
 return array(
-	'driver' => 'Simpleauth',
+	'driver'                 => 'Simpleauth',
 	'verify_multiple_logins' => false,
-	'salt' => Config::get('salt.auth'),
-	'iterations' => 10000,
+	'salt'                   => Config::get('salt.auth'),
+	'iterations'             => 10000,
 );

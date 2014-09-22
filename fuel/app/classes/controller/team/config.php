@@ -15,9 +15,9 @@ class Controller_Team_Config extends Controller_Team
 		$kind = $this->param('kind');
 
 		// 特定のconfigはチーム管理者専門
-		if ( in_array($kind, array('info', 'player', 'delete')) )
+		if (in_array($kind, array('info', 'player', 'delete')))
 		{
-			if ( ! $this->_team_admin )
+			if ( ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
 				return Response::forge('/team/'.$this->_team->url_path);
@@ -25,9 +25,9 @@ class Controller_Team_Config extends Controller_Team
 		}
 
 		// profile編集はチーム参加者本人とチーム管理者のみ
-		if ( $kind === 'profile' or $kind === 'leave' )
+		if ($kind === 'profile' or $kind === 'leave')
 		{
-			if ( ! $this->_player and ! $this->_team_admin )
+			if ( ! $this->_player and ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
 				return Response::forge('/team/'.$this->_team->url_path);
@@ -48,7 +48,7 @@ class Controller_Team_Config extends Controller_Team
 
 		// Fieldset
 		$config = array('form_attribute' => array('class' => 'form'));
-		$form   = Fieldset::forge('team_config_info', $config);
+		$form = Fieldset::forge('team_config_info', $config);
 
 		// add_model
 		$form->add_model(Model_Team::forge());
@@ -68,11 +68,11 @@ class Controller_Team_Config extends Controller_Team
 		));
 
 		// 更新処理
-		if ( Input::post() )
+		if (Input::post())
 		{
 			$val = $form->validation();
 
-			if ( $val->run() )
+			if ($val->run())
 			{
 				// 今はチーム名だけ編集可能
 				$this->_team->name = Input::post('name');
@@ -97,27 +97,28 @@ class Controller_Team_Config extends Controller_Team
 
 	/**
 	 * 選手管理（今使ってない
-   */
+	 * >>>>>>> staging
+	 */
 	public function action_player()
 	{
 		$view = View::forge('team/config/player.twig');
 
 		$view->players = Model_Player::query()->where(array(
-  		array('team_id', $this->_team->id),
-  		array('status', '!=', -1),
-  	))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
+			array('team_id', $this->_team->id),
+			array('status', '!=', -1),
+		))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
 
 		return Response::forge($view);
 	}
 
-  /**
-   * 管理者設定
-   */
-  public function action_admin()
-  {
-		if ( $player_id = Input::get('player_id') and $role = Input::get('role') )
+	/**
+	 * 管理者設定
+	 */
+	public function action_admin()
+	{
+		if ($player_id = Input::get('player_id') and $role = Input::get('role'))
 		{
-			if ( Model_Player::update_role($this->_team->id, $player_id, $role) )
+			if (Model_Player::update_role($this->_team->id, $player_id, $role))
 			{
 				Session::set_flash('info', '権限を更新しました。');
 			}
@@ -129,15 +130,15 @@ class Controller_Team_Config extends Controller_Team
 			return Response::redirect(Uri::current());
 		}
 
-    $view = View::forge('team/config/admin.twig');
+		$view = View::forge('team/config/admin.twig');
 
 		$view->players = Model_Player::query()->where(array(
 			array('team_id', $this->_team->id),
 			array('status', '!=', -1),
 		))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
 
-    return Response::forge($view);
-  }
+		return Response::forge($view);
+	}
 
 	/**
 	 * チーム削除
@@ -156,7 +157,7 @@ class Controller_Team_Config extends Controller_Team
 		$view = View::forge('team/config/profile.twig');
 		return Response::forge($view);
 	}
-	
+
 	/**
 	 * チーム脱退
 	 */

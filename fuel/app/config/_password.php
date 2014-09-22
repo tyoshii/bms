@@ -1,12 +1,12 @@
 <?php
 
 return array(
-  'mysql' => array(
-    'development' => array(
-      'root' => 'password',
-    ),
-    'production' => array(
-      'root' => 'password',
-    ),
-  ),
+	'mysql' => array(
+		'development' => array(
+			'root' => 'password',
+		),
+		'production'  => array(
+			'root' => 'password',
+		),
+	),
 );

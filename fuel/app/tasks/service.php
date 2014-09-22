@@ -12,6 +12,8 @@ class Service
 	 *
 	 * php oil r service
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function run($args = NULL)
@@ -21,18 +23,17 @@ class Service
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
-    if ( \Config::get('bms.maintenance') === 'on' )
-    {
-      echo "現在メンテナンスモードです";
-    }
-    else
-    {
-      echo "サービスインしています";
-    }
+		if (\Config::get('bms.maintenance') === 'on')
+		{
+			echo "現在メンテナンスモードです";
+		}
+		else
+		{
+			echo "サービスインしています";
+		}
 	}
-
 
 
 	/**
@@ -42,6 +43,8 @@ class Service
 	 *
 	 * php oil r service:out "arguments"
 	 *
+	 * @param null $args
+	 *
 	 * @return string
 	 */
 	public function out($args = NULL)
@@ -50,10 +53,10 @@ class Service
 		echo "\nRunning task [Service:Out]";
 		echo "\n-------------------------------------------\n\n";
 
-    \Config::set('bms.maintenance', 'on');
-    \Config::save('bms', 'bms');
+		\Config::set('bms.maintenance', 'on');
+		\Config::save('bms', 'bms');
 
-    echo 'service out... go to maintenance mode';
+		echo 'service out... go to maintenance mode';
 	}
 
 	/*
@@ -72,12 +75,12 @@ class Service
 		echo "\n-------------------------------------------\n\n";
 
 		/***************************
-		 Put in TASK DETAILS HERE
+		 * Put in TASK DETAILS HERE
 		 **************************/
-    \Config::set('bms.maintenance', 'off');
-    \Config::save('bms', 'bms');
+		\Config::set('bms.maintenance', 'off');
+		\Config::save('bms', 'bms');
 
-    echo 'service in... start !!';
+		echo 'service in... start !!';
 	}
 
 }

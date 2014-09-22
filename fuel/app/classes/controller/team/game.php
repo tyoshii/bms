@@ -129,12 +129,13 @@ class Controller_Team_Game extends Controller_Team
 		}
 
 		// team_admin 権限チェック
-		if (in_array($kind, array('score', 'player', 'other')) and !$this->_team_admin)
+		if (in_array($kind, array('score', 'player', 'other')) and ! $this->_team_admin)
 		{
 			Session::set_flash('error', '権限がありません。');
 			return Response::redirect($this->_game->href);
 		}
-		if ($type === 'all' and !$this->_team_admin)
+
+		if ($type === 'all' and ! $this->_team_admin)
 		{
 			Session::set_flash('error', '権限がありません。');
 			return Response::redirect($this->_game->href);
@@ -144,7 +145,7 @@ class Controller_Team_Game extends Controller_Team
 		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
-		$view->playeds = Model_Stats_Player::getStarter($game_id, $team_id);
+		$view->playeds = Model_Stats_Player::get_starter($game_id, $team_id);
 
 		// stats data
 		switch ($kind)
@@ -157,10 +158,12 @@ class Controller_Team_Game extends Controller_Team
 				$score = reset($this->_game->games_runningscores);
 
 				// 初回は必ず必要
-				$view->scores = array(array(
-					'top'    => $score->t1,
-					'bottom' => $score->b1,
-				));
+				$view->scores = array(
+					array(
+						'top'    => $score->t1,
+						'bottom' => $score->b1,
+					),
+				);
 
 				// ２回以降
 				for ($i = 2; $i <= 18; $i++)
@@ -177,13 +180,12 @@ class Controller_Team_Game extends Controller_Team
 				// 合計
 				$this->_game->tsum = $score->tsum;
 				$this->_game->bsum = $score->bsum;
+			break;
 
-				break;
-
-			case 'player':
-				break;
-			case 'other':
-				break;
+			// case 'player':
+			// break;
+			// case 'other':
+			// break;
 			case 'batter':
 				// 出場選手と成績
 				if ($type === 'all')
@@ -198,9 +200,9 @@ class Controller_Team_Game extends Controller_Team
 				}
 
 				// 打席結果一覧
-				$view->results = Model_Batter_Result::getAll();
+				$view->results = Model_Batter_Result::get_all();
+			break;
 
-				break;
 			case 'pitcher':
 				// 出場選手と成績
 				if ($type === 'all')
@@ -213,10 +215,11 @@ class Controller_Team_Game extends Controller_Team
 					$view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
 						$game_id, $team_id, $this->_player->id);
 				}
+			break;
 
-				break;
 			default:
-				break;
+				// no logic
+			break;
 		}
 
 		// 所属選手
@@ -234,7 +237,7 @@ class Controller_Team_Game extends Controller_Team
 
 	static private function _addgame_form()
 	{
-		$config = array('form_attributes' => array('class' => 'form',));
+		$config = array('form_attributes' => array('class' => 'form'));
 		$form = Fieldset::forge('addgame', $config);
 
 		// 試合実施日

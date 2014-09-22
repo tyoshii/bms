@@ -6,18 +6,10 @@ class Model_Games_Team extends \Orm\Model
 		'id',
 		'game_id',
 		'team_id',
-		'order'              => array(
-			'default' => 'top',
-		),
-		'opponent_team_id'   => array(
-			'default' => 0,
-		),
-		'opponent_team_name' => array(
-			'default' => '',
-		),
-		'input_status'       => array(
-			'default' => 'save',
-		),
+		'order'              => array('default' => 'top'),
+		'opponent_team_id'   => array('default' => 0),
+		'opponent_team_name' => array('default' => ''),
+		'input_status'       => array('default' => 'save'),
 		'created_at',
 		'updated_at',
 	);
@@ -75,7 +67,7 @@ class Model_Games_Team extends \Orm\Model
 		}
 
 		// opponent
-		if ( ! isset($opponent_team_id) and !isset($opponent_team_name))
+		if ( ! isset($opponent_team_id) and ! isset($opponent_team_name))
 		{
 			Log::error('opponent_team_id / opponent_team_name はどちらかを指定してください');
 			return false;
@@ -89,7 +81,7 @@ class Model_Games_Team extends \Orm\Model
 		}
 
 		// opponent_team_id is available ?
-		if (isset($opponent_team_id) and !Model_Team::find($opponent_team_id))
+		if (isset($opponent_team_id) and ! Model_Team::find($opponent_team_id))
 		{
 			Log::error('指定されたopponent_team_idが存在しないidです');
 			return false;

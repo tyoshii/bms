@@ -32,15 +32,17 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 		Common::db_clean(self::$_table_name, $where);
 	}
 
-	public static function getStats($where)
+	public static function get_stats($where)
 	{
 		// データ取得
 		$query = DB::select()->from(self::$_table_name);
+		$query->order_by('bat_times');
+
+		// where
 		foreach ($where as $key => $val)
 		{
 			$query->where($key, $val);
 		}
-		$query->order_by('bat_times');
 
 		$result = $query->execute()->as_array();
 
@@ -62,17 +64,17 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 	public static function regist($ids, $player_id, $bat_times, $stat)
 	{
 		$props = $ids + array(
-				'player_id' => $player_id,
-				'bat_times' => $bat_times,
-				'direction' => $stat['direction'],
-				'kind'      => $stat['kind'],
-				'result_id' => $stat['result'],
-			);
+			'player_id' => $player_id,
+			'bat_times' => $bat_times,
+			'direction' => $stat['direction'],
+			'kind'      => $stat['kind'],
+			'result_id' => $stat['result'],
+		);
 
 		self::forge($props)->save();
 	}
 
-	public static function replaceAll($ids, $player_id, $stats)
+	public static function replace_all($ids, $player_id, $stats)
 	{
 		// clean player stats
 		// - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると

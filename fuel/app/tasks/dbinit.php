@@ -189,14 +189,14 @@ class Dbinit
 		}
 
 		// game
-		// TODO: createNewGameは新規ゲーム追加の修正で変更の可能性あり
+		// TODO: create_new_gameは新規ゲーム追加の修正で変更の可能性あり
 		$data = array(
 			'id'     => 1,
 			'date'   => date('Y-m-d'),
 			'top'    => $team1_id,
 			'bottom' => $team2_id,
 		);
-		\Model_Game::createNewGame($data);
+		\Model_Game::create_new_game($data);
 
 		// config
 		$ids = \Config::get('bms.moderator_team_ids');

@@ -4,9 +4,7 @@ class Model_Stats_Hitting extends Model_Base
 {
 	protected static $_properties = array(
 		'id',
-		'status' => array(
-			'default' => 0,
-		),
+		'status' => array('default' => 0),
 		'player_id',
 		'game_id',
 		'team_id',
@@ -144,10 +142,12 @@ class Model_Stats_Hitting extends Model_Base
 	 */
 	public static function get_stats($game_id, $team_id)
 	{
-		return DB::select()->from(self::$_table_name)
-			->where('game_id', $game_id)
-			->where('team_id', $team_id)
-			->execute()->as_array('player_id');
+		$where = array(
+			'game_id' => $game_id,
+			'team_id' => $team_id,
+		);
+
+		return self::select_as_array(self::$_table_name, $where, 'player_id');
 	}
 
 	private static function _get_insert_props($stat)
@@ -226,7 +226,7 @@ class Model_Stats_Hitting extends Model_Base
 				}
 
 				// insert stats_hittings
-				$hit = self::query()->where($ids + array('player_id' => $player_id,))->get_one();
+				$hit = self::query()->where($ids + array('player_id' => $player_id))->get_one();
 				if ( ! $hit)
 					$hit = self::forge($ids + array('player_id' => $player_id));
 
@@ -248,7 +248,7 @@ class Model_Stats_Hitting extends Model_Base
 		}
 	}
 
-	public static function replaceAll($ids, $datas, $status)
+	public static function replace_all($ids, $datas, $status)
 	{
 		Mydb::begin();
 
@@ -272,11 +272,6 @@ class Model_Stats_Hitting extends Model_Base
 			Mydb::rollback();
 			throw new Exception();
 		}
-	}
-
-	public static function getStats($where)
-	{
-		return self::select_as_array(self::$_table_name, $where, 'player_id');
 	}
 
 	public static function get_status($game_id, $player_id)

@@ -18,6 +18,7 @@ class Controller_Api_Deploy extends Controller
 				'bms.list'
 			);
 		}
+
 		if ($data['ref'] === 'refs/heads/staging')
 		{
 			self::_deploy(
@@ -48,7 +49,7 @@ class Controller_Api_Deploy extends Controller
 			`FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate`;
 
 			// deploy
-			chdir("{$git_dir}/deploy/");
+			chdir($git_dir.'/deploy/');
 			`/usr/bin/env perl deploy.pl {$deploy_list} force`;
 
 			// service in
@@ -59,8 +60,7 @@ class Controller_Api_Deploy extends Controller
 			`/usr/bin/env php oil r version:up`;
 			`/usr/bin/env php oil r version`;
 
-			echo "DEPLOY DONE";
-
+			echo 'DEPLOY DONE';
 		}
 		catch (Exception $e)
 		{

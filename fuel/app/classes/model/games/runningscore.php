@@ -457,7 +457,10 @@ class Model_Games_Runningscore extends \Orm\Model
 
 		if (count($stats) === 0)
 		{
-			$stats = array('t1' => 0, 'b1' => 0);
+			$stats = array(
+				't1' => 0,
+				'b1' => 0,
+			);
 		}
 
 		// 空の値をnullにする

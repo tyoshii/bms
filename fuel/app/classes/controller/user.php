@@ -110,9 +110,7 @@ class Controller_User extends Controller_Base
 	public function _get_team_form()
 	{
 		$form = Fieldset::forge('team', array(
-			'form_attributes' => array(
-				'class' => 'form',
-			),
+			'form_attributes' => array('class' => 'form'),
 		));
 
 		// デフォルト
@@ -209,14 +207,14 @@ class Controller_User extends Controller_Base
 
 		$form->add('username', '', array(
 			'value' => Auth::get_screen_name(),
-			'type'  => 'hidden'
+			'type'  => 'hidden',
 		))
 			->add_rule('required')
 			->add_rule('match_value', array(Auth::get_screen_name()));
 
 		$form->add('email', '', array(
 			'value' => Auth::get_email(),
-			'type'  => 'hidden'
+			'type'  => 'hidden',
 		))
 			->add_rule('required')
 			->add_rule('valid_email')

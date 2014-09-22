@@ -2,7 +2,7 @@
 
 class Model_Score_Self
 {
-	public static function getSelfScores($team_id = null)
+	public static function get_self_scores($team_id = null)
 	{
 		if ( ! $team_id)
 		{

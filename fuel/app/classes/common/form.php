@@ -145,15 +145,16 @@ class Common_Form
 		$my_group = $groups[0][1];
 
 		// roles取得
-		$groups = Config::get("simpleauth.groups");
+		$groups = Config::get('simpleauth.groups');
 		$roles = array();
 		foreach ($groups as $k => $v)
 		{
 			if ($k > 0 and $k <= $my_group)
 			{
-				$roles[$k] = $v["name"];
+				$roles[$k] = $v['name'];
 			}
 		}
+
 		$role_ops = $roles;
 
 		// form add

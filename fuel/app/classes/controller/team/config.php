@@ -27,7 +27,7 @@ class Controller_Team_Config extends Controller_Team
 		// profile編集はチーム参加者本人とチーム管理者のみ
 		if ($kind === 'profile' or $kind === 'leave')
 		{
-			if ( ! $this->_player and !$this->_team_admin)
+			if ( ! $this->_player and ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
 				return Response::forge('/team/'.$this->_team->url_path);

@@ -40,6 +40,6 @@ class Controller_Api_Mail extends Controller_Rest
 		// remind
 		Model_Game::remind_mail($game_id, $team_id);
 
-		echo "OK";
+		echo 'OK';
 	}
 }

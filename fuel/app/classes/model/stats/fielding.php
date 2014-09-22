@@ -29,7 +29,7 @@ class Model_Stats_Fielding extends Model_Base
 		Common::db_clean(self::$_table_name, $where);
 	}
 
-	public static function getStats($where)
+	public static function get_stats($where)
 	{
 		return self::select_as_array(self::$_table_name, $where, 'player_id');
 	}

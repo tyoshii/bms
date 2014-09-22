@@ -3,7 +3,7 @@
 class Model_Score_Team
 {
 
-	public static function getTeamScore($team_id = null)
+	public static function get_team_score($team_id = null)
 	{
 		if ( ! $team_id)
 		{
@@ -92,7 +92,7 @@ __QUERY__;
 		};
 	}
 
-	public static function getTeamGameInfo($team_id = null)
+	public static function get_team_game_info($team_id = null)
 	{
 		if ( ! $team_id)
 		{
@@ -121,9 +121,9 @@ __QUERY__;
 	}
 
 	// TODO: 引数のinfosはいらない
-	public static function getTeamWinLose($team_id, $infos)
+	public static function get_team_win_lose($team_id, $infos)
 	{
-		$infos = self::getTeamGameInfo($team_id);
+		$infos = self::get_team_game_info($team_id);
 
 		$ret = array(
 			'games' => count($infos),
@@ -141,19 +141,11 @@ __QUERY__;
 		{
 			if ($info['tsum'] > $info['bsum'])
 			{
-				if ($info['team_top'] == $team_id)
-					++$ret['win'];
-				else
-					++$ret['lose'];
-
+				$info['team_top'] == $team_id ? ++$ret['win'] : ++$ret['lose'];
 			}
-			else if ($info['tsum'] < $info['bsum'])
+			elseif ($info['tsum'] < $info['bsum'])
 			{
-				if ($info['team_top'] == $team_id)
-					++$ret['lose'];
-				else
-					++$ret['win'];
-
+				$info['team_top'] == $team_id ? ++$ret['lose'] : ++$ret['win'];
 			}
 			else
 			{

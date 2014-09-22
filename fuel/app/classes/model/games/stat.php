@@ -27,7 +27,7 @@ class Model_Games_Stat extends \Orm\Model
 	);
 	protected static $_table_name = 'games_stats';
 
-	public static function createNewGame($game_id, $top, $bottom)
+	public static function create_new_game($game_id, $top, $bottom)
 	{
 		$default_players = array();
 		for ($i = 1; $i <= 9; $i++)

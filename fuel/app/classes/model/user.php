@@ -100,9 +100,7 @@ class Model_User extends \Orm\Model
 
 	public static function update_group($username, $group)
 	{
-		return self::_update($username, array(
-			'group' => $group,
-		));
+		return self::_update($username, array('group' => $group));
 	}
 
 	public static function disable($username)

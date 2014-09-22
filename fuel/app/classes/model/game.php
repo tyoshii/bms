@@ -5,21 +5,11 @@ class Model_Game extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'date',
-		'stadium'          => array(
-			'default' => '',
-		),
-		'memo'             => array(
-			'default' => '',
-		),
-		'game_status'      => array(
-			'default' => 0,
-		),
-		'top_status'       => array(
-			'default' => 1,
-		),
-		'bottom_status'    => array(
-			'default' => 1,
-		),
+		'stadium'          => array('default' => ''),
+		'memo'             => array('default' => ''),
+		'game_status'      => array('default' => 0),
+		'top_status'       => array('default' => 1),
+		'bottom_status'    => array('default' => 1),
 		// TODO:削除
 		'team_top'         => array('default' => 0),
 		'team_top_name'    => array('default' => 0),
@@ -91,7 +81,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// stats_players(starter)
-			Model_Stats_Player::createNewGame($game->id, $posts['team_id']);
+			Model_Stats_Player::create_new_game($game->id, $posts['team_id']);
 
 			// opponent_team_idがteamsに登録されているものであればこちらも登録
 			// TODO: conventionが実装されたら
@@ -106,7 +96,7 @@ class Model_Game extends \Orm\Model
 								);
 
 								// stats_players(starter)
-								Model_Stats_Player::createNewGame($game->id, $posts['opponent_team_id']);
+								Model_Stats_Player::create_new_game($game->id, $posts['opponent_team_id']);
 				*/
 			}
 
@@ -123,14 +113,14 @@ class Model_Game extends \Orm\Model
 		}
 	}
 
-	public static function createNewGame($data)
+	public static function create_new_game($data)
 	{
 		try
 		{
 			Mydb::begin();
 
 			// init
-			// TODO: createNewGameの見直しのときに一緒に
+			// TODO: create_new_gameの見直しのときに一緒に
 			if ( ! array_key_exists('top_name', $data)) $data['top_name'] = null;
 			if ( ! array_key_exists('bottom_name', $data)) $data['bottom_name'] = null;
 
@@ -150,12 +140,12 @@ class Model_Game extends \Orm\Model
 
 			// other table default value
 			Model_Games_Runningscore::regist($game->id);
-			Model_Stats_Player::createNewGame($game->id, $data['top']);
-			Model_Stats_Player::createNewGame($game->id, $data['bottom']);
+			Model_Stats_Player::create_new_game($game->id, $data['top']);
+			Model_Stats_Player::create_new_game($game->id, $data['bottom']);
 
 			// json data のデフォルト値
 			// - TODO なくしたい
-			Model_Games_Stat::createNewGame($game->id, $data['top'], $data['bottom']);
+			Model_Games_Stat::create_new_game($game->id, $data['top'], $data['bottom']);
 
 			Mydb::commit();
 		}
@@ -182,7 +172,7 @@ class Model_Game extends \Orm\Model
 		// 出場していない場合はnullとなる。
 		$query->related('stats_players', array(
 			'join_on' => array(
-				array('player_id', '=', Model_Player::get_my_player_id())
+				array('player_id', '=', Model_Player::get_my_player_id()),
 			),
 		));
 
@@ -238,7 +228,7 @@ class Model_Game extends \Orm\Model
 
 				$result[$index]['result'] = $result[$index]['own'] === 'top' ? 'win' : 'lose';
 			}
-			else if ($score['tsum'] < $score['bsum'])
+			elseif ($score['tsum'] < $score['bsum'])
 			{
 				$result[$index]['top_result'] = '●';
 				$result[$index]['bottom_result'] = '○';
@@ -252,7 +242,6 @@ class Model_Game extends \Orm\Model
 
 				$result[$index]['result'] = 'even';
 			}
-
 		}
 
 		return $result;
@@ -430,7 +419,7 @@ class Model_Game extends \Orm\Model
 	public static function remind_mail($game_id, $team_id)
 	{
 		// played member
-		$players = Model_Stats_Player::getStarter($game_id, $team_id);
+		$players = Model_Stats_Player::get_starter($game_id, $team_id);
 
 		foreach ($players as $index => $player)
 		{
@@ -446,7 +435,7 @@ class Model_Game extends \Orm\Model
 			// statusをチェックして、未完了であればメール送信
 			if (Model_Stats_Hitting::get_status($game_id, $player_id) === '0')
 			{
-				$paths[] = "game/{$game_id}/batter/{$team_id}";
+				$paths[] = sprintf('game/%s/batter/%s', $game_id, $team_id);
 			}
 
 			// 投手成績のアラート
@@ -454,7 +443,7 @@ class Model_Game extends \Orm\Model
 			{
 				if (Model_Stats_Pitching::get_status($game_id, $player_id) === '0')
 				{
-					$paths[] = "game/{$game_id}/pitcher/{$team_id}";
+					$paths[] = sprintf('game/%s/pitcher/%s', $game_id, $team_id);
 				}
 			}
 

@@ -8,12 +8,8 @@ class Model_Player extends \Orm\Model
 		'name',
 		'number',
 		'username',
-		'status' => array(
-			'default' => 1,
-		),
-		'role'   => array(
-			'default' => 'user',
-		),
+		'status' => array('default' => 1),
+		'role'   => array('default' => 'user'),
 		'created_at',
 		'updated_at',
 	);
@@ -37,7 +33,8 @@ class Model_Player extends \Orm\Model
 			'key_to'         => 'id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
-		));
+		)
+	);
 
 	public static function get_name_by_username($username = null)
 	{
@@ -186,7 +183,7 @@ class Model_Player extends \Orm\Model
 	{
 		$res = self::query()->where(array(
 			array('username', Auth::get_screen_name()),
-			array('team_id', $team_id)
+			array('team_id', $team_id),
 		))->get_one();
 
 		return $res and $res->role === 'admin';

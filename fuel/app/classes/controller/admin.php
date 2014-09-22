@@ -88,7 +88,7 @@ class Controller_Admin extends Controller_Base
 					Response::redirect(Uri::create('admin/user'));
 				}
 			}
-			else if (Input::post('submit') == '更新')
+			elseif (Input::post('submit') == '更新')
 			{
 				if (Model_User::update_group(Input::post('username'), Input::post('group')))
 				{
@@ -108,7 +108,7 @@ class Controller_Admin extends Controller_Base
 					Response::redirect(Uri::create('admin/user'));
 				}
 			}
-			else if (Input::post('submit') === '最有効')
+			elseif (Input::post('submit') === '最有効')
 			{
 				if (Model_user::update_group(Input::post('username'), 1))
 				{
@@ -195,7 +195,7 @@ class Controller_Admin extends Controller_Base
 		{
 			$view->players = Model_Player::get_players();
 		}
-		else if (Auth::has_access('moderator.moderator.'))
+		elseif (Auth::has_access('moderator.moderator.'))
 		{
 			$team_id = Model_Player::get_my_team_id();
 			$view->players = Model_Player::get_players($team_id);
@@ -456,9 +456,7 @@ class Controller_Admin extends Controller_Base
 	private static function _get_user_regist_form()
 	{
 		$form = Common_Form::forge('regist_user', array(
-			'form_attributes' => array(
-				'class' => 'form'
-			)
+			'form_attributes' => array('class' => 'form'),
 		));
 
 		// 項目

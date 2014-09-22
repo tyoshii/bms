@@ -24,7 +24,7 @@ class Model_Batter_Result extends \Orm\Model
 	);
 	protected static $_table_name = 'batter_results';
 
-	public static function getAll()
+	public static function get_all()
 	{
 		return DB::select()->from(self::$_table_name)
 			->order_by('category_id')

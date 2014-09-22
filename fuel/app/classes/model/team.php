@@ -26,7 +26,11 @@ class Model_Team extends \Orm\Model
 			'validation' => array(
 				'required',
 				'max_length'   => array(64),
-				'valid_string' => array('alpha', 'numeric', 'dashes'),
+				'valid_string' => array(
+					'alpha',
+					'numeric',
+					'dashes',
+				),
 			),
 		),
 		'status'     => array(
@@ -73,7 +77,7 @@ class Model_Team extends \Orm\Model
 		extract($props);
 
 		// validation
-		if ( ! isset($name) or !isset($url_path))
+		if ( ! isset($name) or ! isset($url_path))
 		{
 			Log::error('name/url_pathが指定されていません');
 			return false;

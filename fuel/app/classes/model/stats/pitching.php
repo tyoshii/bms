@@ -4,9 +4,7 @@ class Model_Stats_Pitching extends Model_Base
 {
 	protected static $_properties = array(
 		'id',
-		'status' => array(
-			'default' => 0,
-		),
+		'status' => array('default' => 0),
 		'player_id',
 		'game_id',
 		'team_id',
@@ -113,14 +111,10 @@ class Model_Stats_Pitching extends Model_Base
 				if ( ! $stat) continue;
 
 				# get model
-				$pitch = self::query()->where($ids + array(
-						'player_id' => $player_id,
-					))->get_one();
+				$pitch = self::query()->where($ids + array('player_id' => $player_id))->get_one();
 
 				if ( ! $pitch)
-					$pitch = self::forge($ids + array(
-							'player_id' => $player_id,
-						));
+					$pitch = self::forge($ids + array('player_id' => $player_id));
 
 				# stats set => save
 				$props = self::_get_insert_props($stat);
@@ -140,7 +134,7 @@ class Model_Stats_Pitching extends Model_Base
 		}
 	}
 
-	public static function replaceAll($ids, $stats, $status)
+	public static function replace_all($ids, $stats, $status)
 	{
 		Mydb::begin();
 

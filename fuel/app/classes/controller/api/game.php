@@ -8,7 +8,7 @@ class Controller_Api_Game extends Controller_Rest
 	}
 
 	// get post data ( and validation )
-	private static function _getIds()
+	private static function _get_ids()
 	{
 		$val = Validation::forge();
 		$val->add('game_id', 'game_id')->add_rule('required');
@@ -53,7 +53,7 @@ class Controller_Api_Game extends Controller_Rest
 
 	public function post_updateStatus()
 	{
-		$ids = self::_getIds();
+		$ids = self::_get_ids();
 
 		$ret = Model_Game::update_status(
 			$ids['game_id'],
@@ -65,7 +65,7 @@ class Controller_Api_Game extends Controller_Rest
 			throw new Exception('ステータスのアップデートに失敗しました');
 
 		Session::set_flash('info', '試合ステータスを更新しました。');
-		return "OK";
+		return 'OK';
 	}
 
 	public function post_updateScore()
@@ -98,11 +98,11 @@ class Controller_Api_Game extends Controller_Rest
 		if ( ! Auth::has_access('game.editall'))
 			return Response::forge('出場選手を編集する権限がありません', 403);
 
-		$ids = self::_getIds();
+		$ids = self::_get_ids();
 
 		// stats_metaへの登録
 		$players = Input::post('stats');
-		Model_Stats_Player::registPlayer($ids, $players);
+		Model_Stats_Player::regist_player($ids, $players);
 
 		// status update
 		Model_Game::update_status_minimum($ids['game_id'], 1);
@@ -112,7 +112,7 @@ class Controller_Api_Game extends Controller_Rest
 
 	public function post_updatePitcher()
 	{
-		$ids = self::_getIds();
+		$ids = self::_get_ids();
 
 		// stats_pitchingsへのinsert
 		$pitcher = Input::post('stats');
@@ -120,7 +120,7 @@ class Controller_Api_Game extends Controller_Rest
 
 		if (Auth::has_access('admin.admin'))
 		{
-			Model_Stats_Pitching::replaceAll($ids, $pitcher, $status);
+			Model_Stats_Pitching::replace_all($ids, $pitcher, $status);
 		}
 		else
 		{
@@ -132,7 +132,7 @@ class Controller_Api_Game extends Controller_Rest
 
 	public function post_updateBatter()
 	{
-		$ids = self::_getIds();
+		$ids = self::_get_ids();
 
 		// satasへの登録
 		$batter = Input::post('stats');
@@ -140,7 +140,7 @@ class Controller_Api_Game extends Controller_Rest
 
 		if (Auth::has_access('admin.admin'))
 		{
-			Model_Stats_Hitting::replaceAll($ids, $batter, $status);
+			Model_Stats_Hitting::replace_all($ids, $batter, $status);
 		}
 		else
 		{
@@ -156,7 +156,7 @@ class Controller_Api_Game extends Controller_Rest
 		if ( ! Auth::has_access('game.editall'))
 			return Response::forge('編集する権限がありません', 403);
 
-		$ids = self::_getIds();
+		$ids = self::_get_ids();
 
 		// stats
 		$stats = Input::post('stats');

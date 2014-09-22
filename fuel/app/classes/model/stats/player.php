@@ -58,7 +58,7 @@ class Model_Stats_Player extends \Orm\Model
 		return $query;
 	}
 
-	public static function getStarter($game_id, $team_id)
+	public static function get_starter($game_id, $team_id)
 	{
 		$query = self::get_query($game_id, $team_id);
 
@@ -83,7 +83,7 @@ class Model_Stats_Player extends \Orm\Model
 		return $result;
 	}
 
-	public static function createNewGame($game_id, $team_id)
+	public static function create_new_game($game_id, $team_id)
 	{
 		if ( ! $team_id) return false;
 
@@ -101,10 +101,10 @@ class Model_Stats_Player extends \Orm\Model
 			);
 		}
 
-		self::registPlayer($ids, $default);
+		self::regist_player($ids, $default);
 	}
 
-	public static function registPlayer($ids, $players)
+	public static function regist_player($ids, $players)
 	{
 		Mydb::begin();
 
@@ -120,11 +120,11 @@ class Model_Stats_Player extends \Orm\Model
 				if ( ! $player) continue;
 
 				$player = self::forge($ids + array(
-						'disp_order' => $disp_order,
-						'player_id'  => $player['player_id'],
-						'order'      => $player['order'] ? : 0,
-						'position'   => array_key_exists('position', $player) ? implode(',', $player['position']) : '',
-					));
+					'disp_order' => $disp_order,
+					'player_id'  => $player['player_id'],
+					'order'      => $player['order'] ? : 0,
+					'position'   => array_key_exists('position', $player) ? implode(',', $player['position']) : '',
+				));
 
 				$player->save();
 			}

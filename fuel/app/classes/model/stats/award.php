@@ -6,12 +6,8 @@ class Model_Stats_Award extends Model_Base
 		'id',
 		'game_id',
 		'team_id',
-		'mvp_player_id'        => array(
-			'default' => 0,
-		),
-		'second_mvp_player_id' => array(
-			'default' => 0,
-		),
+		'mvp_player_id'        => array('default' => 0),
+		'second_mvp_player_id' => array('default' => 0),
 		'created_at',
 		'updated_at',
 	);

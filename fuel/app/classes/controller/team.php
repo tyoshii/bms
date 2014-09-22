@@ -169,10 +169,10 @@ class Controller_Team extends Controller_Base
 	{
 		$view = View::forge('team/stats.twig');
 
-		$view->result = Model_Score_Team::getTeamWinLose($this->_team->id, array());
+		$view->result = Model_Score_Team::get_team_win_lose($this->_team->id, array());
 		$view->stats = array(
-			'teams' => Model_Score_Team::getTeamScore($this->_team->id),
-			'selfs' => Model_Score_Self::getSelfScores($this->_team->id),
+			'teams' => Model_Score_Team::get_team_score($this->_team->id),
+			'selfs' => Model_Score_Self::get_self_scores($this->_team->id),
 		);
 
 		return Response::forge($view);

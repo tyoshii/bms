@@ -94,7 +94,7 @@ class Json2mysql
 					}
 
 					// regist
-					\Model_Stats_Player::registPlayer($ids, $players);
+					\Model_Stats_Player::regist_player($ids, $players);
 				}
 
 				// pitchers
@@ -122,14 +122,14 @@ class Json2mysql
 					}
 
 					// regist
-					\Model_Stats_Pitching::replaceAll($ids, $stats);
+					\Model_Stats_Pitching::replace_all($ids, $stats);
 				}
 
 				// batters
 				if ($stats = json_decode($result['batters'], true))
 				{
 					// regist
-					\Model_Stats_Hitting::replaceAll($ids, $stats);
+					\Model_Stats_Hitting::replace_all($ids, $stats);
 				}
 			}
 		}

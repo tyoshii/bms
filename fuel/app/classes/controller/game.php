@@ -9,7 +9,7 @@ class Controller_Game extends Controller_Base
 		parent::before();
 
 		$action = Request::main()->action;
-		if ($action === 'edit' && !Auth::check())
+		if ($action === 'edit' && ! Auth::check())
 		{
 			Session::set('redirect_to', Uri::current(), '', Input::get());
 			Response::redirect(Uri::create('/login'));
@@ -86,8 +86,8 @@ class Controller_Game extends Controller_Base
 		$view->score = Model_Games_Runningscore::find_by_game_id($game_id);
 
 		// stats
-		$view->player_top = Model_Stats_Player::getStarter($game_id, $info['team_top']);
-		$view->player_bottom = Model_Stats_Player::getStarter($game_id, $info['team_bottom']);
+		$view->player_top = Model_Stats_Player::get_starter($game_id, $info['team_top']);
+		$view->player_bottom = Model_Stats_Player::get_starter($game_id, $info['team_bottom']);
 
 		$view->hitting_top = Model_Stats_Hitting::get_stats($game_id, $info['team_top']);
 		$view->hitting_bottom = Model_Stats_Hitting::get_stats($game_id, $info['team_bottom']);
@@ -129,7 +129,7 @@ class Controller_Game extends Controller_Base
 		{
 			if (self::_addgame_myvalidation())
 			{
-				if (Model_Game::createNewGame(Input::post()))
+				if (Model_Game::create_new_game(Input::post()))
 				{
 					Session::set_flash('info', '新規ゲームを追加しました');
 					Response::redirect(Uri::current());
@@ -158,11 +158,12 @@ class Controller_Game extends Controller_Base
 		$kind = $this->param('kind', '');
 
 		// error check
-		if ( ! is_numeric($game_id) || !is_numeric($team_id))
+		if ( ! is_numeric($game_id) || ! is_numeric($team_id))
 		{
 			Session::set_flash('error', '不正なURLです。試合一覧に戻されました。');
 			return Response::redirect(Uri::create('/game'));
 		}
+
 		if ( ! in_array($kind, array('score', 'player', 'pitcher', 'batter', 'other')))
 		{
 			Session::set_flash('error', '不正なURLです。試合一覧に戻されました。');
@@ -171,21 +172,21 @@ class Controller_Game extends Controller_Base
 
 		// type check
 		$type = Input::get('type');
-		if ($type === 'all' and !Auth::has_access('moderator.moderator'))
+		if ($type === 'all' and ! Auth::has_access('moderator.moderator'))
 		{
 			Session::set_flash('error', '権限がありません');
 			return Response::redirect(Uri::create('/game'));
 		}
 
 		// view load
-		$view = Theme::instance()->view("game/{$kind}.twig");
+		$view = Theme::instance()->view('game/'.$kind.'.twig');
 
 		// 所属選手
 		$view->players = Model_Player::get_players($team_id);
 
 		// 出場選手
 		// TODO: metumという変数は微妙だな・・・playeds ?
-		$view->metum = Model_Stats_Player::getStarter($game_id, $team_id);
+		$view->metum = Model_Stats_Player::get_starter($game_id, $team_id);
 
 		// game_status
 		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
@@ -193,15 +194,12 @@ class Controller_Game extends Controller_Base
 		switch ($kind)
 		{
 			case 'score':
-
 				list($view->scores, $view->tsum, $view->bsum)
 					= Model_Games_Runningscore::get_score($game_id);
+			break;
 
-				break;
-
-			case 'player':
-				break;
-
+			// case 'player':
+			// break;
 			case 'pitcher':
 				// ピッチャーだけにフィルター
 				// type=allの時は全員 / それ意外のときは自分だけ
@@ -209,11 +207,11 @@ class Controller_Game extends Controller_Base
 
 				// 成績
 				$view->stats = Model_Stats_Pitching::get_stats(array('game_id' => $game_id));
-				break;
+			break;
 
 			case 'batter':
 				// 打席結果一覧
-				$view->results = Model_Batter_Result::getAll();
+				$view->results = Model_Batter_Result::get_all();
 
 				// ログイン中ユーザのデータだけにフィルタ
 				if ($type !== 'all')
@@ -226,10 +224,10 @@ class Controller_Game extends Controller_Base
 				);
 
 				// TODO: Model_Statsから汎用的に取得したい。
-				$view->hittings = Model_Stats_Hitting::getStats($where);
-				$view->details = Model_Stats_Hittingdetail::getStats($where);
-				$view->fieldings = Model_Stats_Fielding::getStats($where);
-				break;
+				$view->hittings = Model_Stats_Hitting::get_stats($game_id, $team_id);
+				$view->details = Model_Stats_Hittingdetail::get_stats($where);
+				$view->fieldings = Model_Stats_Fielding::get_stats($where);
+			break;
 
 			case 'other':
 				// TODO: いつか消す
@@ -239,11 +237,11 @@ class Controller_Game extends Controller_Base
 					->get_one();
 
 				$view->others = json_decode($stat->others);
-
-				break;
+			break;
 
 			default:
-				break;
+				// no logic
+			break;
 		}
 
 		// ID
@@ -278,7 +276,7 @@ class Controller_Game extends Controller_Base
 	 */
 	static private function _get_addgame_form2()
 	{
-		$config = array('form_attributes' => array('class' => 'form',));
+		$config = array('form_attributes' => array('class' => 'form'));
 		$form = Fieldset::forge('addgame', $config);
 
 		// 試合実施日
@@ -369,9 +367,9 @@ class Controller_Game extends Controller_Base
 
 		// - 先攻
 		$form->add('top', '先攻', $attrs + array(
-				'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
-				'data-placeholder' => 'チームを選択',
-			))
+			'value'            => Model_Player::get_my_team_id(), // デフォルトで自分のチーム
+			'data-placeholder' => 'チームを選択',
+		))
 			->add_rule('in_array', array_keys($teams));
 
 		$form->add('top_name', '', array(
@@ -382,9 +380,7 @@ class Controller_Game extends Controller_Base
 			->add_rule('max_length', 100);
 
 		// - 後攻
-		$form->add('bottom', '後攻', $attrs + array(
-				'data-placeholder' => 'チームを選択',
-			))
+		$form->add('bottom', '後攻', $attrs + array('data-placeholder' => 'チームを選択'))
 			->add_rule('in_array', array_keys($teams));
 
 		$form->add('bottom_name', '', array(
@@ -418,8 +414,8 @@ class Controller_Game extends Controller_Base
 	private static function _addgame_myvalidation()
 	{
 		// 入力チェック
-		if (( ! Input::post('top') && !Input::post('top_name')) ||
-			( ! Input::post('bottom') && !Input::post('bottom_name'))
+		if (( ! Input::post('top') && ! Input::post('top_name')) ||
+			( ! Input::post('bottom') && ! Input::post('bottom_name'))
 		)
 		{
 			Session::set_flash('error', 'リストからチームを選択するか直接入力してください。');

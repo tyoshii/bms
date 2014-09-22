@@ -75,7 +75,6 @@ return array(
 		),
 		'extensions'  => array(
 			'Twig_Fuel_Extension',
-			'Base_Twig_Extension'
 		),
 	),
 

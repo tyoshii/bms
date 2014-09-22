@@ -166,11 +166,12 @@ class Dbinit
 			\Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
 		}
 
-		// login
+		// team
+
+		// loginされているユーザーで作成される。
 		$id = \Model_User::find_by_username('player1')->id;
 		\Auth::force_login($id);
 
-		// team/player
 		$props = array(
 			'name'     => 'テストチーム1',
 			'url_path' => time().rand(),
@@ -189,18 +190,20 @@ class Dbinit
 		}
 
 		// game
-		// TODO: create_new_gameは新規ゲーム追加の修正で変更の可能性あり
 		$data = array(
-			'id'     => 1,
-			'date'   => date('Y-m-d'),
-			'top'    => $team1_id,
-			'bottom' => $team2_id,
+			'team_id'            => $team1_id,
+			'date'               => date('Y-m-d'),
+			'start_time'         => '',
+			'opponent_team_name' => '対戦チームA',
+			'order'              => 'top',
+			'stadium'            => '',
+			'memo'               => '',
 		);
-		\Model_Game::create_new_game($data);
+		\Model_Game::regist($data);
 
 		// config
 		$ids = \Config::get('bms.moderator_team_ids');
-		if (count($ids) === 0)
+		if ( count($ids) === 0 )
 		{
 			\Config::set('bms.moderator_team_ids', array($team1_id));
 			\Config::save('bms', 'bms');

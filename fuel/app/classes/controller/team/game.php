@@ -80,7 +80,7 @@ class Controller_Team_Game extends Controller_Team
 		$view = View::forge('team/game/detail.twig');
 
 		// チーム情報
-		$games_teams = reset($this->_game->games_teams);
+		$games_teams = $this->_game->games_teams;
 
 		if ($games_teams->order === 'top')
 		{

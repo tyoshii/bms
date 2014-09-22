@@ -36,7 +36,13 @@ class Controller_Team_Config extends Controller_Team
 
 		// action
 		$action = 'action_'.$kind;
-		return $this->$action();
+		if ( method_exists($this, $action) )
+		{
+			return $this->$action();
+		}
+
+		Session::set_flash('error', '存在しないURLです');
+		return Response::redirect($this->_team->href);
 	}
 
 	/**

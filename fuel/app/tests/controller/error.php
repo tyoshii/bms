@@ -9,32 +9,33 @@
  */
 class Test_Controller_Error extends Test_Base
 {
-  protected function setUp()
-  {
-    parent::setUp();
-  }
-  protected function tearDown()
-  {
-    parent::tearDown();
-  }
+	protected function setUp()
+	{
+		parent::setUp();
+	}
 
-  /**
-   *
-   */
-  public function test_エラーページの表示()
-  {
-    $res = Request::forge('/error/500')->execute()->response();
+	protected function tearDown()
+	{
+		parent::tearDown();
+	}
 
-    $this->assertSame('500', $res->status);
-  }
-  
-  /**
-   *
-   */
-  public function test_404はデフォルトの_404_のためのactionを用意()
-  {
-    $res = Request::forge('_404_')->execute()->response();
+	/**
+	 *
+	 */
+	public function test_エラーページの表示()
+	{
+		$res = Request::forge('/error/500')->execute()->response();
 
-    $this->assertSame(404, $res->status);
-  }
+		$this->assertSame('500', $res->status);
+	}
+
+	/**
+	 *
+	 */
+	public function test_404はデフォルトの_404_のためのactionを用意()
+	{
+		$res = Request::forge('_404_')->execute()->response();
+
+		$this->assertSame(404, $res->status);
+	}
 }

@@ -42,24 +42,24 @@ return array(
 		 *
 		 * Note: these are temporary links awaiting relaunch of the browscap project
 		 */
-		'url' => 'http://browscap.org/stream?q=Lite_PHP_BrowsCapINI',   // only major browsers and search engines
+		'url'     => 'http://browscap.org/stream?q=Lite_PHP_BrowsCapINI', // only major browsers and search engines
 		//'url' => 'http://tempdownloads.browserscap.com/stream.asp?Full_PHP_BrowscapINI',  // complete file, approx. 3 times the lite version
 
 		/**
 		 * Method used to download the updated browscap file
 		 *
-		 * 	Default: 'wrapper'
+		 *    Default: 'wrapper'
 		 *
 		 * possible values are: 'local', 'wrapper', 'curl'
 		 */
-		 'method' => 'wrapper',
+		'method'  => 'wrapper',
 
 		/**
 		 * Filename for the local browscap.ini file (for method 'local').
 		 *
-		 * 	Default: ''
+		 *    Default: ''
 		 */
-		 'file' => '/tmp/php_browscap.ini',
+		'file'    => '/tmp/php_browscap.ini',
 	),
 
 	/**
@@ -72,32 +72,32 @@ return array(
 	 * well, so when a new user agent string needs to be looked up, no further
 	 * parsing is needed.
 	 */
-	'cache' => array(
+	'cache'    => array(
 
 		/**
 		 * Storage driver to use to cache agent class entries. If not defined,
 		 * the default driver defined in config/cache.php will be used.
 		 *
-		 * 	Default: ''
+		 *    Default: ''
 		 */
-		'driver' => '',
+		'driver'     => '',
 
 		/**
 		 * Cache expiry.
 		 *
 		 * Number of seconds after which a cached agent result expires.
 		 *
-		 *	Default: 604800 (every 7 days)
+		 *    Default: 604800 (every 7 days)
 		 *
 		 * Note that to prevent abuse of the site publishing the browsecap files,
 		 * you can not set the expiry time lower than 7200 (2 hours)
 		 */
-		'expiry' => 604800,
+		'expiry'     => 604800,
 
 		/**
 		 * Identifier used to store agent class cache elements
 		 *
-		 *	Default: 'fuel.agent'
+		 *    Default: 'fuel.agent'
 		 *
 		 */
 		'identifier' => 'fuel.agent',

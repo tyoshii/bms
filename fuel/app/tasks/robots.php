@@ -17,11 +17,11 @@ namespace Fuel\Tasks;
  *
  * Ruthlessly stolen from the beareded Canadian sexy symbol:
  *
- *		Derek Allard: http://derekallard.com/
+ *        Derek Allard: http://derekallard.com/
  *
- * @package		Fuel
- * @version		1.0
- * @author		Phil Sturgeon
+ * @package        Fuel
+ * @version        1.0
+ * @author         Phil Sturgeon
  */
 
 class Robots
@@ -38,6 +38,8 @@ class Robots
 	 *
 	 * php oil r robots "Kill all Mice"
 	 *
+	 * @param null $speech
+	 *
 	 * @return string
 	 */
 	public static function run($speech = null)
@@ -53,8 +55,8 @@ class Robots
 					\"{$speech}\"
 			          _____     /
 			         /_____\\", 'blue')."\n"
-.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
-.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
+		.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
+		.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
 			  /  \\# \\_.---._/ #/  \\
 			 /   /|\\  |   |  /|\\   \\
 			/___/ | | |   | | | \\___\\
@@ -89,8 +91,8 @@ class Robots
 					\"PROTECT ALL HUMANS\"
 			          _____     /
 			         /_____\\", 'blue')."\n"
-.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
-.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
+		.\Cli::color("			    ____[\\", 'blue').$eye.\Cli::color('---', 'blue').$eye.\Cli::color('/]____', 'blue')."\n"
+		.\Cli::color("			   /\\ #\\ \\_____/ /# /\\
 			  /  \\# \\_.---._/ #/  \\
 			 /   /|\\  |   |  /|\\   \\
 			/___/ | | |   | | | \\___\\

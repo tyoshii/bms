@@ -13,7 +13,7 @@ class Rename_field_statsu_to_status_in_teams
 
 	public function down()
 	{
-	\DBUtil::modify_fields('teams', array(
+		\DBUtil::modify_fields('teams', array(
 			'status' => array('name' => 'statsu', 'type' => 'varchar', 'constraint' => 8)
 		));
 	}

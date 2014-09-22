@@ -13,7 +13,7 @@ class Rename_field_username_to_username_in_players
 
 	public function down()
 	{
-	\DBUtil::modify_fields('players', array(
+		\DBUtil::modify_fields('players', array(
 			'username' => array('name' => 'username', 'type' => 'int unsigned')
 		));
 	}

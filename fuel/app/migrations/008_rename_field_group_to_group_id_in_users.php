@@ -13,7 +13,7 @@ class Rename_field_group_to_group_id_in_users
 
 	public function down()
 	{
-	\DBUtil::modify_fields('users', array(
+		\DBUtil::modify_fields('users', array(
 			'group_id' => array('name' => 'group', 'type' => 'int', 'constraint' => 11)
 		));
 	}

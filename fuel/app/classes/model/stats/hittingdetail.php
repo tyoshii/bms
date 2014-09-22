@@ -17,72 +17,74 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
 	protected static $_observers = array(
 		'Orm\Observer_CreatedAt' => array(
-			'events' => array('before_insert'),
+			'events'          => array('before_insert'),
 			'mysql_timestamp' => false,
 		),
 		'Orm\Observer_UpdatedAt' => array(
-			'events' => array('before_update'),
+			'events'          => array('before_update'),
 			'mysql_timestamp' => false,
 		),
 	);
 	protected static $_table_name = 'stats_hittingdetails';
 
-  public static function clean($where)
-  {
-    Common::db_clean(self::$_table_name, $where);
-  }
+	public static function clean($where)
+	{
+		Common::db_clean(self::$_table_name, $where);
+	}
 
-  public static function getStats($where)
-  {
-    // データ取得
-    $query = DB::select()->from(self::$_table_name);
-    foreach ( $where as $key => $val )
-    {
-      $query->where($key, $val);
-    }
-    $query->order_by('bat_times');
+	public static function get_stats($where)
+	{
+		// データ取得
+		$query = DB::select()->from(self::$_table_name);
+		$query->order_by('bat_times');
 
-    $result = $query->execute()->as_array();
+		// where
+		foreach ($where as $key => $val)
+		{
+			$query->where($key, $val);
+		}
 
-    // データ整形
-    $stats = array();
-    foreach ( $result as $res )
-    {
-      $key = $res['player_id'];
+		$result = $query->execute()->as_array();
 
-      if ( ! array_key_exists($key, $stats) )
-        $stats[$key] = array();
+		// データ整形
+		$stats = array();
+		foreach ($result as $res)
+		{
+			$key = $res['player_id'];
 
-      array_push($stats[$key], $res);
-    }
+			if ( ! array_key_exists($key, $stats))
+				$stats[$key] = array();
 
-    return $stats;
-  }
+			array_push($stats[$key], $res);
+		}
 
-  public static function regist($ids, $player_id, $bat_times, $stat)
-  {
-    $props = $ids + array(
-      'player_id' => $player_id,
-      'bat_times' => $bat_times,
-      'direction' => $stat['direction'],
-      'kind'      => $stat['kind'],
-      'result_id' => $stat['result'],
-    );
+		return $stats;
+	}
 
-      self::forge($props)->save();
-  }
+	public static function regist($ids, $player_id, $bat_times, $stat)
+	{
+		$props = $ids + array(
+			'player_id' => $player_id,
+			'bat_times' => $bat_times,
+			'direction' => $stat['direction'],
+			'kind'      => $stat['kind'],
+			'result_id' => $stat['result'],
+		);
 
-  public static function replaceAll($ids, $player_id, $stats)
-  {
-    // clean player stats
-    // - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると
-    // - 4打席目が残ってしまうため、一度削除している
-    self::clean($ids + array('player_id' => $player_id));
+		self::forge($props)->save();
+	}
 
-    // insert
-    foreach ( $stats as $bat_times => $stat )
-    {
-      self::regist($ids, $player_id, $bat_times, $stat);
-    }
-  }
+	public static function replace_all($ids, $player_id, $stats)
+	{
+		// clean player stats
+		// - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると
+		// - 4打席目が残ってしまうため、一度削除している
+		self::clean($ids + array('player_id' => $player_id));
+
+		// insert
+		foreach ($stats as $bat_times => $stat)
+		{
+			self::regist($ids, $player_id, $bat_times, $stat);
+		}
+	}
 }

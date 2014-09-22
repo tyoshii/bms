@@ -2,8 +2,8 @@
 
 class Controller_Team extends Controller_Base
 {
-	public $_team       = array();
-	public $_player     = array();
+	public $_team = array();
+	public $_player = array();
 	public $_team_admin = false;
 
 	public function before()
@@ -11,19 +11,19 @@ class Controller_Team extends Controller_Base
 		parent::before();
 
 		// team 情報
-		if ( $url_path = $this->param('url_path') )
+		if ($url_path = $this->param('url_path'))
 		{
-			if ( ! $this->_team = Model_Team::find_by_url_path($url_path) )
+			if ( ! $this->_team = Model_Team::find_by_url_path($url_path))
 			{
 				Session::set_flash('error', '正しいチーム情報が取得できませんでした。');
 				return Response::redirect('error/404');
 			}
 		}
 
-		if ( $this->_team )
+		if ($this->_team)
 		{
 			// チーム管理者権限があるかどうか
-			if ( Model_Player::has_team_admin($this->_team->id) )
+			if (Model_Player::has_team_admin($this->_team->id))
 			{
 				$this->_team_admin = true;
 			}
@@ -33,7 +33,7 @@ class Controller_Team extends Controller_Base
 		}
 
 		// ログイン中ユーザーの選手情報
-		if ( Auth::check() and $this->_team )
+		if (Auth::check() and $this->_team)
 		{
 			$this->_player = Model_Player::query()->where(array(
 				array('team_id', $this->_team->id),
@@ -49,7 +49,7 @@ class Controller_Team extends Controller_Base
 
 	/**
 	 * チームページトップ
-   */
+	 */
 	public function action_index()
 	{
 		$view = View::forge('team/index.twig');
@@ -62,14 +62,14 @@ class Controller_Team extends Controller_Base
 
 	/**
 	 * チーム検索画面
-   */
+	 */
 	public function action_search()
 	{
 		$view = View::forge('team/search.twig');
 
 		$query = Model_Team::query()->order_by('created_at');
 
-		if ( $q = Input::get('query') )
+		if ($q = Input::get('query'))
 		{
 			$query->where('name', 'LIKE', '%'.$q.'%');
 		}
@@ -81,7 +81,7 @@ class Controller_Team extends Controller_Base
 
 	/**
 	 * チーム、新規登録
-   */
+	 */
 	public function action_regist()
 	{
 		$view = View::forge('team/regist.twig');
@@ -90,13 +90,13 @@ class Controller_Team extends Controller_Base
 		$form = self::_regist_form();
 		$form->repopulate();
 
-		if ( Input::post() )
+		if (Input::post())
 		{
 			$val = $form->validation();
 
-			if ( $val->run() )
+			if ($val->run())
 			{
-				if ( Model_Team::regist(Input::post()) )
+				if (Model_Team::regist(Input::post()))
 				{
 					Session::set_flash('info', '新しくチームを作成しました。');
 					return Response::redirect('/team/'.Input::post('url_path'));
@@ -119,12 +119,12 @@ class Controller_Team extends Controller_Base
 	}
 
 	/**
-   * 新規チーム登録フォーム
-   */
+	 * 新規チーム登録フォーム
+	 */
 	private static function _regist_form()
 	{
 		$config = array('form_attribute' => array('class' => 'form'));
-		$form   = Fieldset::forge('team_regist', $config);
+		$form = Fieldset::forge('team_regist', $config);
 
 		$form->add_model(Model_Team::forge());
 
@@ -147,11 +147,11 @@ class Controller_Team extends Controller_Base
 	public function action_player()
 	{
 
-		if ( $player_id = $this->param('player_id') )
+		if ($player_id = $this->param('player_id'))
 		{
 			// 個人
 			$view = View::forge('team/player/personal.twig');
-			if ( ! $view->player = Model_Player::find($player_id) )
+			if ( ! $view->player = Model_Player::find($player_id))
 			{
 				Session::set_flash('error', '選手情報が取得できませんでした');
 				return Response::redirect($this->_team->href);
@@ -170,7 +170,7 @@ class Controller_Team extends Controller_Base
 
 		return Response::forge($view);
 	}
-	
+
 	/**
 	 * 成績
 	 */
@@ -178,10 +178,10 @@ class Controller_Team extends Controller_Base
 	{
 		$view = View::forge('team/stats.twig');
 
-		$view->result = Model_Score_Team::getTeamWinLose($this->_team->id, array());
+		$view->result = Model_Score_Team::get_team_win_lose($this->_team->id, array());
 		$view->stats = array(
-			'teams' => Model_Score_Team::getTeamScore($this->_team->id),
-			'selfs' => Model_Score_Self::getSelfScores($this->_team->id),
+			'teams' => Model_Score_Team::get_team_score($this->_team->id),
+			'selfs' => Model_Score_Self::get_self_scores($this->_team->id),
 		);
 
 		return Response::forge($view);

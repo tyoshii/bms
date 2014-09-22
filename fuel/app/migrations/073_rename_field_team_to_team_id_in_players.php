@@ -13,7 +13,7 @@ class Rename_field_team_to_team_id_in_players
 
 	public function down()
 	{
-	\DBUtil::modify_fields('players', array(
+		\DBUtil::modify_fields('players', array(
 			'team_id' => array('name' => 'team', 'type' => 'int', 'constraint' => 11)
 		));
 	}

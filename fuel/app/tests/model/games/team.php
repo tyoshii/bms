@@ -9,16 +9,16 @@
  */
 class Test_Model_Games_Team extends \Test_Model_Base
 {
-  public function setUp()
-  {
-  }
+	public function setUp()
+	{
+	}
 
-  public function tearDown()
-  {
-  }
+	public function tearDown()
+	{
+	}
 
-  public function test_スキーマチェック()
-  {
-    $this->assertSchema();
-  }
+	public function test_スキーマチェック()
+	{
+		$this->assertSchema();
+	}
 }

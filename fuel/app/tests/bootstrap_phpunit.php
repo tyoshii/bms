@@ -6,10 +6,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$app_path     = rtrim($_SERVER['app_path'], '/').'/';
+$app_path = rtrim($_SERVER['app_path'], '/').'/';
 $package_path = rtrim($_SERVER['package_path'], '/').'/';
-$vendor_path  = rtrim($_SERVER['vendor_path'], '/').'/';
-$core_path    = rtrim($_SERVER['core_path'], '/').'/';
+$vendor_path = rtrim($_SERVER['vendor_path'], '/').'/';
+$core_path = rtrim($_SERVER['core_path'], '/').'/';
 
 /**
  * Website docroot

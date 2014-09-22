@@ -166,11 +166,12 @@ class Dbinit
 			\Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
 		}
 
-		// login
+		// team
+
+		// loginされているユーザーで作成される。
 		$id = \Model_User::find_by_username('player1')->id;
 		\Auth::force_login($id);
 
-		// team/player
 		$props = array(
 			'name'     => 'テストチーム1',
 			'url_path' => time().rand(),

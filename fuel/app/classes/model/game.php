@@ -85,7 +85,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// stats_players(starter)
-			Model_Stats_Player::createNewGame($game->id, $posts['team_id']);
+			Model_Stats_Player::create_new_game($game->id, $posts['team_id']);
 
 			// opponent_team_idがteamsに登録されているものであればこちらも登録
 			// TODO: conventionが実装されたら
@@ -100,7 +100,7 @@ class Model_Game extends \Orm\Model
 				);
 
 				// stats_players(starter)
-				Model_Stats_Player::createNewGame($game->id, $posts['opponent_team_id']);
+				Model_Stats_Player::create_new_game($game->id, $posts['opponent_team_id']);
 */
 			}
 

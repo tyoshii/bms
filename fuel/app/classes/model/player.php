@@ -94,6 +94,7 @@ class Model_Player extends \Orm\Model
 	 *              - name
 	 *              - number
 	 *              - username
+	 *              - role
 	 *
 	 * @return bool
 	 */

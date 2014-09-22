@@ -94,12 +94,13 @@ class Model_Team extends \Orm\Model
 		$team = Model_Team::forge($props);
 		$team->save();
 
-		// チーム登録したユーザーをプレイヤーとして登録
+		// チーム登録したユーザーをadminとして選手登録
 		$props = array(
 			'team_id'  => $team->id,
 			'name'     => Common::get_dispname(),
 			'number'   => 0,
 			'username' => Auth::get('username'),
+			'role'     => 'admin',
 		);
 		Model_Player::regist($props);
 

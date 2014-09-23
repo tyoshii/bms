@@ -15,6 +15,11 @@ abstract class Test_Base extends \TestCase
 
 	public function request($path, $method = 'GET', $param = array())
 	{
+		// rest
+		Request::reset_request(true);
+		FieldsetEx::reset();
+
+		// request object
 		$req = Request::forge($path)->set_method($method);
 
 		if ($param)

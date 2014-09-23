@@ -264,8 +264,8 @@ class Controller_Game extends Controller_Base
 		// 表彰
 		// TODO: 試合概要だけにあればよいが、othersでも使っていたためここで
 		$award = Model_Stats_Award::get_stats($game_id, $team_id);
-		$view->mvp = $award->mvp_player_id;
-		$view->second_mvp = $award->second_mvp_player_id;
+		$view->mvp = $award['mvp_player_id'];
+		$view->second_mvp = $award['second_mvp_player_id'];
 
 
 		return Response::forge($view);

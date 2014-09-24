@@ -163,7 +163,7 @@ class Controller_Team_Config extends Controller_Team
 
 		// player 情報
 		$player = $this->_player;
-		if (Input::get('player_id'))
+		if ($this->param('player_id'))
 		{
 			if ( ! $this->_team_admin)
 			{
@@ -171,7 +171,7 @@ class Controller_Team_Config extends Controller_Team
 				return Response::redirect($this->_team->href);
 			}
 
-			$player = Model_Player::find(Input::get('player_id'));
+			$player = Model_Player::find($this->param('player_id'));
 		}
 
 		// form
@@ -181,8 +181,9 @@ class Controller_Team_Config extends Controller_Team
 			'username' => $player->username,
 		));
 
-		// username readonly
+		// username readonly and not require
 		$form->field('username')->set_attribute('readonly', 'readonly');
+		$form->field('username')->delete_rule('required');
 
 		// post request
 		if (Input::post())

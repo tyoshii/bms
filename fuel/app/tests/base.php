@@ -4,6 +4,13 @@ abstract class Test_Base extends \TestCase
 {
 	public static $sample = array();
 
+	public static function setUpBeforeClass()
+	{
+		parent::setUpBeforeClass();
+
+		self::set_samples('player1');
+	}
+
 	protected function setUp()
 	{
 		parent::setUp();

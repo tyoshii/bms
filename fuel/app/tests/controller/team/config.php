@@ -13,6 +13,8 @@ class Test_Controller_Team_Config extends Test_Base
 
 	public static function setUpBeforeClass()
 	{
+		parent::setUpBeforeClass();
+
 		self::$team_url = 'team/'.Model_Team::find('first')->url_path;
 	}
 
@@ -41,7 +43,7 @@ class Test_Controller_Team_Config extends Test_Base
 		);
 		foreach ($paths as $path)
 		{
-			$res = $this->request(self::$team_url.'/config/'.$path);
+			$res = $this->request(self::$sample['url']['team'].'/config/'.$path);
 			$this->assertSame(200, $res->status);
 		}
 

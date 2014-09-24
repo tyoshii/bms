@@ -43,10 +43,16 @@ class Controller_Api_Deploy extends Controller
 			`git checkout $branch`;
 			`git pull origin $branch`;
 
+			// submodule
+			`git submodule update`;
+
 			// oil
 			// stagingとproductionで同じデータを見ている場合、
 			// stagingでmigrateしたあとにproductionでmigrateするとエラーになる？
 			`FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate`;
+
+			// composer
+			`/usr/bin/env php composer.phar update`;
 
 			// deploy
 			chdir($git_dir.'/deploy/');

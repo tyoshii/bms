@@ -267,7 +267,6 @@ class Controller_Game extends Controller_Base
 		$view->mvp = $award['mvp_player_id'];
 		$view->second_mvp = $award['second_mvp_player_id'];
 
-
 		return Response::forge($view);
 	}
 

@@ -34,4 +34,11 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 	{
 		$this->assertSame('Baseball Management System', $this->title());
 	}
+
+	public function logout()
+	{
+		$this->url('/');
+		$logout = $this->byCssSelector('a[role=logout]');
+		$logout->click();
+	}
 }

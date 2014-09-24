@@ -46,13 +46,5 @@ class Test_View_Team extends Test_View_Base
 			$this->assertSame($url, $this->url());
 			$this->assertTitle();
 		}
-
-		// $this->byName('username')->value('cannot-login-user');
-		// $this->byName('password')->value('dummy');
-		// $this->byName('login')->submit();
-
-		// $alert = $this->byCssSelector('div.alert[role=alert-error] span');
-		// $this->assertSame('Error! ログインに失敗しました', $alert->text());
-		// $this->assertStringEndsWith('/login', $this->url());
 	}
 }

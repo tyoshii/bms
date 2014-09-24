@@ -20,7 +20,7 @@ class Controller_Team_Config extends Controller_Team
 			if ( ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
-				return Response::forge('/team/'.$this->_team->url_path);
+				return Response::redirect('/team/'.$this->_team->url_path);
 			}
 		}
 
@@ -30,7 +30,7 @@ class Controller_Team_Config extends Controller_Team
 			if ( ! $this->_player and ! $this->_team_admin)
 			{
 				Session::get_flash('error', '権限がありません');
-				return Response::forge('/team/'.$this->_team->url_path);
+				return Response::redirect('/team/'.$this->_team->url_path);
 			}
 		}
 
@@ -103,7 +103,6 @@ class Controller_Team_Config extends Controller_Team
 
 	/**
 	 * 選手管理（今使ってない
-	 * >>>>>>> staging
 	 */
 	public function action_player()
 	{
@@ -161,6 +160,61 @@ class Controller_Team_Config extends Controller_Team
 	public function action_profile()
 	{
 		$view = View::forge('team/config/profile.twig');
+
+		// player 情報
+		$player = $this->_player;
+		if (Input::get('player_id'))
+		{
+			if ( ! $this->_team_admin)
+			{
+				Session::get_error('権限がありません');
+				return Response::redirect($this->_team->href);
+			}
+
+			$player = Model_Player::find(Input::get('player_id'));
+		}
+
+		// form
+		$form = Model_Player::get_form(array(
+			'name'     => $player->name,
+			'number'   => $player->number,
+			'username' => $player->username,
+		));
+
+		// username readonly
+		$form->field('username')->set_attribute('readonly', 'readonly');
+
+		// post request
+		if (Input::post())
+		{
+			$val = $form->validation();
+
+			if ($val->run())
+			{
+				foreach ($val->validated() as $key => $val)
+				{
+					if (is_null($val)) continue;
+
+					$player->set($key, $val);
+				}
+
+				$player->save();
+
+				Session::set_flash('info', 'プロフィールを更新しました');
+				return Response::redirect(Uri::current());
+			}
+			else
+			{
+				Session::set_flash('error', $val->show_errors());
+			}
+
+			$form->repopulate();
+		}
+
+		// set view
+		$view->player = $player;
+		$view->set_safe('form', $form->build());	
+
 		return Response::forge($view);
 	}
 

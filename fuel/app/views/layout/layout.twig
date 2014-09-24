@@ -109,7 +109,7 @@ Switching each env :
     <ul class="nav navbar-nav navbar-right">
       {% if auth_check() %}
         <li><a href="/user/info"><img id="user-icon" src="{{usericon}}" height="32" width="32"></a></li>
-        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;ログアウト</a></li>
+        <li><a href="/logout" role="logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;ログアウト</a></li>
 			{% else %}
 				<li><a href="/login?url={{ current_url() }}">ログイン</a></li>
       {% endif %}

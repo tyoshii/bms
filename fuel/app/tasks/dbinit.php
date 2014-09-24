@@ -199,7 +199,11 @@ class Dbinit
 			'stadium'            => '',
 			'memo'               => '',
 		);
-		\Model_Game::regist($data);
+		$game = \Model_Game::regist($data);
+
+		// stats_award
+		\Model_Stats_Award::regist($game->id, $team1_id, array());
+		\Model_Stats_Award::regist($game->id, $team2_id, array());
 
 		// config
 		$ids = \Config::get('bms.moderator_team_ids');

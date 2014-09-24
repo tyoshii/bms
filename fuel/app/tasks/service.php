@@ -16,7 +16,7 @@ class Service
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Service:Run]";
@@ -47,7 +47,7 @@ class Service
 	 *
 	 * @return string
 	 */
-	public function out($args = NULL)
+	public function out($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Service:Out]";
@@ -68,7 +68,7 @@ class Service
 	 *
 	 * @return string
 	 */
-	public function in($args = NULL)
+	public function in($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Service:In]";

@@ -16,7 +16,7 @@ class Sendmail
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Sendmail:Run]";

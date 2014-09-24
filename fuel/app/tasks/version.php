@@ -16,7 +16,7 @@ class Version
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Version:Run]";
@@ -41,7 +41,7 @@ class Version
 	 *
 	 * @return string
 	 */
-	public function up($args = NULL)
+	public function up($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Version:up]";

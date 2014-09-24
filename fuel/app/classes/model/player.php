@@ -3,15 +3,44 @@
 class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
-		'id',
-		'team_id',
-		'name',
-		'number',
-		'username',
-		'status' => array('default' => 1),
-		'role'   => array('default' => 'user'),
-		'created_at',
-		'updated_at',
+		'id'      => array('form' => array('type' => false)),
+		'team_id' => array('form' => array('type' => false)),
+		'name'    => array(
+			'data_type' => 'varchar',
+			'form' => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+			'label' => '選手名',
+			'validation' => array(
+				'required',
+				'max_length' => array(60),
+			),
+		),
+		'number' => array(
+			'data_type' => 'varchar',
+			'form' => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+			'label' => '背番号',
+			'validation' => array(
+				'required',
+				'max_length'   => array(4),
+				'valid_string' => array('numeric'),
+			),
+		),
+		'username' => array('form' => array('type' => false)),
+		'status'   => array(
+			'default' => 1,
+			'form' => array('type' => false),
+		),
+		'role' => array(
+			'default' => 'user',
+			'form' => array('type' => false),
+		),
+		'created_at' => array('form' => array('type' => false)),
+		'updated_at' => array('form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
@@ -222,5 +251,38 @@ class Model_Player extends \Orm\Model
 		$player->save();
 
 		return true;
+	}
+
+	/**
+	 * フォーム取得
+	 * @param array field_name => value
+	 *
+	 * @return Fieldset object
+	 */
+	public static function get_form($values = array())
+	{
+		$form = Fieldset::forge('profile', array(
+			'form_attributes' => array('class' => 'form')
+		));
+
+		$form->add_model(self::forge());
+
+		// username
+		Common_Form::add_username($form);
+
+		// default value
+		foreach ($values as $name => $value)
+		{
+			$form->field($name)->set_value($value);
+		}
+
+		// submit
+		$form->add('regist', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
+
+		return $form;
 	}
 }

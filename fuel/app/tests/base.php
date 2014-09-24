@@ -45,6 +45,12 @@ abstract class Test_Base extends \TestCase
 		self::set_sample('url', $url);
 	}
 
+	public function login($username)
+	{
+		$id = Model_User::find_by_username($username)->id;
+		Auth::force_login($id);
+	}
+
 	public function request($path, $method = 'GET', $param = array())
 	{
 		// rest

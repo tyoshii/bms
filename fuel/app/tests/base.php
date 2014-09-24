@@ -2,6 +2,8 @@
 
 abstract class Test_Base extends \TestCase
 {
+	public static $sample = array();
+
 	protected function setUp()
 	{
 		parent::setUp();
@@ -11,6 +13,36 @@ abstract class Test_Base extends \TestCase
 	protected function tearDown()
 	{
 		parent::tearDown();
+	}
+
+	public static function set_sample($key, $value)
+	{
+		self::$sample[$key] = $value;
+	}
+
+	public static function set_samples($username = null)
+	{
+		if (is_null($username))
+		{
+			$username = Model_User::find('first')->username;
+		}
+
+		$player     = Model_Player::find_by_username($username);
+		$team       = Model_Team::find($player->team_id);
+		$games_team = Model_Games_Team::find_by_team_id($team->id);
+		$game       = Model_Game::find($games_team->id);
+
+		$url = array(
+			'team' => '/team/'.$team->url_path,
+			'game' => '/team/'.$team->url_path.'/game/'.$game->id,
+			'edit' => '/team/'.$team->url_path.'/game/'.$game->id.'/edit',
+		);
+
+		self::set_sample('username', $username);
+		self::set_sample('player', $player);
+		self::set_sample('team', $team);
+		self::set_sample('game', $game);
+		self::set_sample('url', $url);
 	}
 
 	public function request($path, $method = 'GET', $param = array())

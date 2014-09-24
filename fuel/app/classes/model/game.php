@@ -78,7 +78,6 @@ class Model_Game extends \Orm\Model
 			Model_Games_Runningscore::regist($game->id);
 
 			// games_teamsへの保存
-			// TODO : team_id / opponent_team_id / opponent_team_name のパラメータをPOSTしてもらう
 			if ( ! Model_Games_Team::regist($posts + array('game_id' => $game->id)) )
 			{
 				throw new Exception('新規ゲーム登録に失敗しました。');
@@ -91,17 +90,6 @@ class Model_Game extends \Orm\Model
 			// TODO: conventionが実装されたら
 			if ( array_key_exists('opponent_team_id', $posts) )
 			{
-/*
-				// games_teamsへの保存
-				Model_Games_Team::regist(
-					$game->id,
-					$posts['opponent_team_id'],
-					$posts['team_id']
-				);
-
-				// stats_players(starter)
-				Model_Stats_Player::create_new_game($game->id, $posts['opponent_team_id']);
-*/
 			}
 
 			Mydb::commit();

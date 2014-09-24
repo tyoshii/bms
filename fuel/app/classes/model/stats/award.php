@@ -27,11 +27,22 @@ class Model_Stats_Award extends Model_Base
 
 	public static function get_stats($game_id, $team_id)
 	{
-		$props = array(
-			'game_id' => $game_id,
-			'team_id' => $team_id,
-		);
-		return self::get_one_or_forge($props);
+		$query = <<<__SQL__
+SELECT
+	*,
+	(SELECT name FROM players WHERE id = stats_awards.mvp_player_id)
+		as mvp_player_name,
+	(SELECT name FROM players WHERE id = stats_awards.second_mvp_player_id)
+		as second_mvp_player_name
+FROM
+	stats_awards
+WHERE
+	game_id = $game_id AND
+	team_id = $team_id
+__SQL__;
+
+		$result = DB::query($query)->execute()->as_array();
+		return reset($result);
 	}
 
 	public static function regist($game_id, $team_id, $stats)
@@ -44,5 +55,7 @@ class Model_Stats_Award extends Model_Base
 
 		$award->set($stats);
 		$award->save();
+
+		return $award;
 	}
 }

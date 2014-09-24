@@ -36,7 +36,8 @@
 <hr>
 
 <ul>
-<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+<li><a href="javascript:void(0);" role="remind" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+<li><a href="/api/download/stats/itleague?game_id={{ global.game.id }}&team_id={{ global.team.id }}" role="download">成績ダウンロード(IT LEAGUE)</a></li>
 </ul>
 
 {% endblock %}

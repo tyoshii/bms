@@ -36,7 +36,18 @@ class Common_Form
 
 	public function username($value = '')
 	{
-		$this->form->add('username', 'ユーザー名', array(
+		self::add_username($this->form, $value);
+		return $this;
+	}
+
+	public static function add_username($form, $value = '')
+	{
+		if ($form->field('username'))
+		{
+			$form->delete('username');
+		}
+
+		$form->add('username', 'ユーザー名', array(
 			'type'        => 'text',
 			'class'       => 'form-control',
 			'value'       => $value,
@@ -46,8 +57,6 @@ class Common_Form
 			->add_rule('trim')
 			->add_rule('valid_string', array('alpha', 'numeric', 'dashes'))
 			->add_rule('max_length', 50);
-
-		return $this;
 	}
 
 	public function password()

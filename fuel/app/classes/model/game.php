@@ -314,57 +314,14 @@ class Model_Game extends \Orm\Model
 		$game->save();
 	}
 
-	public static function get_game_status($game_id, $team_id = null)
+	public static function update_status($game_id, $status)
 	{
 		$game = self::find($game_id);
-
-		// game_idが無効
-		if ( ! $game) return null;
-
-		// 管理者権限
-		if (Auth::has_access('admin.admin'))
-			return $game->game_status;
-
-		// チームIDの指定がない
-		if ( ! $team_id) return null;
-
-		$games_teams = $game->games_teams;
-		if ( ! $games_teams ) return null;
-
-		// 先攻 or 後攻
-		if ( $games_teams->order === 'top' )
-			return $game->top_status;
-
-		if ( $games_teams->order === 'bottom' )
-			return $game->bottom_status;
-
-		// 該当なし
-		return null;
-	}
-
-	public static function update_status($game_id, $team_id, $status )
-	{
-		$game = self::find($game_id);
-		
 		if ( ! $game ) return false;
 
-		// 各種ステータス update
-		if ( Auth::has_access('admin.admin') )
-		{
-			$game->game_status   = $status;
-			$game->top_status    = $status;
-			$game->bottom_status = $status;
-		}
-		else
-		{
-			if ( $game->team_top    == $team_id )  $game->top_status    = $status;
-			if ( $game->team_bottom == $team_id )  $game->bottom_status = $status;
-		
-			// 両チームのステータスが同じだったらgame_statusもそれに合わせる
-			if ( $game->team_top === $game->team_bottom )
-				$game->game_status = $game->team_top;
-		}
+		// 大会の場合は、大会管理者だけが出来るようにする。
 
+		$game->game_status = $status;
 		$game->save();
 
 		return true;
@@ -393,7 +350,7 @@ class Model_Game extends \Orm\Model
 		{
 			// game_statusのチェック
 			// 成績入力中のものに関してのみアラートを表示する
-			if ( self::get_game_status($game_id, $team_id) !== '1' )
+			if ( $data['game_status'] !== '1' )
 			{
 				continue;
 			}

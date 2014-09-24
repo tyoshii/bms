@@ -39,10 +39,10 @@ class Controller_Api_Game extends Controller_Rest
 
 		// check game status
 		$action = Request::main()->action;
-		$status = Model_Game::get_game_status($ids['game_id'], $ids['team_id']);
 		if ($action !== 'updateStatus' and $action !== 'updateOther')
 		{
-			if ($status == 2)
+			$game = Model_Game::find($ids['game_id']);
+			if ( ! $game or $game->game_status === '2')
 			{
 				throw new Exception('既に成績入力を完了している試合です');
 			}
@@ -55,11 +55,7 @@ class Controller_Api_Game extends Controller_Rest
 	{
 		$ids = self::_get_ids();
 
-		$ret = Model_Game::update_status(
-			$ids['game_id'],
-			$ids['team_id'],
-			Input::post('status')
-		);
+		$ret = Model_Game::update_status($ids['game_id'], Input::post('status'));
 
 		if ( ! $ret)
 			throw new Exception('ステータスのアップデートに失敗しました');

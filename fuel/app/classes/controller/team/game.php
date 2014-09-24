@@ -228,10 +228,6 @@ class Controller_Team_Game extends Controller_Team
 		// 対戦相手
 		$view->games_teams = $this->_game->games_teams;
 
-		// game_status
-		// TODO: input_status に切り替える
-		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
-
 		return Response::forge($view);
 	}
 

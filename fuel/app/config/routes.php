@@ -31,6 +31,7 @@ return array(
 	'team/(:url_path)/stats'                        => 'team/stats',
 
 	// team/config
+	'team/(:url_path)/config/(:kind)/(:player_id)'  => 'team/config/index',
 	'team/(:url_path)/config/(:kind)'               => 'team/config/index',
 
 	// team/offer

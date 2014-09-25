@@ -27,18 +27,21 @@ class Controller_Api_Game extends Controller_Rest
 		if ( ! Auth::has_access('game.editall'))
 			return Response::forge('スコアを編集する権限がありません', 403);
 
+		// param
+		$stats = Input::post('stats');
+
+		// validation object
 		$form = Fieldset::forge('score');
 		$form->add_model(Model_Games_Runningscore::forge());
-
 		$val = $form->validation();
 
-		// TODO: スマホ版の実装でstatsのキーでポストしている
-		// PCもいつかそっちによせる
-		$stats = Input::post('stats') ? : Input::post();
-
+		// validate
 		if ( ! $val->run($stats, true))
+		{
 			return Response::forge($val->show_errors(), 400);
+		}
 
+		// regist
 		Model_Games_Runningscore::regist(Input::post('game_id'), $stats);
 
 		return $this->_success();

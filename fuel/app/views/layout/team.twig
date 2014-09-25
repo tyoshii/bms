@@ -10,6 +10,7 @@
 
 <div class="col-md-3">
 
+<div id="sidr">
 <ul class="nav nav-pills nav-stacked" role="menu">
 
 <hr>
@@ -39,6 +40,7 @@
 {% endif %}
 
 </ul>
+</div>
 
 </div>
 
@@ -57,6 +59,7 @@
 
 $(document).ready(function() {
 
+	// active li
 	$("ul[role=menu] li").each(function() {
 
 		var href = $(this).children("a").attr("href");

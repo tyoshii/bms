@@ -10,6 +10,7 @@ class Controller_Base extends Controller
 		// global value
 		View::set_global('env', Fuel::$env);
 		View::set_global('usericon', Common::get_usericon_url());
+		View::set_global('is_mobile', Agent::is_mobiledevice());
 
 		// induct to each env
 		if (Auth::has_access('moderator.moderator'))

@@ -199,17 +199,17 @@ class Model_Stats_Hitting extends Model_Base
 
 		try
 		{
-
 			// - TODO foreach は念のため感ある。
 			// registは基本的には選手一人の成績登録なので
 			// functionの引数変えたほうがいいかも
-			foreach ($datas as $player_id => $data)
+			foreach ($datas as $key => $data)
 			{
 				if ( ! $data) continue;
 
 				// set value
-				$detail = array_key_exists('detail', $data) ? $data['detail'] : null;
-				$stats = array_key_exists('stats', $data) ? $data['stats'] : null;
+				$player_id = $data['player_id'];
+				$detail    = array_key_exists('detail', $data) ? $data['detail'] : null;
+				$stats     = array_key_exists('stats', $data)  ? $data['stats']  : null;
 
 				if ($detail)
 				{

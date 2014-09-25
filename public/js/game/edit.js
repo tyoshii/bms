@@ -171,23 +171,24 @@ function post_other(is_alert) {
 
 function post_batter(is_alert, is_comp) {
 
-  var data = [];
+  var data = {};
   var detail = [];
 
   // tr parse / data push
   $('tr.result').each(function() {
     var $this = $(this);
  
-    var id = $this.children('td.player-id').text();
+    var player_id = $this.children('td.player-id').text();
+    var data_key  = 'player-id-'+player_id;
 
-    if ( id === '0' ) {
+    if ( player_id === '0' ) {
       return true; //continue
     }
 
     if ( $this.hasClass("detail") ) {
       var daseki_number = $this.children('td.daseki-number').text();
 
-      data[id].detail.push({
+      data[data_key].detail.push({
         direction: $this.find('select.direction').val(), 
         kind: $this.find('select.kind').val(), 
         result: $this.find('select.result').val() 
@@ -214,12 +215,12 @@ function post_batter(is_alert, is_comp) {
         stats[key] = val;
       }
 
-      data[id] = {
+      data[data_key] = {
+        player_id: player_id,
         stats: stats,
-        detail: [],
+        detail: []
       };
     }
-    
   });
   // console.log(data);
 
@@ -247,7 +248,6 @@ function post_batter(is_alert, is_comp) {
       }
     }, 
   });
-  
 }
 
 function delete_daseki(self, daseki) {

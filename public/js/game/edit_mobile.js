@@ -286,11 +286,12 @@ $("div.stats-post[role=pitching] button").click(function(){
 });
 
 $("div.stats-post[role=hitting] button").click(function(){
-  STATS.data = [];
+  STATS.data = {};
   STATS.post.complete = $(this).attr("post_type") === 'complete';
   
   $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();
+    var data_key  = 'player_id:'+player_id;
 
     // stats
     var stats = {
@@ -318,9 +319,10 @@ $("div.stats-post[role=hitting] button").click(function(){
     });
 
     // set
-    STATS.data[player_id] = {
-      stats: stats,
-      detail: detail,
+    STATS.data[data_key] = {
+      player_id: player_id,
+      stats:     stats,
+      detail:    detail,
     };
   });
   // console.log(STATS.data);

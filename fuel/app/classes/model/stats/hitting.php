@@ -193,15 +193,12 @@ class Model_Stats_Hitting extends Model_Base
 		}
 	}
 
-	public static function regist($ids, $datas, $status)
+	public static function regist($ids, $datas, $status = null)
 	{
 		Mydb::begin();
 
 		try
 		{
-			// - TODO foreach は念のため感ある。
-			// registは基本的には選手一人の成績登録なので
-			// functionの引数変えたほうがいいかも
 			foreach ($datas as $key => $data)
 			{
 				if ( ! $data) continue;
@@ -234,7 +231,12 @@ class Model_Stats_Hitting extends Model_Base
 					$hit = self::forge($ids + array('player_id' => $player_id));
 
 				$hit->set($stats);
-				$hit->status = $status;
+
+				// status
+				if ( ! is_null($status))
+				{
+					$hit->status = $status;
+				}
 
 				$hit->save();
 
@@ -248,32 +250,6 @@ class Model_Stats_Hitting extends Model_Base
 		{
 			Mydb::rollback();
 			throw new Exception($e->getMessage());
-		}
-	}
-
-	public static function replace_all($ids, $datas, $status)
-	{
-		Mydb::begin();
-
-		try
-		{
-
-			// clean database
-			Common::db_clean(self::$_table_name, $ids);
-			Model_Stats_Hittingdetail::clean($ids);
-			Model_Stats_Fielding::clean($ids);
-
-			// regist new data
-			// TODO: registへの第2引数（成績データ）は複数の成績ではなく個人にしたい。
-			// player_idとdataを渡すように
-			self::regist($ids, $datas, $status);
-
-			Mydb::commit();
-		}
-		catch (Exception $e)
-		{
-			Mydb::rollback();
-			throw new Exception();
 		}
 	}
 

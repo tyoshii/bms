@@ -211,7 +211,7 @@ class Model_Player extends \Orm\Model
 	public static function has_team_admin($team_id)
 	{
 		$res = self::query()->where(array(
-			array('username', Auth::get_screen_name()),
+			array('username', Auth::get('username')),
 			array('team_id', $team_id),
 		))->get_one();
 

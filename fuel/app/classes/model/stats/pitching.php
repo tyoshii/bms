@@ -102,7 +102,7 @@ class Model_Stats_Pitching extends Model_Base
 		);
 	}
 
-	public static function regist($ids, $stats, $status)
+	public static function regist($ids, $stats, $status = null)
 	{
 		Mydb::begin();
 
@@ -122,38 +122,10 @@ class Model_Stats_Pitching extends Model_Base
 
 				// other
 				$pitch->order  = $order;
-				$pitch->status = $status;
-
-				$pitch->save();
-			}
-
-			Mydb::commit();
-		}
-		catch (Exception $e)
-		{
-			Mydb::rollback();
-			throw new Exception($e->getMessage());
-		}
-	}
-
-	public static function replace_all($ids, $stats, $status)
-	{
-		Mydb::begin();
-
-		try
-		{
-
-			// clean data
-			Common::db_clean(self::$_table_name, $ids);
-
-			// regist new data
-			foreach ($stats as $player_id => $stat)
-			{
-				if ( ! $stat) continue;
-
-				$props = self::_get_insert_props($stat);
-				$pitch = self::forge($ids + $props + array('player_id' => $player_id));
-				$pitch->status = $status;
+				if ( ! is_null($status))
+				{
+					$pitch->status = $status;
+				}
 
 				$pitch->save();
 			}

@@ -25,7 +25,7 @@ class Controller_Team_Config extends Controller_Team
 		}
 
 		// profile編集はチーム参加者本人とチーム管理者のみ
-		if ($kind === 'profile' or $kind === 'leave')
+		if ($kind === 'leave')
 		{
 			if ( ! $this->_player and ! $this->_team_admin)
 			{
@@ -214,47 +214,6 @@ class Controller_Team_Config extends Controller_Team
 	public function action_delete()
 	{
 		$view = View::forge('team/config/delete.twig');
-		return Response::forge($view);
-	}
-
-	/**
-	 * プロフィール編集
-	 */
-	public function action_profile()
-	{
-		$view = View::forge('team/config/profile.twig');
-
-		// post request
-		if (Input::post())
-		{
-			$val = $form->validation();
-
-			if ($val->run())
-			{
-				foreach ($val->validated() as $key => $val)
-				{
-					if (is_null($val)) continue;
-
-					$player->set($key, $val);
-				}
-
-				$player->save();
-
-				Session::set_flash('info', 'プロフィールを更新しました');
-				return Response::redirect(Uri::current());
-			}
-			else
-			{
-				Session::set_flash('error', $val->show_errors());
-			}
-
-			$form->repopulate();
-		}
-
-		// set view
-		$view->player = $player;
-		$view->set_safe('form', $form->build());	
-
 		return Response::forge($view);
 	}
 

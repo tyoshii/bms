@@ -2,6 +2,21 @@
 
 class Controller_Api_Game extends Controller_Rest
 {
+	public function router($resource, $arguments)
+	{
+		// 権限チェック
+		if (in_array($resource, array('updateScore', 'updatePlayer', 'updateOther')))
+		{
+			if ( ! Model_Player::has_team_admin(Input::post('team_id')))
+			{
+				Log::warning('updateScore/Player/Otherに対して権限の無いアクセス');
+				throw new Exception('権限がありません');
+			}
+		}
+
+		parent::router($resource, $arguments);
+	}
+
 	public function before()
 	{
 		parent::before();
@@ -23,10 +38,6 @@ class Controller_Api_Game extends Controller_Rest
 
 	public function post_updateScore()
 	{
-		// 権限チェック
-		if ( ! Auth::has_access('game.editall'))
-			return Response::forge('スコアを編集する権限がありません', 403);
-
 		// param
 		$stats = Input::post('stats');
 
@@ -50,10 +61,6 @@ class Controller_Api_Game extends Controller_Rest
 	// 出場選手
 	public function post_updatePlayer()
 	{
-		// 権限チェック
-		if ( ! Auth::has_access('game.editall'))
-			return Response::forge('出場選手を編集する権限がありません', 403);
-
 		$ids = self::_get_ids();
 
 		// stats_metaへの登録
@@ -114,10 +121,6 @@ class Controller_Api_Game extends Controller_Rest
 
 	public function post_updateOther()
 	{
-		// 権限チェック
-		if ( ! Auth::has_access('game.editall'))
-			return Response::forge('編集する権限がありません', 403);
-
 		$ids = self::_get_ids();
 
 		// stats
@@ -145,6 +148,7 @@ class Controller_Api_Game extends Controller_Rest
 	 */
 	private static function _get_ids()
 	{
+		// validation game_id/team_id
 		$val = Validation::forge();
 		$val->add('game_id', 'game_id')->add_rule('required');
 		$val->add('team_id', 'team_id')->add_rule('required');
@@ -156,20 +160,10 @@ class Controller_Api_Game extends Controller_Rest
 
 		$ids = $val->validated();
 
-		// check acl if no admin
-		if ( ! Auth::has_access('admin.admin') and Auth::has_access('moderator.moderator'))
+		// 自分のチームの試合かどうか
+		if ( ! Model_Player::is_belong(Input::post('team_id')))
 		{
-			// has Moderators ?
-			if ( ! Auth::member('50'))
-			{
-				throw new Exception('権限がありません');
-			}
-
-			// Moderatorsだとして、自分のチームの試合ですか？
-			if ($ids['team_id'] !== Model_Player::get_my_team_id())
-			{
-				throw new Exception('権限がありません');
-			}
+			throw new Exception('権限がありません');
 		}
 
 		// check game status
@@ -188,7 +182,8 @@ class Controller_Api_Game extends Controller_Rest
 
 
 	/**
-	 * statsに複数の成績が送られてきたとき、チーム管理者の権限があるかどうかをチェック
+	 * statsに複数の成績が送られてきたときはチーム管理者の権限が必要
+	 * リクエストユーザーに権限があるかどうかをチェック
 	 *
 	 * @param array  stats
 	 * @param string team_id

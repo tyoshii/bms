@@ -202,6 +202,34 @@ class Model_Player extends \Orm\Model
 	}
 
 	/**
+	 * 指定されたチームにユーザーが所属しているかどうか
+	 *
+	 * @param string team_id
+	 * @param string username
+	 *
+	 * @return player object / false
+	 */
+	public static function is_belong($team_id = null, $username = null)
+	{
+		if (is_null($team_id))
+		{
+			return false;
+		}
+
+		if (is_null($username))
+		{
+			$username = Auth::get('username');
+		}
+
+		$player = self::query()
+			->where('team_id', $team_id)
+			->where('username', $username)
+			->get_one();
+
+		return $player ?: false;
+	}
+
+	/**
 	 * チームの管理者権限をもっているかどうか
 	 *
 	 * @param string team_id

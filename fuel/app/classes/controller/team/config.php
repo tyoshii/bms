@@ -8,29 +8,35 @@ class Controller_Team_Config extends Controller_Team
 	}
 
 	/**
-	 * 設定アクション
+	 * indexアクション。すべてのteam/configリクエストはここを通る
+	 * 
+	 * param string kind
+	 *  - team_admin
+	 *    - admin
+	 *    - info
+	 *    - delete
+	 *  - belong_player
+	 *    - leave
+	 *  - both
+	 *    - player
 	 */
 	public function action_index()
 	{
-		$kind = $this->param('kind');
+		// 選手情報が無い
+		if ( ! $this->_player)
+		{
+			Session::set_flash('error', '権限がありません');
+			return Response::redirect($this->_team->href);
+		}
 
 		// 特定のconfigはチーム管理者専門
-		if (in_array($kind, array('info', 'player', 'delete', 'admin')))
+		$kind = $this->param('kind');
+		if (in_array($kind, array('info', 'delete', 'admin')))
 		{
 			if ( ! $this->_team_admin)
 			{
 				Session::set_flash('error', '権限がありません');
-				return Response::redirect('/team/'.$this->_team->url_path);
-			}
-		}
-
-		// profile編集はチーム参加者本人とチーム管理者のみ
-		if ($kind === 'leave')
-		{
-			if ( ! $this->_player and ! $this->_team_admin)
-			{
-				Session::set_flash('error', '権限がありません');
-				return Response::redirect('/team/'.$this->_team->url_path);
+				return Response::redirect($this->_team->href);
 			}
 		}
 

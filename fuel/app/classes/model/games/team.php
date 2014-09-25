@@ -51,7 +51,7 @@ class Model_Games_Team extends \Orm\Model
 	 *
 	 * @return bool
 	 */
-	public static function regist($props)
+	public static function regist($props = array())
 	{
 		extract($props);
 
@@ -96,7 +96,6 @@ class Model_Games_Team extends \Orm\Model
 		$team = self::forge($props);
 		$team->save();
 
-		return true;
+		return $team;
 	}
-
 }

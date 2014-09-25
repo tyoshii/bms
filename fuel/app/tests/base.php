@@ -40,9 +40,9 @@ abstract class Test_Base extends \TestCase
 		$game       = Model_Game::find($games_team->id);
 
 		$url = array(
-			'team' => '/team/'.$team->url_path,
-			'game' => '/team/'.$team->url_path.'/game/'.$game->id,
-			'edit' => '/team/'.$team->url_path.'/game/'.$game->id.'/edit',
+			'team' => 'team/'.$team->url_path,
+			'game' => 'team/'.$team->url_path.'/game/'.$game->id,
+			'edit' => 'team/'.$team->url_path.'/game/'.$game->id.'/edit',
 		);
 
 		self::set_sample('username', $username);

@@ -9,13 +9,9 @@
  */
 class Test_Controller_Team_Config extends Test_Base
 {
-	public static $team_url = '';
-
 	public static function setUpBeforeClass()
 	{
 		parent::setUpBeforeClass();
-
-		self::$team_url = 'team/'.Model_Team::find('first')->url_path;
 	}
 
   protected function setUp()
@@ -39,7 +35,6 @@ class Test_Controller_Team_Config extends Test_Base
 			'player',
 			'admin',
 			'delete',
-			'profile',
 			'leave',
 		);
 		foreach ($paths as $path)
@@ -49,9 +44,9 @@ class Test_Controller_Team_Config extends Test_Base
 		}
 
 		// 存在しないconfig
-		$res = $this->request(self::$team_url.'/config/not_exist_config');
+		$res = $this->request(self::$sample['url']['team'].'/config/not_exist_config');
 
 		$this->assertSession('error', '存在しないURLです');
-		$this->assertRedirect($res, self::$team_url);
+		$this->assertRedirect($res, self::$sample['url']['team']);
 	}
 }

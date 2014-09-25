@@ -2,11 +2,6 @@
 
 class Controller_Team_Config extends Controller_Team
 {
-	public function before()
-	{
-		parent::before();
-	}
-
 	/**
 	 * indexアクション。すべてのteam/configリクエストはここを通る
 	 * 

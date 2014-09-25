@@ -14,7 +14,7 @@ class Test_View_Team_Config extends Test_View_Base
 		$this->setBrowserUrl('http://localhost:8888/');
 	}
 
-	public function test_profile正常系テスト()
+	public function test_選手情報更新_正常系テスト()
 	{
 		// 管理者権限でログイン
 		$this->login('player1');
@@ -27,7 +27,7 @@ class Test_View_Team_Config extends Test_View_Base
 		$this->assertRegExp('/編集/', $table->text());
 
 		// request
-		$url = self::$sample['url']['team'].'/config/profile';
+		$url = self::$sample['url']['team'].'/config/player/'.self::$sample['player']->id;
 		$this->url($url);
 
 		// 自分のプロフィール編集画面

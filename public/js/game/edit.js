@@ -448,7 +448,7 @@ function post_pitcher(is_alert, is_comp) {
   var $pitcher = $("table#pitcher tbody tr");
   var data = [];
 
-  $pitcher.each( function() {
+  $pitcher.each( function(order) {
     var $this = $(this);
     var $name    = $this.children("td.name"),
         $number  = $this.children("td.number"),
@@ -464,18 +464,19 @@ function post_pitcher(is_alert, is_comp) {
   
     var player_id = $name.children('data').text();
 
-    data[player_id] = {
-      name    : $name.children('span').text(),
-      number  : $number.text(),
-      result  : $result.children('.result').val(),
-      IP      : $IP.children('.IP').val(),
-      IP_frac : $IP_frac.children('.IP_frac').val(),
-      H       : $H.children('.H').val(),
-      SO      : $SO.children('.SO').val(),
-      BB      : $BB.children('.BB').val(),
-      HB      : $HB.children('.HB').val(),
-      ER      : $ER.children('.ER').val(),
-      R       : $R.children('.R').val()
+    data[order] = {
+      player_id : $name.children('data').text(),
+      name      : $name.children('span').text(),
+      number    : $number.text(),
+      result    : $result.children('.result').val(),
+      IP        : $IP.children('.IP').val(),
+      IP_frac   : $IP_frac.children('.IP_frac').val(),
+      H         : $H.children('.H').val(),
+      SO        : $SO.children('.SO').val(),
+      BB        : $BB.children('.BB').val(),
+      HB        : $HB.children('.HB').val(),
+      ER        : $ER.children('.ER').val(),
+      R         : $R.children('.R').val()
     };
   });
   // console.log(data);
@@ -620,3 +621,30 @@ function post_player(is_alert) {
     }, 
   });
 }
+
+// 投手成績：登板順
+$("div[role=pitching-order] button").click(function(){
+
+  var target_class = '.pitching-stats-row';
+  var type = $(this).attr("data-type");
+
+  var $tr = $(this).parents(target_class);
+  var $target = type === "up" ? $tr.prev(target_class) : $tr.next(target_class);
+
+  if ($target[0])
+  {
+    if (type === "up") {
+      $tr.insertBefore($target[0]);
+    }
+    else {
+      $tr.insertAfter($target[0]);
+    }
+  }
+
+  // 登板順の文言変更
+  // TODO: いまスマホだけ
+  var order = 0;
+  $("table.pitching-stats td.order").each(function(){
+    $(this).text( order++ === 0 ? '先発' : order + '番手' );
+  });
+});

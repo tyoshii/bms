@@ -30,3 +30,8 @@ span.navbar-brand a {
 table.player-table div.player-position {
   margin: 0px 0px 5px;
 }
+
+/* 投手成績：登板順のボタンの大きさを小さく */
+div.btn-group[role="pitching-order"] button.btn-xs {
+  font-size: x-small; 
+}

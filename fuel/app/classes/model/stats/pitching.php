@@ -8,6 +8,7 @@ class Model_Stats_Pitching extends Model_Base
 		'player_id',
 		'game_id',
 		'team_id',
+		'order' => array('default' => 0),
 		'W',
 		'L',
 		'HLD',
@@ -61,6 +62,9 @@ class Model_Stats_Pitching extends Model_Base
 		// positionに1が含まれている場合のみ取得
 		$query->where('p.position', 'LIKE', '%1%');
 
+		// 登板順に
+		$query->order_by(self::$_table_name.'.order');
+
 		$result = $query->execute()->as_array();
 
 		return $result;
@@ -83,10 +87,10 @@ class Model_Stats_Pitching extends Model_Base
 	private static function _get_insert_props($stat)
 	{
 		return array(
-			'W'       => $stat['result'] == 'win' ? 1 : 0,
-			'L'       => $stat['result'] == 'lose' ? 1 : 0,
-			'HLD'     => $stat['result'] == 'hold' ? 1 : 0,
-			'SV'      => $stat['result'] == 'save' ? 1 : 0,
+			'W'       => $stat['result'] === 'win'  ? 1 : 0,
+			'L'       => $stat['result'] === 'lose' ? 1 : 0,
+			'HLD'     => $stat['result'] === 'hold' ? 1 : 0,
+			'SV'      => $stat['result'] === 'save' ? 1 : 0,
 			'IP'      => $stat['IP'],
 			'IP_frac' => $stat['IP_frac'],
 			'H'       => $stat['H'],
@@ -104,22 +108,20 @@ class Model_Stats_Pitching extends Model_Base
 
 		try
 		{
-
 			// regist new data
-			foreach ($stats as $player_id => $stat)
+			foreach ($stats as $order => $stat)
 			{
 				if ( ! $stat) continue;
 
-				# get model
-				$pitch = self::query()->where($ids + array('player_id' => $player_id))->get_one();
+				// get model
+				$pitch = self::get_one_or_forge($ids + array('player_id' => $stat['player_id']));
 
-				if ( ! $pitch)
-					$pitch = self::forge($ids + array('player_id' => $player_id));
-
-				# stats set => save
+				// stats set => save
 				$props = self::_get_insert_props($stat);
-
 				$pitch->set($props);
+
+				// other
+				$pitch->order  = $order;
 				$pitch->status = $status;
 
 				$pitch->save();

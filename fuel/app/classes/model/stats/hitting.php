@@ -106,6 +106,9 @@ class Model_Stats_Hitting extends Model_Base
 	{
 		$query = Model_Stats_Player::get_query($game_id, $team_id, $player_id);
 
+		// 交代も含めて表示順をそろえる
+		$query->order_by('p.disp_order');	
+
 		// join table
 		$join_tables = array(
 			self::$_table_name,

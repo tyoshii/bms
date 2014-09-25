@@ -36,6 +36,7 @@ class Test_Controller_Team_Config extends Test_Base
 		
 		$paths = array(
 			'info',
+			'player',
 			'admin',
 			'delete',
 			'profile',

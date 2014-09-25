@@ -125,7 +125,7 @@ class Model_Player extends \Orm\Model
 	 *              - username
 	 *              - role
 	 *
-	 * @return bool
+	 * @return player object
 	 */
 	public static function regist($props, $id = null)
 	{
@@ -152,7 +152,6 @@ class Model_Player extends \Orm\Model
 			$player->save();
 
 			return true;
-
 		}
 		catch (Exception $e)
 		{
@@ -269,19 +268,19 @@ class Model_Player extends \Orm\Model
 
 		// username
 		Common_Form::add_username($form);
+		
+		// submit
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
 
 		// default value
 		foreach ($values as $name => $value)
 		{
 			$form->field($name)->set_value($value);
 		}
-
-		// submit
-		$form->add('regist', '', array(
-			'type'  => 'submit',
-			'value' => '更新',
-			'class' => 'btn btn-success',
-		));
 
 		return $form;
 	}

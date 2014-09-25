@@ -15,7 +15,7 @@ class Controller_Team extends Controller_Base
 		{
 			if ( ! $this->_team = Model_Team::find_by_url_path($url_path))
 			{
-				Session::set_flash('error', '正しいチーム情報が取得できませんでした。');
+				Session::set_flash('error', $url_path.'正しいチーム情報が取得できませんでした。');
 				return Response::redirect('error/404');
 			}
 		}
@@ -146,7 +146,6 @@ class Controller_Team extends Controller_Base
 	 */
 	public function action_player()
 	{
-
 		if ($player_id = $this->param('player_id'))
 		{
 			// 個人

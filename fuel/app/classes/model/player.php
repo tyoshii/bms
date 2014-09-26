@@ -125,7 +125,7 @@ class Model_Player extends \Orm\Model
 	 *              - username
 	 *              - role
 	 *
-	 * @return bool
+	 * @return player object
 	 */
 	public static function regist($props, $id = null)
 	{
@@ -152,7 +152,6 @@ class Model_Player extends \Orm\Model
 			$player->save();
 
 			return true;
-
 		}
 		catch (Exception $e)
 		{
@@ -203,6 +202,34 @@ class Model_Player extends \Orm\Model
 	}
 
 	/**
+	 * 指定されたチームにユーザーが所属しているかどうか
+	 *
+	 * @param string team_id
+	 * @param string username
+	 *
+	 * @return player object / false
+	 */
+	public static function is_belong($team_id = null, $username = null)
+	{
+		if (is_null($team_id))
+		{
+			return false;
+		}
+
+		if (is_null($username))
+		{
+			$username = Auth::get('username');
+		}
+
+		$player = self::query()
+			->where('team_id', $team_id)
+			->where('username', $username)
+			->get_one();
+
+		return $player ?: false;
+	}
+
+	/**
 	 * チームの管理者権限をもっているかどうか
 	 *
 	 * @param string team_id
@@ -212,7 +239,7 @@ class Model_Player extends \Orm\Model
 	public static function has_team_admin($team_id)
 	{
 		$res = self::query()->where(array(
-			array('username', Auth::get_screen_name()),
+			array('username', Auth::get('username')),
 			array('team_id', $team_id),
 		))->get_one();
 
@@ -269,19 +296,19 @@ class Model_Player extends \Orm\Model
 
 		// username
 		Common_Form::add_username($form);
+		
+		// submit
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
 
 		// default value
 		foreach ($values as $name => $value)
 		{
 			$form->field($name)->set_value($value);
 		}
-
-		// submit
-		$form->add('regist', '', array(
-			'type'  => 'submit',
-			'value' => '更新',
-			'class' => 'btn btn-success',
-		));
 
 		return $form;
 	}

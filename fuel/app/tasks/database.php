@@ -16,7 +16,7 @@ class Database
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Database:Run]";
@@ -39,7 +39,7 @@ class Database
 	 *
 	 * @return string
 	 */
-	public function test($args = NULL)
+	public function test($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Database:Test]";

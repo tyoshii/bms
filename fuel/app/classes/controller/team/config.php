@@ -2,35 +2,36 @@
 
 class Controller_Team_Config extends Controller_Team
 {
-	public function before()
-	{
-		parent::before();
-	}
-
 	/**
-	 * 設定アクション
+	 * indexアクション。すべてのteam/configリクエストはここを通る
+	 * 
+	 * param string kind
+	 *  - team_admin
+	 *    - admin
+	 *    - info
+	 *    - delete
+	 *  - belong_player
+	 *    - leave
+	 *  - both
+	 *    - player
 	 */
 	public function action_index()
 	{
-		$kind = $this->param('kind');
+		// 選手情報が無い
+		if ( ! $this->_player)
+		{
+			Session::set_flash('error', '権限がありません');
+			return Response::redirect($this->_team->href);
+		}
 
 		// 特定のconfigはチーム管理者専門
-		if (in_array($kind, array('info', 'player', 'delete')))
+		$kind = $this->param('kind');
+		if (in_array($kind, array('info', 'delete', 'admin')))
 		{
 			if ( ! $this->_team_admin)
 			{
-				Session::get_flash('error', '権限がありません');
-				return Response::redirect('/team/'.$this->_team->url_path);
-			}
-		}
-
-		// profile編集はチーム参加者本人とチーム管理者のみ
-		if ($kind === 'profile' or $kind === 'leave')
-		{
-			if ( ! $this->_player and ! $this->_team_admin)
-			{
-				Session::get_flash('error', '権限がありません');
-				return Response::redirect('/team/'.$this->_team->url_path);
+				Session::set_flash('error', '権限がありません');
+				return Response::redirect($this->_team->href);
 			}
 		}
 
@@ -43,6 +44,84 @@ class Controller_Team_Config extends Controller_Team
 
 		Session::set_flash('error', '存在しないURLです');
 		return Response::redirect($this->_team->href);
+	}
+
+	/**
+	 * 選出追加
+	 */
+	public function action_player()
+	{
+		$view = View::forge('team/config/player.twig');
+		$view->subtitle = '選出追加';
+
+		// form
+		$form = Model_Player::get_form(array('submit'   => '登録'));
+		$form->field('username')->delete_rule('required');
+
+		// player_idが遅れらて来ると、更新
+		if ($player_id = $this->param('player_id'))
+		{
+			// 自分自身か、チーム管理者でなかったら、権限なし
+			if ($this->_player->id !== $player_id and ! $this->_team_admin)
+			{
+				Session::get_error('権限がありません');
+				return Response::redirect($this->_team->href);
+			}
+
+			// subtitle
+			$view->subtitle = '選手情報更新';
+
+			// player object
+			$player = Model_Player::find($player_id);
+
+			// formに初期値セット
+			$form->field('name')->set_value($player->name);		
+			$form->field('number')->set_value($player->number);		
+			$form->field('username')->set_value($player->username);		
+
+			// チーム管理者以外は、usernameはreadonly
+			if ( ! $this->_team_admin)
+			{
+				$form->field('username')->set_attribute('readonly', 'readonly');
+			}
+		}
+
+		// post request
+		if (Input::post())
+		{
+			$val = $form->validation();
+
+			if ($val->run())
+			{
+				$props = array(
+					'team_id'  => $this->_team->id,
+					'name'     => Input::post('name'),
+					'number'   => Input::post('number'),
+					'username' => Input::post('username'),
+				);
+
+				if (Model_Player::regist($props, $this->param('player_id')))
+				{
+					Session::set_flash('info', '選手情報を登録しました。');
+					return Response::redirect(Uri::current());
+				}
+				else
+				{
+					Session::set_flash('error', '選手データ保存でシステムエラーが発生しました。');
+				}
+			}
+			else
+			{
+				Session::set_flash('error', $val->show_errors());
+			}
+
+			$form->repopulate();
+		}
+
+		// set view
+		$view->set_safe('form', $form->build());
+
+		return Response::forge($view);
 	}
 
 	/**
@@ -102,21 +181,6 @@ class Controller_Team_Config extends Controller_Team
 	}
 
 	/**
-	 * 選手管理（今使ってない
-	 */
-	public function action_player()
-	{
-		$view = View::forge('team/config/player.twig');
-
-		$view->players = Model_Player::query()->where(array(
-			array('team_id', $this->_team->id),
-			array('status', '!=', -1),
-		))->order_by(DB::expr('CAST(number as SIGNED)'))->get();
-
-		return Response::forge($view);
-	}
-
-	/**
 	 * 管理者設定
 	 */
 	public function action_admin()
@@ -151,71 +215,6 @@ class Controller_Team_Config extends Controller_Team
 	public function action_delete()
 	{
 		$view = View::forge('team/config/delete.twig');
-		return Response::forge($view);
-	}
-
-	/**
-	 * プロフィール編集
-	 */
-	public function action_profile()
-	{
-		$view = View::forge('team/config/profile.twig');
-
-		// player 情報
-		$player = $this->_player;
-		if ($this->param('player_id'))
-		{
-			if ( ! $this->_team_admin)
-			{
-				Session::get_error('権限がありません');
-				return Response::redirect($this->_team->href);
-			}
-
-			$player = Model_Player::find($this->param('player_id'));
-		}
-
-		// form
-		$form = Model_Player::get_form(array(
-			'name'     => $player->name,
-			'number'   => $player->number,
-			'username' => $player->username,
-		));
-
-		// username readonly and not require
-		$form->field('username')->set_attribute('readonly', 'readonly');
-		$form->field('username')->delete_rule('required');
-
-		// post request
-		if (Input::post())
-		{
-			$val = $form->validation();
-
-			if ($val->run())
-			{
-				foreach ($val->validated() as $key => $val)
-				{
-					if (is_null($val)) continue;
-
-					$player->set($key, $val);
-				}
-
-				$player->save();
-
-				Session::set_flash('info', 'プロフィールを更新しました');
-				return Response::redirect(Uri::current());
-			}
-			else
-			{
-				Session::set_flash('error', $val->show_errors());
-			}
-
-			$form->repopulate();
-		}
-
-		// set view
-		$view->player = $player;
-		$view->set_safe('form', $form->build());	
-
 		return Response::forge($view);
 	}
 

@@ -16,7 +16,7 @@ class Migration
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Migration:Run]";
@@ -89,7 +89,7 @@ class Migration
 		echo "DONE";
 	}
 
-	public function position_remove_zero($args = NULL)
+	public function position_remove_zero($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [migration:position_remove_zero stats]";
@@ -136,7 +136,7 @@ class Migration
 	 *
 	 * @return string
 	 */
-	public function games2games_stats($args = NULL)
+	public function games2games_stats($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Migration:Games2games stats]";

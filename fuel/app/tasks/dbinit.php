@@ -16,7 +16,7 @@ class Dbinit
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Dbinit:Run]";
@@ -120,7 +120,7 @@ class Dbinit
 		),
 	);
 
-	public function batter_result($args = NULL)
+	public function batter_result($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Dbinit:Batter result]";

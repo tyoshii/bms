@@ -6,13 +6,12 @@
 {{ parent() }}
 
 <br>
-<div class="stats-container" index="{{loop.index}}">
+<div class="stats-container">
 
 
 {% for player in pitchers %}
-{%set stat = stats[player.player_id]%}
 
-<div class="panel panel-default">
+<div class="panel panel-default pitching-stats-row">
 <table class="table pitching-stats" player_id="{{player.player_id}}">
 
 <thead>
@@ -21,16 +20,19 @@
 <tbody>
 
 <tr>
-<td>
-{%if not loop.first%}
-<a href="#">
-<span class="btn btn-info btn-xs glyphicon glyphicon-arrow-up"></span>
-</a>
-{%endif%}
-</td>
-<td>{%if loop.first%}先発{%else%}{{loop.index}}番手{%endif%}</td>
+<td class="order">{%if loop.first%}先発{%else%}{{loop.index}}番手{%endif%}</td>
 <td>{{player.name}}</td>
 <td>{{player.number}}</td>
+<td>
+<div class="btn-group" role="pitching-order">
+<button class="btn btn-info btn-xs" data-type="up">
+<span class="glyphicon glyphicon-arrow-up"></span>
+</button>
+<button class="btn btn-danger btn-xs" data-type="down">
+<span class="glyphicon glyphicon-arrow-down"></span>
+</button>
+</div>
+</td>
 </tr>
 
 <tr>

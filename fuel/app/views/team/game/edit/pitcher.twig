@@ -12,6 +12,7 @@
 <table id="pitcher" class="table">
 <thead>
 <tr>
+<th class="order">登板順</th>
 <th class="name">名前</th>
 <th class="number">＃</th>
 <th class="result">勝敗</th>
@@ -27,13 +28,27 @@
 <tbody>
 {% endif %}
 
-{% set already = [] %}
+<tr class="pitching-stats-row">
 
-<tr>
+{# 登板順 #}
+<td>
+<div class="btn-group" role="pitching-order">
+<button class="btn btn-info btn-xs" data-type="up">
+<span class="glyphicon glyphicon-arrow-up"></span>
+</button>
+<button class="btn btn-danger btn-xs" data-type="down">
+<span class="glyphicon glyphicon-arrow-down"></span>
+</button>
+</div>
+</td>
+
+{# 名前 #}
 <td class="name">
 <span>{{pitcher.name}}</span>
 <data class="disable" data-type="player-id">{{pitcher.player_id}}</data>
 </td>
+
+{# 背番号 #}
 <td class="number">{{pitcher.number}}</td>
 
 {# 勝敗 #}
@@ -95,7 +110,7 @@
 </tbody>
 </table>
 
-{%if game_status == 2%}
+{%if global.game.game_status == 2%}
 <div class="alert alert-success">
 成績入力を完了している試合です。
 </div>

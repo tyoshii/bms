@@ -1,6 +1,5 @@
 html,
 body {
-	overflow-x: hidden;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -93,41 +92,32 @@ div.batter-stats-post button {
   margin: 10px;
 }
 
+/*
+ * 投手成績入力画面
+ */
+
+/* 中央揃え */
+table#pitcher th,
+table#pitcher td {
+  text-align: center;
+}
+
+/* セルの幅指定 */
+table#pitcher th.order,
+table#pitcher th.IP,
+table#pitcher th.result,
+table#pitcher th.H,
+table#pitcher th.SO,
+table#pitcher th.BB,
+table#pitcher th.HB,
+table#pitcher th.ER,
+table#pitcher th.R {
+  width: 80px;
+}
+
+/* Input幅指定 */
 table#pitcher input {
   width: 60px;
-}
-table#pitcher th {
-  text-align: center;
-}
-table#pitcher td.name {
-  text-align: center;
-}
-table#pitcher td.number {
-  text-align: center;
-}
-table#pitcher td.IP {
-  width: 80px;
-}
-table#pitcher td.result {
-  width: 80px;
-}
-table#pitcher td.H {
-  width: 80px;
-}
-table#pitcher td.SO {
-  width: 80px;
-}
-table#pitcher td.BB {
-  width: 80px;
-}
-table#pitcher td.HB {
-  width: 80px;
-}
-table#pitcher td.ER {
-  width: 80px;
-}
-table#pitcher td.R {
-  width: 80px;
 }
 
 table#game-list tbody tr {

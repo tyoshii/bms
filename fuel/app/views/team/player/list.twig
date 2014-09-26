@@ -7,7 +7,7 @@
 {% for player in players %}
 
 {% if loop.first %}
-<table class="table">
+<table class="table table-hover">
 <thead>
 <tr>
 <th>名前</th>
@@ -26,7 +26,7 @@
 <td>{{ player.number }}</td>
 <td><a href="{{ current_url() }}/{{ player.id }}">詳細</a></td>
 {% if global.team_admin %}
-<td><a href="{{ global.team.href }}/config/profile/{{ player.id }}">編集</a></td>
+<td><a href="{{ global.team.href }}/config/player/{{ player.id }}">編集</a></td>
 {% endif %}
 </tr>
 

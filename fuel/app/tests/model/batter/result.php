@@ -21,4 +21,11 @@ class Test_Model_Batter_Result extends \Test_Model_Base
 	{
 		$this->assertSchema();
 	}
+
+	public function test_get_allのテスト()
+	{
+		$res = Model_Batter_Result::get_all();
+
+		$this->assertTrue(is_array($res));
+	}
 }

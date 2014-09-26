@@ -48,8 +48,6 @@ class Model_Stats_Player extends \Orm\Model
 			$query->where('p.player_id', $player_id);
 		}
 
-		$query->order_by('p.disp_order');
-
 		// players
 		$query->join(array('players', 'pl'), 'LEFT OUTER')
 			->on('p.player_id', '=', 'pl.id')
@@ -61,6 +59,9 @@ class Model_Stats_Player extends \Orm\Model
 	public static function get_starter($game_id, $team_id)
 	{
 		$query = self::get_query($game_id, $team_id);
+
+		// 交代も含めて表示順をそろえる
+		$query->order_by('p.disp_order');
 
 		$result = $query->execute()->as_array();
 

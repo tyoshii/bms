@@ -56,7 +56,7 @@ class Json2mysql
 	 * games_stats.pitchers => stats_pitchings
 	 * games_stats.batters  => stats_hittings ( stats_hittingdetails )
 	 */
-	public function player_pitcher_batter($game_id = NULL)
+	public function player_pitcher_batter($game_id = null)
 	{
 		// 対象game_idを取得
 		$game_ids = '';

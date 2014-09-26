@@ -32,7 +32,8 @@ class Controller_Api_Mail extends Controller_Rest
 		$team_id = Input::post('team_id');
 
 		// game status check
-		if (Model_Game::get_game_status($game_id, $team_id) !== '1')
+		$game = Model_Game::find($game_id);
+		if ( ! $game or $game->game_status !== '1')
 		{
 			return Response::forge('成績入力中の試合のみリマインドできます', 400);
 		}

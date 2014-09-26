@@ -1,7 +1,37 @@
+/* sidrのボタンは左に寄せる */
+#sidr-button {
+  float: left !important;
+  margin-left: 2%;
+  margin-right: 0px;
+}
+
+/* BMSのロゴはセンターへ */
+span.navbar-brand {
+	position: absolute;
+  width: 100%;
+	text-align: center;
+}
+/* リンク文字色は黒 */
+span.navbar-brand a {
+  color: black;
+}
+
+/* bootstrapのデフォルトメニューボタンはmarginを調整 */
+.navbar-default .navbar-toggle {
+  margin-right: 2%;
+}
+
+/* モバイルは文字を小さく */
 .container, #footer {
   font-size: x-small;
 }
 
+/* 出場選手の守備：marginをつけて押しやすく */
 table.player-table div.player-position {
   margin: 0px 0px 5px;
+}
+
+/* 投手成績：登板順のボタンの大きさを小さく */
+div.btn-group[role="pitching-order"] button.btn-xs {
+  font-size: x-small; 
 }

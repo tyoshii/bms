@@ -265,19 +265,19 @@ $("div.stats-post[role=pitching] button").click(function(){
   STATS.data= [];
   STATS.post.complete = $(this).attr("post_type") === 'complete';
 
-  $("table.pitching-stats").each(function() {
-    var player_id = $(this).attr("player_id");
+  $("table.pitching-stats").each(function(order) {
 
-    STATS.data[player_id] = {
-      result  : $(this).find("select[role=result]").val(),
-      IP      : $(this).find("select[role=IP]").val(),
-      IP_frac : $(this).find("select[role=IP_frac]").val(),
-      H       : $(this).find("select[role=H]").val(),
-      SO      : $(this).find("select[role=SO]").val(),
-      BB      : $(this).find("select[role=BB]").val(),
-      HB      : $(this).find("select[role=HB]").val(),
-      ER      : $(this).find("select[role=ER]").val(),
-      R       : $(this).find("select[role=R]").val()
+    STATS.data[order] = {
+      player_id : $(this).attr("player_id"),
+      result    : $(this).find("select[role=result]").val(),
+      IP        : $(this).find("select[role=IP]").val(),
+      IP_frac   : $(this).find("select[role=IP_frac]").val(),
+      H         : $(this).find("select[role=H]").val(),
+      SO        : $(this).find("select[role=SO]").val(),
+      BB        : $(this).find("select[role=BB]").val(),
+      HB        : $(this).find("select[role=HB]").val(),
+      ER        : $(this).find("select[role=ER]").val(),
+      R         : $(this).find("select[role=R]").val()
     };
   });
   // console.log(STATS);
@@ -286,11 +286,12 @@ $("div.stats-post[role=pitching] button").click(function(){
 });
 
 $("div.stats-post[role=hitting] button").click(function(){
-  STATS.data = [];
+  STATS.data = {};
   STATS.post.complete = $(this).attr("post_type") === 'complete';
   
   $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();
+    var data_key  = 'player_id:'+player_id;
 
     // stats
     var stats = {
@@ -318,9 +319,10 @@ $("div.stats-post[role=hitting] button").click(function(){
     });
 
     // set
-    STATS.data[player_id] = {
-      stats: stats,
-      detail: detail,
+    STATS.data[data_key] = {
+      player_id: player_id,
+      stats:     stats,
+      detail:    detail,
     };
   });
   // console.log(STATS.data);

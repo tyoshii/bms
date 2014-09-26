@@ -29,7 +29,7 @@ $(document).ready(function() {
 function changeGameStatus(s, game_id, team_id) {
   var status = typeof(s) === 'object' ? $(s).val() : s;
 
-  if ( status === -1 ) {
+  if ( status === '-1' ) {
     if ( ! window.confirm("無効試合としてよいですか？") ) {
       return false;
     }

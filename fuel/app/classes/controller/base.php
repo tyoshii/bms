@@ -8,19 +8,14 @@ class Controller_Base extends Controller
 	public function before()
 	{
 		// global value
-		View::set_global('env', Fuel::$env);
+		View::set_global('fuel_env', Fuel::$env);
 		View::set_global('usericon', Common::get_usericon_url());
 		View::set_global('is_mobile', Agent::is_mobiledevice());
 
-		// induct to each env
-		if (Auth::has_access('moderator.moderator'))
+		// moderator move to staging
+		if (Auth::has_access('moderator.moderator') and Fuel::$env === 'production')
 		{
-			View::set_global('induct_each_env', true);
-		}
-
-		if (in_array(Model_Player::get_my_team_id(), Config::get('bms.moderator_team_ids')))
-		{
-			View::set_global('induct_each_env', true);
+			return Response::redirect(trim(Uri::base(), '/').':8080'.Input::uri());
 		}
 
 		// login

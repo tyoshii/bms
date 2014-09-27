@@ -4,7 +4,7 @@
 
 <div class="pull-right">
 
-{% if global.team %}
+{% if global.player %}
 <ol class="breadcrumb">
 
 {% if global.team_admin %}
@@ -26,7 +26,7 @@
 
 <tr>
 <th>チーム</th>
-{%for i in range(1,12)%}
+{%for i in range(1,score.last_inning)%}
 <th>{{i}}</th>
 {%endfor%}
 <th>合計</th>
@@ -34,7 +34,7 @@
 
 <tr>
 <td>{{ team_top }}</td>
-{%for i in range(1,12)%}
+{%for i in range(1,score.last_inning)%}
 <td>{{score['t'~i]}}</td>
 {%endfor%}
 <td>{{score.tsum}}</td>
@@ -42,7 +42,7 @@
 
 <tr>
 <td>{{ team_bottom }}</td>
-{%for i in range(1,12)%}
+{%for i in range(1,score.last_inning)%}
 <td>{{score['b'~i]}}</td>
 {%endfor%}
 <td>{{score.bsum}}</td>

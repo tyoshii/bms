@@ -19,17 +19,18 @@ nav div.alert {
   padding-bottom: 5px;
 }
 
-nav div[env] {
+/* ヘッダーの環境お知らせの背景 */
+nav div[data-env] {
   padding: 5px;
   color: white;
 }
-nav div[env="development"] {
+nav div[data-env="development"] {
   background-color: red;
 }
-nav div[env="test"] {
+nav div[data-env="test"] {
   background-color: green;
 }
-nav div[env="staging"] {
+nav div[data-env="staging"] {
   background-color: blue;
 }
  

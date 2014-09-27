@@ -20,6 +20,7 @@ symlink ../public/select2/               /var/www/bms/public/select2/
 symlink ../public/jquery-ui/             /var/www/bms/public/jquery-ui/
 symlink ../public/datepicker/            /var/www/bms/public/datepicker/
 symlink ../public/datatable/             /var/www/bms/public/datatable/
+symlink ../public/sidr/                  /var/www/bms/public/sidr/
 symlink ../public/js/                    /var/www/bms/public/js/
 symlink ../public/css/                   /var/www/bms/public/css/
 symlink ../public/image/                 /var/www/bms/public/image/

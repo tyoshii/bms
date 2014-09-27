@@ -77,6 +77,7 @@ return array(
         68 => '074_add_role_to_players',
         69 => '075_drop_games_stats',
         70 => '076_add_order_to_stats_pitchings',
+        71 => '077_add_last_inning_to_games_runningscores',
       ),
     ),
     'module' => 

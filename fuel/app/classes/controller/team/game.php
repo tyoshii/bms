@@ -93,7 +93,15 @@ class Controller_Team_Game extends Controller_Team
 			$view->team_bottom = $this->_team->name;
 		}
 
+		// score
 		$view->score = $this->_game->games_runningscores;
+
+		if ($view->score->last_inning < 7)
+		{
+			$view->score->last_inning = 7;
+		}
+
+		// stats
 		$view->stats = array(
 			'hitting'  => array(
 				'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),

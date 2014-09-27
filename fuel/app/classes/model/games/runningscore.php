@@ -5,6 +5,7 @@ class Model_Games_Runningscore extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'game_id',
+		'last_inning' => array('default' => 0),
 		't1'   => array(
 			'data_type'  => 'int',
 			'default'    => null,
@@ -455,13 +456,14 @@ class Model_Games_Runningscore extends \Orm\Model
 	{
 		if ( ! $game_id) return false;
 
-		if (count($stats) === 0)
-		{
-			$stats = array(
-				't1' => 0,
-				'b1' => 0,
-			);
-		}
+		// last_inning
+		$stats['last_inning'] = count($stats);
+		
+		// default
+		$stats += array(
+			't1' => 0,
+			'b1' => 0,
+		);
 
 		// 空の値をnullにする
 		foreach ($stats as $key => $val)

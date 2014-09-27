@@ -26,8 +26,9 @@ class Test_Controller_Base extends Test_Base
 	{
 		$res = Request::forge('/')->execute()->response();
 
-		$this->assertSame(Fuel::$env, $res->body->env);
+		$this->assertSame(Fuel::$env, $res->body->fuel_env);
 		$this->assertSame(Common::get_usericon_url(), $res->body->usericon);
+		$this->assertSame(Agent::is_mobiledevice(), $res->body->is_mobile);
 	}
 
 	/**

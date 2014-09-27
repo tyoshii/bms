@@ -4,7 +4,7 @@
 
 <div class="pull-right">
 
-{% if global.team %}
+{% if global.player %}
 <ol class="breadcrumb">
 
 {% if global.team_admin %}
@@ -13,10 +13,8 @@
 <li><a href="{{ current_url() }}/edit/other">管理</a></li>
 {%endif%}
 
-{% if global.player %}
 <li><a href="{{ current_url() }}/edit/batter">野手成績</a></li>
 <li><a href="{{ current_url() }}/edit/pitcher">投手成績</a></li>
-{% endif %}
 
 </ol>
 {% endif %}

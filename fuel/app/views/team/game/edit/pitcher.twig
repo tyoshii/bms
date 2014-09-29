@@ -1,10 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
-
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 {% for pitcher in pitchers %}
 
@@ -128,4 +125,4 @@
 </div>
 {% endfor %}
 
-{% endblock content %}
+{% endblock main %}

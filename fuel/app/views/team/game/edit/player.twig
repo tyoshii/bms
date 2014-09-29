@@ -24,10 +24,8 @@
 {% endmacro %}
 
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 <table id="player" class="table">
 
@@ -97,4 +95,4 @@
 {%endif%}
 
 
-{% endblock %}
+{% endblock main %}

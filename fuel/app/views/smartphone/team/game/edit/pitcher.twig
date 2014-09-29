@@ -1,9 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 <br>
 <div class="stats-container">
@@ -139,4 +137,4 @@
 </div>
 {%endif%}
 
-{% endblock content %}
+{% endblock main %}

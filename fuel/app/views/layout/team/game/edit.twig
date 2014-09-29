@@ -61,4 +61,8 @@
 {%block js%}
 {{ parent() }}
 <script type="text/javascript" src="/js/game/edit.js"></script>
+
+{% if is_mobile %}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+{% endif %}
 {%endblock%}

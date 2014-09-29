@@ -2,7 +2,20 @@
 
 {% block main %}
 
-<h1>チーム成績</h1>
+<ul id="stats-tab" class="nav nav-tabs" role="tablist">
+  <li><a href="#nav-tabs-team" role="tab" data-toggle="tab">チーム成績</a></li>
+  <li><a href="#nav-tabs-self" role="tab" data-toggle="tab">個人成績</a></li>
+{% if global.team_admin %}
+  <li><a href="#nav-tabs-download" role="tab" data-toggle="tab">ダウンロード</a></li>
+{% endif %}
+</ul>
+
+<div class="tab-content">
+
+{##
+ # チーム成績
+##}
+<div class="tab-pane" id="nav-tabs-team">
 
 <h3>戦績</h3>
 
@@ -111,6 +124,15 @@
 <h3>投手成績</h3>
 comming soon ...
 
+{# <div id="nav-tabs-team"> #}
+</div>
+
+
+{##
+ # 個人成績
+##}
+<div class="tab-pane" id="nav-tabs-self">
+
 <h3>個人成績</h3>
 
 <div id="datatable-wrapper">
@@ -156,6 +178,24 @@ comming soon ...
 
 </table>
 </div>
+
+{# <div id="nav-tabs-self"> #}
+</div>
+
+<div class="tab-pane" id="nav-tabs-download">
+
+<ul>
+<li><a href="javaascript:void();">Excel形式でダウンロード（未実装）</a></li>
+</ul>
+
+{# <div id="nav-tabs-downalod"> #}
+</div>
+
+{# <div class="tab-content"> #}
+</div>
+
+
+
 {% endblock main %}
 
 
@@ -164,6 +204,29 @@ comming soon ...
 
 <script type="text/javascript">
 $(document).ready(function() {
+
+  // nav-tab
+
+  // clickしたらhashに追加
+  $('#stats-tab a').click(function (e) {
+    location.hash = $(this).attr("href");
+
+    e.preventDefault()
+    $(this).tab('show')
+  });
+
+  // 最初のアクセスでhashがあったら指定のタブへ移動
+  var hash = location.hash;
+  if (hash !== "") {
+    $("#stats-tab a[href="+hash+"]").tab('show')
+  }
+
+  // activeタブがなければ、最初のタブを表示
+  if ( ! $("#stats-tab li.active")[0]) {
+    $('#stats-tab a:first').tab('show')
+  }
+
+  // datatable
   $("#datatable-stats-self").dataTable({
     "order": [[1, "desc"]]
   });

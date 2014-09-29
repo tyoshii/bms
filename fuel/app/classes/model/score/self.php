@@ -2,9 +2,15 @@
 
 class Model_Score_Self
 {
-	public static function get_self_scores($team_id = null)
+	/**
+	 * 個人成績取得
+	 *
+	 * @param team_id
+	 * @param is_regulation 規定打席を考慮するかどうか
+	 */
+	public static function get_self_scores($team_id = null, $is_regulation = true)
 	{
-		if ( ! $team_id)
+		if (is_null($team_id))
 		{
 			$team_id = Model_Player::get_my_team_id();
 		}
@@ -45,7 +51,8 @@ ON
 		t.id = p.team_id
 
 WHERE
-		p.team_id = $team_id AND p.status != -1
+		p.team_id = $team_id AND
+		p.status != -1
 
 GROUP BY
 		s.player_id
@@ -57,8 +64,23 @@ __QUERY__;
 
 		$result = DB::query($query)->execute()->as_array();
 
+		// 規定打席
+		$total_games = count(Model_Games_Team::query()->where('team_id', $team_id)->get());
+		$regulation_at_bats = Model_Team::find($team_id)->regulation_at_bats;
+
 		foreach ($result as $index => $res)
 		{
+			// 規定打席以下のデータを削除
+			if ($is_regulation)
+			{
+				if ($res['TPA'] < ($total_games * $regulation_at_bats))
+				{
+					unset($result[$index]);
+					continue;
+				}
+			}
+
+			// 安打数合計や打率など
 			Model_Score_Team::give_stats($res);
 			$result[$index] = $res;
 		}

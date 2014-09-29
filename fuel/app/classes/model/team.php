@@ -33,6 +33,15 @@ class Model_Team extends \Orm\Model
 				),
 			),
 		),
+		'regulation_at_bats' => array(
+			'date_type' => 'varchar',
+			'default' => '2.0',
+			'label' => '規定打席数',
+			'form' => array(
+				'class' => 'form-control',
+				'type'  => 'select',
+			),
+		),
 		'status'     => array(
 			'default' => 0,
 			'form'    => array('type' => false),

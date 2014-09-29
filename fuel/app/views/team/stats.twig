@@ -4,7 +4,8 @@
 
 <ul id="stats-tab" class="nav nav-tabs" role="tablist">
   <li><a href="#nav-tabs-team" role="tab" data-toggle="tab">チーム成績</a></li>
-  <li><a href="#nav-tabs-self" role="tab" data-toggle="tab">個人成績</a></li>
+  <li><a href="#nav-tabs-hitting" role="tab" data-toggle="tab">個人：野手</a></li>
+  <li><a href="#nav-tabs-pitching" role="tab" data-toggle="tab">個人：投手</a></li>
 {% if global.team_admin %}
   <li><a href="#nav-tabs-download" role="tab" data-toggle="tab">ダウンロード</a></li>
 {% endif %}
@@ -129,11 +130,11 @@ comming soon ...
 
 
 {##
- # 個人成績
+ # 個人：野手
 ##}
-<div class="tab-pane" id="nav-tabs-self">
+<div class="tab-pane" id="nav-tabs-hitting">
 
-<h3>個人成績</h3>
+<h3>打撃成績 - <small>規定打席：チーム試合数＊{{ global.team.regulation_at_bats }}</small></h3>
 
 <div id="datatable-wrapper">
 <table id="datatable-stats-self" class="table table-hover">
@@ -179,9 +180,21 @@ comming soon ...
 </table>
 </div>
 
-{# <div id="nav-tabs-self"> #}
+
+{# <div id="nav-tabs-hitting"> #}
 </div>
 
+{##
+ # 個人：投手
+##}
+<div class="tab-pane" id="nav-tabs-pitching">
+<h3>投手成績</h3>
+comming soon ...
+</div>
+
+{##
+ # 成績のダウンロード
+##}
 <div class="tab-pane" id="nav-tabs-download">
 
 <ul>

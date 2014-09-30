@@ -1,9 +1,7 @@
 {% extends 'layout/team/game/edit.twig' %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 <div class="row">
 
@@ -170,7 +168,7 @@
 
 </div>{# <div class="row"> #}
 
-{% endblock content %}
+{% endblock main %}
 
 
 {% block js %}
@@ -180,4 +178,4 @@
 {# post-statsのメソッドのみ使っている #}
 {# TODO: PCとスマホでpost-stats周りのメソッドをあわせる #}
 <script type="text/javascript" src="/js/game/edit_mobile.js"></script>
-{% endblock %}
+{% endblock js %}

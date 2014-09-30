@@ -14,7 +14,7 @@ var STATS = {
           complete: STATS.post.complete
         },
         success: function(html) {
-          alert('成績保存に成功しまし');
+          alert('成績が保存/登録されました。');
         },
         error: function(res) {
           if ( res.status === 403 ) {

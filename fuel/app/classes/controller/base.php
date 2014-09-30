@@ -12,12 +12,6 @@ class Controller_Base extends Controller
 		View::set_global('usericon', Common::get_usericon_url());
 		View::set_global('is_mobile', Agent::is_mobiledevice());
 
-		// moderator move to staging
-		if (Auth::has_access('moderator.moderator') and Fuel::$env === 'production')
-		{
-			return Response::redirect(trim(Uri::base(), '/').':8080'.Input::uri());
-		}
-
 		// login
 		$this->_login_form = self::_get_login_form();
 

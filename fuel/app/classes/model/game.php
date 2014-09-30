@@ -12,11 +12,6 @@ class Model_Game extends \Orm\Model
 		'game_status'      => array('default' => 0),
 		'top_status'       => array('default' => 1),
 		'bottom_status'    => array('default' => 1),
-		// TODO:削除
-		'team_top'         => array('default' => 0),
-		'team_top_name'    => array('default' => 0),
-		'team_bottom'      => array('default' => 0),
-		'team_bottom_name' => array('default' => 0),
 		'created_at',
 		'updated_at',
 	);

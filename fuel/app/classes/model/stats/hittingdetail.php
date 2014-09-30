@@ -73,18 +73,4 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
 		self::forge($props)->save();
 	}
-
-	public static function replace_all($ids, $player_id, $stats)
-	{
-		// clean player stats
-		// - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると
-		// - 4打席目が残ってしまうため、一度削除している
-		self::clean($ids + array('player_id' => $player_id));
-
-		// insert
-		foreach ($stats as $bat_times => $stat)
-		{
-			self::regist($ids, $player_id, $bat_times, $stat);
-		}
-	}
 }

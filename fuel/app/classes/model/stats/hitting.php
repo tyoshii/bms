@@ -39,6 +39,23 @@ class Model_Stats_Hitting extends Model_Base
 	);
 	protected static $_table_name = 'stats_hittings';
 
+	protected static $_has_one = array(
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'games_teams' => array(
+			'model_to'       => 'Model_Games_Team',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	private static $_result_map = array(
 		// 打席,打数,安打,二塁,三塁,本塁,三振,四球,死球,犠打,犠飛
 		'11' => array(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0), // 凡打

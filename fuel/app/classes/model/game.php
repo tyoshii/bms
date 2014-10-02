@@ -54,6 +54,23 @@ class Model_Game extends \Orm\Model
 			'cascade_delete' => false,
 		),
 	);
+	
+	protected static $_belongs_to = array(
+		'stats_hittings' => array(
+			'model_to'       => 'Model_Stats_Hitting',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'stats_pitchings' => array(
+			'model_to'       => 'Model_Stats_Pitching',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
 
 	public static function regist($posts)
 	{

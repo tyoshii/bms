@@ -38,6 +38,23 @@ class Model_Stats_Pitching extends Model_Base
 	);
 	protected static $_table_name = 'stats_pitchings';
 
+	protected static $_has_one = array(
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'games_teams' => array(
+			'model_to'       => 'Model_Games_Team',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	/**
 	 * 出場選手に従って投手成績取得
 	 *

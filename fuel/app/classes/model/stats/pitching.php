@@ -125,7 +125,7 @@ class Model_Stats_Pitching extends Model_Base
 				$pitch->order  = $order;
 				if ( ! is_null($status))
 				{
-					$pitch->status = $status;
+					$pitch->input_status = $status;
 				}
 
 				$pitch->save();

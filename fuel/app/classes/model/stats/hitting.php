@@ -236,7 +236,7 @@ class Model_Stats_Hitting extends Model_Base
 				// status
 				if ( ! is_null($status))
 				{
-					$hit->status = $status;
+					$hit->input_status = $status;
 				}
 
 				$hit->save();

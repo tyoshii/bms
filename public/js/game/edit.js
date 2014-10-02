@@ -169,8 +169,11 @@ function post_other(is_alert) {
   });
 }
 
-function post_batter(is_alert, is_comp) {
-
+/**
+ * 野手成績登録
+ */
+function post_batter(self) {
+  var status = $(self).attr("data-status");
   var data = {};
   var detail = [];
 
@@ -232,12 +235,10 @@ function post_batter(is_alert, is_comp) {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
       stats: data,
-      complete: is_comp
+      status: status,
     },
     success: function(html) {
-      if ( is_alert === true ) {
-        alert("成績保存に成功");
-      }
+      alert("成績保存に成功");
     },
     error: function(res) {
       if ( res.status === 403 ) {
@@ -444,7 +445,11 @@ function add_order(self, kind) {
   });
 }
 
-function post_pitcher(is_alert, is_comp) {
+/**
+ * 投手成績登録
+ */
+function post_pitcher(self) {
+  var status = $(self).attr("data-status");
   var $pitcher = $("table#pitcher tbody tr");
   var data = [];
 
@@ -489,12 +494,10 @@ function post_pitcher(is_alert, is_comp) {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
       stats: data,
-      complete: is_comp
+      status: status,
     },
     success: function(html) {
-      if ( is_alert === true ) {
-        alert("成績保存に成功");
-      }
+      alert("成績保存に成功");
     },
     error: function(res) {
       if ( res.status === 403 ) {

@@ -22,6 +22,9 @@ class Controller_Api_Game extends Controller_Rest
 		parent::before();
 	}
 
+	/**
+	 * ステータス更新
+	 */
 	public function post_updateStatus()
 	{
 		$ids = self::_get_ids();
@@ -36,6 +39,9 @@ class Controller_Api_Game extends Controller_Rest
 		return $this->_success();
 	}
 
+	/**
+	 * スコア更新
+	 */
 	public function post_updateScore()
 	{
 		// param
@@ -58,7 +64,9 @@ class Controller_Api_Game extends Controller_Rest
 		return $this->_success();
 	}
 
-	// 出場選手
+	/**
+	 * 出場選手登録
+	 */
 	public function post_updatePlayer()
 	{
 		$ids = self::_get_ids();
@@ -73,13 +81,16 @@ class Controller_Api_Game extends Controller_Rest
 		return $this->_success();
 	}
 
+	/**
+	 * 投手成績更新
+	 */
 	public function post_updatePitcher()
 	{
 		$ids = self::_get_ids();
 
 		// stats_pitchingsへのinsert
 		$pitcher = Input::post('stats');
-		$status = Input::post('complete') === 'true' ? 1 : 0;
+		$status  = Input::post('status', null);
 
 		// 複数登録できるのはチーム管理者だけ
 		self::_validate_stats_count($pitcher, $ids['team_id']);
@@ -96,13 +107,16 @@ class Controller_Api_Game extends Controller_Rest
 		return $this->_success();
 	}
 
+	/**
+	 * 野手成績更新
+	 */
 	public function post_updateBatter()
 	{
 		$ids = self::_get_ids();
 
 		// satasへの登録
 		$batter = Input::post('stats');
-		$status = Input::post('complete') === 'true' ? 1 : 0;
+		$status = Input::post('status', null);
 
 		// 複数登録できるのはチーム管理者だけ
 		self::_validate_stats_count($batter, $ids['team_id']);
@@ -119,6 +133,9 @@ class Controller_Api_Game extends Controller_Rest
 		$this->_success();
 	}
 
+	/**
+	 * その他の記録を更新
+	 */
 	public function post_updateOther()
 	{
 		$ids = self::_get_ids();
@@ -213,5 +230,4 @@ class Controller_Api_Game extends Controller_Rest
 			'message' => 'OK',
 		));
 	}
-
 }

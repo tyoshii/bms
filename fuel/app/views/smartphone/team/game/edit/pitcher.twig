@@ -132,8 +132,12 @@
 </div>
 {%else%}
 <div class="stats-post" role="pitching">
-<button type="button" class="btn btn-default" post_type="save">保存</button>
-<button type="button" class="btn btn-success" post_type="complete">决定</button>
+{% if type == 'all' %}
+<button type="button" class="btn btn-default">保存</button>
+{% else %}
+<button type="button" class="btn btn-default" data-status="save">保存</button>
+<button type="button" class="btn btn-success" data-status="complete">决定</button>
+{% endif %}
 </div>
 {%endif%}
 

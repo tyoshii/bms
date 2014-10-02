@@ -2,7 +2,7 @@
 var STATS = {
   data: [],
   post: {
-    complete: false, 
+    status: '',
     ajax: function(path) {
       $.ajax({
         url: "/api/game/" + path,
@@ -11,7 +11,7 @@ var STATS = {
           game_id: $("data#game_id").text(),
           team_id: $("data#team_id").text(),
           stats: STATS.data,
-          complete: STATS.post.complete
+          status: STATS.post.status,
         },
         success: function(html) {
           alert('成績が保存/登録されました。');
@@ -261,9 +261,12 @@ $("div.stats-post[role=player] button").click(function() {
   STATS.post.ajax('updatePlayer');
 });
 
+/**
+ * 投手成績登録
+ */
 $("div.stats-post[role=pitching] button").click(function(){
   STATS.data= [];
-  STATS.post.complete = $(this).attr("post_type") === 'complete';
+  STATS.post.status   = $(this).attr("data-status");
 
   $("table.pitching-stats").each(function(order) {
 
@@ -285,9 +288,12 @@ $("div.stats-post[role=pitching] button").click(function(){
   STATS.post.ajax('updatePitcher');
 });
 
+/**
+ * 野手成績登録
+ */
 $("div.stats-post[role=hitting] button").click(function(){
   STATS.data = {};
-  STATS.post.complete = $(this).attr("post_type") === 'complete';
+  STATS.post.status   = $(this).attr("data-status");
   
   $("div.stats-container").each(function(){
     var player_id = $(this).find("data.player-id").text();

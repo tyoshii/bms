@@ -136,8 +136,12 @@
 成績入力を完了している試合です。
 </div>
 {%else%}
-<button class="btn btn-default" onClick="post_batter(true);">保存</button>
-<button class="btn btn-success" onClick="post_batter(true, true);">决定</button>
+{% if type == 'all' %}
+<button class="btn btn-default" onClick="post_batter(this);">保存</button>
+{% else %}
+<button class="btn btn-default" onClick="post_batter(this);" data-status="save">保存</button>
+<button class="btn btn-success" onClick="post_batter(this);" data-status="complete">决定</button>
+{% endif %}
 {%endif%}
 
 {% endif %}

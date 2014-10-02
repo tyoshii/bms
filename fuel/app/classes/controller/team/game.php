@@ -149,11 +149,17 @@ class Controller_Team_Game extends Controller_Team
 			return Response::redirect($this->_game->href);
 		}
 
-		// view load
+		// view load and set
 		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
 		$view->playeds = Model_Stats_Player::get_starter($game_id, $team_id);
+		// 所属選手
+		$view->players = Model_Player::get_players($team_id);
+		// 対戦相手
+		$view->games_teams = $this->_game->games_teams;
+		// type（保存・完了ボタンの出し分け）
+		$view->type = $type;
 
 		// stats data
 		switch ($kind)
@@ -229,12 +235,6 @@ class Controller_Team_Game extends Controller_Team
 				// no logic
 			break;
 		}
-
-		// 所属選手
-		$view->players = Model_Player::get_players($team_id);
-
-		// 対戦相手
-		$view->games_teams = $this->_game->games_teams;
 
 		return Response::forge($view);
 	}

@@ -75,6 +75,10 @@ return array(
         66 => '072_add_opponent_team_name_to_games_teams',
         67 => '073_rename_field_team_to_team_id_in_players',
         68 => '074_add_role_to_players',
+        69 => '075_drop_games_stats',
+        70 => '076_add_order_to_stats_pitchings',
+        71 => '077_add_last_inning_to_games_runningscores',
+        72 => '078_add_regulation_at_bats_to_teams',
       ),
     ),
     'module' => 

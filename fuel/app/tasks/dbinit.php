@@ -16,7 +16,7 @@ class Dbinit
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Dbinit:Run]";
@@ -120,7 +120,7 @@ class Dbinit
 		),
 	);
 
-	public function batter_result($args = NULL)
+	public function batter_result($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Dbinit:Batter result]";
@@ -199,7 +199,11 @@ class Dbinit
 			'stadium'            => '',
 			'memo'               => '',
 		);
-		\Model_Game::regist($data);
+		$game = \Model_Game::regist($data);
+
+		// stats_award
+		\Model_Stats_Award::regist($game->id, $team1_id, array());
+		\Model_Stats_Award::regist($game->id, $team2_id, array());
 
 		// config
 		$ids = \Config::get('bms.moderator_team_ids');

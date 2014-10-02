@@ -93,7 +93,15 @@ class Controller_Team_Game extends Controller_Team
 			$view->team_bottom = $this->_team->name;
 		}
 
-		$view->score = reset($this->_game->games_runningscores);
+		// score
+		$view->score = $this->_game->games_runningscores;
+
+		if ($view->score->last_inning < 7)
+		{
+			$view->score->last_inning = 7;
+		}
+
+		// stats
 		$view->stats = array(
 			'hitting'  => array(
 				'players' => Model_Stats_Hitting::get_stats_by_playeds($this->_game->id, $this->_team->id),
@@ -155,7 +163,7 @@ class Controller_Team_Game extends Controller_Team
 				$view->awards = Model_Stats_Award::find_by_game_id($this->_game->id);
 
 				// score
-				$score = reset($this->_game->games_runningscores);
+				$score = $this->_game->games_runningscores;
 
 				// 初回は必ず必要
 				$view->scores = array(
@@ -226,11 +234,7 @@ class Controller_Team_Game extends Controller_Team
 		$view->players = Model_Player::get_players($team_id);
 
 		// 対戦相手
-		$view->games_teams = reset($this->_game->games_teams);
-
-		// game_status
-		// TODO: input_status に切り替える
-		$view->game_status = Model_Game::get_game_status($game_id, $team_id);
+		$view->games_teams = $this->_game->games_teams;
 
 		return Response::forge($view);
 	}

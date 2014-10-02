@@ -7,12 +7,15 @@
 {% for player in players %}
 
 {% if loop.first %}
-<table class="table">
+<table class="table table-hover">
 <thead>
 <tr>
 <th>名前</th>
 <th>背番号</th>
 <th>詳細</th>
+{% if global.team_admin %}
+<th>編集</th>
+{% endif %}
 </tr>
 </thead>
 <tbody>
@@ -22,6 +25,9 @@
 <td>{{ player.name }}</td>
 <td>{{ player.number }}</td>
 <td><a href="{{ current_url() }}/{{ player.id }}">詳細</a></td>
+{% if global.team_admin %}
+<td><a href="{{ global.team.href }}/config/player/{{ player.id }}">編集</a></td>
+{% endif %}
 </tr>
 
 {% if loop.last %}

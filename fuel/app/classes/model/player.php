@@ -3,15 +3,44 @@
 class Model_Player extends \Orm\Model
 {
 	protected static $_properties = array(
-		'id',
-		'team_id',
-		'name',
-		'number',
-		'username',
-		'status' => array('default' => 1),
-		'role'   => array('default' => 'user'),
-		'created_at',
-		'updated_at',
+		'id'      => array('form' => array('type' => false)),
+		'team_id' => array('form' => array('type' => false)),
+		'name'    => array(
+			'data_type' => 'varchar',
+			'form' => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+			'label' => '選手名',
+			'validation' => array(
+				'required',
+				'max_length' => array(60),
+			),
+		),
+		'number' => array(
+			'data_type' => 'varchar',
+			'form' => array(
+				'class' => 'form-control',
+				'type'  => 'text',
+			),
+			'label' => '背番号',
+			'validation' => array(
+				'required',
+				'max_length'   => array(4),
+				'valid_string' => array('numeric'),
+			),
+		),
+		'username' => array('form' => array('type' => false)),
+		'status'   => array(
+			'default' => 1,
+			'form' => array('type' => false),
+		),
+		'role' => array(
+			'default' => 'user',
+			'form' => array('type' => false),
+		),
+		'created_at' => array('form' => array('type' => false)),
+		'updated_at' => array('form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
@@ -96,7 +125,7 @@ class Model_Player extends \Orm\Model
 	 *              - username
 	 *              - role
 	 *
-	 * @return bool
+	 * @return player object
 	 */
 	public static function regist($props, $id = null)
 	{
@@ -123,7 +152,6 @@ class Model_Player extends \Orm\Model
 			$player->save();
 
 			return true;
-
 		}
 		catch (Exception $e)
 		{
@@ -174,6 +202,34 @@ class Model_Player extends \Orm\Model
 	}
 
 	/**
+	 * 指定されたチームにユーザーが所属しているかどうか
+	 *
+	 * @param string team_id
+	 * @param string username
+	 *
+	 * @return player object / false
+	 */
+	public static function is_belong($team_id = null, $username = null)
+	{
+		if (is_null($team_id))
+		{
+			return false;
+		}
+
+		if (is_null($username))
+		{
+			$username = Auth::get('username');
+		}
+
+		$player = self::query()
+			->where('team_id', $team_id)
+			->where('username', $username)
+			->get_one();
+
+		return $player ?: false;
+	}
+
+	/**
 	 * チームの管理者権限をもっているかどうか
 	 *
 	 * @param string team_id
@@ -183,7 +239,7 @@ class Model_Player extends \Orm\Model
 	public static function has_team_admin($team_id)
 	{
 		$res = self::query()->where(array(
-			array('username', Auth::get_screen_name()),
+			array('username', Auth::get('username')),
 			array('team_id', $team_id),
 		))->get_one();
 
@@ -222,5 +278,38 @@ class Model_Player extends \Orm\Model
 		$player->save();
 
 		return true;
+	}
+
+	/**
+	 * フォーム取得
+	 * @param array field_name => value
+	 *
+	 * @return Fieldset object
+	 */
+	public static function get_form($values = array())
+	{
+		$form = Fieldset::forge('profile', array(
+			'form_attributes' => array('class' => 'form')
+		));
+
+		$form->add_model(self::forge());
+
+		// username
+		Common_Form::add_username($form);
+		
+		// submit
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'value' => '更新',
+			'class' => 'btn btn-success',
+		));
+
+		// default value
+		foreach ($values as $name => $value)
+		{
+			$form->field($name)->set_value($value);
+		}
+
+		return $form;
 	}
 }

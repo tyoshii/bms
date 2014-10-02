@@ -26,8 +26,9 @@ class Test_Controller_Base extends Test_Base
 	{
 		$res = Request::forge('/')->execute()->response();
 
-		$this->assertSame(Fuel::$env, $res->body->env);
+		$this->assertSame(Fuel::$env, $res->body->fuel_env);
 		$this->assertSame(Common::get_usericon_url(), $res->body->usericon);
+		$this->assertSame(Agent::is_mobiledevice(), $res->body->is_mobile);
 	}
 
 	/**
@@ -59,23 +60,22 @@ class Test_Controller_Base extends Test_Base
 	 *
 	 */
 	public function test_未ログイン状態でPOSTリクエストを送ると、ログインを検証()
-  {
-    $_POST['username'] = '';
-    $_POST['password'] = '';
+	{
+		$_POST['username'] = '';
+		$_POST['password'] = '';
 
-    $res = Request::forge('/')->set_method('POST')->execute()->response();
+		$res = Request::forge('/')->set_method('POST')->execute()->response();
 
-    $this->assertFalse(Auth::check());
-    $this->assertSame('ログインに失敗しました', Session::get_flash('error'));
-  }
+		$this->assertFalse(Auth::check());
+		$this->assertSame('ログインに失敗しました', Session::get_flash('error'));
+	}
 
-/**
- *
- */
-public
-function test_ログインに成功したらトップページへリダイレクト()
-{
-	InputEx::reset();
+	/**
+	 *
+	 */
+	public function test_ログインに成功したらトップページへリダイレクト()
+	{
+		InputEx::reset();
 
 	// create user for test
 	$rand = rand(1000, 9999).rand(1000, 9999);

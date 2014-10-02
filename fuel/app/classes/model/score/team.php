@@ -5,7 +5,7 @@ class Model_Score_Team
 
 	public static function get_team_score($team_id = null)
 	{
-		if ( ! $team_id)
+		if (is_null($team_id))
 		{
 			$team_id = Model_Player::get_my_team_id();
 		}

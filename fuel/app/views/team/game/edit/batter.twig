@@ -1,9 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 {% for batter in batters %}
 
@@ -133,7 +131,7 @@
 </tfoot>
 </table>
 
-{%if game_status == 2%}
+{%if global.game.game_status == 2%}
 <div class="alert alert-success">
 成績入力を完了している試合です。
 </div>
@@ -151,4 +149,4 @@
 </div>
 {% endfor %}
 
-{% endblock content %}
+{% endblock main %}

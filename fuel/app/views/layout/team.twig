@@ -3,49 +3,61 @@
 {% block content %}
 
 <div id="team-name">
-<h1><a href="/team/{{ global.team.url_path }}/">{{ global.team.name }}</a></h1>
+<h1><a href="{{ global.team.href }}/">{{ global.team.name }}</a></h1>
 </div>
 
 <div class="row">
 
-<div class="col-md-3">
+{% if is_mobile %}
+<div id="sidr">
+{% else %}
+<div class="col-xs-4 col-md-3">
+{% endif %}
 
 <ul class="nav nav-pills nav-stacked" role="menu">
 
 <hr>
 <label id="menu-team-info">チーム情報</label>
-<li><a href="/team/{{ global.team.url_path }}/game">試合一覧</a></li>
-<li><a href="/team/{{ global.team.url_path }}/player">所属選手</a></li>
-<li><a href="/team/{{ global.team.url_path }}/stats">成績</a></li>
+<li><a href="{{ global.team.href }}/game">試合一覧</a></li>
+<li><a href="{{ global.team.href }}/player">所属選手</a></li>
+<li><a href="{{ global.team.href }}/stats">成績</a></li>
 
 {% if global.team_admin %}
 <hr>
 <label id="menu-admin">管理者メニュー</label>
-<li><a href="/team/{{ global.team.url_path }}/game/add">新規試合追加</a></li>
-<li><a href="/team/{{ global.team.url_path }}/config/admin">管理者設定</a></li>
-<li><a href="/team/{{ global.team.url_path }}/config/info">チーム基本情報</a></li>
-<li><a href="/team/{{ global.team.url_path }}/config/delete">チーム削除</a></li>
+<li><a href="{{ global.team.href }}/game/add">新規試合追加</a></li>
+<li><a href="{{ global.team.href }}/config/player">選手追加</a></li>
+<li><a href="{{ global.team.href }}/config/admin">管理者設定</a></li>
+<li><a href="{{ global.team.href }}/config/info">チーム基本情報</a></li>
+<li><a href="{{ global.team.href }}/config/delete">チーム削除</a></li>
 {% endif %}
 
 {% if global.player %}
 <hr>
 <label id="menu-profile">個人設定</label>
-<li><a href="/team/{{ global.team.url_path }}/config/profile">プロフィール編集</a></li>
-<li><a href="/team/{{ global.team.url_path }}/config/leave">チーム退団</a></li>
+<li><a href="{{ global.team.href }}/config/player/{{ global.player.id }}">選手情報編集</a></li>
+<li><a href="{{ global.team.href }}/config/leave">チーム退団</a></li>
 {% else %}
 <hr>
 <label id="menu-offer">オファー</label>
-<li><a href="/team/{{ global.team.url_path }}/offer">入部</a></li>
+<li><a href="{{ global.team.href }}/offer">入部</a></li>
 {% endif %}
 
 </ul>
 
 </div>
 
-<div class="col-md-9">
+{% if is_mobile %}
+<div class="col-xs-12">
+{% else %}
+<div class="col-xs-8 col-md-9">
+{% endif %}
+
 {% block main %}
 {% endblock %}
 </div>
+
+{# <div class="row"> #}
 </div>
 {% endblock content %}
 
@@ -57,6 +69,7 @@
 
 $(document).ready(function() {
 
+	// active li
 	$("ul[role=menu] li").each(function() {
 
 		var href = $(this).children("a").attr("href");

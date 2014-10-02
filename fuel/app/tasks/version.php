@@ -16,7 +16,7 @@ class Version
 	 *
 	 * @return string
 	 */
-	public function run($args = NULL)
+	public function run($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning DEFAULT task [Version:Run]";
@@ -25,8 +25,8 @@ class Version
 		/***************************
 		 * Put in TASK DETAILS HERE
 		 **************************/
-		echo "Version   : ".\Config::get('system.version')."\n";
-		echo "Update At : ".\Config::get('system.update_at')."\n";
+		echo "Version   : ".\Config::get('version.version')."\n";
+		echo "Update At : ".\Config::get('version.update_at')."\n";
 	}
 
 
@@ -41,7 +41,7 @@ class Version
 	 *
 	 * @return string
 	 */
-	public function up($args = NULL)
+	public function up($args = null)
 	{
 		echo "\n===========================================";
 		echo "\nRunning task [Version:up]";
@@ -50,12 +50,12 @@ class Version
 		$CHANGELOG = DOCROOT.'/CHANGELOG.md';
 		$version = `cat $CHANGELOG | grep Version | head -1 | awk '{ print $3}'`;
 
-		\Config::set('system.version', trim($version));
-		\Config::set('system.update_at', date('Y/m/d H:i:s'));
+		\Config::set('version.version', trim($version));
+		\Config::set('version.update_at', date('Y/m/d H:i:s'));
 
-		\Config::save('system', 'system');
+		\Config::save('version', 'version');
 
-		echo "version up done. config/system.php update";
+		echo "version up done. config/version.php update";
 	}
 
 }

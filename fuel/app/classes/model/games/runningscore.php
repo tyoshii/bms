@@ -5,6 +5,7 @@ class Model_Games_Runningscore extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'game_id',
+		'last_inning' => array('default' => 0),
 		't1'   => array(
 			'data_type'  => 'int',
 			'default'    => null,
@@ -455,13 +456,14 @@ class Model_Games_Runningscore extends \Orm\Model
 	{
 		if ( ! $game_id) return false;
 
-		if (count($stats) === 0)
-		{
-			$stats = array(
-				't1' => 0,
-				'b1' => 0,
-			);
-		}
+		// last_inning
+		$stats['last_inning'] = count($stats);
+		
+		// default
+		$stats += array(
+			't1' => 0,
+			'b1' => 0,
+		);
 
 		// 空の値をnullにする
 		foreach ($stats as $key => $val)
@@ -478,36 +480,7 @@ class Model_Games_Runningscore extends \Orm\Model
 
 		$score = self::forge(array('game_id' => $game_id) + $stats);
 		$score->save();
-	}
 
-	public static function get_score($game_id = null)
-	{
-		if ( ! $game_id) return false;
-
-		$score = self::find_by_game_id($game_id);
-
-		// 初回のスコアは必ず必要
-		$return = array();
-		$return[] = array(
-			'top'    => $score->t1,
-			'bottom' => $score->t1,
-		);
-
-		// 2回から
-		for ($i = 2; $i <= 12; $i++)
-		{
-			$tkey = 't'.$i;
-			$bkey = 'b'.$i;
-
-			if ($score->$tkey === null and $score->$bkey === null)
-				break;
-
-			$return[] = array(
-				'top'    => $score->$tkey,
-				'bottom' => $score->$bkey,
-			);
-		}
-
-		return array($return, $score->tsum, $score->bsum);
+		return $score;
 	}
 }

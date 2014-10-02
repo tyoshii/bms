@@ -18,12 +18,16 @@
     <link rel="apple-touch-icon" href="/favicon.ico">
 
     {% block css %}
-    <link href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
-    <link href="/twbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/select2/select2.css" type="text/css" rel="stylesheet">
-    <link href="/datepicker/css/datepicker.css" type="text/css" rel="stylesheet">
-    <link href="/datatable/media/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet">
-    <link href="/css/bms.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="/twbootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/select2/select2.css">
+    <link type="text/css" rel="stylesheet" href="/datepicker/css/datepicker.css">
+    <link type="text/css" rel="stylesheet" href="/datatable/media/css/jquery.dataTables.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/bms.css">
+		{% if is_mobile %}
+    <link type="text/css" rel="stylesheet" href="/sidr/stylesheets/jquery.sidr.light.css">
+    <link type="text/css" rel="stylesheet" href="/css/bms_mobile.css">
+		{% endif %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,7 +35,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    {{ css }}
 
     {% endblock css %}
 
@@ -43,90 +46,46 @@
 {# header #}
 <nav class="navbar navbar-default" role="navigation">
 
-{# ステージング環境への誘導 #}
-{%if induct_each_env%}
-<div class="alert alert-info alert-dismissable" role="induct_each_env">
-<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-Switching each env : 
-<a class="alert-link" onClick="location.href='http://'+location.hostname;">production</a>
-/
-<a class="alert-link" onClick="location.href='http://'+location.hostname+':8080';">staging</a>
-/
-<a class="alert-link" onClick="location.href='http://'+location.hostname+':9999';">test</a>
+{# stagingへの案内 #}
+{% if auth_has_access('moderator.moderator') %}
+<div class="alert alert-default">
+go to /&nbsp;
+<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + location.pathname;">production</button>
+<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + ':8080' + location.pathname;">staging</button>
 </div>
-{%endif%}
+{% endif %}
 
 {# production以外は上部に赤い線 #}
-{%if env and env != 'production'%}
-<div env="{{env}}">FUEL_ENV = {{env}}</div>
-{%endif%}
+{% if fuel_env != 'production' %}
+<div data-env="{{ fuel_env }}">FUEL_ENV = {{ fuel_env }}</div>
+{% endif %}
 
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bms-navbar">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="/"><strong>BMS</strong></a>
+    <span class="navbar-brand"><a href="/"><strong>BMS</strong></a></span>
+		<button type="button" id="sidr-button" class="glyphicon glyphicon-list navbar-toggle">
+		</button>
+    <button type="button" class="glyphicon glyphicon-cog navbar-toggle" data-toggle="collapse" data-target="#bms-navbar">
+		</button>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bms-navbar">
     <ul class="nav navbar-nav">
       {%block li_team %}<li>{%endblock%}<a href="/team">チーム一覧</a></li>
-{% if auth_has_access('moderator.moderator') %}
-      {%block li_game %}<li>{%endblock%}<a href="/game">試合一覧</a></li>
-{% endif %}
-<!--
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-          <li class="divider"></li>
-          <li><a href="#">One more separated link</a></li>
-        </ul>
-      </li>
--->
       {% if auth_has_access('moderator.moderator') %}
         <li class="bms-navbar-admin"><a href="/admin">管理者Menu</a></li>
       {% endif %}
     </ul>
-<!--
-    <form class="navbar-form navbar-left" role="search">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search">
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
--->
 
     <ul class="nav navbar-nav navbar-right">
       {% if auth_check() %}
         <li><a href="/user/info"><img id="user-icon" src="{{usericon}}" height="32" width="32"></a></li>
-        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;ログアウト</a></li>
+        <li><a href="/logout" role="logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;ログアウト</a></li>
 			{% else %}
 				<li><a href="/login?url={{ current_url() }}">ログイン</a></li>
       {% endif %}
     </ul>
-<!--
-      <li><a href="#">Link</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-        </ul>
-      </li>
--->
   </div><!-- /.navbar-collapse -->
 </nav>
 
@@ -158,7 +117,7 @@ Switching each env :
 <div id="footer">
 <hr>
 <div><b>BMS - Baseball Management System</b></div>
-<div>System Version {{config('system.version')}} / Updated at {{config('system.update_at')}}</div>
+<div>System Version {{config('version.version')}} / Updated at {{config('version.update_at')}}</div>
 <div>&nbsp;</div>
 <a href="mailto:tyoshii716@gmail.com">お問い合わせ / フィードバック</a> | <a href="https://github.com/tyoshii/bms">GitHub</a>
 <div>&nbsp;</div>
@@ -174,12 +133,9 @@ Switching each env :
 <script type="text/javascript" src="/select2/select2.min.js"></script>
 <script type="text/javascript" src="/datepicker/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="/datatable/media/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  $('.select2').select2({
-    width: "100%",
-  });
-});
-</script>
+<script type="text/javascript" src="/js/bms.js"></script>
+{% if is_mobile %}
+<script type="text/javascript" src="/sidr/jquery.sidr.min.js"></script>
+<script type="text/javascript" src="/js/bms_mobile.js"></script>
+{% endif %}
 {% endblock %}

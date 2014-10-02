@@ -35,8 +35,8 @@ $("button[type=score-add]").click(function() {
   var $clone = $last.clone(true);
 
   $clone.find("[data-type=inning]").text(parseInt(inning) + 1);
-  $clone.find("[data-type=score_top]").val('');
-  $clone.find("[data-type=score_bottom]").val('');
+  $clone.find("[data-type=score_top]").val('0');
+  $clone.find("[data-type=score_bottom]").val('0');
 
   $clone.insertAfter($last);
 });

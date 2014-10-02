@@ -1,9 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 <div class="row">
 <div class="col-md-3"></div>
@@ -18,9 +16,10 @@
 <th>試合ステータス</th>
 <td>
 <select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{global.game.id}}, {{global.team.id}});"> 
-<option value="0" {%if game_status == 0%}selected{%endif%}>試合登録のみ</option>
-<option value="1" {%if game_status == 1%}selected{%endif%}>成績入力中</option>
-<option value="2" {%if game_status == 2%}selected{%endif%}>成績入力完了</option>
+<option value="-1" {%if global.game.game_status == -1%}selected{%endif%}>無効</option>
+<option value="0"  {%if global.game.game_status ==  0%}selected{%endif%}>試合登録のみ</option>
+<option value="1"  {%if global.game.game_status ==  1%}selected{%endif%}>成績入力中</option>
+<option value="2"  {%if global.game.game_status ==  2%}selected{%endif%}>成績入力完了</option>
 </select>
 </td>
 <td></td>
@@ -36,10 +35,11 @@
 <hr>
 
 <ul>
-<li><a href="javascript:void(0);" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+<li><a href="javascript:void(0);" role="remind" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
+<li><a href="/api/download/stats/itleague?game_id={{ global.game.id }}&team_id={{ global.team.id }}" role="download">成績ダウンロード(IT LEAGUE)</a></li>
 </ul>
 
-{% endblock %}
+{% endblock main %}
 
 {% block js %}
 {{ parent() }}
@@ -73,4 +73,4 @@ var remind_mail = function() {
   }
 };
 </script>
-{% endblock %}
+{% endblock js %}

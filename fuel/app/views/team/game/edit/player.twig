@@ -24,10 +24,8 @@
 {% endmacro %}
 
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 <table id="player" class="table">
 
@@ -86,7 +84,7 @@
 {% endfor %}
 
 {# 登録ボタン #}
-{%if game_status == 2%}
+{%if global.game.game_status == 2%}
 <div class="alert alert-success">
 成績入力を完了している試合です。
 </div>
@@ -97,4 +95,4 @@
 {%endif%}
 
 
-{% endblock %}
+{% endblock main %}

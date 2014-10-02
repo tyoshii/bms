@@ -19,3 +19,8 @@
 # Web page
 
 http://192.168.33.10/
+
+
+
+## Cookbook
+- https://github.com/opscode-cookbooks/yum

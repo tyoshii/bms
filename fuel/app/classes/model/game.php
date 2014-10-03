@@ -361,7 +361,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// 野手成績の入力が完了しているかどうか
-			if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
+			if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
 			{ 
 				$alert_games[] = array('kind' => 'batter') + $data;
 				continue; 
@@ -370,7 +370,7 @@ class Model_Game extends \Orm\Model
 			// 投手成績のアラート
 			if ( strstr($data['position'], '1') )
 			{
-				if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
+				if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
 				{ 
 					$alert_games[] = array('kind' => 'pitcher') + $data;
 					continue; 
@@ -398,7 +398,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// statusをチェックして、未完了であればメール送信
-			if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
+			if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
 			{ 
 				$paths[] = "game/{$game_id}/batter/{$team_id}";
 			}
@@ -406,7 +406,7 @@ class Model_Game extends \Orm\Model
 			// 投手成績のアラート
 			if ( in_array('1', $player['position'] ) )
 			{
-				if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
+				if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
 				{ 
 					$paths[] = "game/{$game_id}/pitcher/{$team_id}";
 				}

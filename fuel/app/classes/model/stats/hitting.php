@@ -271,13 +271,13 @@ class Model_Stats_Hitting extends Model_Base
 		}
 	}
 
-	public static function get_status($game_id, $player_id)
+	public static function get_input_status($game_id, $player_id)
 	{
 		$s = self::query()->where(array(
 			'game_id'   => $game_id,
 			'player_id' => $player_id,
 		))->get_one();
 
-		return $s ? $s->status : '0';
+		return $s ? $s->input_status : '';
 	}
 }

@@ -21,7 +21,6 @@ SELECT
 		p.number,
 		t.name as team,
 		p.name,
-		s.game_id,
 		count(s.id) as G,
 		sum(s.TPA) as TPA,
 		sum(s.AB)  as AB,
@@ -51,9 +50,15 @@ LEFT JOIN
 ON
 		t.id = p.team_id
 
+LEFT JOIN
+		games AS g
+ON
+		s.game_id = g.id
+
 WHERE
 		p.team_id = $team_id AND
-		p.status != -1
+		p.status != -1       AND
+		g.game_status = 2
 
 GROUP BY
 		s.player_id
@@ -71,14 +76,6 @@ __QUERY__;
 
 		foreach ($result as $index => $res)
 		{
-			// 試合のステータスが完了ではないものは考慮しない
-			$game = Model_Game::find($res['game_id']);
-			if ($game and $game->game_status !== '2')
-			{
-				unset($result[$index]);
-				continue;
-			}
-
 			// 規定打席以下のデータを削除
 			if ($is_regulation)
 			{

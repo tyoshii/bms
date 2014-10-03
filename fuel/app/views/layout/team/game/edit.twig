@@ -1,64 +1,10 @@
-{% extends 'layout/layout.twig' %}
+{% extends "layout/team.twig" %}
 
-{% block content %}
-
-<div class="pull-right">
-<ol class="breadcrumb">
-<li><a href="{{ global.team.href }}/game/{{ global.game.id }}">試合概要</a></li>
-<li><a href="{{ global.team.href }}/game">試合一覧へもどる</a></li>
-</ol>
-</div>
-
-{# 試合概要 #}
-<div class="panel panel-default">
-<div class="panel-body">
-<h4>{{ global.game.date }}</h4>
-<h5><a href="{{ global.team.href }}">{{ global.team.name }}</a> vs {{ games_teams.opponent_team_name }}</h5>
-</div>
-</div>
-
-{# tab メニュー #}
-
-{# チーム管理者には試合概要/出場選手/管理 のメニューを表示 #}
-{% if global.team_admin %}
-<ul class="nav nav-tabs">
-    <li {%if uri_segment(6)=='score'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/score">試合概要</a>
-    </li>
-    <li {%if uri_segment(6)=='player'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/player">出場選手</a>
-    </li>
-    <li {%if uri_segment(6)=="other"%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/other">管理</a>
-    </li>
-</ul>
-{%endif%}
-
-<ul class="nav nav-tabs">
-    <li {%if uri_segment(6)=="batter" and input_get('type')!='all'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/batter">野手成績</a>
-    </li>
-    <li {%if uri_segment(6)=='pitcher' and input_get('type')!='all'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/pitcher">投手成績</a>
-    </li>
-
-{% if global.team_admin %}
-    <li {%if uri_segment(6)=="batter" and input_get('type')=='all'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/batter?type=all">全野手</a>
-    </li>
-    <li {%if uri_segment(6)=='pitcher' and input_get('type')=='all'%}class="active"{%endif%}>
-      <a href="{{ global.game.href }}/edit/pitcher?type=all">全投手</a>
-    </li>
-{% endif %}
-</ul>
-
-{# データ保存の際にjsから取得しやすいように #}
-<data id="game_id" class="disable">{{ global.game.id }}</data>
-<data id="team_id" class="disable">{{ global.team.id }}</data>
-
-{%endblock%}
-
-{%block js%}
+{% block js %}
 {{ parent() }}
 <script type="text/javascript" src="/js/game/edit.js"></script>
-{%endblock%}
+
+{% if is_mobile %}
+<script type="text/javascript" src="/js/game/edit_mobile.js"></script>
+{% endif %}
+{% endblock %}

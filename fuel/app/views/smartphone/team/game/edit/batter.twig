@@ -1,9 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
-
-{# header #}
-{{ parent() }}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
 {% for batter in batters %}
 
@@ -146,9 +144,13 @@
 </div>
 {%else%}
 <div class="stats-post" role="hitting">
-<button type="button" class="btn btn-default" post_type="save">保存</button>
-<button type="button" class="btn btn-success" post_type="complete">决定</button>
+{% if type == 'all' %}
+<button type="button" class="btn btn-default">保存</button>
+{% else %}
+<button type="button" class="btn btn-default" data-status="save">保存</button>
+<button type="button" class="btn btn-success" data-status="complete">决定</button>
+{% endif %}
 </div>
 {%endif%}
 
-{% endblock content %}
+{% endblock main %}

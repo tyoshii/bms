@@ -1,21 +1,19 @@
 {% extends "layout/team/game/edit.twig" %}
 
-{% block content %}
+{% block main %}
+{% include "header/team/game/edit.twig" %}
 
-{# header #}
-{{ parent() }}
-
-<div class="row">
-<div class="col-md-3"></div>
-<div class="col-md-6">
-&nbsp;
 
 <table class="table">
 <tbody>
 
 {# 試合ステータス #}
 <tr>
-<th>試合ステータス</th>
+<th>
+<p>試合ステータス</p>
+<div>※一度無効にした試合は元に戻せません</div>
+<div>※成績入力完了にすると、成績にデータが反映されます</div>
+</th>
 <td>
 <select id="status" name="status" class="form-control" onChange="changeGameStatus(this, {{global.game.id}}, {{global.team.id}});"> 
 <option value="-1" {%if global.game.game_status == -1%}selected{%endif%}>無効</option>
@@ -27,12 +25,14 @@
 <td></td>
 </tr>
 
+<tr>
+<td>
+<td>
+<td></td>
+</tr>
+
 </tbody>
 </table>
-
-{#div class="col-md-6"#}</div>
-<div class="col-md-3"></div>
-{#div class="row"#}</div>
 
 <hr>
 
@@ -41,7 +41,7 @@
 <li><a href="/api/download/stats/itleague?game_id={{ global.game.id }}&team_id={{ global.team.id }}" role="download">成績ダウンロード(IT LEAGUE)</a></li>
 </ul>
 
-{% endblock %}
+{% endblock main %}
 
 {% block js %}
 {{ parent() }}
@@ -75,4 +75,4 @@ var remind_mail = function() {
   }
 };
 </script>
-{% endblock %}
+{% endblock js %}

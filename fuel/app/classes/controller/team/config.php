@@ -142,6 +142,19 @@ class Controller_Team_Config extends Controller_Team
 		$form->field('name')->set_value($this->_team->name);
 		$form->field('url_path')->set_value($this->_team->url_path);
 
+		$regulation_at_bats = array();
+		for ($i = 0; $i <= 3; $i++)
+		{
+			for ($j = 0; $j <= 9; $j++)
+			{
+				$v = $i.'.'.$j;
+				$regulation_at_bats[$v] = $v;
+			}
+		}
+		$form->field('regulation_at_bats')->set_options($regulation_at_bats);
+		$form->field('regulation_at_bats')->add_rule('in_array', $regulation_at_bats);
+		$form->field('regulation_at_bats')->set_value($this->_team->regulation_at_bats);
+
 		// hidden url_path
 		$form->field('url_path')->set_type('hidden');
 
@@ -159,8 +172,8 @@ class Controller_Team_Config extends Controller_Team
 
 			if ($val->run())
 			{
-				// 今はチーム名だけ編集可能
 				$this->_team->name = Input::post('name');
+				$this->_team->regulation_at_bats = Input::post('regulation_at_bats');
 				$this->_team->save();
 
 				Session::set_flash('info', 'チーム情報を更新しました');

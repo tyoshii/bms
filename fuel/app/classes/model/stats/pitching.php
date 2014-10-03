@@ -5,7 +5,7 @@ class Model_Stats_Pitching extends Model_Base
 	protected static $_properties = array(
 		'id',
 		'status' => array('default' => 0),
-		'input_status' => array('defaultu' => 'save'),
+		'input_status' => array('default' => 'save'),
 		'player_id',
 		'game_id',
 		'team_id',

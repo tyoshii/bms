@@ -19,3 +19,6 @@
 [submodule "vagrant/site-cookbooks/yum"]
 	path = vagrant/site-cookbooks/yum
 	url = https://github.com/opscode-cookbooks/yum.git
+[submodule "vagrant/site-cookbooks/yum-remi"]
+	path = vagrant/site-cookbooks/yum-remi
+	url = git://github.com/aiming-cookbooks/yum-remi.git

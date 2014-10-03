@@ -12,6 +12,7 @@ class Model_Score_Team
 
 		$query = <<<__QUERY__
 SELECT
+		s.game_id,
 		sum(s.TPA) as TPA,
 		sum(s.AB)  as AB,
 		sum(s.H)   as H,
@@ -29,18 +30,27 @@ SELECT
 		(SELECT sum(E) from stats_fieldings where team_id = $team_id) as E
 FROM
 		stats_hittings AS s
+
+LEFT JOIN
+		games as g
+ON
+		s.game_id = g.id
+
 LEFT JOIN
 		players AS p
 ON
 		s.player_id = p.id
+
 LEFT JOIN
 		teams AS  t
 ON
 		t.id = p.team_id
+
 WHERE
-		p.status != -1
-AND
-		s.team_id = $team_id
+		p.status != -1       AND
+		s.team_id = $team_id AND
+		g.game_status = 2	
+
 GROUP BY
 		s.team_id
 ;
@@ -54,6 +64,9 @@ __QUERY__;
 		return $result;
 	}
 
+	/**
+	 * 安打数合計や打率などを配列に付与
+	 */
 	public static function give_stats(&$stats)
 	{
 		if ( ! $stats)
@@ -101,15 +114,32 @@ __QUERY__;
 
 		$query = <<<__QUERY__
 SELECT
-	g.id,gr.tsum,gr.bsum,g.team_top,g.team_bottom,g.game_status,g.team_top_name,g.team_bottom_name,g.date
+	g.id,
+	gr.tsum,
+	gr.bsum,
+	g.team_top,
+	g.team_bottom,
+	g.game_status,
+	g.team_top_name,
+	g.team_bottom_name,
+	g.date
 FROM
 	games as g
+
 LEFT JOIN
 	games_runningscores as gr
 ON
 	g.id = gr.game_id
+
+LEFT JOIN
+	games_teams as gt
+ON
+	g.id = gt.game_id
+
 WHERE
-	(g.team_top = $team_id or g.team_bottom = $team_id)
+	gt.team_id = $team_id AND
+	g.game_status = 2
+
 ORDER BY
 	g.date DESC
 ;

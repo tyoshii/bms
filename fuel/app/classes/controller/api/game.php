@@ -76,7 +76,7 @@ class Controller_Api_Game extends Controller_Rest
 		$status  = Input::post('status');
 
 		// regist
-		Model_Stats_Player::regist_player($ids, $players);
+		Model_Stats_Player::regist($ids, $players);
 
 		// notice
 		if ($status === 'complete')

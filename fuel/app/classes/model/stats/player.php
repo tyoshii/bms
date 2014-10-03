@@ -102,16 +102,15 @@ class Model_Stats_Player extends \Orm\Model
 			);
 		}
 
-		self::regist_player($ids, $default);
+		self::regist($ids, $default);
 	}
 
-	public static function regist_player($ids, $players)
+	public static function regist($ids, $players)
 	{
 		Mydb::begin();
 
 		try
 		{
-
 			// clean data
 			Common::db_clean(self::$_table_name, $ids);
 
@@ -131,7 +130,6 @@ class Model_Stats_Player extends \Orm\Model
 			}
 
 			Mydb::commit();
-
 		}
 		catch (Exception $e)
 		{

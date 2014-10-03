@@ -85,7 +85,8 @@ __BODY__;
 		$url_path = Model_Team::find($team_id)->url_path;
 		$uri      = Uri::base(false);
 
-		$body .= $uri.'team/'.$url_path.'/game/'.$game->id.'/edit/batter';
+		$body .= '野手成績：'.$uri.'team/'.$url_path.'/game/'.$game->id.'/edit/batter';
+		$body .= '投手成績：'.$uri.'team/'.$url_path.'/game/'.$game->id.'/edit/pitcher';
 
 		// sendmail
 		self::sendmail($to, $subject, $body);

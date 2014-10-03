@@ -53,6 +53,56 @@
 <div class="col-xs-8 col-md-9">
 {% endif %}
 
+{# 未完了のアラート #}
+{% if global.alerts %}
+<div class="panel panel-warning">
+<div class="panel-heading">未完了の成績/試合があります</div>
+<div class="panel-body">
+<ul>
+
+{# 打者成績のアラート #}
+{% for hitting in global.alerts.hittings %}
+{% if loop.first %}
+<li>打者成績の入力
+<ul>
+{% endif %}
+<li><a href="{{ global.team.href }}/game/{{ hitting.game_id }}/edit/batter">{{ hitting.date }} vs {{ hitting.opponent_team_name }}</a></li>
+{% if loop.last %}
+</ul>
+</li>
+{% endif %}
+{% endfor %}
+
+{# 投手成績のアラート #}
+{% for pitching in global.alerts.pitchings %}
+{% if loop.first %}
+<li>投手成績の入力
+<ul>
+{% endif %}
+<li><a href="{{ global.team.href }}/game/{{ pitching.game_id }}/edit/pitcher">{{ pitching.date }} vs {{ pitching.opponent_team_name }}</a></li>
+{% if loop.last %}
+</ul>
+</li>
+{% endif %}
+{% endfor %}
+
+{# チーム管理者としての試合のアラート #}
+{% for game in global.alerts.games %}
+{% if loop.first %}
+<li>試合ステータス（チーム管理者のみ）
+<ul>
+{% endif %}
+<li><a href="{{ global.team.href }}/game/{{ game.game_id }}/edit/other">{{ game.date }} vs {{ game.opponent_team_name }}</a></li>
+{% if loop.last %}
+</ul>
+</li>
+{% endif %}
+{% endfor %}
+
+</div>
+</div>
+{% endif %}
+
 {% block main %}
 {% endblock %}
 </div>

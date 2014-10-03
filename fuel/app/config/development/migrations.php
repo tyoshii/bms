@@ -79,6 +79,8 @@ return array(
         70 => '076_add_order_to_stats_pitchings',
         71 => '077_add_last_inning_to_games_runningscores',
         72 => '078_add_regulation_at_bats_to_teams',
+        73 => '079_add_input_status_to_stats_hittings',
+        74 => '080_add_input_status_to_stats_pitchings',
       ),
     ),
     'module' => 

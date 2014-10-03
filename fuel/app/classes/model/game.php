@@ -12,13 +12,13 @@ class Model_Game extends \Orm\Model
 		'game_status'      => array('default' => 0),
 		'top_status'       => array('default' => 1),
 		'bottom_status'    => array('default' => 1),
-		// TODO:削除
-		'team_top'         => array('default' => 0),
-		'team_top_name'    => array('default' => 0),
-		'team_bottom'      => array('default' => 0),
-		'team_bottom_name' => array('default' => 0),
 		'created_at',
 		'updated_at',
+		// TODO:削除予定
+		'team_top' => array('default' => 0),
+		'team_top_name' => array('default' => 0),
+		'team_bottom' => array('default' => 0),
+		'team_bottom_name' => array('default' => 0),
 	);
 
 	protected static $_observers = array(
@@ -53,6 +53,23 @@ class Model_Game extends \Orm\Model
 	protected static $_has_many = array(
 		'stats_players' => array(
 			'model_to'       => 'Model_Stats_Player',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+	
+	protected static $_belongs_to = array(
+		'stats_hittings' => array(
+			'model_to'       => 'Model_Stats_Hitting',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'stats_pitchings' => array(
+			'model_to'       => 'Model_Stats_Pitching',
 			'key_from'       => 'id',
 			'key_to'         => 'game_id',
 			'cascade_save'   => false,
@@ -344,7 +361,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// 野手成績の入力が完了しているかどうか
-			if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
+			if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
 			{ 
 				$alert_games[] = array('kind' => 'batter') + $data;
 				continue; 
@@ -353,7 +370,7 @@ class Model_Game extends \Orm\Model
 			// 投手成績のアラート
 			if ( strstr($data['position'], '1') )
 			{
-				if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
+				if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
 				{ 
 					$alert_games[] = array('kind' => 'pitcher') + $data;
 					continue; 
@@ -381,7 +398,7 @@ class Model_Game extends \Orm\Model
 			}
 
 			// statusをチェックして、未完了であればメール送信
-			if ( Model_Stats_Hitting::get_status($game_id, $player_id) === '0' )
+			if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
 			{ 
 				$paths[] = "game/{$game_id}/batter/{$team_id}";
 			}
@@ -389,7 +406,7 @@ class Model_Game extends \Orm\Model
 			// 投手成績のアラート
 			if ( in_array('1', $player['position'] ) )
 			{
-				if ( Model_Stats_Pitching::get_status($game_id, $player_id) === '0' )
+				if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
 				{ 
 					$paths[] = "game/{$game_id}/pitcher/{$team_id}";
 				}

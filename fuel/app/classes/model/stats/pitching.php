@@ -5,6 +5,7 @@ class Model_Stats_Pitching extends Model_Base
 	protected static $_properties = array(
 		'id',
 		'status' => array('default' => 0),
+		'input_status' => array('defaultu' => 'save'),
 		'player_id',
 		'game_id',
 		'team_id',
@@ -36,6 +37,23 @@ class Model_Stats_Pitching extends Model_Base
 		),
 	);
 	protected static $_table_name = 'stats_pitchings';
+
+	protected static $_has_one = array(
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+		'games_teams' => array(
+			'model_to'       => 'Model_Games_Team',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
 
 	/**
 	 * 出場選手に従って投手成績取得
@@ -124,7 +142,7 @@ class Model_Stats_Pitching extends Model_Base
 				$pitch->order  = $order;
 				if ( ! is_null($status))
 				{
-					$pitch->status = $status;
+					$pitch->input_status = $status;
 				}
 
 				$pitch->save();
@@ -139,13 +157,13 @@ class Model_Stats_Pitching extends Model_Base
 		}
 	}
 
-	public static function get_status($game_id, $player_id)
+	public static function get_input_status($game_id, $player_id)
 	{
 		$s = self::query()->where(array(
 			'game_id'   => $game_id,
 			'player_id' => $player_id,
 		))->get_one();
 
-		return $s ? $s->status : '0';
+		return $s ? $s->input_status : '';
 	}
 }

@@ -16,6 +16,9 @@ BMS - Baseball Management System
 http://bm-s.info
 __FOOTER__;
 
+	/**
+	 * メールを送信する
+	 */
 	public static function sendmail($to, $subject, $body)
 	{
 		$email = Email::forge();
@@ -30,6 +33,9 @@ __FOOTER__;
 		$email->send();
 	}
 
+	/**
+	 * パスワードのリセット
+	 */
 	public static function reset_password($username, $email, $time, $crypt)
 	{
 		$url = Uri::base(false);
@@ -49,6 +55,45 @@ __BODY__;
 		self::sendmail($email, $subject, $body);
 	}
 
+	/**
+	 * スタメン登録されたことの通知
+	 */
+	public static function regist_starter($game_id, $team_id, $player_id)
+	{
+		// to
+		$to = Model_Player::get_player_email($player_id);
+		if ( ! $to)
+			return false;
+
+		// subject
+		$subject = '出場選手登録されました';
+
+		// body
+		$game = Model_Game::find($game_id);
+		$date = $game->date;
+		$opponent_team_name = $game->games_teams->opponent_team_name;
+
+		$body = <<<__BODY__
+
+以下の試合に出場選手登録されました。
+$date vs $opponent_team_name
+
+成績入力をしましょう。
+
+__BODY__;
+
+		$url_path = Model_Team::find($team_id)->url_path;
+		$uri      = Uri::base(false);
+
+		$body .= $uri.'team/'.$url_path.'/game/'.$game->id.'/edit/batter';
+
+		// sendmail
+		self::sendmail($to, $subject, $body);
+	}
+
+	/**
+	 * 成績入力のリマインド
+	 */
 	public static function remind_game_stats($player_id, $paths)
 	{
 		$name = Model_Player::find($player_id)->name;

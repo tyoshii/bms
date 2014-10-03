@@ -537,7 +537,8 @@ function post_player2(is_alert) {
   return data;
 }
 
-function post_player(is_alert) {
+function post_player(self) {
+  var status  = $(self).attr("data-status");
   var $player = $("table#player td");
   // console.log($player);
 
@@ -569,7 +570,7 @@ function post_player(is_alert) {
 
       // 重複チェック
       if ( player_id != '0' && already[player_id] == 1 ) {
-        if ( is_alert ) alert('同じ選手が登録されています');
+        alert('同じ選手が登録されています');
         exit = true;  
         return false;
       }
@@ -607,12 +608,11 @@ function post_player(is_alert) {
     data: {
       game_id: $('data#game_id').text(),
       team_id: $('data#team_id').text(),
-      stats: data
+      stats: data,
+      status: status,
     },
     success: function(html) {
-      if ( is_alert === true ) {
-        alert("成績保存に成功");
-      }
+      alert("成績保存に成功");
     },
     error: function(res) {
       if ( res.status === 403 ) {

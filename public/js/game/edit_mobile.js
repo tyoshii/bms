@@ -241,6 +241,7 @@ $("div.stats-post[role=score] button").click(function() {
 
 $("div.stats-post[role=player] button").click(function() {
   STATS.data = [];
+  STATS.post.status = $(this).attr("data-status");
  
   $("table.player-table tbody tr").each(function() {
 

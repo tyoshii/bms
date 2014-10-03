@@ -71,9 +71,21 @@ class Controller_Api_Game extends Controller_Rest
 	{
 		$ids = self::_get_ids();
 
-		// stats_metaへの登録
+		// parameter
 		$players = Input::post('stats');
+		$status  = Input::post('status');
+
+		// regist
 		Model_Stats_Player::regist_player($ids, $players);
+
+		// notice
+		if ($status === 'complete')
+		{
+			foreach ($players as $player)
+			{
+				Common_Email::regist_starter($ids['game_id'], $ids['team_id'], $player['player_id']);
+			}
+		}
 
 		// status update
 		Model_Game::update_status_minimum($ids['game_id'], 1);

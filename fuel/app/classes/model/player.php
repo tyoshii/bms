@@ -191,8 +191,12 @@ class Model_Player extends \Orm\Model
 			->limit(1)
 			->execute()->as_array();
 
-		$user = $user[0];
+		if (count($user) === 0)
+		{
+			return '';
+		}
 
+		$user = $user[0];
 		if ($user['username'] === '')
 		{
 			return '';

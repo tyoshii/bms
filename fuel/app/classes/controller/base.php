@@ -44,7 +44,12 @@ class Controller_Base extends Controller
 
 	public function after($res)
 	{
+		// set global method
 		View::set_global('global', $this->_global);
+
+		// trace log
+		Log::trace($res->status);
+
 		return $res;
 	}
 

@@ -90,8 +90,10 @@
 </div>
 {%else%}
 <div>
-<button onClick="post_player(true);" class="btn btn-success">登録</button>
+<button onClick="post_player(this);" data-status="save" class="btn btn-default">保存</button>
+<button onClick="post_player(this);" data-status="complete" class="btn btn-success">登録</button>
 </div>
+<span>※登録すると、出場選手に成績入力を促すメールが送信されます</span>
 {%endif%}
 
 

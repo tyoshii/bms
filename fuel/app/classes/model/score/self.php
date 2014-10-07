@@ -50,9 +50,15 @@ LEFT JOIN
 ON
 		t.id = p.team_id
 
+LEFT JOIN
+		games AS g
+ON
+		s.game_id = g.id
+
 WHERE
 		p.team_id = $team_id AND
-		p.status != -1
+		p.status != -1       AND
+		g.game_status = 2
 
 GROUP BY
 		s.player_id

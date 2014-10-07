@@ -4,6 +4,7 @@ class Controller_Team extends Controller_Base
 {
 	public $_team = array();
 	public $_player = array();
+	public $_alerts = array();
 	public $_team_admin = false;
 
 	public function before()
@@ -32,19 +33,22 @@ class Controller_Team extends Controller_Base
 			$this->_team->href = '/team/'.$this->_team->url_path;
 		}
 
-		// ログイン中ユーザーの選手情報
+		// ログイン中ユーザーの選手情報/alert情報
 		if (Auth::check() and $this->_team)
 		{
 			$this->_player = Model_Player::query()->where(array(
 				array('team_id', $this->_team->id),
 				array('username', Auth::get('username')),
 			))->get_one();
+
+			$this->_alerts = Model_Stats_Common::get_stats_alerts($this->_team->id, $this->_player->id);
 		}
 
 		// set_global
 		$this->set_global('team', $this->_team);
 		$this->set_global('team_admin', $this->_team_admin);
 		$this->set_global('player', $this->_player);
+		$this->set_global('alerts', $this->_alerts);
 	}
 
 	/**

@@ -1,0 +1,7 @@
+source "https://supermarket.getchef.com"
+
+cookbook 'yum-epel'
+cookbook 'composer'
+cookbook 'php'
+cookbook 'mysql'
+cookbook 'nginx'

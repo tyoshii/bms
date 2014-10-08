@@ -1,9 +1,17 @@
 {
   "run_list": [
     "recipe[yum-epel]",
-    "recipe[php]"
+    "recipe[mysql::client]",
+    "recipe[mysql::server]",
+    "recipe[php]",
+    "recipe[composer]",
+    "recipe[bms]"
   ],
   "automatic": {
     "ipaddress": "vbms"
+  },
+  "mysql": {
+    "port" : "3306",
+    "server_root_password": "yolo"
   }
 }

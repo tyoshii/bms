@@ -16,6 +16,3 @@
 [submodule "fuel/packages/email"]
 	path = fuel/packages/email
 	url = git://github.com/fuel/email.git
-[submodule "vagrant/site-cookbooks/yum-remi"]
-	path = vagrant/site-cookbooks/yum-remi
-	url = git://github.com/aiming-cookbooks/yum-remi.git

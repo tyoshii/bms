@@ -1,22 +1,52 @@
 DEPENDENCIES
+  apache
+  bms
+    path: site-cookbooks/bms
   composer
+  hhvm
+  mruby
   mysql
   nginx
   php
   yum-epel
 
 GRAPH
+  apache (0.0.5)
+    apache2 (>= 0.0.0)
+  apache2 (2.0.0)
+    iptables (>= 0.0.0)
+    logrotate (>= 0.0.0)
+    pacman (>= 0.0.0)
   apt (2.6.0)
   bluepill (2.3.1)
     rsyslog (>= 0.0.0)
+  bms (0.1.0)
   build-essential (2.0.6)
   chef-sugar (2.3.0)
   chef_handler (1.1.6)
   composer (1.0.5)
     php (>= 0.0.0)
     windows (>= 0.0.0)
+  dmg (2.2.0)
+  git (4.0.2)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    runit (>= 1.0.0)
+    windows (>= 0.0.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  hhvm (0.4.0)
+    apt (>= 0.0.0)
+    yum (>= 0.0.0)
   iis (2.1.5)
     windows (>= 1.2.6)
+  iptables (0.14.0)
+  logrotate (1.7.0)
+  mruby (0.4.1)
+    apache2 (>= 0.0.0)
+    build-essential (>= 0.0.0)
+    nginx (>= 0.0.0)
+    rbenv (>= 0.0.0)
   mysql (5.5.3)
     yum-mysql-community (>= 0.0.0)
   nginx (2.7.4)
@@ -27,6 +57,7 @@ GRAPH
     runit (~> 1.2)
     yum-epel (~> 0.3)
   ohai (2.0.1)
+  pacman (1.1.1)
   php (1.4.6)
     build-essential (>= 0.0.0)
     iis (>= 0.0.0)
@@ -34,6 +65,11 @@ GRAPH
     windows (>= 0.0.0)
     xml (>= 0.0.0)
     yum-epel (>= 0.0.0)
+  rbenv (1.7.1)
+    apt (>= 0.0.0)
+    build-essential (>= 0.0.0)
+    git (>= 0.0.0)
+    ohai (>= 1.1)
   rsyslog (1.12.2)
   runit (1.5.10)
     build-essential (>= 0.0.0)

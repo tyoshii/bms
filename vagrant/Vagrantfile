@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # TODO: fix permission
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "../", "/vagrant", mount_options: ['dmode=777', 'fmode=666']
+  config.vm.synced_folder "../", "/vagrant", mount_options: ['dmode=777', 'fmode=775']
 
 
   # Provider-specific configuration so you can fine-tune various
@@ -121,12 +121,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.omnibus.chef_version = :latest
   config.omnibus.chef_version = "11.10.0"
   config.vm.provision :chef_solo do |chef|
+    chef.roles_path = "roles"
+    chef.add_role "bms"
     chef.cookbooks_path = ["./cookbooks", "./site-cookbooks"]
-    chef.add_recipe "yum-epel"
-    chef.add_recipe "yum-remi"
+    # chef.add_recipe "yum-epel"
+    #chef.add_recipe "yum-remi"
     #chef.add_recipe "yum-remi::php55"
 
-    chef.add_recipe "base"
+    #chef.add_recipe "base"
     #chef.add_recipe "mysql56"
     #
     #chef.add_recipe "php55"

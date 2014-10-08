@@ -1,14 +1,7 @@
-/*
 {
+  "chef_type": "role",
   "json_class": "Chef::Role",
   "run_list": [
-    "role[bms]"
-  ]
-}
-*/
-{
-  "run_list": [
-    "recipe[hhvm::package]",
     "recipe[yum-epel]",
     //"recipe[apache2::mod_rewrite]",
     "recipe[mysql::client]",

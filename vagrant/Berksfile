@@ -6,3 +6,8 @@ cookbook 'composer'
 cookbook 'php'
 cookbook 'mysql'
 cookbook 'nginx'
+cookbook 'mruby'
+cookbook 'apache'
+# option
+cookbook 'hhvm'
+cookbook 'bms', path: './site-cookbooks/bms'

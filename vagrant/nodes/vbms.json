@@ -1,11 +1,9 @@
-/*
 {
-  "json_class": "Chef::Role",
   "run_list": [
     "role[bms]"
   ]
 }
-*/
+/*
 {
   "run_list": [
     "recipe[hhvm::package]",
@@ -31,3 +29,4 @@
     "server_root_password": "yolo"
   }
 }
+*/

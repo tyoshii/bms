@@ -126,19 +126,6 @@
 </div>{# class="stats-container" #}
 
 {# 保存/决定ボタン #}
-{%if game_status == 2%}
-<div class="alert alert-success">
-成績入力を完了している試合です。
-</div>
-{%else%}
-<div class="stats-post" role="pitching">
-{% if type == 'all' %}
-<button type="button" class="btn btn-default">保存</button>
-{% else %}
-<button type="button" class="btn btn-default" data-status="save">保存</button>
-<button type="button" class="btn btn-success" data-status="complete">决定</button>
-{% endif %}
-</div>
-{%endif%}
+{% include "include/footer/team/game/edit.twig" with {"role":"pitching"} %}
 
 {% endblock main %}

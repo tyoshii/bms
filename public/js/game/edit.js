@@ -172,6 +172,9 @@ function post_other(is_alert) {
 /**
  * 野手成績登録
  */
+$("div.stats-post[role=batter] button").click(function(){
+  post_batter(this);
+});
 function post_batter(self) {
   var status = $(self).attr("data-status");
   var data = {};
@@ -448,6 +451,9 @@ function add_order(self, kind) {
 /**
  * 投手成績登録
  */
+$("div.stats-post[role=pitching] button").click(function(){
+  post_pitcher(this);
+});
 function post_pitcher(self) {
   var status = $(self).attr("data-status");
   var $pitcher = $("table#pitcher tbody tr");
@@ -537,6 +543,12 @@ function post_player2(is_alert) {
   return data;
 }
 
+/**
+ * 選手登録
+ */
+$("div.stats-post[role=player] button").click(function(){
+  post_player(this);
+});
 function post_player(self) {
   var status  = $(self).attr("data-status");
   var $player = $("table#player td");

@@ -123,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = ["./cookbooks", "./site-cookbooks"]
     # stop iptables
-    chef.add_recipe "base"
+    chef.add_recipe "bms::vagrant"
 
     chef.roles_path = "roles"
     chef.add_role "bms"

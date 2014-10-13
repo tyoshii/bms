@@ -10,4 +10,6 @@ cookbook 'mruby'
 cookbook 'apache'
 # option
 cookbook 'hhvm'
+# original
+cookbook 'base', path: './site-cookbooks/base'
 cookbook 'bms', path: './site-cookbooks/bms'

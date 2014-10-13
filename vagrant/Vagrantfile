@@ -121,20 +121,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.omnibus.chef_version = :latest
   config.omnibus.chef_version = "11.10.0"
   config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ["./cookbooks", "./site-cookbooks"]
+    # stop iptables
+    chef.add_recipe "base"
+
     chef.roles_path = "roles"
     chef.add_role "bms"
-    chef.cookbooks_path = ["./cookbooks", "./site-cookbooks"]
-    # chef.add_recipe "yum-epel"
-    #chef.add_recipe "yum-remi"
-    #chef.add_recipe "yum-remi::php55"
-
-    #chef.add_recipe "base"
-    #chef.add_recipe "mysql56"
-    #
-    #chef.add_recipe "php55"
-    #chef.add_recipe "composer"
-
-    #chef.add_recipe "fuelphp"
 
     chef.json = {
       httpd: {

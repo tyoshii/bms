@@ -48,7 +48,8 @@ class Controller_Base extends Controller
 		View::set_global('global', $this->_global);
 
 		// trace log
-		Log::trace($res->status);
+		$status = $res ? $res->status : '999';
+		Log::trace($status);
 
 		return $res;
 	}

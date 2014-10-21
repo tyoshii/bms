@@ -14,4 +14,13 @@ class Log extends \Fuel\Core\Log
 
 		static::warning($msg, 'TRACE');
 	}
+
+	public static function get_log_path()
+	{
+		$y = date('Y');
+		$m = date('m');
+		$d = date('d');
+
+		return sprintf('%s/logs/%s/%s/%s.php', APPPATH, $y, $m, $d);
+	}
 }

@@ -26,6 +26,16 @@ class Controller_Admin extends Controller_Base
 		return Response::forge(View::forge('layout/admin.twig'));
 	}
 
+	public function action_log()
+	{
+		$view = View::forge('admin/log.twig');
+
+		$log_path = Log::get_log_path();
+		$view->log = file_get_contents($log_path);
+
+		return Response::forge($view);
+	}
+
 	public function action_user_detail($id)
 	{
 		$form = $this->_get_user_form($id);

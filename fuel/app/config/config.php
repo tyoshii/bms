@@ -275,6 +275,7 @@ return array(
 			'parser',
 			'auth',
 			'email',
+			'my',
 		),
 
 		/**

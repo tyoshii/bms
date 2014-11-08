@@ -54,4 +54,4 @@ Fuel::$is_test = true;
 import('testcase');
 
 // load my package for test
-Package::load('my');
+Package::load('test');

@@ -1,6 +1,6 @@
 <?php
 
-namespace My;
+namespace Test;
 
 class FieldsetEX extends \Fuel\Core\Fieldset
 {

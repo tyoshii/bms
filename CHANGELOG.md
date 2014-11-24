@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Version 0.0.14
+
+* Agentクラスの修正（browscap対応）
+
 ## Version 0.0.13
 
 * 規定打席の設定を追加（野手成績に反映）

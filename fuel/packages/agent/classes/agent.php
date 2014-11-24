@@ -74,12 +74,32 @@ class Agent extends \Fuel\Core\Agent
 			// try the build in get_browser() method
 			if (ini_get('browscap') == '' or false === $browser = get_browser(static::$user_agent, true))
 			{
+/*
+             // if it fails, use browscap/browscap-php
+             $cacheDir = APPPATH.'cache/fuel/agent';
+             $browscap = new \phpbrowscap\Browscap($cacheDir);
+             $browscap->remoteIniUrl = 'http://browscap.org/stream?q=Lite_PHP_BrowsCapINI';
+             $browscap->doAutoUpdate = false;
+             $browser = $browscap->getBrowser(static::$user_agent, true);
+*/
+/*
+				// disable automatic updates
+				$updater = new \Crossjoin\Browscap\Updater\None();
+				\Crossjoin\Browscap\Browscap::setUpdater($updater);
+
+				// set the dataset type
+				\Crossjoin\Browscap\Browscap::setDatasetType(\Crossjoin\Browscap\Browscap::DATASET_TYPE_SMALL);
+
 				// use Crossjoin\Browscap
 				$browscap = new \Crossjoin\Browscap\Browscap();
 				$browser = (array) $browscap->getBrowser()->getData();
 
+				// merge it with the defaults to add missing values
+				$browser = array_merge(static::$properties, $browser);
+*/
+
 				// if it fails, emulate get_browser()
-				// $browser = static::get_from_browscap();
+			  $browser = static::get_from_browscap();
 			}
 
 			if ($browser)
@@ -88,5 +108,15 @@ class Agent extends \Fuel\Core\Agent
 				static::$properties = array_change_key_case($browser);
 			}
 		}
+	}
+
+	/**
+	 * Get the Browser Version
+	 *
+	 * @return  float
+	 */
+	public static function version()
+	{
+		return (float) static::$properties['version'];
 	}
 }

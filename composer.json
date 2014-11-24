@@ -27,7 +27,8 @@
     	"fuelphp/upload": "2.0.1",
         "twig/twig": "1.15.0",
         "phpexcel/phpexcel": "1.7.*",
-        "crossjoin/browscap": "dev-master"
+        "crossjoin/browscap": "dev-master",
+        "browscap/browscap-php": "2.0.*"
     },
     "suggest": {
         "mustache/mustache": "Allow Mustache templating with the Parser package",

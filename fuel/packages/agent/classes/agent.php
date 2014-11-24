@@ -74,7 +74,7 @@ class Agent extends \Fuel\Core\Agent
 			// try the build in get_browser() method
 			if (ini_get('browscap') == '' or false === $browser = get_browser(static::$user_agent, true))
 			{
-/*
+/* browscap-php ( dont move
              // if it fails, use browscap/browscap-php
              $cacheDir = APPPATH.'cache/fuel/agent';
              $browscap = new \phpbrowscap\Browscap($cacheDir);
@@ -82,7 +82,8 @@ class Agent extends \Fuel\Core\Agent
              $browscap->doAutoUpdate = false;
              $browser = $browscap->getBrowser(static::$user_agent, true);
 */
-/*
+
+/* Crossjoin ( dont move
 				// disable automatic updates
 				$updater = new \Crossjoin\Browscap\Updater\None();
 				\Crossjoin\Browscap\Browscap::setUpdater($updater);

@@ -7,6 +7,40 @@ class Controller_Api_Download_Stats extends Controller_Rest
 	 */
 	public function action_team()
 	{
+		// validation parameter
+		$team_id = Input::get('team_id');
+		if ( ! $team_id)
+		{
+			Session::set_flash('error', '不正なパラメーターです');
+			return Response::redirect('error/400');
+		}
+
+		// validation acl
+		if ( ! Model_Player::has_team_admin($team_id))
+		{
+			Session::set_flash('error', '権限を持っていません');
+			return Response::redirect('error/403');
+		}
+
+		// create excel book
+		$book = new PHPExcel();
+		$book->setActiveSheetIndex(0);
+		$sheet = $book->getActiveSheet();
+
+		// set stats
+		$stats = Model_Score_Self::get_self_scores($team_id, false);
+		static::_set_team_batter_stats($sheet, $stats);
+
+		// output
+		$team = Model_Team::find($team_id)->name;
+		$filename = sprintf('チーム成績_%s.xls', $team);
+
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+
+		$writer = PHPExcel_IOFactory::createWriter($book, "Excel5");
+		$writer->save('php://output');  
 	}
 
 	/**
@@ -64,6 +98,74 @@ class Controller_Api_Download_Stats extends Controller_Rest
 		$writer->save('php://output');  
 	}
 	
+	/**
+	 * チーム成績をsheetにプロット
+	 */
+	private static function _set_team_batter_stats(&$sheet, $stats)
+	{
+		// シート名
+		$sheet->setTitle('野手成績');
+
+		// データマッピング
+		$props = array(
+			array('title' => '選手ID', 'key' => 'player_id'),
+			array('title' => '名前', 'key' => 'name'),
+			array('title' => '背番号', 'key' => 'number'),
+			array('title' => '出場試合数', 'key' => 'G'),
+			array('title' => '打席', 'key' => 'TPA'),
+			array('title' => '打数', 'key' => 'AB'),
+			array('title' => '単打', 'key' => 'H'),
+			array('title' => '二塁打', 'key' => '2B'),
+			array('title' => '三塁打', 'key' => '3B'),
+			array('title' => '本塁打', 'key' => 'HR'),
+			array('title' => '三振', 'key' => 'SO'),
+			array('title' => '四球', 'key' => 'BB'),
+			array('title' => '死球', 'key' => 'HBP'),
+			array('title' => '犠打', 'key' => 'SAC'),
+			array('title' => '犠飛', 'key' => 'SF'),
+			array('title' => '打点', 'key' => 'RBI'),
+			array('title' => '得点', 'key' => 'R'),
+			array('title' => '盗塁', 'key' => 'SB'),
+			array('title' => '失策', 'key' => 'E'),
+
+			array('title' => '塁打数', 'key' => 'TB'),
+			array('title' => '安打数', 'key' => 'total.TH'),
+			array('title' => '四死球数', 'key' => 'total.TBB'),
+			array('title' => '犠打犠飛数', 'key' => 'total.TSF'),
+
+			array('title' => '打率', 'key' => 'rate.AVG'),
+			array('title' => '出塁率', 'key' => 'rate.OBP'),
+			array('title' => '長打率', 'key' => 'rate.SLG'),
+			array('title' => 'OPS', 'key' => 'rate.OPS'),
+			array('title' => '三振率', 'key' => 'rate.SOR'),
+		);
+
+		// title追加
+		foreach ($props as $col => $prop)
+		{
+			$sheet->setCellValueByColumnAndRow($col, 1, $prop['title']);
+		}
+
+		// 成績プロット
+		foreach ($stats as $row => $stat)
+		{
+			// 2行目からプロットする
+			$row += 2;
+
+			foreach ($props as $col => $prop)
+			{
+				// key名が配列を指す場合
+				$val = null;
+				foreach (explode('.', $prop['key']) as $key)
+				{
+					$val = is_null($val) ? $stat[$key] : $val[$key];
+				}	
+
+				$sheet->setCellValueByColumnAndRow($col, $row, $val);
+			}
+		}
+	}
+
 	/**
 	 * 選手データ
 	 */

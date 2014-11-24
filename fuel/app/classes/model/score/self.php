@@ -53,7 +53,8 @@ ON
 LEFT JOIN
 		games AS g
 ON
-		s.game_id = g.id
+		s.game_id = g.id AND
+		g.game_status != -1
 
 WHERE
 		p.team_id = $team_id AND

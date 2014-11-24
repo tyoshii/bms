@@ -1,17 +1,18 @@
 <?php
 
-class Controller_Api_Download extends Controller_Rest
+class Controller_Api_Download_Stats extends Controller_Rest
 {
-	public function before()
+	/**
+	 * チーム成績のダウンロード
+	 */
+	public function action_team()
 	{
-		parent::before();
 	}
 
 	/**
-	 * 成績のダウンロード
-	 * (IT LEAGUE成績提出のため)
+	 * IT LEAGUE仕様の成績のダウンロード
 	 */
-	public function action_stats()
+	public function action_itleague()
 	{
 		// validation
 		$val = Validation::forge();

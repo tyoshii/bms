@@ -86,6 +86,7 @@ __BODY__;
 		$uri      = Uri::base(false);
 
 		$body .= '野手成績：'.$uri.'team/'.$url_path.'/game/'.$game->id.'/edit/batter';
+		$body .= "\n";
 		$body .= '投手成績：'.$uri.'team/'.$url_path.'/game/'.$game->id.'/edit/pitcher';
 
 		// sendmail

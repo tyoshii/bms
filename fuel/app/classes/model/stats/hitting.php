@@ -39,6 +39,16 @@ class Model_Stats_Hitting extends Model_Base
 	);
 	protected static $_table_name = 'stats_hittings';
 
+	protected static $_has_many = array(
+		'details' => array(
+			'model_to'       => 'Model_Stats_Hittingdetail',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	protected static $_has_one = array(
 		'games' => array(
 			'model_to'       => 'Model_Game',
@@ -106,6 +116,41 @@ class Model_Stats_Hitting extends Model_Base
 		$result = $query->execute()->as_array();
 
 		return reset($result);
+	}
+
+	/**
+	 * 指定されたplayer_idが出場した試合ごとの打撃成績を返す
+	 *
+	 * @param string player_id
+	 * @return array
+	 */
+	public static function get_stats_per_game($player_id)
+	{
+		$played_games = Model_Stats_Player::get_played_games($player_id);
+
+		$return = array();
+
+		foreach ($played_games ?: array() as $stats_player) 
+		{
+			$stats = static::query()
+				->where('player_id', $player_id)
+				->where('game_id', $stats_player->game_id)
+				->related('details')
+					->where('details.player_id', '=', $player_id)
+					->order_by('details.bat_times')
+				->related('details.batter_results')
+				->get_one();
+
+			$return[] = array(
+				'game_id'            => $stats_player->games->id,
+				'date'               => $stats_player->games->date,
+				'opponent_team_id'   => $stats_player->games->games_teams->opponent_team_id,
+				'opponent_team_name' => $stats_player->games->games_teams->opponent_team_name,
+				'stats' => $stats,
+			);
+		}
+
+		return $return;
 	}
 
 	/**

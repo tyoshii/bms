@@ -26,6 +26,16 @@ class Model_Stats_Player extends \Orm\Model
 	);
 	protected static $_table_name = 'stats_players';
 
+	protected static $_has_one = array(
+		'games' => array(
+			'model_to'       => 'Model_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	protected static $_belongs_to = array(
 		'games' => array(
 			'model_to'       => 'Model_Game',
@@ -136,5 +146,28 @@ class Model_Stats_Player extends \Orm\Model
 			Mydb::rollback();
 			throw new Exception($e->getMessage());
 		}
+	}
+
+	/**
+	 * 出場した試合のデータ
+	 *
+	 * @param string player_id
+	 * @return array object(Model_Stats_Player)
+	 */
+	public static function get_played_games($player_id)
+	{
+		$team_id = Model_Player::find($player_id)->team_id;
+
+		$return = static::query()
+				->where('player_id', $player_id)
+				->where('team_id', $team_id)
+			->related('games')
+				->where('games.game_status', '!=', '-1')
+				->order_by('games.date', 'DESC')
+			->related('games.games_teams')
+				->where('games.games_teams.team_id', '=', $team_id)
+			->get();
+
+		return $return;
 	}
 }

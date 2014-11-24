@@ -161,26 +161,7 @@ class Controller_Team extends Controller_Base
 			}
 
 			// 試合ごとの野手成績
-			$view->stats_per_games = array(
-				array(
-					'game_id' => 1,
-					'date' => '1/1',
-					'opponent_team_id' => 1,
-					'opponent_team_name' => 'hoge',
-					'details' => array(
-						array(
-							'result' => '本塁打',
-							'color' => 'red',
-						),
-						array(
-							'result' => '本塁打',
-							'color' => 'red',
-						),
-					),
-				),
-			);
-
-
+			$view->stats_per_games = Model_Stats_Hitting::get_stats_per_game($player_id);
 		}
 		else
 		{

@@ -21,6 +21,15 @@ __FOOTER__;
 	 */
 	public static function sendmail($to, $subject, $body)
 	{
+		// developmentではログイン中のユーザーにしかメールを送信しない
+		if (Fuel::$env === 'development')
+		{
+			if ($to !== Auth::get_email())
+			{
+				return false;
+			}	
+		}
+
 		$email = Email::forge();
 
 		$email->from('no-reply@bm-s.info');
@@ -120,5 +129,21 @@ __BODY__;
 		}
 
 		self::sendmail($email, $subject, $body);
+	}
+
+	/**
+	 * チーム内連絡
+	 */
+	public static function team_notice($team_id, $subject, $body)
+	{
+		foreach (Model_Player::query()->where('team_id', $team_id)->get() ?: array() as $team)
+		{
+			$email = Model_User::find_by_username($team->username);
+
+			if ($email)
+			{
+				static::sendmail($email->email, $subject, $body);	
+			}
+		}
 	}
 }

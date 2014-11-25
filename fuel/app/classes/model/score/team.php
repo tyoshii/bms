@@ -83,6 +83,8 @@ __QUERY__;
 		$stats['total']['TH'] = $stats['H'] + $stats['2B'] + $stats['3B'] + $stats['HR'];
 		// - total bb : 四死球数
 		$stats['total']['TBB'] = $stats['BB'] + $stats['HBP'];
+		// - total sf : 犠打犠飛合計
+		$stats['total']['TSF'] = $stats['SAC'] + $stats['SF'];
 		// - total on-base : 出塁した記録
 		$stats['total']['TOB'] = $stats['total']['TH'] + $stats['total']['TBB'];
 		// - total hitting appearance : 打撃機会
@@ -94,6 +96,7 @@ __QUERY__;
 			'OBP' => '0.000', // 出塁率
 			'SLG' => '0.000', // 長打率
 			'OPS' => '0.000',
+			'SOR' => '0.000', // 三振率 SwingOutRate
 		);
 
 		if ($stats['AB'] !== 0 and $stats['AB'] !== '0')
@@ -102,6 +105,7 @@ __QUERY__;
 			$stats['rate']['OBP'] = sprintf('%.3f', ($stats['total']['TH'] + $stats['total']['TBB']) / $stats['total']['THA']);
 			$stats['rate']['SLG'] = sprintf('%.3f', $stats['TB'] / $stats['AB']);
 			$stats['rate']['OPS'] = sprintf('%.3f', $stats['rate']['OBP'] + $stats['rate']['SLG']);
+			$stats['rate']['SOR'] = sprintf('%.3f', $stats['SO'] / $stats['AB']);
 		};
 	}
 

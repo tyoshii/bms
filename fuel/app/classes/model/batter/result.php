@@ -24,6 +24,16 @@ class Model_Batter_Result extends \Orm\Model
 	);
 	protected static $_table_name = 'batter_results';
 
+	protected static $_belongs_to = array(
+		'batter_results' => array(
+			'model_to'       => 'Model_Stats_Hittingdetail',
+			'key_from'       => 'id',
+			'key_to'         => 'result_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	public static function get_all()
 	{
 		return DB::select()->from(self::$_table_name)

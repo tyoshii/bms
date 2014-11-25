@@ -51,7 +51,8 @@ return array(
 	'api/game/(:segment)'                           => 'api/game/$1',
 	'api/deploy'                                    => 'api/deploy/index',
 	'api/mail/remind'                               => 'api/mail/remind',
-	'api/download/stats/(:kind)'                    => 'api/download/stats',
+	'api/download/stats/itleague'                   => 'api/download/stats/itleague',
+	'api/download/stats/team'                       => 'api/download/stats/team',
 
 	'register'                                      => 'register/index',
 	'forget_password'                               => 'register/forget_password',

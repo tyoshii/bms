@@ -61,6 +61,13 @@ class Model_Game extends \Orm\Model
 	);
 	
 	protected static $_belongs_to = array(
+		'stats_players' => array(
+			'model_to'       => 'Model_Stats_Player',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 		'stats_hittings' => array(
 			'model_to'       => 'Model_Stats_Hitting',
 			'key_from'       => 'id',

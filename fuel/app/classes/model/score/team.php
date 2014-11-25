@@ -117,6 +117,7 @@ SELECT
 	g.id,
 	gr.tsum,
 	gr.bsum,
+	gt.order,
 	g.team_top,
 	g.team_bottom,
 	g.game_status,
@@ -171,11 +172,11 @@ __QUERY__;
 		{
 			if ($info['tsum'] > $info['bsum'])
 			{
-				$info['team_top'] == $team_id ? ++$ret['win'] : ++$ret['lose'];
+				$info['order'] == 'top' ? ++$ret['win'] : ++$ret['lose'];
 			}
 			elseif ($info['tsum'] < $info['bsum'])
 			{
-				$info['team_top'] == $team_id ? ++$ret['lose'] : ++$ret['win'];
+				$info['order'] == 'top' ? ++$ret['lose'] : ++$ret['win'];
 			}
 			else
 			{

@@ -73,7 +73,7 @@ class Test_Controller_Admin extends \TestCase
 			'tag'        => 'ul',
 			'attributes' => array('class' => 'nav nav-pills'),
 			'children'   => array(
-				'count' => 3,
+				'count' => 4,
 				'only'  => array('tag' => 'li'),
 			),
 		);

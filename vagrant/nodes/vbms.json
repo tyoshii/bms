@@ -1,0 +1,32 @@
+{
+  "run_list": [
+    "role[bms]"
+  ]
+}
+/*
+{
+  "run_list": [
+    "recipe[hhvm::package]",
+    "recipe[yum-epel]",
+    //"recipe[apache2::mod_rewrite]",
+    "recipe[mysql::client]",
+    "recipe[mysql::server]",
+    "recipe[php]",
+    "recipe[composer]",
+    "recipe[bms]"
+  ],
+  "automatic": {
+    "ipaddress": "vbms"
+  },
+  //"apache2" : {
+  //    "hostname": "vbms.com",
+  //    "name": "vbms.com",
+  //    "conf_dir": "/etc/httpd/conf/",
+  //    "listen_ports" : [ "80", "8080"]
+  //},
+  "mysql": {
+    "port" : "3306",
+    "server_root_password": "yolo"
+  }
+}
+*/

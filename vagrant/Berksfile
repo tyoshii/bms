@@ -1,0 +1,14 @@
+#source "https://supermarket.getchef.com"
+site :opscode
+
+cookbook 'yum-epel'
+cookbook 'composer'
+cookbook 'php'
+cookbook 'mysql'
+cookbook 'nginx'
+cookbook 'mruby'
+cookbook 'apache'
+# option
+cookbook 'hhvm'
+# original
+cookbook 'bms', path: './site-cookbooks/bms'

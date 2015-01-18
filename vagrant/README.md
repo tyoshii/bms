@@ -19,3 +19,18 @@
 # Web page
 
 http://192.168.33.10/
+
+
+
+## Cookbook
+- https://github.com/opscode-cookbooks/yum
+
+## MEMO
+
+```
+% vagrant box add bms_cent64 ~/Downloads/centos65.box
+Downloading box from URL: file:/Users/callistoiv/Downloads/centos65.box
+Extracting box...te: 70.5M/s, Estimated time remaining: 0:00:01)
+Successfully added box 'bms_cent64' with provider 'virtualbox'!
+```
+

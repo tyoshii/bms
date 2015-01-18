@@ -1,0 +1,36 @@
+{
+  "name": "bms",
+  "description": " ",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+
+    "automatic": {
+        "ipaddress": "vbms"
+    },
+    "mysql": {
+      "port" : "3306",
+      "server_root_password": "yolo"
+    }
+  },
+  "override_attributes": {
+
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[yum-epel]",
+    //"recipe[apache2::mod_rewrite]",
+    "recipe[mysql::client]",
+    "recipe[mysql::server]",
+    "recipe[php]",
+    "recipe[composer]",
+    "recipe[bms]"
+  ],
+  "env_run_lists": {
+  }
+  //"apache2" : {
+  //    "hostname": "vbms.com",
+  //    "name": "vbms.com",
+  //    "conf_dir": "/etc/httpd/conf/",
+  //    "listen_ports" : [ "80", "8080"]
+  //},
+}

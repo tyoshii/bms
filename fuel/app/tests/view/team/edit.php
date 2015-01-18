@@ -25,12 +25,6 @@ class Test_View_Team_Edit extends Test_View_Base
 		$this->assertSame('成績が保存/登録されました。', $this->alertText());
 		$this->acceptAlert();
 		
-		// other
-		$this->url(self::$sample['url']['edit'].'/score');
-		$this->byCssSelector("div.stats-post[role=other] button")->click();
-		$this->assertSame('成績が保存/登録されました。', $this->alertText());
-		$this->acceptAlert();
-
 		// 選手
 		// $this->url(self::$sample['url']['edit'].'/player');
 		// $this->byCssSelector("div button:last")->click();

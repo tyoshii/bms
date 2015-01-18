@@ -1,7 +1,7 @@
 {% extends "layout/team/game/edit.twig" %}
 
 {% block main %}
-{% include "header/team/game/edit.twig" %}
+{% include "include/header/team/game/edit.twig" %}
 
 <div class="stats-container">
 
@@ -71,20 +71,14 @@
 <button role="player-del" class="btn btn-danger btn-xs">削除</button>
 </div>
 
+{# div class="stats-container" #}
+</div>
+
 <hr>
 <br><br>
 
-{%if game_status == 2%}
-<div class="alert alert-success">
-成績入力を完了している試合です。
-</div>
-{%else%}
-<div class="stats-post" role="player">
-<button class="btn btn-default" data-status="save">保存</button>
-<button class="btn btn-success" data-status="complete">登録</button>
-</div>
-{%endif%}
+{# 保存/決定ボタン #}
+{% include "include/footer/team/game/edit.twig" with {"role":"player"} %}
 
-</div>
 
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'layout/team/game/edit.twig' %}
 
 {% block main %}
-{% include "header/team/game/edit.twig" %}
+{% include "include/header/team/game/edit.twig" %}
 
 <div class="row">
 
@@ -73,10 +73,6 @@
 </tr>
 </tfoot>
 </table>
-
-<div class="stats-post" role="score">
-<button type="button" class="btn btn-success">登録</button>
-</div>
 
 
 </div>{# <div class="col-md-6"> #}
@@ -160,13 +156,13 @@
 </tbody>
 </table>
 
-<div class="stats-post" role="other">
-<button class="btn btn-success">登録</button>
-</div>
-
 </div>{# <div class="col-md-6"> #}
 
 </div>{# <div class="row"> #}
+
+<div class="stats-post" role="score">
+<button class="btn btn-success">登録</button>
+</div>
 
 {% endblock main %}
 

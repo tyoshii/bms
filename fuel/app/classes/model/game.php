@@ -391,7 +391,7 @@ class Model_Game extends \Orm\Model
 	public static function remind_mail( $game_id, $team_id )
 	{
 		// played member
-		$players = Model_Stats_Player::getStarter($game_id, $team_id);
+		$players = Model_Stats_Player::get_starter($game_id, $team_id);
 
 		foreach ( $players as $index => $player )
 		{

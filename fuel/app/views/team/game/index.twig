@@ -10,6 +10,7 @@
 <table class="table table-hover">
 <thead>
 <tr>
+<th>No.</th>
 <th>日付</th>
 <th>対戦相手</th>
 <th>スコア</th>
@@ -21,6 +22,7 @@
 {% endif %}
 
 <tr>
+<td>{{ loop.index }}</td>
 <td>{{ game.date }}</td>
 <td>{{ game.games_teams.opponent_team_name }}</td>
 <td>

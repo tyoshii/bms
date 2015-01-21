@@ -29,6 +29,10 @@ class Controller_Convention extends Controller_Base
 	 */
 	public function action_add()
 	{
+		// form
+		$form = Model_Convention::get_form();
+		$this->view->set_safe('form', $form->build(Uri::current()));
+
 		return Response::forge($this->view);
 	}
 

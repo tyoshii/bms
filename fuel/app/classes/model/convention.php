@@ -21,10 +21,7 @@ class Model_Convention extends \Orm\Model
 			'label' => '大会の種類',
 			'validation' => array(
 				'required',
-				'in_array' => array(
-					'league',
-					'tournament',
-				),
+				// TODO: validation
 			),
 			'form' => array(
 				'type' => 'select',
@@ -81,5 +78,35 @@ class Model_Convention extends \Orm\Model
 		));
 
 		return $form;
+	}
+
+	/**
+	 * convention regist
+	 * @param array $val->validated()
+	 * @return boolean
+	 */
+	public static function regist($prop)
+	{
+		if (array_key_exists('id', $prop))
+		{
+			// update
+		}
+
+		// new
+		if ( ! $prop['published'])
+		{
+			$prop['published'] = 'true';
+		}
+
+		Mydb::begin();
+
+		$conv = static::forge($prop);
+		$conv->save();
+
+		Model_Conventions_Admin::add($conv['id'], Auth::get_screen_name());
+
+		Mydb::commit();
+
+		return true;
 	}
 }

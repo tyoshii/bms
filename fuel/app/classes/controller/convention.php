@@ -38,6 +38,24 @@ class Controller_Convention extends Controller_Base
 
 	public function post_add()
 	{
+		$form = Model_Convention::get_form();
+		$val  = $form->validation();
+
+		if ($val->run())
+		{
+			Model_Convention::regist($val->validated());			
+
+			Session::set_flash('info', '新しく大会を登録しました。');
+			return Response::redirect(Uri::create('/convention'));
+		}
+		else
+		{
+			Session::set_flash('error', $val->show_errors());
+		}
+	
+		$form->repopulate();
+		$this->view->set_safe('form', $form->build(Uri::current()));
+
 		return Response::forge($this->view);
 	}
 

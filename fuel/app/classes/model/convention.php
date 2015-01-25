@@ -26,8 +26,8 @@ class Model_Convention extends \Orm\Model
 			'form' => array(
 				'type' => 'select',
 				'options' => array(
-					'league',
-					'tournament',
+					'league' => 'league',
+					'tournament' => 'tournament',
 				),
 				'value' => 'league',
 				'class' => 'form-control',

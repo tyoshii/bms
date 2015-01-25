@@ -109,4 +109,26 @@ class Model_Convention extends \Orm\Model
 
 		return true;
 	}
+
+	/**
+	 * get own convnetion list
+	 *   published = true && admin convention
+	 * @return array
+	 */
+	public static function get_own_list()
+	{
+		// TODO: Convention / Conventions_Admin をrelationに
+		// 今のままだと Conventionテーブルの値しかとってこれてない
+
+		$ids = Model_Conventions_Admin::query()
+						->select('convention_id')
+						->where('username', Auth::get_screen_name());
+
+		$res = static::query()
+			->where('published', 'true')
+			->or_where('id', 'in', $ids->get_query(true))
+			->get();
+
+		return $res;
+	}
 }

@@ -14,6 +14,28 @@
 
 <div class="col-md-9">
 大会リスト
+
+<table class="table">
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>公開/非公開</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+{% for list in lists %}
+<tr>
+<td>{{ list.name }}</td>
+<td>{{ list.kind }}</td>
+<td>{{ list.published }}</td>
+<td><a href="/convention/{{ list.id }}/detail">詳細</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 </div>
 </div>
 {% endblock %}

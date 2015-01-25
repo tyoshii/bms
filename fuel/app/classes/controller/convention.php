@@ -21,6 +21,8 @@ class Controller_Convention extends Controller_Base
 	 */
 	public function action_index()
 	{
+		$this->view->lists = Model_Convention::get_own_list();
+
 		return Response::forge($this->view);
 	}
 	

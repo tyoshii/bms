@@ -5,7 +5,11 @@
 
 <div class="row">
 <div class="col-md-3">
+{% if auth_check() %}
 <a href="/convention/add">大会の作成</a>
+{% else %}
+新しく大会を開催したい場合は<a href="/login?url={{ current_url() }}">ログイン</a>してください。
+{% endif %}
 </div>
 
 <div class="col-md-9">

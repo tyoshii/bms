@@ -82,6 +82,7 @@ return array(
         73 => '079_add_input_status_to_stats_hittings',
         74 => '080_add_input_status_to_stats_pitchings',
         75 => '081_create_conventions',
+        76 => '082_create_conventions_admins',
       ),
     ),
     'module' => 

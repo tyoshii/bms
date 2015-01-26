@@ -57,6 +57,9 @@ return array(
 	'convention/(:convention_id)/games'             => 'convention/game/index',
 	'convention/(:convention_id)/game/add'          => 'convention/game/add',
 
+	'convention/(:convention_id)/teams'    => 'convention/team/index',
+	'convention/(:convention_id)/team/add' => 'convention/team/add',
+
 	'convention/(:convention_id)/update' => 'convention/update',
 	'convention/(:convention_id)/stats'  => 'convention/stats',
 	'convention/(:convention_id)/detail' => 'convention/detail',

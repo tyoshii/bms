@@ -52,10 +52,10 @@ return array(
 	'convention'     => 'convention/index',
 	'convention/add' => 'convention/add',
 
-	'convention/(:convention_id)/(:game_id)/add'    => 'convention/game/add',
 	'convention/(:convention_id)/(:game_id)/update' => 'convention/game/update',
 	'convention/(:convention_id)/(:game_id)/detail' => 'convention/game/detail',
 	'convention/(:convention_id)/games'             => 'convention/game/index',
+	'convention/(:convention_id)/game/add'          => 'convention/game/add',
 
 	'convention/(:convention_id)/update' => 'convention/update',
 	'convention/(:convention_id)/stats'  => 'convention/stats',

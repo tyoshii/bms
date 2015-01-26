@@ -3,7 +3,7 @@
 class Model_Convention extends \Orm\Model
 {
 	protected static $_properties = array(
-		'id' => array('form' => array('type' => false)),
+		'id' => array(),
 		'name' => array(
 			'date_type' => 'varchar',
 			'label' => '大会名',
@@ -64,18 +64,37 @@ class Model_Convention extends \Orm\Model
 
 	/**
 	 * convention add/update form
-	 * @param
+	 * @param Model_Convention
 	 * @return FieldsetObject
 	 */
-	public static function get_form()
+	public static function get_form($model)
 	{
 		$form = Fieldset::forge('convention_add')->add_model(static::forge());
 
-		$form->add('add', '', array(
+		// submit
+		$form->add($model ? 'update' : 'add', '', array(
 			'type' => 'submit',
-			'value' => '追加',
+			'value' => $model ? '更新' : '追加',
 			'class' => 'form-control btn btn-success',
 		));
+
+		// when update ..
+		if ($model)
+		{
+			// add id field
+			$form->add('id', '', array(
+				'type' => 'hidden',
+				'class' => 'form-control',
+			))->add_rule('require')
+				->add_rule('match_value', $model->id);
+
+			// default value
+			$form->populate($model);
+
+			// kind field readonly
+			$form->field('kind')->add_rule('match_value', $model->kind);
+			$form->field('kind')->set_attribute('readonly', 'readonly');
+		}
 
 		return $form;
 	}

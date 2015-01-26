@@ -3,4 +3,30 @@
 {% block content %}
 <h2>大会の詳細</h2>
 
+<div class="row">
+
+<div class="col-md-3">
+<a href="/convention/{{ global.convention.id }}/update">リーグ情報の更新</a>
+</div>
+
+<div class="col-md-9">
+<h3>参加チーム</h3>
+{% for team in teams %}
+
+{% else %}
+まだ参加チームが登録されていません
+{% endfor %}
+
+<h3>試合一覧</h3>
+{% for game in games %}
+
+{% else %}
+まだ試合が開催されていません
+{% endfor %}
+
+<h3>成績</h3>
+comming soon...
+</div>
+
+</div>
 {% endblock %}

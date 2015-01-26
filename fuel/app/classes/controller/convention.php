@@ -12,8 +12,12 @@ class Controller_Convention extends Controller_Base
 		$action = Request::main()->action;
 		$this->view = View::forge('convention/'.$action.'.twig');
 
-		// debug
-		echo $this->param('convention_id');
+		// global value
+		$this->convention = Model_Convention::find($this->param('convention_id'));
+		$this->game       = Model_Game::find($this->param('game_id'));
+
+		$this->set_global('convention', $this->convention);
+		$this->set_global('game', $this->game);
 	}
 
 	/**
@@ -74,6 +78,9 @@ class Controller_Convention extends Controller_Base
 	 */
 	public function action_update()
 	{
+		$form = Model_Convention::get_form($this->convention);
+		$this->view->set_safe('form', $form->build(Uri::current()));
+
 		return Response::forge($this->view);
 	}
 	public function post_update()

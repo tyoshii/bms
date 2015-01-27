@@ -20,7 +20,6 @@ class Mydb
 		if (self::$_already)
 		{
 			self::$_already = false;
-			return false;
 		}
 
 		if (DB::in_transaction())

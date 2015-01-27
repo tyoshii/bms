@@ -1,0 +1,41 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+<h2>大会</h2>
+
+<div class="row">
+<div class="col-md-3">
+{% if auth_check() %}
+<a href="/convention/add">大会の作成</a>
+{% else %}
+新しく大会を開催したい場合は<a href="/login?url={{ current_url() }}">ログイン</a>してください。
+{% endif %}
+</div>
+
+<div class="col-md-9">
+大会リスト
+
+<table class="table">
+<thead>
+<tr>
+<th>名前</th>
+<th>種別</th>
+<th>公開/非公開</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+{% for list in lists %}
+<tr>
+<td>{{ list.name }}</td>
+<td>{{ list.kind }}</td>
+<td>{{ list.published }}</td>
+<td><a href="/convention/{{ list.id }}/detail">詳細</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}

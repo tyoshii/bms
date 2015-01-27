@@ -1,0 +1,136 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+
+{# data for ajax #}
+<data class="disable" data-name="convention_id">{{ global.convention.id }}</data>
+
+<h2><a href="/convention/{{ global.convention.id }}">{{ global.convention.name }}</a></h2>
+<div class="row">
+
+{# チーム検索 #}
+<div class="col-md-8">
+<form class="form">
+<input id="search" type="text" class="form-control" placeholder="チーム名を検索">
+</form>
+
+<table class="table table-hover" data-type="add-team">
+<thead>
+<tr>
+<th>チーム名</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+{% for team in teams if not team.entried %}
+<tr class="disable">
+<td data-name="team-name">{{ team.name }}</td>
+<td data-name="team-info"><a href="/team/{{ team.url_path }}">チーム情報</a></td>
+<td data-name="add-button" data-target="{{ team.id }}"><button class="btn btn-success btn-xs">追加</button></td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+</div>
+<div class="col-md-4">
+
+<h3>参加チーム</h3>
+
+<table class="table" data-type="entried-team">
+
+<!-- template -->
+<tr class="disable">
+<td data-name="team-name"></td>
+<td data-name="del-button" data-target=""><button class="btn btn-danger btn-xs">削除</button></td>
+</tr>
+
+{% for team in teams if team.entried %}
+<tr>
+<td data-name="team-name">{{ team.name }}</td>
+<td data-name="del-button" data-target="{{ team.id }}"><button class="btn btn-danger btn-xs">削除</button></td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+
+<script>
+$(document).ready(function() {
+
+  // チーム検索（インクリメントサーチ）
+  $("input#search").keyup(function() {
+    if ( ! $(this).val()) {
+      $("table[data-type=add-team] tbody tr").hide();
+    }
+    else {
+      $("table[data-type=add-team] tbody tr:contains(" + this.value + ")").show();
+    }
+  });
+
+});
+
+// 「追加」押下で参加チームへ
+$("table[data-type=add-team] button").click(function() {
+
+  // add-teamのテーブルから削除
+  var $orig = $(this).parents('tr');
+  $orig.hide();
+
+  // entried-teamテーブルへの追加
+  var $conv_team = $("table[data-type=entried-team]");
+  var $clone = $conv_team.find("tr:first").clone(true);
+
+  var team_name = $orig.find("td[data-name=team-name]").text();
+  var target_id = $orig.find("td[data-name=add-button]").attr("data-target");
+
+  $clone.find("td[data-name=team-name]").text(team_name);
+  $clone.find("td[data-name=del-button]").attr("data-target", target_id);
+
+  $clone.show(); 
+  $clone.insertAfter($conv_team.find("tr:last"));
+
+  // api call
+  $.ajax({
+    type: "POST",
+    url: "/api/convention/team/add",
+    data: {
+      convention_id: $("data[data-name=convention_id]").text(),
+      team_id: target_id 
+    },
+  });
+});
+
+// 「削除」押下で参加チームから削除
+// 削除は滅多なことではしないので、confirmしてreloadさせる
+$("table[data-type=entried-team] button").click(function() {
+
+  var target_id = $(this).parents("tr").find("td[data-name=del-button]").attr("data-target");
+
+console.log(target_id);
+  // api
+  $.ajax({
+    type: "POST",
+    url: "/api/convention/team/remove",
+    data: {
+      convention_id: $("data[data-name=convention_id]").text(),
+      team_id: target_id 
+    },
+    success: function(html) {
+      location.reload();
+    }
+  });
+});
+</script>
+{% endblock %}

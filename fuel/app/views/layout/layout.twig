@@ -74,6 +74,7 @@ go to /&nbsp;
     <ul class="nav navbar-nav">
       {%block li_team %}<li>{%endblock%}<a href="/team">チーム一覧</a></li>
       {% if auth_has_access('moderator.moderator') %}
+      {%block li_convention %}<li>{%endblock%}<a href="/convention">大会</a></li>
         <li class="bms-navbar-admin"><a href="/admin">管理者Menu</a></li>
       {% endif %}
     </ul>

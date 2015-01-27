@@ -185,7 +185,7 @@ return array(
 	/**
 	 * Cookie settings
 	 */
-	// 'cookie' => array(
+	'cookie' => array(
 	// Number of seconds before the cookie expires
 	// 'expiration'  => 0,
 	// Restrict the path that the cookie is available to
@@ -193,10 +193,10 @@ return array(
 	// Restrict the domain that the cookie is available to
 	// 'domain'      => null,
 	// Only transmit cookies over secure connections
-	// 'secure'      => false,
+		'secure'      => true,
 	// Only transmit cookies over HTTP, disabling Javascript access
 	// 'http_only'   => false,
-	// ),
+	),
 
 	/**
 	 * Validation settings

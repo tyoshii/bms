@@ -13,6 +13,7 @@ require_once COREPATH.'bootstrap.php';
 Autoloader::add_classes(array(
 	// Add classes you want to override here
 	// Example: 'View' => APPPATH.'classes/view.php',
+	'Log' => APPPATH.'classes/log.php',
 ));
 
 // Register the autoloader

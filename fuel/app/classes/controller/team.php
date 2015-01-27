@@ -159,6 +159,9 @@ class Controller_Team extends Controller_Base
 				Session::set_flash('error', '選手情報が取得できませんでした');
 				return Response::redirect($this->_team->href);
 			}
+
+			// 試合ごとの野手成績
+			$view->stats_per_games = Model_Stats_Hitting::get_stats_per_game($player_id);
 		}
 		else
 		{

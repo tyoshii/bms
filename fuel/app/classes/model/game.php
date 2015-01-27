@@ -61,6 +61,13 @@ class Model_Game extends \Orm\Model
 	);
 	
 	protected static $_belongs_to = array(
+		'stats_players' => array(
+			'model_to'       => 'Model_Stats_Player',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 		'stats_hittings' => array(
 			'model_to'       => 'Model_Stats_Hitting',
 			'key_from'       => 'id',
@@ -384,7 +391,7 @@ class Model_Game extends \Orm\Model
 	public static function remind_mail( $game_id, $team_id )
 	{
 		// played member
-		$players = Model_Stats_Player::getStarter($game_id, $team_id);
+		$players = Model_Stats_Player::get_starter($game_id, $team_id);
 
 		foreach ( $players as $index => $player )
 		{

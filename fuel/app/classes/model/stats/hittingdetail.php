@@ -27,6 +27,26 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 	);
 	protected static $_table_name = 'stats_hittingdetails';
 
+	protected static $_has_one = array(
+		'batter_results' => array(
+			'model_to'       => 'Model_Batter_Result',
+			'key_from'       => 'result_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
+	protected static $_belongs_to = array(
+		'details' => array(
+			'model_to'       => 'Model_Stats_Hitting',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
+	);
+
 	public static function clean($where)
 	{
 		Common::db_clean(self::$_table_name, $where);
@@ -72,5 +92,38 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 		);
 
 		self::forge($props)->save();
+	}
+
+	/**
+	 * 指定されたplayer_idが出場した試合ごとの打撃成績を返す
+	 *
+	 * @param string player_id
+	 * @return array
+	 */
+	public static function get_stats_per_game($player_id)
+	{
+		$played_games = Model_Stats_Player::get_played_games($player_id);
+
+		$return = array();
+
+		foreach ($played_games ?: array() as $stats_player) 
+		{
+			$stats = static::query()
+				->where('player_id', $player_id)
+				->where('game_id', $stats_player->game_id)
+				->related('details')
+					->order_by('details.bat_times')
+				->get();
+
+			$return[] = array(
+				'game_id'            => $stats_player->games->id,
+				'date'               => $stats_player->games->date,
+				'opponent_team_id'   => $stats_player->games->games_teams->opponent_team_id,
+				'opponent_team_name' => $stats_player->games->games_teams->opponent_team_name,
+				'stats' => $details,
+			);
+		}
+
+		return $return;
 	}
 }

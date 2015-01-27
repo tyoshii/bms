@@ -10,6 +10,7 @@ class Controller_Team_Config extends Controller_Team
 	 *    - admin
 	 *    - info
 	 *    - delete
+	 *    - notice
 	 *  - belong_player
 	 *    - leave
 	 *  - both
@@ -26,7 +27,7 @@ class Controller_Team_Config extends Controller_Team
 
 		// 特定のconfigはチーム管理者専門
 		$kind = $this->param('kind');
-		if (in_array($kind, array('info', 'delete', 'admin')))
+		if (in_array($kind, array('info', 'delete', 'admin', 'notice')))
 		{
 			if ( ! $this->_team_admin)
 			{
@@ -44,6 +45,57 @@ class Controller_Team_Config extends Controller_Team
 
 		Session::set_flash('error', '存在しないURLです');
 		return Response::redirect($this->_team->href);
+	}
+
+	/**
+	 * メンバーに連絡
+	 */
+	public function action_notice()
+	{
+		$view = View::forge('team/config/notice.twig');
+		$view->subtitle = 'メンバーに連絡';
+
+		// form
+		$config = array('form_attributes' => array(
+			'class' => 'form',
+			'onSubmit' => "return window.confirm('メールを送信します。よろしいですか？');",
+		));
+		$form = Fieldset::forge('team_notice', $config);
+
+		$form->add('subject', '件名', array(
+			'type' => 'text',
+			'placeholder' => 'メールタイトル',
+			'class' => 'form-control',
+			'required' => true,
+		));
+
+		$form->add('body', '本文', array(
+			'type' => 'textarea',
+			'placeholder' => 'メール本文',
+			'class' => 'form-control',
+			'required' => true,
+			'rows' => '5',
+		));
+
+		$form->add('submit', '', array(
+			'type' => 'submit',
+			'value' => 'メール送信',
+			'class' => 'btn btn-success',
+		));
+
+		// sendmail
+		if (Input::post())
+		{
+			Common_Email::team_notice($this->_team->id, Input::post('subject'), Input::post('body'));
+
+			Session::set_flash('info', 'メールを送信しました。');
+			return Response::redirect(Uri::current());
+		}
+
+		// set view
+		$view->set_safe('form', $form->build(Uri::current()));
+
+		return Response::forge($view);
 	}
 
 	/**

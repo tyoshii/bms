@@ -28,10 +28,50 @@
 </table>
 
 
-<h3>成績</h3>
+<h3>個人成績</h3>
 comming soon ...
 
-<h3>最近の試合</h3>
-comming soon ...
+<h3>試合ごとの野手成績</h3>
+{% for spg in stats_per_games %}
+
+{% if loop.first %}
+<table class="table table-hover">
+<thead>
+<tr>
+<th>日付</th>
+<th>相手</th>
+<th>成績</th>
+<th>盗塁</th>
+<th>失策</th>
+</tr>
+</thead>
+</tbody>
+{% endif %}
+
+<tr data-game-id="{{ spg.game_id }}">
+<td>
+<a href="{{ global.team.href }}/game/{{ spg.game_id }}">{{ spg.date }}</a>
+</td>
+<td data-opponent-team-id="{{ spg.opponent_team_id }}">
+{{ spg.opponent_team_name }}
+</td>
+<td>
+<div class="pull-left">
+{% for key,detail in spg.stats.details %}
+<span class="{{ detail.color }}">{{ detail.batter_results.result }}</span>{% if not loop.last %}、{% endif %}
+{% endfor %}
+</div>
+</td>
+
+<td>{{ spg.stats.SB }}</td>
+<td>{{ spg.stats.E }}</td>
+</tr>
+
+{% if loop.last %}
+</tbody>
+</table>
+{% endif %}
+
+{% endfor %}
 
 {% endblock %}

@@ -72,6 +72,16 @@ class Model_Team extends \Orm\Model
 		)
 	);
 
+	protected static $_belongs_to = array(
+		'conventions_team' => array(
+			'model_to'       => 'Model_Conventions_Team',
+			'key_from'       => 'id',
+			'key_to'         => 'team_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		)
+	);
+
 	/**
 	 * 新規チーム登録
 	 *

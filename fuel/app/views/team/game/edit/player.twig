@@ -25,7 +25,7 @@
 
 
 {% block main %}
-{% include "header/team/game/edit.twig" %}
+{% include "include/header/team/game/edit.twig" %}
 
 <table id="player" class="table">
 
@@ -83,18 +83,9 @@
 <data id="number-{{player.id}}" class="disable">{{player.number}}</data>
 {% endfor %}
 
-{# 登録ボタン #}
-{%if global.game.game_status == 2%}
-<div class="alert alert-success">
-成績入力を完了している試合です。
-</div>
-{%else%}
-<div>
-<button onClick="post_player(this);" data-status="save" class="btn btn-default">保存</button>
-<button onClick="post_player(this);" data-status="complete" class="btn btn-success">登録</button>
-</div>
-<span>※登録すると、出場選手に成績入力を促すメールが送信されます</span>
-{%endif%}
+{# 保存/決定ボタン #}
+{% include "include/footer/team/game/edit.twig" with {"role":"player"} %}
 
+<span>※決定すると、出場選手に成績入力を促すメールが送信されます</span>
 
 {% endblock main %}

@@ -3,7 +3,10 @@ var STATS = {
   data: [],
   post: {
     status: '',
-    ajax: function(path) {
+    ajax: function(path, is_alert) {
+
+      is_alert = typeof is_alert === 'undefined' ? true : is_alert;
+
       $.ajax({
         url: "/api/game/" + path,
         type: "POST",
@@ -14,7 +17,10 @@ var STATS = {
           status: STATS.post.status,
         },
         success: function(html) {
-          alert('成績が保存/登録されました。');
+          if (is_alert)
+          {
+            alert('成績が保存/登録されました。');
+          }
         },
         error: function(res) {
           if ( res.status === 403 ) {
@@ -219,7 +225,24 @@ $("button.detail-del").click(function(){
 });
 
 // save/decide stats
+
+/**
+ * 試合概要登録
+ */
 $("div.stats-post[role=score] button").click(function() {
+
+  // othersを先に
+  // TODO: 1リクエストで処理するように
+  STATS.data = {
+    mvp:        $("select#mvp").val(),
+    second_mvp: $("select#second_mvp").val(),
+    stadium:    $("input#stadium").val(),
+    memo:       $("textarea#memo").val()
+  };
+
+  STATS.post.ajax('updateOther', false);
+
+  // score data
   STATS.data = {};
 
   // each inning score
@@ -335,15 +358,4 @@ $("div.stats-post[role=hitting] button").click(function(){
   // console.log(STATS.data);
 
   STATS.post.ajax('updateBatter');
-});
-
-$("div.stats-post[role=other] button").click(function() {
-  STATS.data = {
-    mvp:        $("select#mvp").val(),
-    second_mvp: $("select#second_mvp").val(),
-    stadium:    $("input#stadium").val(),
-    memo:       $("textarea#memo").val()
-  };
-
-  STATS.post.ajax('updateOther');
 });

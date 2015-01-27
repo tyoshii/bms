@@ -164,7 +164,7 @@ comming soon ...
 <td>{{ stats.TPA }}</td>
 <td>{{ stats.AB }}</td>
 <td>{{ stats.H + stats['2B'] + stats['3B'] + stats.HR }}</td>
-<td>{{ stast.BB + stats.HBP }}</td>
+<td>{{ stats.BB + stats.HBP }}</td>
 <td>{{ stats.RBI }}</td>
 <td>{{ stats.SO }}</td>
 <td>{{ stats.SAC + stats.SF }}</td>
@@ -198,7 +198,7 @@ comming soon ...
 <div class="tab-pane" id="nav-tabs-download">
 
 <ul>
-<li><a href="javaascript:void();">Excel形式でダウンロード（未実装）</a></li>
+<li><a href="/api/download/stats/team?team_id={{ global.team.id }}">Excel形式でダウンロード</a></li>
 </ul>
 
 {# <div id="nav-tabs-downalod"> #}

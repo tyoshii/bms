@@ -23,8 +23,18 @@ class Model_Conventions_Team extends \Orm\Model
 
 	protected static $_table_name = 'conventions_teams';
 
+	protected static $_has_one = array(
+		'team' => array(
+			'key_from'       => 'team_id',
+			'model_to'       => 'Model_Team',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+    ),
+	);
+
 	/**
-	 * get team data
+	 * get team data ( add entried convention data )
 	 * @param string convention_id
 	 * @return array
 	 */
@@ -42,6 +52,19 @@ class Model_Conventions_Team extends \Orm\Model
 		}
 
 		return $teams;
+	}
+
+	/**
+	 * get entried team data
+	 * @param convention_id
+	 * @return array
+	 */
+	public static function get_entried_teams($convention_id)
+	{
+		return static::query()
+			->related('team')
+			->where('convention_id', $convention_id)
+			->get();
 	}
 
 	/**

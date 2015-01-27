@@ -70,6 +70,8 @@ class Controller_Convention extends Controller_Base
 	 */
 	public function action_detail()
 	{
+		$this->view->teams = Model_Conventions_Team::get_entried_teams($this->convention->id);
+
 		return Response::forge($this->view);
 	}
 	

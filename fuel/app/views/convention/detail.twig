@@ -1,7 +1,7 @@
 {% extends 'layout/layout.twig' %}
 
 {% block content %}
-<h2>大会の詳細</h2>
+<h2>{{ global.convention.name }} - 大会の詳細</h2>
 
 <div class="row">
 
@@ -16,7 +16,24 @@
 <h3>参加チーム</h3>
 {% for team in teams %}
 
-{% else %}
+{% if loop.first %}
+<table class="table">
+<thead><tr>
+<th>チーム名</th>
+</tr></thead>
+<tbody>
+{% endif %}
+
+<tr>
+<td>{{ team.team.name }}</td>
+</tr>
+
+{% if loop.last %}
+</tbody>
+</table>
+{% endif %}
+
+{% else %}{# for team in teams #}
 まだ参加チームが登録されていません
 {% endfor %}
 

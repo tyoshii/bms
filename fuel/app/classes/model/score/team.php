@@ -122,11 +122,7 @@ SELECT
 	gr.tsum,
 	gr.bsum,
 	gt.order,
-	g.team_top,
-	g.team_bottom,
 	g.game_status,
-	g.team_top_name,
-	g.team_bottom_name,
 	g.date
 FROM
 	games as g

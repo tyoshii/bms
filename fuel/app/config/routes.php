@@ -49,9 +49,6 @@ return array(
 	'game/(:game_id)'                               => 'game/summary',
 
 	// convention
-	'convention'     => 'convention/index',
-	'convention/add' => 'convention/add',
-
 	'convention/(:convention_id)/(:game_id)/update' => 'convention/game/update',
 	'convention/(:convention_id)/(:game_id)/detail' => 'convention/game/detail',
 	'convention/(:convention_id)/games'             => 'convention/game/index',
@@ -63,6 +60,10 @@ return array(
 	'convention/(:convention_id)/update' => 'convention/update',
 	'convention/(:convention_id)/stats'  => 'convention/stats',
 	'convention/(:convention_id)/detail' => 'convention/detail',
+	'convention/(:convention_id)'        => 'convention/detail',
+
+	'convention/add' => 'convention/add',
+	'convention'     => 'convention/index',
 
 	// api
 	'api/game/(:segment)'                           => 'api/game/$1',

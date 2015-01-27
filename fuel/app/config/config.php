@@ -193,7 +193,7 @@ return array(
 	// Restrict the domain that the cookie is available to
 	// 'domain'      => null,
 	// Only transmit cookies over secure connections
-		'secure'      => true,
+		'secure'      => false,
 	// Only transmit cookies over HTTP, disabling Javascript access
 	// 'http_only'   => false,
 	),

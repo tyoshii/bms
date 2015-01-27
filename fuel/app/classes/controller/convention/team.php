@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Convention_Team extends Controller_Base
+class Controller_Convention_Team extends Controller_Convention
 {
 	public $view = '';
 
@@ -26,6 +26,8 @@ class Controller_Convention_Team extends Controller_Base
 	 */
 	public function action_add()
 	{
+		$this->view->teams = Model_Conventions_Team::get_teams($this->convention->id);
+
 		return Response::forge($this->view);
 	}
 

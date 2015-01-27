@@ -71,6 +71,10 @@ return array(
 	'api/download/stats/itleague'                   => 'api/download/stats/itleague',
 	'api/download/stats/team'                       => 'api/download/stats/team',
 
+	'api/convention/team/add' => 'api/convention/team/add',
+	'api/convention/team/remove' => 'api/convention/team/remove',
+
+
 	'register'                                      => 'register/index',
 	'forget_password'                               => 'register/forget_password',
 	'reset_password'                                => 'register/reset_password',

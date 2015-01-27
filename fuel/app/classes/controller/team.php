@@ -41,7 +41,10 @@ class Controller_Team extends Controller_Base
 				array('username', Auth::get('username')),
 			))->get_one();
 
-			$this->_alerts = Model_Stats_Common::get_stats_alerts($this->_team->id, $this->_player->id);
+			if ($this->_player)
+			{
+				$this->_alerts = Model_Stats_Common::get_stats_alerts($this->_team->id, $this->_player->id);
+			}
 		}
 
 		// set_global

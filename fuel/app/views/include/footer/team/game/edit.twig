@@ -1,8 +1,15 @@
 {%if global.game.game_status == 2%}
 <div class="alert alert-success">
 成績入力を完了している試合です。
+
+{% if global.team_admin %}
+管理者は、保存/決定ができます。
+{% endif %}
 </div>
-{%else%}
+{% endif %}
+
+{# 管理者であれば完了状態でも登録できるようにする #}
+{% if global.game.game_status != 2 or global.team_admin %}
 <div class="stats-post" role="{{role}}">
 {% if type == 'all' %}
 <button type="button" class="btn btn-default">保存</button>

@@ -84,6 +84,8 @@ return array(
         75 => '081_create_conventions',
         76 => '082_create_conventions_admins',
         77 => '083_create_conventions_teams',
+        78 => '084_delete_status_from_stats_hittings',
+        79 => '085_delete_status_from_stats_pitchings',
       ),
     ),
     'module' => 

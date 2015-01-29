@@ -65,6 +65,11 @@ class Model_Player extends \Orm\Model
 		)
 	);
 
+	/**
+	 * get player name by username
+	 * @param string username
+	 * @return string/null player name
+	 */
 	public static function get_name_by_username($username = null)
 	{
 		if ( ! $username)
@@ -76,6 +81,10 @@ class Model_Player extends \Orm\Model
 		return null;
 	}
 
+	/**
+	 * get login user player id
+	 * @return string/null player id
+	 */
 	public static function get_my_player_id()
 	{
 		if ($res = self::find_by_username(Auth::get_screen_name()))
@@ -84,14 +93,25 @@ class Model_Player extends \Orm\Model
 		return null;
 	}
 
+	/**
+	 * get login user team name
+	 * @return string/null team name
+	 */
 	public static function get_my_team_name()
 	{
 		if ($team_id = self::get_my_team_id())
 		{
 			return Model_Team::find($team_id)->name;
 		}
+
+		return null;
 	}
 
+	/**
+	 * get login user team id
+	 *
+	 * TODO: 複数チームに所属している場合に対応しきれない（１つしか返せない）
+	 */
 	public static function get_my_team_id()
 	{
 		if ($res = self::find_by_username(Auth::get_screen_name()))
@@ -100,6 +120,11 @@ class Model_Player extends \Orm\Model
 		return null;
 	}
 
+	/**
+	 * get players
+	 * @param string team_id
+	 * @return array
+	 */
 	public static function get_players($team_id = null)
 	{
 		$query = DB::select('p.*', array('teams.name', 'teamname'))
@@ -182,6 +207,11 @@ class Model_Player extends \Orm\Model
 		}
 	}
 
+	/**
+	 * get player email address
+	 * @param string player_id
+	 * @return string email(or empty)
+	 */
 	public static function get_player_email($player_id)
 	{
 		$user = DB::select()

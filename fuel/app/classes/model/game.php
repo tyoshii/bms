@@ -14,11 +14,6 @@ class Model_Game extends \Orm\Model
 		'bottom_status'    => array('default' => 1),
 		'created_at',
 		'updated_at',
-		// TODO:削除予定
-		'team_top' => array('default' => 0),
-		'team_top_name' => array('default' => 0),
-		'team_bottom' => array('default' => 0),
-		'team_bottom_name' => array('default' => 0),
 	);
 
 	protected static $_observers = array(

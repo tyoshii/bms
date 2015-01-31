@@ -40,6 +40,9 @@ class Controller_Team_Game extends Controller_Team
 		return Response::forge($view);
 	}
 
+	/**
+	 * add new game
+	 */
 	public function action_add()
 	{
 		$view = View::forge('team/game/add.twig');
@@ -75,6 +78,9 @@ class Controller_Team_Game extends Controller_Team
 		return Response::forge($view);
 	}
 
+	/**
+	 * game detail
+	 */
 	public function action_detail()
 	{
 		$view = View::forge('team/game/detail.twig');
@@ -116,6 +122,9 @@ class Controller_Team_Game extends Controller_Team
 		return Response::forge($view);
 	}
 
+	/**
+	 * game stats input page
+	 */
 	public function action_edit()
 	{
 		$game_id = $this->_game->id;
@@ -133,6 +142,13 @@ class Controller_Team_Game extends Controller_Team
 		if ( ! in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher')))
 		{
 			Session::set_flash('error', '不正なURLです。');
+			return Response::redirect($this->_team->href);
+		}
+
+		// 所属しているチームかどうか
+		if ( ! Model_Player::is_belong($this->_team->id))
+		{
+			Session::set_flash('error', 'そのチームの権限がありません');
 			return Response::redirect($this->_team->href);
 		}
 
@@ -239,6 +255,9 @@ class Controller_Team_Game extends Controller_Team
 		return Response::forge($view);
 	}
 
+	/**
+	 * new game form
+	 */
 	static private function _addgame_form()
 	{
 		$config = array('form_attributes' => array('class' => 'form'));

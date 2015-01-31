@@ -27,6 +27,9 @@
     	"fuelphp/upload": "2.0.1",
         "twig/twig": "1.15.0",
         "phpexcel/phpexcel": "1.7.*",
+        "opauth/opauth": "0.4.*",
+        "opauth/google": "dev-master",
+        "opauth/facebook": "dev-master",
         "crossjoin/browscap": "dev-master",
         "browscap/browscap-php": "2.0.*"
     },

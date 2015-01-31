@@ -9,4 +9,10 @@ return array(
 			'root' => 'password',
 		),
 	),
+  'opauth' => array(
+    'facebook' => array(
+      'app_id'     => 'xxxxxxxxxxxxxxxxxxx',
+      'app_secret' => 'xxxxxxxxxxxxxxxxxxx',
+    ),
+  ),
 );

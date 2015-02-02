@@ -2,26 +2,46 @@
 
 class Controller_Register extends Controller
 {
+	/**
+	 * new user register form
+	 */
 	public function action_index()
 	{
 		// ログイン中だったらトップへ飛ばす
 		if (Auth::check() and ! Auth::has_access('admin.admin'))
-			Response::redirect(Uri::create('/'));
+		{
+			return Response::redirect(Uri::create('/'));
+		}
 
 		$view = View::forge('register.twig');
 
 		$form = self::_get_register_form();
+		$form = Model_User::get_register_form();
 
 		$val = $form->validation();
 
+		// TODO: POSTじゃないときにset_flashしてて何かあれ
 		if (Input::post() && $val->run())
 		{
+			// パスワードが送信されている場合、BMSオリジナルIDでの登録
+			if (Input::post('password'))
+			{
+				// 本登録確認のメールを送信
+				if (Common_Email::regist_user())
+				{
+					Session::set_flash('info', 'メールアドレに登録確認のメールを送信しました。');
+					return Response::redirect('/login');
+				}
+			}
+
+/*
 			if (Model_User::regist())
 			{
 				// 成功した場合は、loginページへリダイレクト
 				Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
 				Response::redirect(Uri::create('/login'));
 			}
+*/
 		}
 		else
 		{
@@ -34,6 +54,47 @@ class Controller_Register extends Controller
 		return Response::forge($view);
 	}
 
+	/**
+	 * confirm regist new user
+	 */
+	public function action_confirm()
+	{
+		$time  = Input::get('t');
+		$crypt = Input::get('c');
+
+		// 時間切れ
+		if (Common::check_crypt_time($time))
+		{
+			Session::set_flash('error', '有効期限切れのリンクです。もう一度やり直して下さい。');
+			return Response::redirect('/');
+		}
+
+		// crypt decode
+		list($crypt_time, $fullname, $email, $password) = explode("\t", Crypt::decode($crypt));
+
+		// check
+		if ($time !== $crypt_time)
+		{
+			Session::set_flash('error', '不正なアクセスです。もう一度やり直してください。');
+			return Response::redirect('/');
+		}
+
+		// regist
+		if (Model_User::regist($fullname, $email, $password))
+		{
+			// 成功した場合は、loginページへリダイレクト
+			Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
+			return Response::redirect(Uri::create('/login'));
+		}
+		else
+		{
+			return Response::redirect(Uri::create('/'));
+		}
+	}
+
+	/**
+	 * forget password form
+	 */
 	public function action_forget_password()
 	{
 		$view = View::forge('forget_password.twig');
@@ -100,14 +161,14 @@ class Controller_Register extends Controller
 		if (time() - $time > 60 * 60)
 		{
 			Session::set_flash('error', '有効期限切れのリンクです');
-			Response::redirect('/');
+			return Response::redirect('/');
 		}
 
 		// cryptチェック
 		if (Crypt::decode($crypt) !== $time.$username)
 		{
 			Session::set_flash('error', '不正なアクセスです。');
-			Response::redirect('/');
+			return Response::redirect('/');
 		}
 
 		$view = View::forge('reset_password.twig');
@@ -134,5 +195,4 @@ class Controller_Register extends Controller
 
 		return $form;
 	}
-
 }

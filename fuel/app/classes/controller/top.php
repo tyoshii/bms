@@ -37,6 +37,7 @@ class Controller_Top extends Controller_Base
 
 	public function action_logout()
 	{
+		// TODO: OpenID連携の場合は don't remember したほうがいい？
 		Auth::logout();
 		return Response::redirect(Uri::create('/'));
 	}

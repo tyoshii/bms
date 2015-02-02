@@ -56,7 +56,7 @@ return array(
 	 *
 	 * You HAVE to set this value in your application config file!
 	 */
-	'security_salt' => null,
+	'security_salt' => Config::get('salt.opauth'),
 
 	/**
 	 * Higher value, better security, slower hashing;
@@ -78,6 +78,12 @@ return array(
 		'Facebook' => array(
 			'app_id' => Config::get('password.opauth.facebook.app_id'),
 			'app_secret' => Config::get('password.opauth.facebook.app_secret'),
+			'scope' => 'email',
+		),
+
+		'Google' => array(
+			'client_id'     => Config::get('password.opauth.google.client_id'),
+			'client_secret' => Config::get('password.opauth.google.client_secret'),
 		),
 	),
 );

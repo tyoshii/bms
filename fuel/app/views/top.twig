@@ -52,11 +52,14 @@
 
 {%else%}
 
-<h3>ユーザーログイン</h3>
+<h3>ログイン</h3>
 {{login_form}}
 
-<p><a href="/forget_password">パスワードを忘れた場合はこちら</a></p>
+<p><a href="/auth/oauth/facebook">Facebookでログイン</a>
+<p><a href="/auth/oauth/google">Googleでログイン</a>
+
 <p><a href="/register">新規ユーザー登録はこちら</a></p>
+<p><a href="/forget_password">パスワードを忘れた場合はこちら</a></p>
 
 {%endif%}
 </div>

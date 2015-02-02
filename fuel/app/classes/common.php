@@ -2,6 +2,25 @@
 
 class Common
 {
+	/**
+	 * generate random string
+	 *
+	 * @return string
+	 */
+	public static function random_string()
+	{
+		return time().rand(1000,9999).rand(1000,9999);
+	}
+
+	/**
+	 * check crypt time
+	 * @return boolean
+	 */
+	public static function check_crypt_time($time)
+	{
+		return time() - $time > 60 * 60;
+	}
+
 	public static function db_clean($table, $where)
 	{
 		$query = DB::delete($table);

@@ -199,7 +199,6 @@ class Controller_User extends Controller_Base
 		$form = Fieldset::forge('user', array(
 			'form_attributes' => array(
 				'class' => 'form',
-				'role'  => 'search',
 			),
 		));
 
@@ -233,15 +232,18 @@ class Controller_User extends Controller_Base
 		));
 
 		$form->add('dispname', '表示名', array(
-			'value'       => Common::get_dispname(),
-			'maxlength'   => 16,
-			'class'       => 'form-control',
-			'description' => '※これとは別に、所属チームごとに選手名を設定できます。',
+			'type'  => 'text',
+			'value' => Auth::get_profile_fields('fullname'),
+			'class' => 'form-control',
 		))
 			->add_rule('required')
-			->add_rule('max_length', 8);
+			->add_rule('max_length', 128);
 
-		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'class' => 'btn btn-info',
+			'value' => '更新',
+		));
 
 		return $form;
 	}

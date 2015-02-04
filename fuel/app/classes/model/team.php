@@ -21,16 +21,13 @@ class Model_Team extends \Orm\Model
 			'form'       => array(
 				'class' => 'form-control',
 				'type'  => 'text',
+				'description' => '半角英数字と-_が使えます',
 			),
-			'label'      => '英語名（URLになります）',
+			'label'      => '英語名',
 			'validation' => array(
 				'required',
 				'max_length'   => array(64),
-				'valid_string' => array(
-					'alpha',
-					'numeric',
-					'dashes',
-				),
+				'valid_string' => array(array('alpha','numeric','dashes')),
 			),
 		),
 		'regulation_at_bats' => array(
@@ -105,7 +102,7 @@ class Model_Team extends \Orm\Model
 		// duplicate check
 		if (Model_Team::find_by_url_path($url_path))
 		{
-			Session::set_flash('error', 'そのURLは既に使われています。');
+			Log::error('そのURLは既に使われています。');
 			return false;
 		}
 
@@ -116,7 +113,7 @@ class Model_Team extends \Orm\Model
 		// チーム登録したユーザーをadminとして選手登録
 		$props = array(
 			'team_id'  => $team->id,
-			'name'     => Common::get_dispname(),
+			'name'     => Auth::get_profile_fields('fullname'),
 			'number'   => 0,
 			'username' => Auth::get('username'),
 			'role'     => 'admin',
@@ -154,5 +151,26 @@ class Model_Team extends \Orm\Model
 		}
 
 		return $kv;
+	}
+
+	/**
+	 * regist new team form
+	 * @return object Fieldset
+	 */
+	public static function get_regist_form()
+	{
+		$form = Fieldset::forge('regist_team')->add_model(static::forge());
+
+		// 規定打席は登録時は除く
+		$form->disable('regulation_at_bats');
+
+		// submit
+		$form->add('regist', '', array(
+			'type' => 'submit',
+			'value' => '新規チーム登録',
+			'class' => 'btn btn-success',
+		));
+			
+		return $form;
 	}
 }

@@ -59,6 +59,7 @@ class Controller_Auth extends Controller
 					// inform the user the link was succesfully made
 					// and set the redirect url for this status
 					$url = '/';
+					Session::set_flash('info', 'ログインに成功しました。');
 				break;
 
 				// the provider was known and linked, the linked account as logged-in
@@ -67,6 +68,7 @@ class Controller_Auth extends Controller
 					// and set the redirect url for this status
 
 					$url = '/';
+					Session::set_flash('info', 'ログインに成功しました。');
 				break;
 
 				// we don't know this provider login, ask the user to create a local account first
@@ -178,7 +180,7 @@ class Controller_Auth extends Controller
 			Auth::force_login($user_id);
 
 			// success
-			Session::set_flash('info', 'ユーザー登録が完了しました');
+			Session::set_flash('info', $provider.' IDとの連携が完了しました。');
 			return Response::redirect('/');
 		}
 

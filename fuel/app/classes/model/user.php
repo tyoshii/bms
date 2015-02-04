@@ -80,6 +80,7 @@ class Model_User extends \Orm\Model
 		$username = Common::random_string();
 		if (is_null($password))
 		{
+			$regist_by_openid = true;
 			$password = Common::random_string();
 		}
 
@@ -91,7 +92,10 @@ class Model_User extends \Orm\Model
 				$password,
 				$email,
 				1,
-				array('fullname' => $fullname)
+				array(
+					'fullname'         => $fullname,
+					'regist_by_openid' => $regist_by_openid ? 1 : 0,
+				)
 			);
 
 			if ($user_id === false)

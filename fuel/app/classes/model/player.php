@@ -30,7 +30,10 @@ class Model_Player extends \Orm\Model
 				'valid_string' => array('numeric'),
 			),
 		),
-		'username' => array('form' => array('type' => false)),
+		'username' => array(
+			'form' => array('type' => false),
+			'default' => '',
+		),
 		'status'   => array(
 			'default' => 1,
 			'form' => array('type' => false),
@@ -159,7 +162,7 @@ class Model_Player extends \Orm\Model
 			$player = $id ? self::find($id) : self::forge();
 
 			// 既に登録されたusernameかチェック
-			if ($props['username'] and $props['username'] !== $player->username)
+			if (array_key_exists('username', $props) and $props['username'] !== $player->username)
 			{
 				$already = self::query()->where(array(
 					array('username', $props['username']),
@@ -180,7 +183,7 @@ class Model_Player extends \Orm\Model
 		}
 		catch (Exception $e)
 		{
-			Session::set_flash('error', $e->getMessage());
+			Log::error($e->getMessage());
 			return false;
 		}
 	}
@@ -328,9 +331,6 @@ class Model_Player extends \Orm\Model
 
 		$form->add_model(self::forge());
 
-		// username
-		Common_Form::add_username($form);
-		
 		// submit
 		$form->add('submit', '', array(
 			'type'  => 'submit',

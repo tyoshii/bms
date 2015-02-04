@@ -306,6 +306,7 @@ return array(
 			'bms'        => true,
 			'password'   => true,
 			'simpleauth' => true,
+			'salt'       => true,
 		),
 
 		/**

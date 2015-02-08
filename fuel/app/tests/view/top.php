@@ -19,7 +19,7 @@ class Test_View_Top extends Test_View_Base
 	{
 		// login
 		$this->url('/');
-		$this->byName('username')->value('cannot-login-user');
+		$this->byName('email')->value('cannot-login-user');
 		$this->byName('password')->value('dummy');
 		$this->byName('login')->submit();
 
@@ -29,18 +29,5 @@ class Test_View_Top extends Test_View_Base
 
 		// ログイン専用ページに飛ばされる
 		$this->assertStringEndsWith('/login', $this->url());
-	}
-
-	public function test_ログイン成功()
-	{
-		// login
-		$this->url('/');
-		$this->byName('username')->value('user');
-		$this->byName('password')->value('password');
-		$this->byName('login')->submit();
-
-		// check
-		$alert = $this->byCssSelector('div.alert[role=alert-info] span');
-		$this->assertSame('Information ログインに成功しました！', $alert->text());
 	}
 }

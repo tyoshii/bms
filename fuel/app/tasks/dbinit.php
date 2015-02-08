@@ -163,7 +163,7 @@ class Dbinit
 		foreach ($data as $username => $group)
 		{
 			\Auth::delete_user($username);
-			\Auth::create_user($username, 'password', "{$username}@bm-s.info", $group);
+			\Auth::create_user($username, 'password', "{$username}@bm-s.info", $group, array('fullname' => $username));
 		}
 
 		// team

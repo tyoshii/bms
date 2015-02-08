@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.0.17
+
+* OpenID対応
+    * Facebook
+    * Google
+
 ## Version 0.0.16
 
 * チーム管理者は完了状態のゲームも保存できるようにした

@@ -5,6 +5,9 @@ return array(
 		'development' => array(
 			'root' => 'password',
 		),
+		'staging' => array(
+			'root' => 'password',
+		),
 		'production'  => array(
 			'root' => 'password',
 		),

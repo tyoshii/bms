@@ -77,6 +77,7 @@ return array(
 
 
 	'register'                                      => 'register/index',
+	'register/confirm'                              => 'register/confirm',
 	'forget_password'                               => 'register/forget_password',
 	'reset_password'                                => 'register/reset_password',
 

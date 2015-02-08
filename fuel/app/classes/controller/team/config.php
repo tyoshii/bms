@@ -104,11 +104,10 @@ class Controller_Team_Config extends Controller_Team
 	public function action_player()
 	{
 		$view = View::forge('team/config/player.twig');
-		$view->subtitle = '選出追加';
+		$view->subtitle = '選手追加';
 
 		// form
-		$form = Model_Player::get_form(array('submit'   => '登録'));
-		$form->field('username')->delete_rule('required');
+		$form = Model_Player::get_form(array('submit' => '登録'));
 
 		// player_idが遅れらて来ると、更新
 		if ($player_id = $this->param('player_id'))
@@ -129,13 +128,6 @@ class Controller_Team_Config extends Controller_Team
 			// formに初期値セット
 			$form->field('name')->set_value($player->name);		
 			$form->field('number')->set_value($player->number);		
-			$form->field('username')->set_value($player->username);		
-
-			// チーム管理者以外は、usernameはreadonly
-			if ( ! $this->_team_admin)
-			{
-				$form->field('username')->set_attribute('readonly', 'readonly');
-			}
 		}
 
 		// post request
@@ -149,7 +141,6 @@ class Controller_Team_Config extends Controller_Team
 					'team_id'  => $this->_team->id,
 					'name'     => Input::post('name'),
 					'number'   => Input::post('number'),
-					'username' => Input::post('username'),
 				);
 
 				if (Model_Player::regist($props, $this->param('player_id')))

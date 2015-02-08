@@ -1,0 +1,16 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+
+<div class="jumbotron">
+<p>{{ email }} は既に登録されているメールアドレスです。
+<p>{{ provider }} IDでもログイン出来るようにしますか？
+
+<form method="POST" class="form form-inline">
+<input type="hidden" name="email" value="{{ email }}">
+<input type="hidden" name="c" value="{{ crypt }}">
+<input type="submit" class="btn btn-success" value="はい">
+<a href="/" class="btn btn-warning">いいえ（トップに戻る）</a>
+</form>
+</div>
+{% endblock %}

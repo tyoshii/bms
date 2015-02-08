@@ -26,7 +26,7 @@ class Controller_Base extends Controller
 			if ($this->_login_form->validation()->run())
 			{
 				$auth = Auth::instance();
-				if ($auth->login(Input::post('username'), Input::post('password')))
+				if ($auth->login(Input::post('email'), Input::post('password')))
 				{
 					Session::set_flash('info', 'ログインに成功しました！');
 
@@ -77,14 +77,14 @@ class Controller_Base extends Controller
 			),
 		));
 
-		$form->add('username', 'ユーザー名', array('class' => 'form-control'))
-			->add_rule('required')
-			->add_rule('max_length', 40);
+		$form->add('email', 'メールアドレス', array(
+			'type'  => 'email',
+			'class' => 'form-control',
+		))
+			->add_rule('required');
 
 		$form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))
-			->add_rule('required')
-			->add_rule('min_length', 8)
-			->add_rule('max_length', 250);
+			->add_rule('required');
 
 		$form->add('login', '', array('type' => 'submit', 'value' => 'ログイン', 'class' => 'btn btn-success'));
 

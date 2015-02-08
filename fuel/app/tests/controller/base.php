@@ -77,27 +77,27 @@ class Test_Controller_Base extends Test_Base
 	{
 		InputEx::reset();
 
-	// create user for test
-	$rand = rand(1000, 9999).rand(1000, 9999);
-	$username = 'test_'.$rand;
-	$password = $rand;
-	$email = $rand.'@yahoo.co.jp';
+		// create user for test
+		$rand = rand(1000, 9999).rand(1000, 9999);
+		$username = 'test_'.$rand;
+		$password = $rand;
+		$email = $rand.'@yahoo.co.jp';
 
-	Auth::create_user($username, $password, $email);
+		Auth::create_user($username, $password, $email);
 
-	// login
-	$_POST['username'] = $username;
-	$_POST['password'] = $password;
+		// login
+		$_POST['email']    = $email;
+		$_POST['password'] = $password;
 
-	$res = Request::forge('/')->set_method('POST')->execute()->response();
+		$res = Request::forge('/')->set_method('POST')->execute()->response();
 
-	$this->assertTrue(Auth::check());
-	$this->assertSame('ログインに成功しました！', Session::get_flash('info'));
+		$this->assertTrue(Auth::check());
+		$this->assertSame('ログインに成功しました！', Session::get_flash('info'));
 
-	// logout
-	Auth::logout();
+		// logout
+		Auth::logout();
 
-	// delete user
-	Auth::delete_user($username);
-}
+		// delete user
+		Auth::delete_user($username);
+	}
 }

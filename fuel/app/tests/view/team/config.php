@@ -33,7 +33,6 @@ class Test_View_Team_Config extends Test_View_Base
 		// 自分のプロフィール編集画面
 		$this->assertSame(self::$sample['player']->name, $this->byName('name')->value());	
 		$this->assertSame(self::$sample['player']->number, $this->byName('number')->value());	
-		$this->assertSame(self::$sample['player']->username, $this->byName('username')->value());	
 
 		// 同じチームの他人の編集画面
 		// TODO:

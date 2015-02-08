@@ -94,8 +94,7 @@ class Controller_Team extends Controller_Base
 		$view = View::forge('team/regist.twig');
 
 		// form
-		$form = self::_regist_form();
-		$form->repopulate();
+		$form = Model_Team::get_regist_form();
 
 		if (Input::post())
 		{
@@ -103,15 +102,26 @@ class Controller_Team extends Controller_Base
 
 			if ($val->run())
 			{
-				if (Model_Team::regist(Input::post()))
+				$url_path = Input::post('url_path');
+
+				// duplicate url_path check
+				// TODO: validation model or javascript check
+				if (Model_Team::find_by_url_path($url_path))
 				{
-					Session::set_flash('info', '新しくチームを作成しました。');
-					return Response::redirect('/team/'.Input::post('url_path'));
+					Session::set_flash('error', 'その英語名は既に登録されています。');
 				}
 				else
 				{
-					Session::set_flash('error', 'システムエラーが発生しました。');
-					return Response::redirect('/');
+					if (Model_Team::regist(Input::post()))
+					{
+						Session::set_flash('info', '新しくチームを作成しました。');
+						return Response::redirect('/team/'.$url_path);
+					}
+					else
+					{
+						Session::set_flash('error', 'システムエラーが発生しました。');
+						return Response::redirect('/');
+					}
 				}
 			}
 			else
@@ -120,32 +130,10 @@ class Controller_Team extends Controller_Base
 			}
 		}
 
+		$form->repopulate();
 		$view->set_safe('form', $form->build(Uri::current()));
 
 		return Response::forge($view);
-	}
-
-	/**
-	 * 新規チーム登録フォーム
-	 */
-	private static function _regist_form()
-	{
-		$config = array('form_attribute' => array('class' => 'form'));
-		$form = Fieldset::forge('team_regist', $config);
-
-		$form->add_model(Model_Team::forge());
-
-		// placeholder 追加
-		$form->field('url_path')->set_attribute('placeholder', Uri::base(false).'team/XXXX');
-
-		// submit
-		$form->add('regist', '', array(
-			'type'  => 'submit',
-			'value' => '新規チーム登録',
-			'class' => 'btn btn-success',
-		));
-
-		return $form;
 	}
 
 	/**

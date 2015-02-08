@@ -76,30 +76,42 @@ class Controller_User extends Controller_Base
 
 		if ($val->run())
 		{
-			$p1 = Input::post('password1');
-			$p2 = Input::post('password2');
+			$username = Auth::get('username');
 
-			if ($p1 !== $p2)
+			if (Auth::get_profile_fields('regist_by_openid') == 1)
 			{
-				Session::set_flash('error', '確認用パスワードが違います');
-				$form->repopulate();
+				$old = Auth::reset_password($username);
 			}
 			else
 			{
-				$data = Auth::Instance()->get_user_array();
-				auth::change_password(Input::post('original'), $p1, $data['screen_name']);
-				Session::set_flash('info', 'パスワードを変更しました。再ログインしてください。');
-				Session::set('redirect_to', Uri::current());
+				$old = Input::post('original');
+			}
 
+			// change password
+			if (Auth::change_password($old, Input::post('password1'), $username))
+			{
+				// update meta
+				Auth::update_user(array('regist_by_openid' => 0));
+
+				// message
+				Session::set('redirect_to', Uri::current());
+				Session::set_flash('info', 'パスワードを変更しました。再ログインしてください。');
+
+				// logout and redirect to /login
 				Auth::logout();
-				Response::redirect(Uri::create('/login'));
+				return Response::redirect(Uri::create('/login'));
+			}
+			else
+			{
+				Session::set_flash('error', 'パスワードの登録に失敗しました');
 			}
 		}
 		else
 		{
 			Session::set_flash('error', $val->show_errors());
-			$form->repopulate();
 		}
+
+		$form->repopulate();
 
 		$view = View::forge('user.twig');
 		$view->set_safe('form', $form->build(Uri::current()));
@@ -170,26 +182,35 @@ class Controller_User extends Controller_Base
 		$form = Fieldset::forge('password', array(
 			'form_attributes' => array(
 				'class' => 'form',
-				'role'  => 'search',
 			),
 		));
 
-		$form->add('original', '今のパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
-			->add_rule('required')
-			->add_rule('min_length', 8)
-			->add_rule('max_length', 250);
+		if (Auth::get_profile_fields('regist_by_openid') == 0)
+		{
+			$form->add('original', '現在のパスワード', array(
+				'type' => 'password',
+				'class' => 'form-control',
+				'placeholder' => 'Password',
+			))
+				->add_rule('required')
+				->add_rule('min_length', 8)
+				->add_rule('max_length', 250);
+		}
 
 		$form->add('password1', '新しいパスワード', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
 			->add_rule('required')
 			->add_rule('min_length', 8)
 			->add_rule('max_length', 250);
 
-		$form->add('password2', '同じものを', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
+		$form->add('password2', '新しいパスワード（確認）', array('type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password'))
 			->add_rule('required')
-			->add_rule('min_length', 8)
-			->add_rule('max_length', 250);
+			->add_rule('match_field', 'password1');
 
-		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '変更'));
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'class' => 'btn btn-info',
+			'value' => '変更',
+		));
 
 		return $form;
 	}
@@ -199,11 +220,8 @@ class Controller_User extends Controller_Base
 		$form = Fieldset::forge('user', array(
 			'form_attributes' => array(
 				'class' => 'form',
-				'role'  => 'search',
 			),
 		));
-
-		$info = Auth::get_profile_fields();
 
 		$form->add('username', '', array(
 			'value' => Auth::get_screen_name(),
@@ -233,15 +251,18 @@ class Controller_User extends Controller_Base
 		));
 
 		$form->add('dispname', '表示名', array(
-			'value'       => Common::get_dispname(),
-			'maxlength'   => 16,
-			'class'       => 'form-control',
-			'description' => '※これとは別に、所属チームごとに選手名を設定できます。',
+			'type'  => 'text',
+			'value' => Auth::get_profile_fields('fullname'),
+			'class' => 'form-control',
 		))
 			->add_rule('required')
-			->add_rule('max_length', 8);
+			->add_rule('max_length', 128);
 
-		$form->add('submit', '', array('type' => 'submit', 'class' => 'btn btn-warning', 'value' => '更新'));
+		$form->add('submit', '', array(
+			'type'  => 'submit',
+			'class' => 'btn btn-info',
+			'value' => '更新',
+		));
 
 		return $form;
 	}

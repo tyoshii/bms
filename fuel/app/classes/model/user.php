@@ -4,15 +4,38 @@ class Model_User extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'username',
-		'password',
-		'group',
-		'email',
-		'last_login',
-		'login_hash',
-		'profile_fields',
-		'created_at',
-		'updated_at',
+		'email' => array(
+			'data_type' => 'varchar',
+			'label' => 'メールアドレス',
+			'validation' => array(
+				'required',
+				'valid_email',
+			),
+			'form' => array(
+				'type' => 'email',
+				'class' => 'form-control',
+			),
+		),
+		'password' => array(
+			'data_type' => 'varchar',
+			'label' => 'パスワード',
+			'validation' => array(
+				'required',
+				'min_length' => array(8),
+				'valid_string' => array('alpha', 'numeric', 'punctuation'),
+			),
+			'form' => array(
+				'type' => 'password',
+				'class' => 'form-control',
+			),
+		),
+		'username'       => array('form' => array('type' => false)),
+		'group'          => array('form' => array('type' => false)),
+		'last_login'     => array('form' => array('type' => false)),
+		'login_hash'     => array('form' => array('type' => false)),
+		'profile_fields' => array('form' => array('type' => false)),
+		'created_at'     => array('form' => array('type' => false)),
+		'updated_at'     => array('form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
@@ -42,30 +65,45 @@ class Model_User extends \Orm\Model
 		return $return;
 	}
 
-	public static function regist()
+	/**
+	 * new user registe
+	 *
+	 * @param string fullname
+	 * @param string email
+	 * @param string password (default null)
+	 *
+	 * @return mix user_id / false
+	 */
+	public static function regist($fullname, $email, $password = null)
 	{
+		// generate username,password
+		$username = Common::random_string();
+		if (is_null($password))
+		{
+			$regist_by_openid = true;
+			$password = Common::random_string();
+		}
+
 		try
 		{
-			// already check
-			if (Model_User::find_by_username(Input::post('username')))
-				throw new Exception('そのユーザー名は既に存在します。');
-
-			if (Model_User::find_by_email(Input::post('email')))
-				throw new Exception('そのメールアドレスは既に登録済みです。');
-
 			// user create
-			$result = Auth::create_user(
-				Input::post('username'),
-				Input::post('password'),
-				Input::post('email'),
-				Input::post('group') ? : 1,
-				array('dispname' => Input::post('name'))
+			$user_id = Auth::create_user(
+				$username,
+				$password,
+				$email,
+				1,
+				array(
+					'fullname'         => $fullname,
+					'regist_by_openid' => $regist_by_openid ? 1 : 0,
+				)
 			);
 
-			if ($result === false)
+			if ($user_id === false)
+			{
 				throw new Exception('Internal Error');
+			}
 
-			return true;
+			return $user_id;
 
 		}
 		catch (SimpleUserUpdateException $e)
@@ -132,5 +170,37 @@ class Model_User extends \Orm\Model
 		return DB::select()->from(self::$_table_name)
 			->where('username', 'in', $usernames)
 			->execute()->as_array();
+	}
+
+	/**
+	 * get register form
+	 */
+	public static function get_register_form()
+	{
+		$form = Fieldset::forge('user_register')->add_model(static::forge());
+
+		// 名前とパスワード（確認）を追加
+		$form->add_before('fullname', '名前', array(
+			'type' => 'text',
+			'class' => 'form-control',
+		), array(), 'email')
+			->add_rule('required')
+			->add_rule('max_length', 255);
+
+		$form->add('confirm', 'パスワード（確認）', array(
+			'type' => 'password',
+			'class' => 'form-control',
+		), array())
+			->add_rule('required')
+			->add_rule('match_field', 'password');
+
+		// submit
+		$form->add('register', '', array(
+			'type' => 'submit',
+			'value' => '登録',
+			'class' => 'form-control btn btn-success',
+		));
+
+		return $form;
 	}
 }

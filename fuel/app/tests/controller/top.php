@@ -76,7 +76,7 @@ class Test_Controller_Top extends Test_Base
 	/**
 	 *
 	 */
-	public function test_未ログイン状態でアクセスするとログインフォームを表示()
+	public function test_未ログイン状態でログインページにアクセスするとログインフォームを表示()
 	{
 		// logout
 		Auth::logout();
@@ -122,8 +122,8 @@ class Test_Controller_Top extends Test_Base
 	{
 		$matcher = array(
 			'tag'        => 'input',
-			'id'         => 'form_username',
-			'attributes' => array('type' => 'text'),
+			'id'         => 'form_email',
+			'attributes' => array('type' => 'email'),
 		);
 		$this->assertTag($matcher, $html);
 

@@ -77,7 +77,10 @@ class Controller_Base extends Controller
 			),
 		));
 
-		$form->add('email', 'メールアドレス', array('class' => 'form-control'))
+		$form->add('email', 'メールアドレス', array(
+			'type'  => 'email',
+			'class' => 'form-control',
+		))
 			->add_rule('required');
 
 		$form->add('password', 'パスワード', array('type' => 'password', 'class' => 'form-control'))

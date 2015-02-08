@@ -66,6 +66,7 @@ return array(
 	'convention'     => 'convention/index',
 
 	// api
+	'api/stats/check'                               => 'api/stats/check',
 	'api/game/(:segment)'                           => 'api/game/$1',
 	'api/deploy'                                    => 'api/deploy/index',
 	'api/mail/remind'                               => 'api/mail/remind',

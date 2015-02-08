@@ -46,10 +46,12 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 
 	public function login($username, $password = 'password')
 	{
+		$email = Model_User::find_by_username($username)->email;
+
 		$this->logout();
 
 		$this->url('/');
-    $this->byName('username')->value($username);
+    $this->byName('email')->value($email);
     $this->byName('password')->value($password);
     $this->byName('login')->submit();
 	}

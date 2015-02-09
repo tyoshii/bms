@@ -16,7 +16,7 @@ class Controller_Api_Base extends Controller_Rest
 	/**
 	 * 失敗時のテンプレート
 	 */
-	public function error($status => 500, $message => 'Internal Error')
+	public function error($status = 500, $message = 'Internal Error')
 	{
 		return $this->response(array(
 			'status'  => $status,

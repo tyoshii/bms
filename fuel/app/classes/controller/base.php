@@ -95,9 +95,6 @@ class Controller_Base extends Controller
 			return Response::redirect('/');
 		}
 
-		// 試合概要へのURLを付与
-		$this->game->href = '/game/'.$game_id;
-
 		// set global
 		$this->set_global('game', $this->game);
 

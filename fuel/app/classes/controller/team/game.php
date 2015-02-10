@@ -21,7 +21,7 @@ class Controller_Team_Game extends Controller_Team
 		// 試合概要のURL
 		if ($this->_game)
 		{
-			$this->_game->href = '/game/'.$this->_game->id;
+			$this->_game->href = $this->_team->href.'/game/'.$this->_game->id;
 		}
 
 		// set global

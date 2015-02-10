@@ -16,6 +16,9 @@
 <th>スコア</th>
 <th>勝敗</th>
 <th>詳細</th>
+{% if global.player %}
+<th>成績入力</th>
+{% endif %}
 </tr>
 </thead>
 <tbody>
@@ -34,6 +37,12 @@
 </td>
 <td>{{ game.result }}</td>
 <td><a href="/team/{{ global.team.url_path }}/game/{{ game.id }}">詳細</a></td>
+
+{% if global.player %}
+<td>
+<a href="{{ current_url() }}/{{ game.id }}/edit/batter">野手</a> / 
+<a href="{{ current_url() }}/{{ game.id }}/edit/pitcher">投手</a>
+{% endif %}
 
 {% if loop.last %}
 </tbody>

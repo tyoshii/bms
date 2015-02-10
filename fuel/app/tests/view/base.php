@@ -30,7 +30,7 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 		echo "\n";
 
 		// sample data
-		Test_Base::set_samples('player1');
+		Test_Base::set_samples();
 		self::$sample = Test_Base::$sample;
 	}
 

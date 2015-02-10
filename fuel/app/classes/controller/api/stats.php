@@ -172,11 +172,6 @@ team_check_end:
 			}
 		}
 
-		if (count($response) !== 0)
-		{
-			return $this->success($response);
-		}
-
-		return $this->success();
+		return $this->success($response);
 	}
 }

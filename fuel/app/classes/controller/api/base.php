@@ -5,7 +5,7 @@ class Controller_Api_Base extends Controller_Rest
 	/**
 	 * 成功時のテンプレート
 	 */
-	public function success($content)
+	public function success($content = array())
 	{
 		$content = $content ?: array(
 			'status'  => 200,

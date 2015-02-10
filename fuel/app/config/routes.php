@@ -41,12 +41,10 @@ return array(
 	'team/(:url_path)'                              => 'team/index',
 
 	// game
-	'game'                                          => 'game/list',
+	'game/(:game_id)'                               => 'game/detail',
 
-	// game stats
-	'game/(:game_id)/(:kind)/(:team_id)'            => 'game/edit',
-	'game/(:game_id)/(:kind)'                       => 'game/edit',
-	'game/(:game_id)'                               => 'game/summary',
+	// player
+	'player/(:player_id)'                           => 'player/index',
 
 	// convention
 	'convention/(:convention_id)/(:game_id)/update' => 'convention/game/update',
@@ -60,7 +58,6 @@ return array(
 	'convention/(:convention_id)/update' => 'convention/update',
 	'convention/(:convention_id)/stats'  => 'convention/stats',
 	'convention/(:convention_id)/detail' => 'convention/detail',
-	'convention/(:convention_id)'        => 'convention/detail',
 
 	'convention/add' => 'convention/add',
 	'convention'     => 'convention/index',

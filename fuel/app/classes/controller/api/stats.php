@@ -18,9 +18,11 @@ class Controller_Api_Stats extends Controller_Api_Base
 			return $this->error(400, $message);
 		}
 
-		// check logic
-		// TODO:
+		$teams = Model_Games_Team::find_by_game_id($game_id);
 
+		// check logic
+
+		//
 		return $this->success();
 	}
 }

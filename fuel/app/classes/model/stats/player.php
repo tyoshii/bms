@@ -164,8 +164,8 @@ class Model_Stats_Player extends \Orm\Model
 			->related('games')
 				->where('games.game_status', '!=', '-1')
 				->order_by('games.date', 'DESC')
-			->related('games.games_teams')
-				->where('games.games_teams.team_id', '=', $team_id)
+			->related('games.games_team')
+				->where('games.games_team.team_id', '=', $team_id)
 			->get();
 
 		return $return;

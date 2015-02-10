@@ -87,6 +87,8 @@ return array(
         78 => '084_delete_status_from_stats_hittings',
         79 => '085_delete_status_from_stats_pitchings',
         80 => '086_delete_team_top_to_games',
+        81 => '087_add_start_time_to_games',
+        82 => '088_create_conventions_games',
       ),
     ),
     'module' => 

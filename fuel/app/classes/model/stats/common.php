@@ -14,7 +14,7 @@ class Model_Stats_Common extends Model_Base
 		// hitting
 		$hittings = Model_Stats_Hitting::query()
 			->related('games')
-			->related('games_teams')
+			->related('games_team')
 			->where(array(
 				array('player_id', $player_id),
 				array('input_status', 'save'),
@@ -26,14 +26,14 @@ class Model_Stats_Common extends Model_Base
 			$return['hittings'][] = array(
 				'game_id' => $hitting->game_id,
 				'date' => $hitting->games->date,
-				'opponent_team_name' => $hitting->games_teams->opponent_team_name,
+				'opponent_team_name' => $hitting->games_team->opponent_team_name,
 			);
 		}
 
 		// pitching
 		$pitchings = Model_Stats_Pitching::query()
 			->related('games')
-			->related('games_teams')
+			->related('games_team')
 			->where(array(
 				array('player_id', $player_id),
 				array('input_status', 'save'),
@@ -45,16 +45,16 @@ class Model_Stats_Common extends Model_Base
 			$return['pitchings'][] = array(
 				'game_id' => $pitching->game_id,
 				'date' => $pitching->games->date,
-				'opponent_team_name' => $pitching->games_teams->opponent_team_name,
+				'opponent_team_name' => $pitching->games_team->opponent_team_name,
 			);
 		}
 
 		// team_admin
 		if (Model_Player::has_team_admin($team_id))
 		{
-			$games = Model_Game::query()->related('games_teams')->where(array(
+			$games = Model_Game::query()->related('games_team')->where(array(
 				array('game_status', '1'),
-				array('games_teams.team_id', $team_id),
+				array('games_team.team_id', $team_id),
 			))->get();
 
 			foreach ($games as $game)
@@ -62,7 +62,7 @@ class Model_Stats_Common extends Model_Base
 				$return['games'][] = array(
 					'game_id' => $game->id,
 					'date' => $game->date,
-					'opponent_team_name' => $game->games_teams->opponent_team_name,
+					'opponent_team_name' => $game->games_team->opponent_team_name,
 				);
 			}
 		}

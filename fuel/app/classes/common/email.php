@@ -120,7 +120,7 @@ __BODY__;
 		// body
 		$game = Model_Game::find($game_id);
 		$date = $game->date;
-		$opponent_team_name = $game->games_teams->opponent_team_name;
+		$opponent_team_name = $game->games_team->opponent_team_name;
 
 		$body = <<<__BODY__
 

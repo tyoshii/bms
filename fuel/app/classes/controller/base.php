@@ -12,6 +12,15 @@ class Controller_Base extends Controller
 		View::set_global('usericon', Common::get_usericon_url());
 		View::set_global('is_mobile', Agent::is_mobiledevice());
 
+		// default view
+		$path = implode('/', Request::main()->route->segments);
+		$path.= '.twig';
+
+		if (is_file(APPPATH.DS.'views'.DS.$path))
+		{
+			$this->view = View::forge($path);
+		}
+
 		// login
 		$this->_login_form = self::_get_login_form();
 
@@ -62,6 +71,37 @@ class Controller_Base extends Controller
 	public function set_global($key, $val)
 	{
 		$this->_global[$key] = $val;
+	}
+
+	/**
+	 * game object set to global
+	 *
+	 * @param string game_id
+	 *
+	 * @return boolean
+	 */
+	public function set_global_game_object($game_id = false)
+	{
+		$game_id = $game_id ?: $this->param('game_id');
+
+		if ( ! $game_id)
+		{
+			return false;
+		}
+
+		if ( ! $this->game = Model_Game::find($game_id))
+		{
+			Session::set_flash('error', '試合情報が取得できませんでした。');
+			return Response::redirect('/');
+		}
+
+		// 試合概要へのURLを付与
+		$this->game->href = '/game/'.$game_id;
+
+		// set global
+		$this->set_global('game', $this->game);
+
+		return true;
 	}
 
 	/**

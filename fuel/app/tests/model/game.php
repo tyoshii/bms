@@ -46,7 +46,9 @@ class Test_Model_Game extends \Test_Model_Base
 			$this->assertTrue(isset($game->result));
 
 			// relationのデータ
-			$this->assertSame('Model_Games_Runningscore', get_class($game->games_runningscores));
+			$this->assertTrue(isset($game->games_runningscore));
+			$this->assertTrue(isset($game->games_team));
+			$this->assertTrue(isset($game->games_teams));
 			$this->assertTrue(isset($game->stats_players));
 		}
 	}
@@ -75,8 +77,7 @@ class Test_Model_Game extends \Test_Model_Base
 		// チーム情報が$idであること
 		foreach ($games as $game)
 		{
-			$games_teams = $game->games_teams;
-			$this->assertSame($games_teams->team_id, $id);
+			$this->assertSame($game->games_team->team_id, $id);
 		}
 	}
 }

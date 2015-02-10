@@ -44,7 +44,12 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 		$this->assertSame('Baseball Management System', $this->title());
 	}
 
-	public function login($username, $password = 'password')
+	/**
+	 * 指定されたusernameでログインする
+	 * @param string username
+	 * @param string password(default:password)
+	 */
+	public function login_by_username($username, $password = 'password')
 	{
 		$email = Model_User::find_by_username($username)->email;
 

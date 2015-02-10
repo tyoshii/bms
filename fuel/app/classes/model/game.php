@@ -389,6 +389,10 @@ class Model_Game extends \Orm\Model
 		return true;
 	}
 
+	/**
+	 * (descript TBD)
+	 * @return object Model_Game
+	 */
 	public static function get_info()
 	{
 		// base query
@@ -485,12 +489,11 @@ class Model_Game extends \Orm\Model
 		// base query
 		$query  = self::_get_info_query();
  
-		// related games_team
-		$query->related('games_team', array(
-			'where' => array(
-				array('team_id', '=', $team_id),
-			),
-		));
+		// related games_teams
+		// has_manyのrelationで取得して、あとで配列から戻す
+		// 配列から戻すのは、変更前との互換性のため
+		$query->related('games_teams')
+			->where('games_teams.team_id', $team_id);
 
 		$games = $query->get();
 
@@ -502,7 +505,10 @@ class Model_Game extends \Orm\Model
 			$game->bsum = $score->bsum;
 
 			// games_team
-			$team = $game->games_team;
+			$team = array_shift($game->games_teams);
+
+			// games_teamへコピー（後方互換性
+			$game->games_team = $team;
 
 			// result
 			if ($team->order === 'top')

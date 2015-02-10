@@ -17,7 +17,7 @@ class Test_View_Team_Edit extends Test_View_Base
 	public function test_保存と登録が動くことをテスト()
 	{
 		// login
-		$this->login(self::$sample['username']);
+		$this->login_by_username(self::$sample['username']);
 
 		// score
 		$this->url(self::$sample['url']['edit'].'/score');
@@ -44,7 +44,7 @@ class Test_View_Team_Edit extends Test_View_Base
 		$this->assertRegExp('/login/', $this->url());
 
 		// team adminでログイン
-		$this->login(self::$sample['username']);
+		$this->login_by_username(self::$sample['username']);
 
 		// request
 		$this->url($url);

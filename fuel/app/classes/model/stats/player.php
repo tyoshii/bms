@@ -66,7 +66,15 @@ class Model_Stats_Player extends \Orm\Model
 		return $query;
 	}
 
-	public static function get_starter($game_id, $team_id)
+	/**
+	 * get participate players
+	 *
+	 * @param string game_id
+	 * @param string team_id
+	 *
+	 * @return array
+	 */
+	public static function get_participate_players($game_id, $team_id)
 	{
 		$query = self::get_query($game_id, $team_id);
 

@@ -5,12 +5,14 @@ class Controller_Api_Base extends Controller_Rest
 	/**
 	 * 成功時のテンプレート
 	 */
-	public function success()
+	public function success($content)
 	{
-		return $this->response(array(
+		$content = $content ?: array(
 			'status'  => 200,
 			'message' => 'OK',
-		));
+		);
+
+		return $this->response($content);
 	}
 
 	/**

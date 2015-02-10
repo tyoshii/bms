@@ -169,7 +169,7 @@ class Controller_Team_Game extends Controller_Team
 		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
-		$view->playeds = Model_Stats_Player::get_starter($game_id, $team_id);
+		$view->playeds = Model_Stats_Player::get_participate_players($game_id, $team_id);
 		// 所属選手
 		$view->players = Model_Player::get_players($team_id);
 		// 対戦相手

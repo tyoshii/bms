@@ -464,7 +464,7 @@ class Model_Games_Runningscore extends \Orm\Model
 		if ( ! $game_id) return false;
 
 		// last_inning
-		$stats['last_inning'] = count($stats);
+		$stats['last_inning'] = (count($stats) - 2) / 2;
 		
 		// default
 		$stats += array(

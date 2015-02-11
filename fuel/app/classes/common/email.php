@@ -40,6 +40,8 @@ __FOOTER__;
 		$email->body(self::$_body_header.$body.self::$_body_footer);
 
 		$email->send();
+
+		Log::warning("sendmail -> to:$to subject:$subject");
 	}
 
 	/**

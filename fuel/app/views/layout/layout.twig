@@ -56,15 +56,6 @@
 {# header #}
 <nav class="navbar navbar-default" role="navigation">
 
-{# stagingへの案内 #}
-{% if auth_has_access('moderator.moderator') %}
-<div class="alert alert-default">
-go to /&nbsp;
-<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + location.pathname;">production</button>
-<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + ':8080' + location.pathname;">staging</button>
-</div>
-{% endif %}
-
 {# production以外は上部に赤い線 #}
 {% if fuel_env and fuel_env != 'production' %}
 <div data-env="{{ fuel_env }}">FUEL_ENV = {{ fuel_env }}</div>
@@ -132,6 +123,16 @@ go to /&nbsp;
 <div>&nbsp;</div>
 <a href="mailto:tyoshii716@gmail.com">お問い合わせ / フィードバック</a> | <a href="https://github.com/tyoshii/bms">GitHub</a>
 <div>&nbsp;</div>
+
+{# stagingへの案内 #}
+{% if auth_has_access('moderator.moderator') %}
+<div class="alert alert-default">
+go to /&nbsp;
+<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + location.pathname;">production</button>
+<button class="btn btn-info btn-xs" onClick="window.location = 'http://' + location.hostname + ':8080' + location.pathname;">staging</button>
+</div>
+{% endif %}
+
 </div>
 
 </body>

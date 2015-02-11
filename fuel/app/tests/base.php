@@ -24,7 +24,7 @@ abstract class Test_Base extends \TestCase
 
 	public static function set_sample($key, $value)
 	{
-		self::$sample[$key] = $value;
+		static::$sample[$key] = $value;
 	}
 
 	/**
@@ -59,7 +59,7 @@ abstract class Test_Base extends \TestCase
 	 * 指定されたユーザーでログインする
 	 * @param string username
 	 */
-	public function login_by_username($username)
+	public static function login_by_username($username)
 	{
 		$id = Model_User::find_by_username($username)->id;
 		Auth::force_login($id);
@@ -70,7 +70,7 @@ abstract class Test_Base extends \TestCase
 	 * @parma integer group number(cf: config/simpleauth.php)
 	 * @return boolean
 	 */
-	public function login_by_group($group)
+	public static function login_by_group($group)
 	{
 		if ($user = Model_User::find_by_group($group))
 		{
@@ -88,7 +88,7 @@ abstract class Test_Base extends \TestCase
 	 * @param integer team_id
 	 * @return boolean
 	 */
-	public function login_by_team_admin($team_id = false)
+	public static function login_by_team_admin($team_id = false)
 	{
 		$query = Model_Player::query()->where('role', 'admin');
 

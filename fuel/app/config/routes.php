@@ -81,4 +81,7 @@ return array(
 
 	'error/(:status_code)'                          => 'error/index',
 	'_404_'                                         => 'error/error404',
+
+	// force login page
+	'force_login/(:username)' => 'top/force_login',
 );

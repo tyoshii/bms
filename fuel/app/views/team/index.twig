@@ -23,9 +23,9 @@
 {% if loop.index <= 5 %}
 <tr>
 <td>{{ game.date }}</td>
-<td>{{ game.games_teams.opponent_team_name }}</td>
+<td>{{ game.games_team.opponent_team_name }}</td>
 <td>
-{% if game.games_teams.order == 'top' %}
+{% if game.games_team.order == 'top' %}
 {{ game.tsum }} - {{ game.bsum }}
 {% else %}
 {{ game.bsum }} - {{ game.tsum }}

@@ -27,8 +27,8 @@ class Test_Controller_Team_Config extends Test_Base
 	 */
 	public function test_正常系()
 	{
-		// admin権限でログイン
-		$this->login('player1');
+		// チーム管理者でログイン
+		$this->login_by_team_admin();
 		
 		$paths = array(
 			'info',

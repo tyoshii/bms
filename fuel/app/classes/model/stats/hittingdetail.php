@@ -118,8 +118,8 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 			$return[] = array(
 				'game_id'            => $stats_player->games->id,
 				'date'               => $stats_player->games->date,
-				'opponent_team_id'   => $stats_player->games->games_teams->opponent_team_id,
-				'opponent_team_name' => $stats_player->games->games_teams->opponent_team_name,
+				'opponent_team_id'   => $stats_player->games->games_team->opponent_team_id,
+				'opponent_team_name' => $stats_player->games->games_team->opponent_team_name,
 				'stats' => $details,
 			);
 		}

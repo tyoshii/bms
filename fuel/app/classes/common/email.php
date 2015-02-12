@@ -40,6 +40,8 @@ __FOOTER__;
 		$email->body(self::$_body_header.$body.self::$_body_footer);
 
 		$email->send();
+
+		Log::warning("sendmail -> to:$to subject:$subject");
 	}
 
 	/**
@@ -120,7 +122,7 @@ __BODY__;
 		// body
 		$game = Model_Game::find($game_id);
 		$date = $game->date;
-		$opponent_team_name = $game->games_teams->opponent_team_name;
+		$opponent_team_name = $game->games_team->opponent_team_name;
 
 		$body = <<<__BODY__
 

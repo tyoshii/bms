@@ -15,6 +15,11 @@ class Test_View_Top extends Test_View_Base
 
 	}
 
+	public function test_ログイン成功()
+	{
+		// TODO
+	}
+
 	public function test_ログイン失敗()
 	{
 		// login

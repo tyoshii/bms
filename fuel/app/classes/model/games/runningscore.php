@@ -450,6 +450,13 @@ class Model_Games_Runningscore extends \Orm\Model
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
+		'conventions_game' => array(
+			'model_to'       => 'Model_Conventions_Game',
+			'key_from'       => 'game_id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 	);
 
 	public static function regist($game_id = null, $stats = array())
@@ -457,7 +464,10 @@ class Model_Games_Runningscore extends \Orm\Model
 		if ( ! $game_id) return false;
 
 		// last_inning
-		$stats['last_inning'] = count($stats);
+		$li = (count($stats) - 2) / 2;
+		if ($li < 0) $li = 0;
+
+		$stats['last_inning'] = $li;
 		
 		// default
 		$stats += array(

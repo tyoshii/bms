@@ -17,16 +17,16 @@ class Test_View_Team_Edit extends Test_View_Base
 	public function test_保存と登録が動くことをテスト()
 	{
 		// login
-		$this->login(self::$sample['username']);
+		$this->login_by_username(static::$sample['username']);
 
 		// score
-		$this->url(self::$sample['url']['edit'].'/score');
+		$this->url(static::$sample['url']['edit'].'/score');
 		$this->byCssSelector("div.stats-post[role=score] button")->click();
 		$this->assertSame('成績が保存/登録されました。', $this->alertText());
 		$this->acceptAlert();
 		
 		// 選手
-		// $this->url(self::$sample['url']['edit'].'/player');
+		// $this->url(static::$sample['url']['edit'].'/player');
 		// $this->byCssSelector("div button:last")->click();
 		// $this->assertSame('成績が保存/登録されました。', $this->alertText());
 		// $this->acceptAlert();
@@ -37,14 +37,14 @@ class Test_View_Team_Edit extends Test_View_Base
 	public function test_edit_other()
 	{
 		// url
-		$url = self::$sample['url']['edit'].'/other';
+		$url = static::$sample['url']['edit'].'/other';
 
 		// 未ログイン状態だと、loginページへ飛ばされる
 		$this->url($url);
 		$this->assertRegExp('/login/', $this->url());
 
 		// team adminでログイン
-		$this->login(self::$sample['username']);
+		$this->login_by_username(static::$sample['username']);
 
 		// request
 		$this->url($url);

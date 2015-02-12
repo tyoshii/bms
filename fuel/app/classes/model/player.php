@@ -57,6 +57,16 @@ class Model_Player extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'players';
+	
+	protected static $_has_one = array(
+		'team' => array(
+			'model_to'       => 'Model_Team',
+			'key_from'       => 'team_id',
+			'key_to'         => 'id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		)
+	);
 
 	protected static $_belongs_to = array(
 		'teams' => array(

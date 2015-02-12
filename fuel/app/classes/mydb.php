@@ -2,13 +2,27 @@
 
 class Mydb
 {
-	private static $_already = false;
+	private static $_callnum = 0;
+	private static function _increment()
+	{
+		static::$_callnum++;
+	}
+	private static function _decrement()
+	{
+		static::$_callnum--;
+
+		if (static::$_callnum < 0)
+		{
+			static::$_callnum = 0;
+		}
+	}
 
 	public static function begin()
 	{
+		static::_increment();
+
 		if (DB::in_transaction())
 		{
-			self::$_already = true;
 			return false;
 		}
 
@@ -17,12 +31,9 @@ class Mydb
 
 	public static function commit()
 	{
-		if (self::$_already)
-		{
-			self::$_already = false;
-		}
-
-		if (DB::in_transaction())
+		static::_decrement();
+		
+		if (DB::in_transaction() && static::$_callnum === 0)
 			return DB::commit_transaction();
 
 		return false;
@@ -30,13 +41,9 @@ class Mydb
 
 	public static function rollback()
 	{
-		if (self::$_already)
-		{
-			self::$_already = false;
-			return false;
-		}
+		static::_decrement();
 
-		if (DB::in_transaction())
+		if (DB::in_transaction() && static::$_callnum === 0)
 			return DB::rollback_transaction();
 
 		return false;

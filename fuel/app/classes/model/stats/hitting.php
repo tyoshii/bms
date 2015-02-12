@@ -56,7 +56,7 @@ class Model_Stats_Hitting extends Model_Base
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
-		'games_teams' => array(
+		'games_team' => array(
 			'model_to'       => 'Model_Games_Team',
 			'key_from'       => 'game_id',
 			'key_to'         => 'game_id',
@@ -143,8 +143,8 @@ class Model_Stats_Hitting extends Model_Base
 			$return[] = array(
 				'game_id'            => $stats_player->games->id,
 				'date'               => $stats_player->games->date,
-				'opponent_team_id'   => $stats_player->games->games_teams->opponent_team_id,
-				'opponent_team_name' => $stats_player->games->games_teams->opponent_team_name,
+				'opponent_team_id'   => $stats_player->games->games_team->opponent_team_id,
+				'opponent_team_name' => $stats_player->games->games_team->opponent_team_name,
 				'stats' => $stats,
 			);
 		}

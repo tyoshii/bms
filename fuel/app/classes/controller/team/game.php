@@ -47,7 +47,7 @@ class Controller_Team_Game extends Controller_Team
 	{
 		$view = View::forge('team/game/add.twig');
 
-		$form = self::_addgame_form();
+		$form = Model_Game::get_regist_form();
 
 		if (Input::post())
 		{
@@ -86,21 +86,21 @@ class Controller_Team_Game extends Controller_Team
 		$view = View::forge('team/game/detail.twig');
 
 		// チーム情報
-		$games_teams = $this->_game->games_teams;
+		$games_team = $this->_game->games_team;
 
-		if ($games_teams->order === 'top')
+		if ($games_team->order === 'top')
 		{
 			$view->team_top = $this->_team->name;
-			$view->team_bottom = $games_teams->opponent_team_name;
+			$view->team_bottom = $games_team->opponent_team_name;
 		}
 		else
 		{
-			$view->team_top = $games_teams->opponent_team_name;
+			$view->team_top = $games_team->opponent_team_name;
 			$view->team_bottom = $this->_team->name;
 		}
 
 		// score
-		$view->score = $this->_game->games_runningscores;
+		$view->score = $this->_game->games_runningscore;
 
 		if ($view->score->last_inning < 7)
 		{
@@ -169,11 +169,11 @@ class Controller_Team_Game extends Controller_Team
 		$view = Theme::instance()->view('team/game/edit/'.$kind.'.twig');
 
 		// 出場選手
-		$view->playeds = Model_Stats_Player::get_starter($game_id, $team_id);
+		$view->playeds = Model_Stats_Player::get_participate_players($game_id, $team_id);
 		// 所属選手
 		$view->players = Model_Player::get_players($team_id);
 		// 対戦相手
-		$view->games_teams = $this->_game->games_teams;
+		$view->games_team = $this->_game->games_team;
 		// type（保存・完了ボタンの出し分け）
 		$view->type = $type;
 
@@ -185,7 +185,7 @@ class Controller_Team_Game extends Controller_Team
 				$view->awards = Model_Stats_Award::find_by_game_id($this->_game->id);
 
 				// score
-				$score = $this->_game->games_runningscores;
+				$score = $this->_game->games_runningscore;
 
 				// 初回は必ず必要
 				$view->scores = array(
@@ -253,71 +253,5 @@ class Controller_Team_Game extends Controller_Team
 		}
 
 		return Response::forge($view);
-	}
-
-	/**
-	 * new game form
-	 */
-	static private function _addgame_form()
-	{
-		$config = array('form_attributes' => array('class' => 'form'));
-		$form = Fieldset::forge('addgame', $config);
-
-		// 試合実施日
-		$form->add('date', '試合実施日', array(
-			'type'             => 'text',
-			'class'            => 'form-control form-datepicker',
-			'value'            => date('Y-m-d'),
-			'data-date-format' => 'yyyy-mm-dd',
-		))
-			->add_rule('required')
-			->add_rule('trim');
-
-		// - 試合開始時間
-		$form->add('start_time', '試合開始時間', array(
-			'type'  => 'hidden', // 未実装
-			'class' => 'form-control',
-		))
-			->add_rule('trim');
-
-		// - 対戦チーム名
-		$form->add('opponent_team_name', '対戦チーム名', array(
-			'type'  => 'text',
-			'class' => 'form-control',
-		))
-			->add_rule('required')
-			->add_rule('trim');
-
-		// - 先攻/後攻
-		$form->add('order', '先攻/後攻', array(
-			'type'    => 'select',
-			'class'   => 'form-control',
-			'options' => array('top' => '先攻', 'bottom' => '後攻'),
-		))
-			->add_rule('required')
-			->add_rule('in_array', array('top', 'bottom'));
-
-		// - 球場
-		$form->add('stadium', '球場', array(
-			'type'  => 'text',
-			'class' => 'form-control',
-		))
-			->add_rule('trim');
-
-		// - メモ
-		$form->add('memo', '試合コメント/メモ', array(
-			'type'  => 'textarea',
-			'class' => 'form-control',
-		))
-			->add_rule('trim');
-
-		// submit
-		$form->add('submit', '', array(
-			'type'  => 'submit',
-			'value' => '登録',
-			'class' => 'btn btn-success',
-		));
-
-		return $form;
 	}
 }

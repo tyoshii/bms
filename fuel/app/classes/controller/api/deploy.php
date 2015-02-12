@@ -49,7 +49,7 @@ class Controller_Api_Deploy extends Controller
 			// oil
 			// stagingとproductionで同じデータを見ている場合、
 			// stagingでmigrateしたあとにproductionでmigrateするとエラーになる？
-			`FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate`;
+			`FUEL_ENV={$fuel_env} /usr/bin/env php oil r migrate -all`;
 
 			// composer
 			`/usr/bin/env php composer.phar update`;

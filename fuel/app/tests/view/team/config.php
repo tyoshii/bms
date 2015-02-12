@@ -17,7 +17,7 @@ class Test_View_Team_Config extends Test_View_Base
 	public function test_選手情報更新_正常系テスト()
 	{
 		// 管理者権限でログイン
-		$this->login('player1');
+		$this->login_by_username(static::$sample['username']);
 
 		// 選手一覧に詳細カラムが追加されている
 		$url = self::$sample['url']['team'].'/player';

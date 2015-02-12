@@ -46,4 +46,25 @@ class Controller_Top extends Controller_Base
 	{
 		return Response::forge(View::forge('errors/404.twig'), 404);
 	}
+
+	/**
+	 * force login page. only development/test
+	 */
+	public function action_force_login()
+	{
+		if (Fuel::$env === 'test' or Fuel::$env === 'development')
+		{
+			$username = $this->param('username');
+	
+			$id = Model_User::find_by_username($username)->id;
+	
+			Auth::force_login($id);
+		}
+		else
+		{
+			Session::set_flash('error', '不正なURLです');
+		}
+
+		return Response::redirect('/');
+	}
 }

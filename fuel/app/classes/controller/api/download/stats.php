@@ -218,27 +218,27 @@ class Controller_Api_Download_Stats extends Controller_Rest
 		// create data
 		$datas = array(
 			$game->date,
-			$game->games_teams->opponent_team_name,
+			$game->games_team->opponent_team_name,
 		);
 
 		// 勝敗
-		$score = $game->games_runningscores;
+		$score = $game->games_runningscore;
 		$result = '分';
 
 		if ($score->tsum < $score->bsum)
 		{
-			$result = $game->games_teams->order === 'top' ? '負' : '勝';
+			$result = $game->games_team->order === 'top' ? '負' : '勝';
 		}
 		
 		if ($score->tsum > $score->bsum)
 		{
-			$result = $game->games_teams->order === 'top' ? '勝' : '負';
+			$result = $game->games_team->order === 'top' ? '勝' : '負';
 		}
 
 		$datas[] = $result;
 
 		// スコア
-		if ($game->games_teams->order === 'top')
+		if ($game->games_team->order === 'top')
 		{
 			$datas[] = $score->tsum.' - '.$score->bsum;
 		}
@@ -281,7 +281,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 		$datas[] = $mip;
 
 		// 先攻/後攻
-		$datas[] = $game->games_teams->order === 'top' ? '先攻' : '後攻';
+		$datas[] = $game->games_team->order === 'top' ? '先攻' : '後攻';
 
 		// set data to excel
 		foreach ($datas as $index => $data)
@@ -485,7 +485,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 	{
 		// TODO: Model_Gameを整理して、そっちにロジック移動したい
 		$query = Model_Game::query()->where('id', Input::get('game_id'));
-		$query->related('games_teams', array(
+		$query->related('games_team', array(
 			'where' => array(
 				array('team_id', '=', Input::get('team_id')),
 			),

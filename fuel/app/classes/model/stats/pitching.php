@@ -45,7 +45,7 @@ class Model_Stats_Pitching extends Model_Base
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
-		'games_teams' => array(
+		'games_team' => array(
 			'model_to'       => 'Model_Games_Team',
 			'key_from'       => 'game_id',
 			'key_to'         => 'game_id',

@@ -56,8 +56,17 @@
 
 {# 未完了のアラート #}
 {% if global.alerts %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <div class="panel panel-warning">
-<div class="panel-heading">未完了の成績/試合があります</div>
+<div class="panel-heading" role="tab" id="headingOne">
+<h4 class="panel-title">
+<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+未完了の成績/試合があります（タップで開閉）
+</a>
+</h4>
+</div>
+{# remove 'in' from class by template #}
+<div id="collapseOne" class="panel-collapse collapse {#in#}" role="tabpanel" aria-labelledby="headingOne">
 <div class="panel-body">
 <ul>
 
@@ -100,6 +109,8 @@
 {% endif %}
 {% endfor %}
 
+</div>
+</div>
 </div>
 </div>
 {% endif %}

@@ -2,6 +2,52 @@
 
 class Controller_Api_Stats extends Controller_Api_Base
 {
+	public function before()
+	{
+		parent::before();
+
+		$this->game_id = Input::get('game_id', null);
+		$this->team_id = Input::get('team_id', null);
+
+		$this->game = Model_Game::find($this->game_id);
+		$this->team = Model_Team::find($this->team_id);
+	}
+
+	/**
+	 * api/stats/check のvalidation
+	 *
+	 * TODO: メソッド名、取り急ぎ_validation
+	 *       他のエントリーポイントなど出てきたら、汎用的なvalidationモジュールへ
+	 *
+	 * @return mixed true or error message
+	 */
+	private function _validation()
+	{
+		// game_id validation
+		if (is_null($this->game_id) or ! $this->game)
+		{
+			$message = 'game_idが正しく指定されていません。';
+			Log::error($message);
+			return $message;
+		}
+
+		// team_id validation, if specify
+		if ($this->team_id and ! $this->team)
+		{
+			$message = '指定されたteam_idが正しくありません';
+			Log::error($message);
+			return $message;
+		}
+
+		// login状態でのアクセスであれば、権限のある試合/チームであること
+		if (Auth::check())
+		{
+			// TODO:
+		}
+
+		return true;
+	}
+
 	/**
 	 * 入力された成績にエラーが無いかをチェックするAPI
 	 * @get integer game_id
@@ -9,52 +55,13 @@ class Controller_Api_Stats extends Controller_Api_Base
 	 */
 	public function get_check()
 	{
-		$game_id = Input::get('game_id', null);
-		$team_id = Input::get('team_id', null);
-		$game = Model_Game::find($game_id);
-
-		// game_id validation
-		if (is_null($game_id) or ! $game)
+		if ($message = $this->_validation() )
 		{
-			$message = 'game_idが正しく指定されていません。';
-			Log::error($message);
 			return $this->error(400, $message);
 		}
 
-		// チェック対象のチームIDを取得
-		$teams = array();
-
-		if ( ! is_null($team_id))
-		{
-			if ($team = Model_Team::find($team_id))
-			{
-				$teams[] = array(
-					'id'   => $team->id,
-					'name' => $team->name,
-				);
-			}
-			else
-			{
-				$message = '指定されたteam_idが正しくありません';
-				Log::error($message);
-				return $this->error(400, $message);
-			}
-		}
-		else
-		{
-			$teams[] = array(
-				'id' => $game->games_team->team_id,
-				'name' => Model_Team::find($game->games_team->team_id)->name,
-			);
-	
-			if ($game->games_team->opponent_team_id != 0)
-			{
-				$teams[] = array(
-					'id'   => $game->games_team->opponent_team_id,
-					'name' => $game->games_team->opponent_team_name,
-				);
-			}
-		}
+		// チェック対象のチーム情報を取得
+		$teams = $this->_get_stats_check_teams();
 
 		// check logic
 		// エラーが有った場合は $response に保存
@@ -198,5 +205,43 @@ team_check_end:
 		}
 
 		return $this->success($response);
+	}
+
+	/**
+	 * api/stats/check で成績チェックするチームを取得
+	 *
+	 * @return array array(
+	 *                array('id' => 'team_id', 'name' => 'team_name'),
+	 *              [ array('id' => 'team_id', 'name' => 'team_name'), ]
+	 *							);
+	 */
+	private function _get_stats_check_teams()
+	{
+		$teams = array();
+
+		if ($this->team)
+		{
+			$teams[] = array(
+				'id'   => $this->team->id,
+				'name' => $this->team->name,
+			);
+		}
+		else
+		{
+			$teams[] = array(
+				'id'   => $this->game->games_team->team_id,
+				'name' => Model_Team::find($this->game->games_team->team_id)->name,
+			);
+	
+			if ($this->game->games_team->opponent_team_id != 0)
+			{
+				$teams[] = array(
+					'id'   => $this->game->games_team->opponent_team_id,
+					'name' => $this->game->games_team->opponent_team_name,
+				);
+			}
+		}
+
+		return $teams;
 	}
 }

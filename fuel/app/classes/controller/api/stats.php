@@ -14,48 +14,14 @@ class Controller_Api_Stats extends Controller_Api_Base
 	}
 
 	/**
-	 * api/stats/check のvalidation
-	 *
-	 * TODO: メソッド名、取り急ぎ_validation
-	 *       他のエントリーポイントなど出てきたら、汎用的なvalidationモジュールへ
-	 *
-	 * @return mixed true or error message
-	 */
-	private function _validation()
-	{
-		// game_id validation
-		if (is_null($this->game_id) or ! $this->game)
-		{
-			$message = 'game_idが正しく指定されていません。';
-			Log::error($message);
-			return $message;
-		}
-
-		// team_id validation, if specify
-		if ($this->team_id and ! $this->team)
-		{
-			$message = '指定されたteam_idが正しくありません';
-			Log::error($message);
-			return $message;
-		}
-
-		// login状態でのアクセスであれば、権限のある試合/チームであること
-		if (Auth::check())
-		{
-			// TODO:
-		}
-
-		return true;
-	}
-
-	/**
 	 * 入力された成績にエラーが無いかをチェックするAPI
 	 * @get integer game_id
 	 * @get integer team_id(optional)
 	 */
 	public function get_check()
 	{
-		if ($message = $this->_validation() )
+		$message = $this->_validation();
+		if (is_string($message))
 		{
 			return $this->error(400, $message);
 		}
@@ -86,9 +52,9 @@ class Controller_Api_Stats extends Controller_Api_Base
 			// 配列の最後でresponseへマージする
 			$errors    = array();
 
-			$players = Model_Stats_Player::get_participate_players($game_id, $team_id);
-			$stats_hitting  = Model_Stats_Hitting::get_stats($game_id, $team_id);
-			$stats_pitching = Model_Stats_Pitching::get_stats($game_id, $team_id);
+			$players = Model_Stats_Player::get_participate_players($this->game_id, $this->team_id);
+			$stats_hitting  = Model_Stats_Hitting::get_stats($this->game_id, $this->team_id);
+			$stats_pitching = Model_Stats_Pitching::get_stats($this->game_id, $this->team_id);
 
 			// 成績入力がされているかどうか。
 			if (count($stats_hitting) === 0 or count($stats_pitching) === 0)
@@ -145,7 +111,7 @@ class Controller_Api_Stats extends Controller_Api_Base
 			}
 
 			// 投球回数と、実施イニングがあっているかどうか。
-			$last_inning = $game->games_runningscore->last_inning;
+			$last_inning = $this->game->games_runningscore->last_inning;
 
 			$IP = 0;
 			$IP_frac = 0;
@@ -175,7 +141,7 @@ team_check_end:
 			{
 				$response[] = array(
 					'item' => array(
-						'team_id'   => $team_id,
+						'team_id'   => $this->team_id,
 						'team_name' => $team_name,
 						'errors'    => $errors,
 					),
@@ -205,6 +171,41 @@ team_check_end:
 		}
 
 		return $this->success($response);
+	}
+
+	/**
+	 * api/stats/check のvalidation
+	 *
+	 * TODO: メソッド名、取り急ぎ_validation
+	 *       他のエントリーポイントなど出てきたら、汎用的なvalidationモジュールへ
+	 *
+	 * @return mixed true or error message
+	 */
+	private function _validation()
+	{
+		// game_id validation
+		if (is_null($this->game_id) or ! $this->game)
+		{
+			$message = 'game_idが正しく指定されていません。';
+			Log::error($message);
+			return $message;
+		}
+
+		// team_id validation, if specify
+		if ($this->team_id and ! $this->team)
+		{
+			$message = '指定されたteam_idが正しくありません';
+			Log::error($message);
+			return $message;
+		}
+
+		// login状態でのアクセスであれば、権限のある試合/チームであること
+		if (Auth::check())
+		{
+			// TODO:
+		}
+
+		return true;
 	}
 
 	/**

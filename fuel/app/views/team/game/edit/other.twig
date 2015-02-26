@@ -26,9 +26,12 @@
 </tr>
 
 <tr>
+<th>入力された成績のチェック</th>
 <td>
-<td>
-<td></td>
+<div id="check-api-result">
+チェック中
+</div>
+</td>
 </tr>
 
 </tbody>
@@ -40,7 +43,6 @@
 <li><a href="javascript:void(0);" role="remind" onClick="remind_mail();">成績入力のリマインドをメールで送信</a>
 <li><a href="/api/download/stats/itleague?game_id={{ global.game.id }}&team_id={{ global.team.id }}" role="download">成績ダウンロード(IT LEAGUE)</a></li>
 </ul>
-
 {% endblock main %}
 
 {% block js %}
@@ -50,6 +52,39 @@
 <script type="text/javascript" src="/js/game/list.js"></script>
 
 <script type="text/javascript">
+// stats check
+$(document).ready(function(){
+
+  var $div =  $("div#check-api-result");
+  var success = function(html) {
+    if (html.status === 200) {
+      $div.text('正しく入力されています。').addClass("green");
+    }
+    else {
+      var text = "<ul><li>";
+          text+= html[0].item.errors.join("</li><li>");
+          text+= "</li></ul>";
+
+      $div.text("");
+      $div.append($(text)).addClass("red");
+    }
+  }
+
+  $.ajax({
+    url: '/api/stats/check.json',
+    type: 'GET',
+    data: {
+      game_id: $("data#game_id").text(),
+      team_id: $("data#team_id").text(),
+    },
+    success: success,
+    error: function(res) {
+      $div.text('チェックに失敗しました。').addClass("red");
+    }
+  });
+});
+
+// リマインドメールのconfirm => API
 var remind_mail = function() {
 
   if ( confirm("成績入力の完了していない人にメールを送信します。") ) {

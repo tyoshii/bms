@@ -2,36 +2,32 @@
 
 class Controller_Api_Stats extends Controller_Api_Base
 {
+	public function before()
+	{
+		parent::before();
+
+		$this->game_id = Input::get('game_id', null);
+		$this->team_id = Input::get('team_id', null);
+
+		$this->game = Model_Game::find($this->game_id);
+		$this->team = Model_Team::find($this->team_id);
+	}
+
 	/**
 	 * 入力された成績にエラーが無いかをチェックするAPI
 	 * @get integer game_id
+	 * @get integer team_id(optional)
 	 */
 	public function get_check()
 	{
-		$game_id = Input::get('game_id', null);
-		$game = Model_Game::find($game_id);
-
-		// game_id validation
-		if (is_null($game_id) or ! $game)
+		$message = $this->_validation();
+		if (is_string($message))
 		{
-			$message = 'game_idが正しく指定されていません。';
-			Log::error($message);
 			return $this->error(400, $message);
 		}
 
-		// チェック対象のチームIDを取得
-		$teams[] = array(
-			'id' => $game->games_team->team_id,
-			'name' => Model_Team::find($game->games_team->team_id)->name,
-		);
-
-		if ($game->games_team->opponent_team_id != 0)
-		{
-			$teams[] = array(
-				'id'   => $game->games_team->opponent_team_id,
-				'name' => $game->games_team->opponent_team_name,
-			);
-		}
+		// チェック対象のチーム情報を取得
+		$teams = $this->_get_stats_check_teams();
 
 		// check logic
 		// エラーが有った場合は $response に保存
@@ -56,9 +52,9 @@ class Controller_Api_Stats extends Controller_Api_Base
 			// 配列の最後でresponseへマージする
 			$errors    = array();
 
-			$players = Model_Stats_Player::get_participate_players($game_id, $team_id);
-			$stats_hitting  = Model_Stats_Hitting::get_stats($game_id, $team_id);
-			$stats_pitching = Model_Stats_Pitching::get_stats($game_id, $team_id);
+			$players = Model_Stats_Player::get_participate_players($this->game_id, $this->team_id);
+			$stats_hitting  = Model_Stats_Hitting::get_stats($this->game_id, $this->team_id);
+			$stats_pitching = Model_Stats_Pitching::get_stats($this->game_id, $this->team_id);
 
 			// 成績入力がされているかどうか。
 			if (count($stats_hitting) === 0 or count($stats_pitching) === 0)
@@ -115,7 +111,7 @@ class Controller_Api_Stats extends Controller_Api_Base
 			}
 
 			// 投球回数と、実施イニングがあっているかどうか。
-			$last_inning = $game->games_runningscore->last_inning;
+			$last_inning = $this->game->games_runningscore->last_inning;
 
 			$IP = 0;
 			$IP_frac = 0;
@@ -143,10 +139,12 @@ class Controller_Api_Stats extends Controller_Api_Base
 team_check_end:
 			if (count($errors) !== 0)
 			{
-				$response['team'] = array(
-					'team_id' => $team_id,
-					'team_name' => $team_name,
-					'errors' => $errors,
+				$response[] = array(
+					'item' => array(
+						'team_id'   => $this->team_id,
+						'team_name' => $team_name,
+						'errors'    => $errors,
+					),
 				);
 			}
 		}
@@ -173,5 +171,78 @@ team_check_end:
 		}
 
 		return $this->success($response);
+	}
+
+	/**
+	 * api/stats/check のvalidation
+	 *
+	 * TODO: メソッド名、取り急ぎ_validation
+	 *       他のエントリーポイントなど出てきたら、汎用的なvalidationモジュールへ
+	 *
+	 * @return mixed true or error message
+	 */
+	private function _validation()
+	{
+		// game_id validation
+		if (is_null($this->game_id) or ! $this->game)
+		{
+			$message = 'game_idが正しく指定されていません。';
+			Log::error($message);
+			return $message;
+		}
+
+		// team_id validation, if specify
+		if ($this->team_id and ! $this->team)
+		{
+			$message = '指定されたteam_idが正しくありません';
+			Log::error($message);
+			return $message;
+		}
+
+		// login状態でのアクセスであれば、権限のある試合/チームであること
+		if (Auth::check())
+		{
+			// TODO:
+		}
+
+		return true;
+	}
+
+	/**
+	 * api/stats/check で成績チェックするチームを取得
+	 *
+	 * @return array array(
+	 *                array('id' => 'team_id', 'name' => 'team_name'),
+	 *              [ array('id' => 'team_id', 'name' => 'team_name'), ]
+	 *							);
+	 */
+	private function _get_stats_check_teams()
+	{
+		$teams = array();
+
+		if ($this->team)
+		{
+			$teams[] = array(
+				'id'   => $this->team->id,
+				'name' => $this->team->name,
+			);
+		}
+		else
+		{
+			$teams[] = array(
+				'id'   => $this->game->games_team->team_id,
+				'name' => Model_Team::find($this->game->games_team->team_id)->name,
+			);
+	
+			if ($this->game->games_team->opponent_team_id != 0)
+			{
+				$teams[] = array(
+					'id'   => $this->game->games_team->opponent_team_id,
+					'name' => $this->game->games_team->opponent_team_name,
+				);
+			}
+		}
+
+		return $teams;
 	}
 }

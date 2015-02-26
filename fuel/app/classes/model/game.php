@@ -23,8 +23,8 @@ class Model_Game extends \Orm\Model
 			'type' => 'varchar',
 			'label' => '開始時間',
 			'form' => array(
-				'type' => 'select',
-				'class' => 'select2',
+				'type' => 'time',
+				'class' => 'form-control',
 			),
 		),
 		'stadium' => array(
@@ -145,19 +145,31 @@ class Model_Game extends \Orm\Model
 			'class' => 'form',
 		)))->add_model(static::forge());
 
-		// start_timeのoption追加
-		$options = array();
-		for ($hour = 0; $hour < 24; $hour++)
+		// start_time : PCサイトでは時間と分の入力に分ける
+		if ( ! Agent::is_mobiledevice())
 		{
-			for ($time = 0; $time <= 45; $time += 15)
-			{
-				$value = sprintf('%02d:%02d', $hour, $time);
-				$options[$value] = $value;
-				$form->field('start_time')->set_options($value, $value);
-			}
-		}
+			// start_hour / start_minの追加
+			// TODO: Fieldsetのテーブルだと表示がいまいちなので、start_timeのままにしている
 
-		$form->field('start_time')->add_rule('in_array', array_keys($options));
+			$field = $form->field('start_time');
+
+			$field->set_type('select');
+			$field->set_attribute('class', 'select2');
+
+			// start_timeのoption追加
+			$options = array();
+			for ($hour = 0; $hour < 24; $hour++)
+			{
+				for ($time = 0; $time <= 45; $time += 15)
+				{
+					$value = sprintf('%02d:%02d', $hour, $time);
+					$options[$value] = $value;
+					$form->field('start_time')->set_options($value, $value);
+				}
+			}
+	
+			$form->field('start_time')->add_rule('in_array', array_keys($options));
+		}
 		
 		// submit
 		$form->add('submit', '', array(

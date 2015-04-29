@@ -1,5 +1,8 @@
 <?php
 return array(
+	'mock/(:path)'                                  => 'mock/index',
+	'mock'                                          => 'mock/index',
+
 	'_root_'                                        => 'top/index',
 	'login'                                         => 'top/login',
 	'logout'                                        => 'top/logout',

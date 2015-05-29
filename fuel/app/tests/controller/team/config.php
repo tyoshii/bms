@@ -7,7 +7,7 @@
  * @group Controller
  * @group Controller_Team_Config
  */
-class Test_Controller_Team_Config extends Test_Base
+class Test_Controller_Team_Config extends Test_Controller_Team_Base
 {
 	public static function setUpBeforeClass()
 	{

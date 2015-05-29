@@ -56,6 +56,17 @@ abstract class Test_Base extends \TestCase
 	}
 
 	/**
+	 * ログイン共通メソッド
+	 * Auth::force_loginのwrapper
+	 *
+	 * @param string id
+	 */
+	public static function _login($id)
+	{
+		$this->assertTrue(Auth::force_login($id));
+	}
+
+	/**
 	 * 指定されたユーザーでログインする
 	 * @param string username
 	 */

@@ -37,8 +37,15 @@ class Test_Controller_Team_Game extends Test_Controller_Team_Base
 	 */
 	public function test_ゲーム追加()
 	{
+		# no login状態で302
 		$res = $this->request(self::$team_url.'/game/add');
+		$this->assertSame(302, $res->status);
 
+		# チーム管理権限でログイン
+		$this->login_by_team_admin(static::$sample['team']->id);
+
+		# ゲーム追加ページの表示
+		$res = $this->request(static::$sample['url']['team'].'/game/add');
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_string($res->body->form));
 

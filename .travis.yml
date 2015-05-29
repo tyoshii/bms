@@ -13,6 +13,7 @@ before_install:
 before_script:
   - mkdir -p build/logs
   - mysql -e 'create database bms;'
+  - php composer.phar self-update
   - FUEL_ENV=test php composer.phar install
   - php -S localhost:8888 -t public > builtinserver.log 2>&1 &
 

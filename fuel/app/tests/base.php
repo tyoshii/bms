@@ -56,13 +56,24 @@ abstract class Test_Base extends \TestCase
 	}
 
 	/**
+	 * ログイン共通メソッド
+	 * Auth::force_loginのwrapper
+	 *
+	 * @param string user id
+	 */
+	public function login($id)
+	{
+		$this->assertTrue(Auth::force_login($id));
+	}
+
+	/**
 	 * 指定されたユーザーでログインする
 	 * @param string username
 	 */
-	public static function login_by_username($username)
+	public function login_by_username($username)
 	{
 		$id = Model_User::find_by_username($username)->id;
-		Auth::force_login($id);
+		$this->login($id);
 	}
 
 	/**
@@ -70,11 +81,11 @@ abstract class Test_Base extends \TestCase
 	 * @parma integer group number(cf: config/simpleauth.php)
 	 * @return boolean
 	 */
-	public static function login_by_group($group)
+	public function login_by_group($group)
 	{
 		if ($user = Model_User::find_by_group($group))
 		{
-			Auth::force_login($user->id);
+			$this->login($user->id);
 			return true;
 		}
 
@@ -88,7 +99,7 @@ abstract class Test_Base extends \TestCase
 	 * @param integer team_id
 	 * @return boolean
 	 */
-	public static function login_by_team_admin($team_id = false)
+	public function login_by_team_admin($team_id = false)
 	{
 		$query = Model_Player::query()->where('role', 'admin');
 
@@ -100,7 +111,7 @@ abstract class Test_Base extends \TestCase
 		if ($result = $query->get_one())
 		{
 			$id = Model_User::find_by_username($result->username)->id;
-			Auth::force_login($id);
+			$this->login($id);
 
 			return true;
 		}

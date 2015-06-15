@@ -22,7 +22,7 @@ class Test_Controller_Team_Game extends Test_Controller_Team_Base
 	 */
 	public function test_ゲーム一覧()
 	{
-		$res = $this->request(self::$team_url.'/game');
+		$res = $this->request(static::$sample['url']['team'].'/game');
 
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_array($res->body->games));
@@ -37,15 +37,22 @@ class Test_Controller_Team_Game extends Test_Controller_Team_Base
 	 */
 	public function test_ゲーム追加()
 	{
-		$res = $this->request(self::$team_url.'/game/add');
+		# no login状態で302
+		$res = $this->request(static::$sample['url']['team'].'/game/add');
+		$this->assertSame(302, $res->status);
 
+		# チーム管理権限でログイン
+		$this->login_by_team_admin(static::$sample['team']->id);
+
+		# ゲーム追加ページの表示
+		$res = $this->request(static::$sample['url']['team'].'/game/add');
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_string($res->body->form));
 
 		// post request
 
 		// validation error
-		$res = $this->request(self::$team_url.'/game/add', 'POST', array('key' => 'value'));
+		$res = $this->request(static::$sample['url']['team'].'/game/add', 'POST', array('key' => 'value'));
 
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_string(Session::get_flash('error')));
@@ -57,7 +64,7 @@ class Test_Controller_Team_Game extends Test_Controller_Team_Base
 	{
 		$sample_game    = Model_Game::find('first');
 		$sample_game_id = $sample_game->id;
-		$res = $this->request(self::$team_url.'/game/'.$sample_game_id);
+		$res = $this->request(static::$sample['url']['team'].'/game/'.$sample_game_id);
 
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_string($res->body->team_top));
@@ -82,7 +89,7 @@ class Test_Controller_Team_Game extends Test_Controller_Team_Base
 		);
 		foreach ($paths as $path)
 		{
-			$res = $this->request(self::$team_url.'/game/'.$sample_game_id.'/edit/'.$path);
+			$res = $this->request(static::$sample['url']['team'].'/game/'.$sample_game_id.'/edit/'.$path);
 		}
 	}
 }

@@ -6,10 +6,12 @@ class Controller_Top extends Controller_Base
 	{
 		$view = Theme::instance()->view('top.twig');
 
+		$view->teams = Model_Team::find('all');
+
 		if (Auth::check())
 		{
 			// 所属チーム
-			$view->teams = Model_Team::get_belong_team();
+			$view->my_teams = Model_Team::get_belong_team();
 		}
 		else
 		{

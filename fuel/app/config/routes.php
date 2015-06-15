@@ -19,6 +19,7 @@ return array(
 	'admin/league'                                  => 'admin/league',
 
 	// team
+	// teamは現状使っていない
 	'team'                                          => 'team/search',
 	'team/regist'                                   => 'team/regist',
 

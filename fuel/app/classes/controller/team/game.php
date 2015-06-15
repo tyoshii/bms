@@ -45,6 +45,13 @@ class Controller_Team_Game extends Controller_Team
 	 */
 	public function action_add()
 	{
+		// acl
+		if ( ! $this->_team_admin)
+		{
+			Session::set_flash('error', '権限がありません');
+			return Response::redirect($this->_team->href);
+		}
+
 		$view = View::forge('team/game/add.twig');
 
 		$form = Model_Game::get_regist_form();

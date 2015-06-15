@@ -76,6 +76,8 @@ class Model_User extends \Orm\Model
 	 */
 	public static function regist($fullname, $email, $password = null)
 	{
+		$regist_by_openid = false;
+
 		// generate username,password
 		$username = Common::random_string();
 		if (is_null($password))

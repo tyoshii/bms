@@ -38,7 +38,7 @@ class Test_Model_Conventions_Team extends \Test_Model_Base
 
 		// convention_idを付与すると、大会参加中のチームにentriedキーを付与してくれる
 		$id = Model_Convention::find('first')->id;
-		$teams = Model_Conventions_Team::get_temas();
+		$teams = Model_Conventions_Team::get_teams();
 		$this->assertTrue(is_array(Model_Conventions_Team::get_teams()));
 			
 		// パラメーターが足りない場合はfalse

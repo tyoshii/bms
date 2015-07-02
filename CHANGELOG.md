@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 0.0.18
+
+* 試合詳細に日付・球場の情報を追加
+* aboutページの追加
+
 ## Version 0.0.17
 
 * OpenID対応

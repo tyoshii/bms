@@ -2,6 +2,9 @@
 
 class Controller_Top extends Controller_Base
 {
+	/**
+	 * トップページ
+	 */
 	public function action_index()
 	{
 		$view = Theme::instance()->view('top.twig');
@@ -23,6 +26,9 @@ class Controller_Top extends Controller_Base
 		return Response::forge($view);
 	}
 
+	/**
+	 * login
+	 */
 	public function action_login()
 	{
 		if (Auth::check())
@@ -37,6 +43,9 @@ class Controller_Top extends Controller_Base
 		return Response::forge($view);
 	}
 
+	/**
+	 * logout
+	 */
 	public function action_logout()
 	{
 		// TODO: OpenID連携の場合は don't remember したほうがいい？
@@ -68,5 +77,14 @@ class Controller_Top extends Controller_Base
 		}
 
 		return Response::redirect('/');
+	}
+
+	/**
+	 * about page
+	 */
+	public function action_about()
+	{
+		$view = View::forge('about.twig');
+		return Response::forge($view);
 	}
 }

@@ -73,6 +73,7 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bms-navbar">
     <ul class="nav navbar-nav">
+      <li><a href="/about">about</a></li>
       {% if auth_has_access('moderator.moderator') %}
       {%block li_convention %}<li>{%endblock%}<a href="/convention">大会</a></li>
         <li class="bms-navbar-admin"><a href="/admin">管理者Menu</a></li>

@@ -4,6 +4,7 @@ return array(
 	'mock'                                          => 'mock/index',
 
 	'_root_'                                        => 'top/index',
+	'about'                                         => 'top/about',
 	'login'                                         => 'top/login',
 	'logout'                                        => 'top/logout',
 

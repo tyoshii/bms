@@ -212,6 +212,12 @@ class Dbinit
 			\Config::set('bms.moderator_team_ids', array($team1_id));
 			\Config::save('bms', 'bms');
 		}
+
+		// conventions
+		\Model_Convention::regist(array(
+			'name' => '大会サンプル',
+			'kind' => 'league',
+		));
 	}
 }
 /* End of file tasks/dbinit.php */

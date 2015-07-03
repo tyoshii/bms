@@ -113,7 +113,7 @@ class Model_Convention extends \Orm\Model
 		}
 
 		// new
-		if ( ! $prop['published'])
+		if (! array_key_exists('published', $prop) || ! $prop['published'])
 		{
 			$prop['published'] = 'true';
 		}

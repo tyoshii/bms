@@ -2,14 +2,19 @@
 
 class Controller_Top extends Controller_Base
 {
+	/**
+	 * トップページ
+	 */
 	public function action_index()
 	{
 		$view = Theme::instance()->view('top.twig');
 
+		$view->teams = Model_Team::find('all');
+
 		if (Auth::check())
 		{
 			// 所属チーム
-			$view->teams = Model_Team::get_belong_team();
+			$view->my_teams = Model_Team::get_belong_team();
 		}
 		else
 		{
@@ -21,6 +26,9 @@ class Controller_Top extends Controller_Base
 		return Response::forge($view);
 	}
 
+	/**
+	 * login
+	 */
 	public function action_login()
 	{
 		if (Auth::check())
@@ -35,6 +43,9 @@ class Controller_Top extends Controller_Base
 		return Response::forge($view);
 	}
 
+	/**
+	 * logout
+	 */
 	public function action_logout()
 	{
 		// TODO: OpenID連携の場合は don't remember したほうがいい？
@@ -45,5 +56,35 @@ class Controller_Top extends Controller_Base
 	public function action_404()
 	{
 		return Response::forge(View::forge('errors/404.twig'), 404);
+	}
+
+	/**
+	 * force login page. only development/test
+	 */
+	public function action_force_login()
+	{
+		if (Fuel::$env === 'test' or Fuel::$env === 'development')
+		{
+			$username = $this->param('username');
+	
+			$id = Model_User::find_by_username($username)->id;
+	
+			Auth::force_login($id);
+		}
+		else
+		{
+			Session::set_flash('error', '不正なURLです');
+		}
+
+		return Response::redirect('/');
+	}
+
+	/**
+	 * about page
+	 */
+	public function action_about()
+	{
+		$view = View::forge('about.twig');
+		return Response::forge($view);
 	}
 }

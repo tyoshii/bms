@@ -16,13 +16,13 @@
 <tr>
 <th class="width-20">
 <th class="width-40"><p>先攻</p>
-{% if games_teams.order == 'top' %}{{ global.team.name }}
-{% else %}{{ games_teams.opponent_team_name }}
+{% if games_team.order == 'top' %}{{ global.team.name }}
+{% else %}{{ games_team.opponent_team_name }}
 {% endif %}
 </th>
 <th class="width-40"><p>後攻</p>
-{% if games_teams.order == 'bottom' %}{{ global.team.name }}
-{% else %}{{ games_teams.opponent_team_name }}
+{% if games_team.order == 'bottom' %}{{ global.team.name }}
+{% else %}{{ games_team.opponent_team_name }}
 {% endif %}
 </th>
 </tr>

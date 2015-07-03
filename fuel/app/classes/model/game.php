@@ -6,14 +6,57 @@ class Model_Game extends \Orm\Model
 
 	protected static $_properties = array(
 		'id',
-		'date',
-		'stadium'          => array('default' => ''),
-		'memo'             => array('default' => ''),
-		'game_status'      => array('default' => 0),
-		'top_status'       => array('default' => 1),
-		'bottom_status'    => array('default' => 1),
-		'created_at',
-		'updated_at',
+		'date' => array(
+			'type' => 'varchar',
+			'label' => '試合日',
+			'form' => array(
+				'type' => 'text',
+				'class' => 'form-control form-datepicker',
+				'data-date-format' => 'yyyy-mm-dd',
+			),
+			'validation' => array(
+				'required',
+				'valid_date' => array('Y-m-d'),
+			),
+		),
+		'start_time' => array(
+			'type' => 'varchar',
+			'label' => '開始時間',
+			'form' => array(
+				'type' => 'time',
+				'class' => 'form-control',
+			),
+		),
+		'stadium' => array(
+			'default' => '',
+			'type' => 'varchar',
+			'label' => '球場',
+			'form' => array(
+				'type' => 'text',
+				'class' => 'form-control',
+			),
+			'validation' => array(
+				'required',
+				'max_length' => array(64),
+			),
+		),
+		'memo' => array(
+			'default' => '',
+			'type' => 'varchar',
+			'label' => 'メモ',
+			'form' => array(
+				'type' => 'textarea',
+				'class' => 'form-control',
+			),
+			'validation' => array(
+				'max_length' => array(256),
+			),
+		),
+		'game_status'   => array('default' => 0, 'form' => array('type' => false)),
+		'top_status'    => array('default' => 0, 'form' => array('type' => false)),
+		'bottom_status' => array('default' => 0, 'form' => array('type' => false)),
+		'created_at'    => array('default' => 0, 'form' => array('type' => false)),
+		'updated_at'    => array('default' => 0, 'form' => array('type' => false)),
 	);
 
 	protected static $_observers = array(
@@ -29,14 +72,14 @@ class Model_Game extends \Orm\Model
 	protected static $_table_name = 'games';
 
 	protected static $_has_one = array(
-		'games_runningscores' => array(
+		'games_runningscore' => array(
 			'model_to'       => 'Model_Games_Runningscore',
 			'key_from'       => 'id',
 			'key_to'         => 'game_id',
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
-		'games_teams' => array(
+		'games_team' => array(
 			'model_to'       => 'Model_Games_Team',
 			'key_from'       => 'id',
 			'key_to'         => 'game_id',
@@ -46,6 +89,13 @@ class Model_Game extends \Orm\Model
 	);
 
 	protected static $_has_many = array(
+		'games_teams' => array(
+			'model_to'       => 'Model_Games_Team',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 		'stats_players' => array(
 			'model_to'       => 'Model_Stats_Player',
 			'key_from'       => 'id',
@@ -77,44 +127,225 @@ class Model_Game extends \Orm\Model
 			'cascade_save'   => false,
 			'cascade_delete' => false,
 		),
+		'conventions_game' => array(
+			'model_to'       => 'Model_Conventions_Game',
+			'key_from'       => 'id',
+			'key_to'         => 'game_id',
+			'cascade_save'   => false,
+			'cascade_delete' => false,
+		),
 	);
 
-	public static function regist($posts)
+	/**
+	 * 試合追加のフォーム
+	 */
+	private static function _get_regist_form()
 	{
+		$form = Fieldset::forge('regist_game', array('form-attribute' => array(
+			'class' => 'form',
+		)))->add_model(static::forge());
+
+		// start_time : PCサイトでは時間と分の入力に分ける
+		if ( ! Agent::is_mobiledevice())
+		{
+			// start_hour / start_minの追加
+			// TODO: Fieldsetのテーブルだと表示がいまいちなので、start_timeのままにしている
+
+			$field = $form->field('start_time');
+
+			$field->set_type('select');
+			$field->set_attribute('class', 'select2');
+
+			// start_timeのoption追加
+			$options = array();
+			for ($hour = 0; $hour < 24; $hour++)
+			{
+				for ($time = 0; $time <= 45; $time += 15)
+				{
+					$value = sprintf('%02d:%02d', $hour, $time);
+					$options[$value] = $value;
+					$form->field('start_time')->set_options($value, $value);
+				}
+			}
+	
+			$form->field('start_time')->add_rule('in_array', array_keys($options));
+		}
+		
+		// submit
+		$form->add('submit', '', array(
+			'type' => 'submit',
+			'class' => 'form-control btn btn-success',
+			'value' => '追加',
+		));
+
+		return $form;
+	}
+
+	/**
+	 * 所属チームにおける試合追加のフォーム
+	 * 
+	 * 対戦相手はテキストで入力など
+	 */
+	public static function get_regist_form()
+	{
+		$form = static::_get_regist_form();
+
+		// 対戦チーム
+		$form->add_before('opponent_team_name', '対戦チーム名',
+			array(
+				'type' => 'text',
+				'class' => 'form-control',
+			),
+			array(
+				'required',
+				'trim',
+			),
+			'stadium'
+		);
+
+		// order
+		$options = array('top' => '先攻', 'bottom' => '後攻');
+		$form->add_before('order', '先攻/後攻',
+			array(
+				'type' => 'select',
+				'class' => 'form-control',
+				'options' => $options,
+			),
+			array(
+				'required',
+				'in_array' => array(array_keys($options)),
+			),
+			'stadium'
+		);
+
+		return $form;
+	}
+
+	/**
+	 * 大会における試合追加のフォーム
+	 *
+	 * BMSに登録してあるチーム同士の試合追加
+	 */
+	public static function get_regist_form_convention($convention_id)
+	{
+		$form = static::_get_regist_form();
+
+		// 大会参加チーム
+		$results = Model_Conventions_Team::get_entried_teams($convention_id);
+		$teams   = array();
+
+		foreach ($results as $result)
+		{
+			$teams[$result->team_id] = $result->team->name;
+		}
+
+		// 対戦チーム
+		$form->add_before('top', '先攻',
+			array(
+				'type' => 'select',
+				'class' => 'form-control',
+				'options' => $teams,
+				'required',
+			),
+			array(),'memo'
+		)
+			->add_rule('required')
+			->add_rule('in_array', array_keys($teams));
+
+		$form->add_before('bottom', '後攻',
+			array(
+				'type' => 'select',
+				'class' => 'form-control',
+				'options' => $teams,
+				'required',
+			),
+			array(),'memo'
+		)
+			->add_rule('required')
+			->add_rule('in_array', array_keys($teams));
+
+
+		return $form;
+	}
+
+	/**
+	 * 試合の追加
+	 */
+	public static function regist($props = false)
+	{
+		$props = $props ?: Input::post();
+		extract($props);
+
 		try {
 			Mydb::begin();
 
 			// gamesテーブルへの保存
-			$game = self::forge(array(
-				'date'       => $posts['date'],
-				'start_time' => $posts['start_time'],
-				'stadium'    => $posts['stadium'],
-				'memo'       => $posts['memo'],
+			$game = static::forge(array(
+				'date'       => $date,
+				'start_time' => $start_time,
+				'stadium'    => $stadium,
+				'memo'       => $memo,
 			));
 			$game->save();
 
-			// games_runningscores
+			// games_runningscoresテーブルへの登録
 			Model_Games_Runningscore::regist($game->id);
 
-			// games_teamsへの保存
-			if ( ! Model_Games_Team::regist($posts + array('game_id' => $game->id)) )
+			// games_teamsテーブルへの保存
+			$values = array();
+			if (isset($order))
 			{
-				throw new Exception('新規ゲーム登録に失敗しました。');
+				// 先攻or後攻が指定されていれば、チームでの試合登録と判断
+				$values[] = array(
+					'game_id' => $game->id,
+					'team_id' => $team_id,
+					'order'   => $order,
+					'opponent_team_id'   => 0,
+					'opponent_team_name' => $opponent_team_name,
+				);
+			}
+			else
+			{
+				// 大会における試合登録
+				// games 1 : 2 games_teams のレコード数になる
+				$values[] = array(
+					'game_id' => $game->id,
+					'team_id' => $top,
+					'order'   => 'top',
+					'opponent_team_id'   => $bottom,
+					'opponent_team_name' => Model_Team::find($bottom)->name,
+				);
+				$values[] = array(
+					'game_id' => $game->id,
+					'team_id' => $bottom,
+					'order'   => 'bottom',
+					'opponent_team_id'   => $top,
+					'opponent_team_name' => Model_Team::find($top)->name,
+				);
+			}
+
+			foreach ($values as $value)
+			{
+				if ( ! Model_Games_Team::regist($value)) 
+				{
+					throw new Exception('新規ゲーム登録に失敗しました。');
+				}
 			}
 
 			// stats_players(starter)
-			Model_Stats_Player::create_new_game($game->id, $posts['team_id']);
-
-			// opponent_team_idがteamsに登録されているものであればこちらも登録
-			// TODO: conventionが実装されたら
-			if ( array_key_exists('opponent_team_id', $posts) )
+			if (isset($team_id))
 			{
+				Model_Stats_Player::create_new_game($game->id, $team_id);
+			}
+			else
+			{
+				Model_Stats_Player::create_new_game($game->id, $top);
+				Model_Stats_Player::create_new_game($game->id, $bottom);
 			}
 
+			// success
 			Mydb::commit();
-			
 			return $game;
-
 		}
 		catch (Exception $e)
 		{
@@ -170,13 +401,17 @@ class Model_Game extends \Orm\Model
 		return true;
 	}
 
+	/**
+	 * (descript TBD)
+	 * @return object Model_Game
+	 */
 	public static function get_info()
 	{
 		// base query
 		$query = self::_get_info_query();
 
 		// 対戦相手
-		$query->related('games_teams');
+		$query->related('games_team');
 
 		// 自分が出場している試合かどうかをサブクエリで取得する
 		// defaultがleft joinなので、join_onに条件追加
@@ -226,7 +461,7 @@ class Model_Game extends \Orm\Model
 			}
 			
 			// 試合結果を配列に付与
-			$score = $res->games_runningscores;
+			$score = $res->games_runningscore;
 
 			// 合計
 			$result[$index]['tsum'] = $score['tsum'];
@@ -267,23 +502,25 @@ class Model_Game extends \Orm\Model
 		$query  = self::_get_info_query();
  
 		// related games_teams
-		$query->related('games_teams', array(
-			'where' => array(
-				array('team_id', '=', $team_id),
-			),
-		));
+		// has_manyのrelationで取得して、あとで配列から戻す
+		// 配列から戻すのは、変更前との互換性のため
+		$query->related('games_teams')
+			->where('games_teams.team_id', $team_id);
 
 		$games = $query->get();
 
 		foreach ( $games as $id => $game )
 		{
 			// scoreの合計を結果に
-			$score = $game->games_runningscores;
+			$score = $game->games_runningscore;
 			$game->tsum = $score->tsum;
 			$game->bsum = $score->bsum;
 
-			// games_teams
-			$team = $game->games_teams;
+			// games_team
+			$team = array_shift($game->games_teams);
+
+			// games_teamへコピー（後方互換性
+			$game->games_team = $team;
 
 			// result
 			if ($team->order === 'top')
@@ -385,8 +622,8 @@ class Model_Game extends \Orm\Model
 
 	public static function remind_mail( $game_id, $team_id )
 	{
-		// played member
-		$players = Model_Stats_Player::get_starter($game_id, $team_id);
+		// played player
+		$players = Model_Stats_Player::get_participate_players($game_id, $team_id);
 
 		foreach ( $players as $index => $player )
 		{
@@ -431,7 +668,7 @@ class Model_Game extends \Orm\Model
 			->where('game_status', '!=', -1)
 			->order_by('date', 'desc');
 
-		$query->related('games_runningscores', array(
+		$query->related('games_runningscore', array(
 			'select' => array('tsum', 'bsum')
 		));
 

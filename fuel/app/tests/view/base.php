@@ -29,9 +29,7 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 		echo "このテストはSeleniumが起動していないとSkipされてしまいます。\n";
 		echo "\n";
 
-		// sample data
-		Test_Base::set_samples('player1');
-		self::$sample = Test_Base::$sample;
+		static::set_samples();
 	}
 
 	protected function setUp()
@@ -39,21 +37,30 @@ abstract class Test_View_Base extends \PHPUnit_Extensions_Selenium2TestCase
 		$this->timeouts()->implicitWait(10000);
 	}
 
+	/**
+	 * set sample datas
+	 */
+	public static function set_samples()
+	{
+		Test_Base::set_samples();
+		static::$sample = Test_Base::$sample;
+	}
+
 	public function assertTitle()
 	{
 		$this->assertSame('Baseball Management System', $this->title());
 	}
 
-	public function login($username, $password = 'password')
+	/**
+	 * 指定されたusernameでログインする
+	 * @param string username
+	 * @param string password(default:'password')
+	 */
+	public function login_by_username($username)
 	{
-		$email = Model_User::find_by_username($username)->email;
-
 		$this->logout();
 
-		$this->url('/');
-    $this->byName('email')->value($email);
-    $this->byName('password')->value($password);
-    $this->byName('login')->submit();
+		$this->url('/force_login/'.$username);
 	}
 
 	public function logout()

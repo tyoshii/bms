@@ -83,7 +83,7 @@ class Model_Games_Team extends \Orm\Model
 		}
 
 		// opponent_team_id is available ?
-		if (isset($opponent_team_id) and ! Model_Team::find($opponent_team_id))
+		if (isset($opponent_team_id) and $opponent_team_id !== 0 and ! Model_Team::find($opponent_team_id))
 		{
 			Log::error('指定されたopponent_team_idが存在しないidです');
 			return false;

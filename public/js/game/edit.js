@@ -223,6 +223,9 @@ function add_daseki(self, daseki) {
   $clone.find('td.daseki-number').text(next_daseki);
   $clone.find('th.daseki-number-text').text('第' + next_daseki + '打席');
 
+  // removeAttr disabled
+  $clone.find('select').removeAttr('disabled');
+
   // select default
   $clone.find('select').each(function(){
     $(this).val(0);

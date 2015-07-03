@@ -66,7 +66,15 @@ class Model_Stats_Player extends \Orm\Model
 		return $query;
 	}
 
-	public static function get_starter($game_id, $team_id)
+	/**
+	 * get participate players
+	 *
+	 * @param string game_id
+	 * @param string team_id
+	 *
+	 * @return array
+	 */
+	public static function get_participate_players($game_id, $team_id)
 	{
 		$query = self::get_query($game_id, $team_id);
 
@@ -164,8 +172,8 @@ class Model_Stats_Player extends \Orm\Model
 			->related('games')
 				->where('games.game_status', '!=', '-1')
 				->order_by('games.date', 'DESC')
-			->related('games.games_teams')
-				->where('games.games_teams.team_id', '=', $team_id)
+			->related('games.games_team')
+				->where('games.games_team.team_id', '=', $team_id)
 			->get();
 
 		return $return;

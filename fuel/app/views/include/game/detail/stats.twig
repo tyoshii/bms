@@ -1,0 +1,114 @@
+<h4>野手成績</h4>
+
+<table class="table table-striped" data-type="hitting">
+<thead>
+<tr>
+<th>打順</th>
+<th>名前</th>
+<th>＃</th>
+<th>打席数</th>
+<th>打数</th>
+<th>安打</th>
+<th>二塁打</th>
+<th>三塁打</th>
+<th>本塁打</th>
+<th>三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>犠打</th>
+<th>犠飛</th>
+<th>打点</th>
+<th>得点</th>
+<th>盗塁</th>
+<th>エラー</th>
+</tr>
+</thead>
+
+<tbody>
+{%for player in stats.hitting.players %}
+<tr>
+<td>{% if player.order != 0 %}{{player.order}}{% endif %}</td>
+<td><a href="/player/{{ player.player_id }}">{{player.name}}</a></td>
+<td>{{player.number}}</td>
+<td>{{player['TPA']}}</td>
+<td>{{player['AB']}}</td>
+<td>{{player['H']}}</td>
+<td>{{player['2B']}}</td>
+<td>{{player['3B']}}</td>
+<td>{{player['HR']}}</td>
+<td>{{player['SO']}}</td>
+<td>{{player['BB']}}</td>
+<td>{{player['HBP']}}</td>
+<td>{{player['SAC']}}</td>
+<td>{{player['SF']}}</td>
+<td>{{player['RBI']}}</td>
+<td>{{player['R']}}</td>
+<td>{{player['SB']}}</td>
+<td></td>
+</tr>
+{%endfor%}
+</tbody>
+
+<tfoot>
+<tr class="active">
+<th></th>
+<th>計</th>
+<th></th>
+<th>{{stats.hitting.total['TPA']}}</th>
+<th>{{stats.hitting.total['AB']}}</th>
+<th>{{stats.hitting.total['H']}}</th>
+<th>{{stats.hitting.total['2B']}}</th>
+<th>{{stats.hitting.total['3B']}}</th>
+<th>{{stats.hitting.total['HR']}}</th>
+<th>{{stats.hitting.total['SO']}}</th>
+<th>{{stats.hitting.total['BB']}}</th>
+<th>{{stats.hitting.total['HBP']}}</th>
+<th>{{stats.hitting.total['SAC']}}</th>
+<th>{{stats.hitting.total['SF']}}</th>
+<th>{{stats.hitting.total['RBI']}}</th>
+<th>{{stats.hitting.total['R']}}</th>
+<th>{{stats.hitting.total['SB']}}</th>
+<th></th>
+</tfoot>
+</table>
+
+<h4>投手成績</h4>
+
+<table class="table table-striped" data-type="pitching">
+<tr>
+<th>名前</th>
+<th>＃</th>
+<th>勝敗</th>
+<th>投球回</th>
+<th>被安打</th>
+<th>奪三振</th>
+<th>四球</th>
+<th>死球</th>
+<th>自責点</th>
+<th>失点</th>
+</tr>
+
+{%for player in stats.pitching.players %}
+
+<tr>
+<td><a href="/player/{{ player.player_id }}">{{player.name}}</a></td>
+<td>{{player.number}}</td>
+<td>
+{%if player['W']   == 1%}勝{%endif%}
+{%if player['L']   == 1%}負{%endif%}
+{%if player['HLD'] == 1%}ホールド{%endif%}
+{%if player['SV']  == 1%}セーブ{%endif%}
+</td>
+<td>
+{{ player['IP'] }} {{player['IP_frac']}}
+</td>
+<td>{{player['H']}}</td>
+<td>{{player['SO']}}</td>
+<td>{{player['BB']}}</td>
+<td>{{player['HB']}}</td>
+<td>{{player['ER']}}</td>
+<td>{{player['R']}}</td>
+</tr>
+
+{%endfor%}
+</table>

@@ -34,13 +34,22 @@ class Model_Conventions_Team extends \Orm\Model
 	);
 
 	/**
-	 * get team data ( add entried convention data )
+	 * get team data
+	 * 
+	 * Model_Team::get_teamsのラッパー
+	 * 大会IDが引数で指定されると、entriedキーが付与される
+	 *
 	 * @param string convention_id
 	 * @return array
 	 */
-	public static function get_teams($convention_id)
+	public static function get_teams($convention_id = null)
 	{
 		$teams = Model_Team::get_teams();
+
+		if (is_null($convention_id))
+		{
+			return $teams;
+		}
 
 		$entried = static::query()->where('convention_id', $convention_id)->get();
 		foreach ($entried as $team)

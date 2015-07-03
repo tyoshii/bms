@@ -27,7 +27,7 @@ class Model_Convention extends \Orm\Model
 				'type' => 'select',
 				'options' => array(
 					'league' => 'league',
-					'tournament' => 'tournament',
+					// 'tournament' => 'tournament',
 				),
 				'value' => 'league',
 				'class' => 'form-control',
@@ -67,9 +67,10 @@ class Model_Convention extends \Orm\Model
 	 * @param Model_Convention
 	 * @return FieldsetObject
 	 */
-	public static function get_form($model)
+	public static function get_form($model = false)
 	{
-		$form = Fieldset::forge('convention_add')->add_model(static::forge());
+		$form = Fieldset::forge('convention_add')
+							->add_model($model ?: static::forge());
 
 		// submit
 		$form->add($model ? 'update' : 'add', '', array(
@@ -112,7 +113,7 @@ class Model_Convention extends \Orm\Model
 		}
 
 		// new
-		if ( ! $prop['published'])
+		if (! array_key_exists('published', $prop) || ! $prop['published'])
 		{
 			$prop['published'] = 'true';
 		}

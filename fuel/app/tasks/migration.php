@@ -163,5 +163,29 @@ class Migration
 			}
 		}
 	}
+
+	/**
+	 * games_runningscores の last_inning を修正する
+	 * スコアの入力されているイニングを調べ、最後のイニングを
+	 * last_inningに設定する
+	 */
+	public function fixture_last_inning()
+	{
+		$scores = \Model_Games_Runningscore::find('all');
+
+		foreach ($scores as $score)
+		{
+			for ($i = 1; $i <= 18; $i++)
+			{
+				if (is_null($score['t'.$i]) and is_null($score['b'.$i]))
+				{
+					$score->last_inning = $i - 1;
+					break;
+				}
+			}
+
+			$score->save();
+		}
+	}
 }
 /* End of file tasks/migration.php */

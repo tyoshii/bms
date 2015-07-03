@@ -1,0 +1,106 @@
+{% extends 'layout/layout.twig' %}
+
+{% block content %}
+
+{# 成績入力へのリンク #}
+{% if global.player %}
+
+<div class="pull-right">
+<ol class="breadcrumb">
+
+{% if global.team_admin %}
+<li><a href="{{ current_url() }}/edit/score">試合概要</a></li>
+<li><a href="{{ current_url() }}/edit/player">出場選手</a></li>
+<li><a href="{{ current_url() }}/edit/other">管理</a></li>
+{%endif%}
+
+<li><a href="{{ current_url() }}/edit/batter">野手成績</a></li>
+<li><a href="{{ current_url() }}/edit/pitcher">投手成績</a></li>
+
+</ol>
+</div>
+{% endif %}{# if global.player #}
+
+
+{# ヘッダー部分
+左：試合概要
+右：ランニングスコア #}
+
+<div class="row">
+<div class="col-md-3">
+
+<table class="table">
+<tr>
+<th>日付</th>
+<td>{{ global.game.date }}</td>
+</tr>
+<tr>
+<th>球場</th>
+<td>{{ global.game.stadium }}</td>
+</tr>
+</table>
+</div>
+
+<div class="col-md-9">
+
+<table class="table" data-type="score">
+
+<tr>
+<th>チーム</th>
+{%for i in range(1,global.game.games_runningscore.last_inning)%}
+<th>{{i}}</th>
+{%endfor%}
+<th>合計</th>
+</tr>
+
+<tr>
+<td>{{ team.top_name }}</td>
+{%for i in range(1,global.game.games_runningscore.last_inning)%}
+<td>{{global.game.games_runningscore['t'~i]}}</td>
+{%endfor%}
+<td>{{global.game.games_runningscore.tsum}}</td>
+</tr>
+
+<tr>
+<td>{{ team.bottom_name }}</td>
+{%for i in range(1,global.game.games_runningscore.last_inning)%}
+<td>{{global.game.games_runningscore['b'~i]}}</td>
+{%endfor%}
+<td>{{global.game.games_runningscore.bsum}}</td>
+</tr>
+</table>
+
+</div>
+</div>
+{# ヘッダーここまで #}
+
+
+{# 成績 #}
+<ul class="nav nav-tabs" role="tablist" id="stats_tab">
+{% if team.top_id != 0 %}
+  <li role="presentation"><a href="#top" aria-controls="top" role="tab" data-toggle="tab">{{ team.top_name }}</a></li>
+{% endif %}
+
+{% if team.bottom_id != 0 %}
+  <li role="presentation"><a href="#bottom" aria-controls="bottom" role="tab" data-toggle="tab">{{ team.bottom_name }}</a></li>
+{% endif %}
+</ul>
+
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane" id="top">
+{% include "include/game/detail/stats.twig" with {"stats" : stats.top } %}
+</div>
+<div role="tabpanel" class="tab-pane" id="bottom">
+{% include "include/game/detail/stats.twig" with {"stats" : stats.bottom } %}
+</div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+$("#stats_tab a:first").tab('show');
+</script>
+{% endblock js %}

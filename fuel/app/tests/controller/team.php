@@ -9,13 +9,6 @@
  */
 class Test_Controller_Team extends Test_Base
 {
-	public static $team_url = '';
-
-	public static function setUpBeforeClass()
-	{
-		self::$team_url = '/team/'.Model_Team::find('first')->url_path;
-	}
-
   protected function setUp()
   {
     parent::setUp();
@@ -29,7 +22,7 @@ class Test_Controller_Team extends Test_Base
 	 */
 	public function test_チームトップページ()
 	{
-		$res = Request::forge(self::$team_url)->execute()->response();
+		$res = Request::forge(static::$sample['url']['team'])->execute()->response();
 
 		// assertion
 		$this->assertSame(200, $res->status);
@@ -91,7 +84,7 @@ class Test_Controller_Team extends Test_Base
 	 */
 	public function test_選手一覧_個人()
 	{
-		$res = $this->request(self::$team_url.'/player');
+		$res = $this->request(static::$sample['url']['team'].'/player');
 
 		$this->assertSame(200, $res->status);
 		$this->assertTrue(is_array($res->body->players));
@@ -100,13 +93,13 @@ class Test_Controller_Team extends Test_Base
 		$sample_team_id = Model_Team::find('first')->id;
 		$sample_player_id = Model_Player::find_by_team_id($sample_team_id)->id;
 
-		$res = $this->request(self::$team_url.'/player/'.$sample_player_id);
+		$res = $this->request(static::$sample['url']['team'].'/player/'.$sample_player_id);
 
 		$this->assertSame(200, $res->status);
 		$this->assertSame('Model_Player', get_class($res->body->player));
 
 		// 存在しない選手
-		$res = $this->request(self::$team_url.'/player/not_exist_player');
+		$res = $this->request(static::$sample['url']['team'].'/player/not_exist_player');
 
 		$this->assertSame(302, $res->status);
 		$this->assertSame('選手情報が取得できませんでした', Session::get_flash('error'));
@@ -116,7 +109,7 @@ class Test_Controller_Team extends Test_Base
 	 */
 	public function test_成績()
 	{
-		$res = $this->request(self::$team_url.'/stats');
+		$res = $this->request(static::$sample['url']['team'].'/stats');
 
 		$this->assertSame(200, $res->status);
 
@@ -129,7 +122,7 @@ class Test_Controller_Team extends Test_Base
 	 */
 	public function test_オファー()
 	{
-		$res = $this->request(self::$team_url.'/offer');
+		$res = $this->request(static::$sample['url']['team'].'/offer');
 
 		$this->assertSame(200, $res->status);
 	}

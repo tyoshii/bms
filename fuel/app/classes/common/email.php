@@ -22,13 +22,31 @@ __FOOTER__;
 	public static function sendmail($to, $subject, $body)
 	{
 		// developmentではログイン中のユーザーにしかメールを送信しない
-		if (Fuel::$env === 'development')
+		if (Auth::check() && Fuel::$env === 'development')
 		{
 			if ($to !== Auth::get_email())
 			{
+				Log::debug('ログイン時はログインユーザーのメールにしか送信しません。');
+				Log::debug("$to へのメールはスキップされました。");
 				return false;
 			}	
 		}
+
+		// テスト用のメールアドレス以外は送信しない
+		$emails = Config::get('bms.test_email', array());
+		foreach ($emails as $email)
+		{
+			if (preg_match("/$email/", $to))
+			{
+				goto SEND_EMAIL;
+			}
+		}
+
+		Log::debug('config/bms.phpに設定されているtest_emailにマッチしないアドレスには送信しません。');
+		Log::debug("$to へのメールはスキップされました。");
+		return false;
+
+SEND_EMAIL:
 
 		$email = Email::forge();
 

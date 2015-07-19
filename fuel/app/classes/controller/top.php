@@ -9,7 +9,7 @@ class Controller_Top extends Controller_Base
 	{
 		$view = Theme::instance()->view('top.twig');
 
-		$view->teams = Model_Team::find('all');
+		$view->teams = Model_Team::query()->order_by('updated_at', 'DESC')->get();
 
 		if (Auth::check())
 		{

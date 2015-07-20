@@ -5,7 +5,6 @@
 
 <div class="row">
 
-
 <div class="col-md-6">
 
 {% if auth_check() %}
@@ -37,36 +36,26 @@
 <a href="/team/regist">新しくチームを作る</a>
 </div>
 
-<hr>
-
-<label>または、登録されているチームを検索</label>
-<form class="form-inline" action="/team">
-<div class="form-group">
-<input class="form-control input-sm" type="text" name="query">
-</div>
-<div class="form-group">
-<input class="btn btn-success btn-sm" type="submit" value="検索">
-</div>
-</form>
 {% endfor %}
 
 {%else%}
 
-<h3>ログイン</h3>
+<h3>ログインして使う</h3>
 {{login_form}}
 
 <p><a href="/auth/oauth/facebook">Facebookでログイン</a>
 <p><a href="/auth/oauth/google">Googleでログイン</a>
 
-<p><a href="/register">新規ユーザー登録はこちら</a></p>
 <p><a href="/forget_password">パスワードを忘れた場合はこちら</a></p>
 
+<h3>新しくユーザー登録する</h3>
+<p><a href="/register">新規ユーザー登録はこちら</a></p>
 {%endif%}
 
 </div>
 
 <div class="col-md-6">
-<h3>登録チーム一覧</h3>
+<h3>チームを探す</h3>
 
 <table class="table" id="teams">
 <thead>

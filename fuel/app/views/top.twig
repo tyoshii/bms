@@ -9,14 +9,13 @@
 
 {% if auth_check() %}
 
+<h3>所属しているチーム</h3>
 {% for team in my_teams %}
 
 {% if loop.first %}
 <table class="table">
 <thead>
-<tr>
-<th>所属チーム名</th>
-</tr>
+<tr></tr>
 </thead>
 <tbody>
 {% endif %}
@@ -28,6 +27,8 @@
 {% if loop.last %}
 </tbody>
 </table>
+
+<a href="/team/regist">新しくチームを作る</a>
 {% endif %}
 
 {% else %}

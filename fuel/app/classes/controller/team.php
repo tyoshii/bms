@@ -55,7 +55,7 @@ class Controller_Team extends Controller_Base
 
 		// postメソッドであれば、teamのupdated_atを更新
 		// - トップページのsort keyに利用
-		if (Input::post())
+		if (Input::post() and $this->_team)
 		{
 			$this->_team->updated_at = time();
 			$this->_team->save();

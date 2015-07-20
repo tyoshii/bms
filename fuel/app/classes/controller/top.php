@@ -14,7 +14,7 @@ class Controller_Top extends Controller_Base
 		if (Auth::check())
 		{
 			// 所属チーム
-			$view->my_teams = Model_Team::get_belong_team();
+			$view->my_teams = Model_Team::get_belong_teams();
 		}
 		else
 		{

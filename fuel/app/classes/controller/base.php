@@ -39,10 +39,7 @@ class Controller_Base extends Controller
 				{
 					Session::set_flash('info', 'ログインに成功しました！');
 
-					$redirect_to = Session::get('redirect_to', '/');
-					Session::delete('redirect_to');
-
-					Response::redirect($redirect_to);
+					Response::redirect(Common::get_url_redirect_after_login());
 				}
 			}
 

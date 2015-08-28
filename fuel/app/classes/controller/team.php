@@ -52,6 +52,14 @@ class Controller_Team extends Controller_Base
 		$this->set_global('team_admin', $this->_team_admin);
 		$this->set_global('player', $this->_player);
 		$this->set_global('alerts', $this->_alerts);
+
+		// postメソッドであれば、teamのupdated_atを更新
+		// - トップページのsort keyに利用
+		if (Input::post() and $this->_team)
+		{
+			$this->_team->updated_at = time();
+			$this->_team->save();
+		}
 	}
 
 	/**

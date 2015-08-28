@@ -74,4 +74,27 @@ class Common
 
 		return sprintf('%s?d=%s', $gravatar_url, $bms_url);
 	}
+
+	/**
+	 * ログイン後にリダイレクトする先のURL
+	 */
+	public static function get_url_redirect_after_login()
+	{
+		// セッションにredirectURLが入っている場合
+		if ($url = Session::get('redirect_to'))
+		{
+			Session::delete('redirect_to');
+			return $url;
+		}
+
+		// 所属チームがある場合は、チームページへredirect
+		$team = Model_Team::get_belong_team();
+		if ($team)
+		{
+			return '/team/'.$team->url_path;
+		}
+
+		// default is top page
+		return '/';
+	}
 }

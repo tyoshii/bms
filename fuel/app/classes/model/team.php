@@ -123,7 +123,23 @@ class Model_Team extends \Orm\Model
 		return $team->id;
 	}
 
+	/**
+	 * 自分の所属するチームを返す
+	 *
+	 * @return mix object Model_Team / null
+	 */
 	public static function get_belong_team()
+	{
+		$teams = static::get_belong_teams();
+
+		return is_array($teams) ? reset($teams) : null;
+	}
+	/**
+	 * 自分の所属するチームを返す（複数チーム所属している場合
+	 *
+	 * @return array Model_Team
+	 */
+	public static function get_belong_teams()
 	{
 		return self::query()->related('players', array(
 			'where' => array(

@@ -58,7 +58,8 @@ class Controller_Auth extends Controller
 				case 'linked':
 					// inform the user the link was succesfully made
 					// and set the redirect url for this status
-					$url = '/';
+
+					$url = Common::get_url_redirect_after_login();
 					Session::set_flash('info', 'ログインに成功しました。');
 				break;
 
@@ -67,7 +68,7 @@ class Controller_Auth extends Controller
 					// inform the user the login using the provider was succesful
 					// and set the redirect url for this status
 
-					$url = '/';
+					$url = Common::get_url_redirect_after_login();
 					Session::set_flash('info', 'ログインに成功しました。');
 				break;
 

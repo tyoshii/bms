@@ -9,12 +9,12 @@ class Controller_Top extends Controller_Base
 	{
 		$view = Theme::instance()->view('top.twig');
 
-		$view->teams = Model_Team::find('all');
+		$view->teams = Model_Team::query()->order_by('updated_at', 'DESC')->get();
 
 		if (Auth::check())
 		{
 			// 所属チーム
-			$view->my_teams = Model_Team::get_belong_team();
+			$view->my_teams = Model_Team::get_belong_teams();
 		}
 		else
 		{

@@ -7,12 +7,17 @@ class Model_Score_Self
 	 *
 	 * @param team_id
 	 * @param is_regulation 規定打席を考慮するかどうか
+	 * @param year
 	 */
-	public static function get_self_scores($team_id = null, $is_regulation = true)
+	public static function get_self_scores($team_id = null, $is_regulation = true, $year = null)
 	{
 		if (is_null($team_id))
 		{
 			$team_id = Model_Player::get_my_team_id();
+		}
+		if (is_null($year))
+		{
+			$year = date('Y');
 		}
 
 		$query = <<<__QUERY__
@@ -59,7 +64,9 @@ ON
 WHERE
 		p.team_id = $team_id AND
 		p.status != -1       AND
-		g.game_status = 2
+		g.game_status = 2    AND
+		g.date >= "$year-01-01" AND
+	 	g.date <= "$year-12-31"
 
 GROUP BY
 		s.player_id

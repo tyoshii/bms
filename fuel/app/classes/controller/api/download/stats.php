@@ -8,6 +8,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 	public function action_team()
 	{
 		// validation parameter
+		$year = Input::get('year', null);
 		$team_id = Input::get('team_id');
 		if ( ! $team_id)
 		{
@@ -28,7 +29,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 		$sheet = $book->getActiveSheet();
 
 		// set stats
-		$stats = Model_Score_Self::get_self_scores($team_id, false);
+		$stats = Model_Score_Self::get_self_scores($team_id, false, $year);
 		static::_set_team_batter_stats($sheet, $stats);
 
 		// output

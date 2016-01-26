@@ -4,6 +4,16 @@
 
 <h1>試合一覧</h1>
 
+<form>
+<label>試合年</label>
+<select name="year">
+{% for year in years %}
+<option value="{{year}}">{{year}}年</option>
+{% endfor %}
+</select>
+<input class="btn btn-xs btn-default" type="submit" value="絞り込み">
+</form>
+
 {% for game in games %}
 
 {% if loop.first %}

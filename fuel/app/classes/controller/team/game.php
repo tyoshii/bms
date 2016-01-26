@@ -35,7 +35,12 @@ class Controller_Team_Game extends Controller_Team
 	{
 		$view = View::forge('team/game/index.twig');
 
-		$view->games = Model_Game::get_info_by_team_id($this->_team->id);
+		$view->games = Model_Game::get_info_by_team_id($this->_team->id, Input::get('year'));
+
+		// 表示用の変数
+		//
+		// 年数絞り込みのための年数
+		$view->years = Model_Game::get_distinct_year();
 
 		return Response::forge($view);
 	}

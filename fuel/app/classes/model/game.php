@@ -182,6 +182,22 @@ class Model_Game extends \Orm\Model
 	}
 
 	/**
+	 * 登録されている試合情報から、実施された"年"の情報を抽出
+	 *
+	 */
+	public static function get_distinct_year()
+	{
+		$query = DB::select(DB::expr('DATE_FORMAT(date, "%Y") as year'))->from(static::$_table_name)->distinct(true);
+		$result = $query->execute()->as_array('year');
+		$result[date('Y')] = 1;
+
+		$years = array_unique(array_keys($result));
+		arsort($years);
+
+		return $years;
+	}
+
+	/**
 	 * 所属チームにおける試合追加のフォーム
 	 * 
 	 * 対戦相手はテキストで入力など
@@ -494,13 +510,17 @@ class Model_Game extends \Orm\Model
 		return $result;
 	}
 
-	public static function get_info_by_team_id($team_id = null)
+	public static function get_info_by_team_id($team_id = null, $year = null)
 	{
 		if ( ! $team_id ) return array();
 
+		// $year default
+		if (! $year)
+			$year = date('Y');
+
 		// base query
-		$query  = self::_get_info_query();
- 
+		$query  = self::_get_info_query($year);
+
 		// related games_teams
 		// has_manyのrelationで取得して、あとで配列から戻す
 		// 配列から戻すのは、変更前との互換性のため
@@ -662,10 +682,15 @@ class Model_Game extends \Orm\Model
 	 *
 	 * @return : Queyry Builder object
 	 */
-	private static function _get_info_query()
+	private static function _get_info_query($year = null)
 	{
+		// $year default
+		if (! $year)
+			$year = date('Y');
+
 		$query = self::query()
 			->where('game_status', '!=', -1)
+			->where('date', 'between', array("$year-01-01", "$year-12-31"))
 			->order_by('date', 'desc');
 
 		$query->related('games_runningscore', array(

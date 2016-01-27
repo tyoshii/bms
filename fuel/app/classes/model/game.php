@@ -52,20 +52,20 @@ class Model_Game extends \Orm\Model
                 'max_length' => array(256),
             ),
         ),
-        'game_status'   => array('default' => 0, 'form' => array('type' => false)),
-        'top_status'    => array('default' => 0, 'form' => array('type' => false)),
+        'game_status' => array('default' => 0, 'form' => array('type' => false)),
+        'top_status' => array('default' => 0, 'form' => array('type' => false)),
         'bottom_status' => array('default' => 0, 'form' => array('type' => false)),
-        'created_at'    => array('default' => 0, 'form' => array('type' => false)),
-        'updated_at'    => array('default' => 0, 'form' => array('type' => false)),
+        'created_at' => array('default' => 0, 'form' => array('type' => false)),
+        'updated_at' => array('default' => 0, 'form' => array('type' => false)),
     );
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -73,71 +73,71 @@ class Model_Game extends \Orm\Model
 
     protected static $_has_one = array(
         'games_runningscore' => array(
-            'model_to'       => 'Model_Games_Runningscore',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Games_Runningscore',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'games_team' => array(
-            'model_to'       => 'Model_Games_Team',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Games_Team',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
 
     protected static $_has_many = array(
         'games_teams' => array(
-            'model_to'       => 'Model_Games_Team',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Games_Team',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'stats_players' => array(
-            'model_to'       => 'Model_Stats_Player',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Player',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
-    
+
     protected static $_belongs_to = array(
         'stats_players' => array(
-            'model_to'       => 'Model_Stats_Player',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Player',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'stats_hittings' => array(
-            'model_to'       => 'Model_Stats_Hitting',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Hitting',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'stats_pitchings' => array(
-            'model_to'       => 'Model_Stats_Pitching',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Pitching',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'conventions_game' => array(
-            'model_to'       => 'Model_Conventions_Game',
-            'key_from'       => 'id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Conventions_Game',
+            'key_from' => 'id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
 
     /**
-     * 試合追加のフォーム
+     * 試合追加のフォーム.
      */
     private static function _get_regist_form()
     {
@@ -146,8 +146,7 @@ class Model_Game extends \Orm\Model
         )))->add_model(static::forge());
 
         // start_time : PCサイトでは時間と分の入力に分ける
-        if ( ! Agent::is_mobiledevice())
-        {
+        if (!Agent::is_mobiledevice()) {
             // start_hour / start_minの追加
             // TODO: Fieldsetのテーブルだと表示がいまいちなので、start_timeのままにしている
 
@@ -158,19 +157,17 @@ class Model_Game extends \Orm\Model
 
             // start_timeのoption追加
             $options = array();
-            for ($hour = 0; $hour < 24; $hour++)
-            {
-                for ($time = 0; $time <= 45; $time += 15)
-                {
+            for ($hour = 0; $hour < 24; ++$hour) {
+                for ($time = 0; $time <= 45; $time += 15) {
                     $value = sprintf('%02d:%02d', $hour, $time);
                     $options[$value] = $value;
                     $form->field('start_time')->set_options($value, $value);
                 }
             }
-    
+
             $form->field('start_time')->add_rule('in_array', array_keys($options));
         }
-        
+
         // submit
         $form->add('submit', '', array(
             'type' => 'submit',
@@ -182,8 +179,7 @@ class Model_Game extends \Orm\Model
     }
 
     /**
-     * 登録されている試合情報から、実施された"年"の情報を抽出
-     *
+     * 登録されている試合情報から、実施された"年"の情報を抽出.
      */
     public static function get_distinct_year()
     {
@@ -198,7 +194,7 @@ class Model_Game extends \Orm\Model
     }
 
     /**
-     * 所属チームにおける試合追加のフォーム
+     * 所属チームにおける試合追加のフォーム.
      * 
      * 対戦相手はテキストで入力など
      */
@@ -238,7 +234,7 @@ class Model_Game extends \Orm\Model
     }
 
     /**
-     * 大会における試合追加のフォーム
+     * 大会における試合追加のフォーム.
      *
      * BMSに登録してあるチーム同士の試合追加
      */
@@ -248,10 +244,9 @@ class Model_Game extends \Orm\Model
 
         // 大会参加チーム
         $results = Model_Conventions_Team::get_entried_teams($convention_id);
-        $teams   = array();
+        $teams = array();
 
-        foreach ($results as $result)
-        {
+        foreach ($results as $result) {
             $teams[$result->team_id] = $result->team->name;
         }
 
@@ -263,7 +258,7 @@ class Model_Game extends \Orm\Model
                 'options' => $teams,
                 'required',
             ),
-            array(),'memo'
+            array(), 'memo'
         )
             ->add_rule('required')
             ->add_rule('in_array', array_keys($teams));
@@ -275,17 +270,16 @@ class Model_Game extends \Orm\Model
                 'options' => $teams,
                 'required',
             ),
-            array(),'memo'
+            array(), 'memo'
         )
             ->add_rule('required')
             ->add_rule('in_array', array_keys($teams));
-
 
         return $form;
     }
 
     /**
-     * 試合の追加
+     * 試合の追加.
      */
     public static function regist($props = false)
     {
@@ -297,10 +291,10 @@ class Model_Game extends \Orm\Model
 
             // gamesテーブルへの保存
             $game = static::forge(array(
-                'date'       => $date,
+                'date' => $date,
                 'start_time' => $start_time,
-                'stadium'    => $stadium,
-                'memo'       => $memo,
+                'stadium' => $stadium,
+                'memo' => $memo,
             ));
             $game->save();
 
@@ -309,88 +303,83 @@ class Model_Game extends \Orm\Model
 
             // games_teamsテーブルへの保存
             $values = array();
-            if (isset($order))
-            {
+            if (isset($order)) {
                 // 先攻or後攻が指定されていれば、チームでの試合登録と判断
                 $values[] = array(
                     'game_id' => $game->id,
                     'team_id' => $team_id,
-                    'order'   => $order,
-                    'opponent_team_id'   => 0,
+                    'order' => $order,
+                    'opponent_team_id' => 0,
                     'opponent_team_name' => $opponent_team_name,
                 );
-            }
-            else
-            {
+            } else {
                 // 大会における試合登録
                 // games 1 : 2 games_teams のレコード数になる
                 $values[] = array(
                     'game_id' => $game->id,
                     'team_id' => $top,
-                    'order'   => 'top',
-                    'opponent_team_id'   => $bottom,
+                    'order' => 'top',
+                    'opponent_team_id' => $bottom,
                     'opponent_team_name' => Model_Team::find($bottom)->name,
                 );
                 $values[] = array(
                     'game_id' => $game->id,
                     'team_id' => $bottom,
-                    'order'   => 'bottom',
-                    'opponent_team_id'   => $top,
+                    'order' => 'bottom',
+                    'opponent_team_id' => $top,
                     'opponent_team_name' => Model_Team::find($top)->name,
                 );
             }
 
-            foreach ($values as $value)
-            {
-                if ( ! Model_Games_Team::regist($value)) 
-                {
+            foreach ($values as $value) {
+                if (!Model_Games_Team::regist($value)) {
                     throw new Exception('新規ゲーム登録に失敗しました。');
                 }
             }
 
             // stats_players(starter)
-            if (isset($team_id))
-            {
+            if (isset($team_id)) {
                 Model_Stats_Player::create_new_game($game->id, $team_id);
-            }
-            else
-            {
+            } else {
                 Model_Stats_Player::create_new_game($game->id, $top);
                 Model_Stats_Player::create_new_game($game->id, $bottom);
             }
 
             // success
             Mydb::commit();
+
             return $game;
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Mydb::rollback();
             Log::error('内部処理エラー:'.$e->getMessage());
+
             return false;
         }
     }
 
     public static function create_new_game($data)
     {
-        try
-        {
+        try {
             Mydb::begin();
 
             // init
             // TODO: create_new_gameの見直しのときに一緒に
-            if ( ! array_key_exists('top_name', $data)) $data['top_name'] = null;
-            if ( ! array_key_exists('bottom_name', $data)) $data['bottom_name'] = null;
+            if (!array_key_exists('top_name', $data)) {
+                $data['top_name'] = null;
+            }
+            if (!array_key_exists('bottom_name', $data)) {
+                $data['bottom_name'] = null;
+            }
 
             // チーム名
-            $team_top_name = $data['top_name'] ? : Model_Team::find($data['top'])->name;
-            $team_bottom_name = $data['bottom_name'] ? : Model_Team::find($data['bottom'])->name;
+            $team_top_name = $data['top_name'] ?: Model_Team::find($data['top'])->name;
+            $team_bottom_name = $data['bottom_name'] ?: Model_Team::find($data['bottom'])->name;
             // games insert
             $game = self::forge(array(
-                'date'             => $data['date'],
-                'team_top'         => $data['top_name'] ? 0 : $data['top'],
-                'team_top_name'    => $team_top_name,
-                'team_bottom'      => $data['bottom_name'] ? 0 : $data['bottom'],
+                'date' => $data['date'],
+                'team_top' => $data['top_name'] ? 0 : $data['top'],
+                'team_top_name' => $team_top_name,
+                'team_bottom' => $data['bottom_name'] ? 0 : $data['bottom'],
                 'team_bottom_name' => $team_bottom_name,
             ));
 
@@ -406,11 +395,10 @@ class Model_Game extends \Orm\Model
             Model_Games_Stat::create_new_game($game->id, $data['top'], $data['bottom']);
 
             Mydb::commit();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Mydb::rollback();
             Session::set_flash('error', '内部処理エラー:'.$e->getMessage());
+
             return false;
         }
 
@@ -418,7 +406,8 @@ class Model_Game extends \Orm\Model
     }
 
     /**
-     * (descript TBD)
+     * (descript TBD).
+     *
      * @return object Model_Game
      */
     public static function get_info()
@@ -434,7 +423,7 @@ class Model_Game extends \Orm\Model
         // 出場していない場合はnullとなる。
         $query->related('stats_players', array(
             'join_on' => array(
-                array('player_id', '=', Model_Player::get_my_player_id())
+                array('player_id', '=', Model_Player::get_my_player_id()),
             ),
         ));
 
@@ -442,11 +431,9 @@ class Model_Game extends \Orm\Model
         $result = $query->get();
 
         // add value
-        foreach ( $result as $index => $res )
-        {
+        foreach ($result as $index => $res) {
             // 自分が出場している試合
-            if ( $stats = $res->stats_players )
-            {
+            if ($stats = $res->stats_players) {
                 $result[$index]['play'] = true;
             }
 
@@ -454,15 +441,13 @@ class Model_Game extends \Orm\Model
             // - 加えて、game.statusをセット
             $result[$index]['own'] = false;
 
-            if ( Auth::has_access('admin.admin') )
-            {
-                $result[$index]['own']    = 'admin';
+            if (Auth::has_access('admin.admin')) {
+                $result[$index]['own'] = 'admin';
                 $result[$index]['status'] = $result[$index]['game_status'];
             }
 
-            if ( $team_id = Model_Player::get_my_team_id() )
-            {
-/*
+            if ($team_id = Model_Player::get_my_team_id()) {
+                /*
                 if ( $res['team_top'] == $team_id ) 
                 {
                     $result[$index]['own']    = 'top';
@@ -475,7 +460,7 @@ class Model_Game extends \Orm\Model
                 }
 */
             }
-            
+
             // 試合結果を配列に付与
             $score = $res->games_runningscore;
 
@@ -483,28 +468,22 @@ class Model_Game extends \Orm\Model
             $result[$index]['tsum'] = $score['tsum'];
             $result[$index]['bsum'] = $score['bsum'];
 
-            if ( $score['tsum'] > $score['bsum'] )
-            {
+            if ($score['tsum'] > $score['bsum']) {
                 $result[$index]['top_result'] = '○';
                 $result[$index]['bottom_result'] = '●';
-                    
+
                 $result[$index]['result'] = $result[$index]['own'] === 'top' ? 'win' : 'lose';
-            }
-            else if ( $score['tsum'] < $score['bsum'] )
-            {
+            } elseif ($score['tsum'] < $score['bsum']) {
                 $result[$index]['top_result'] = '●';
                 $result[$index]['bottom_result'] = '○';
 
                 $result[$index]['result'] = $result[$index]['own'] === 'top' ? 'lose' : 'win';
-            }
-            else
-            {
+            } else {
                 $result[$index]['top_result'] = '△';
                 $result[$index]['bottom_result'] = '△';
 
                 $result[$index]['result'] = 'even';
             }
-
         }
 
         return $result;
@@ -512,14 +491,17 @@ class Model_Game extends \Orm\Model
 
     public static function get_info_by_team_id($team_id = null, $year = null)
     {
-        if ( ! $team_id ) return array();
+        if (!$team_id) {
+            return array();
+        }
 
         // $year default
-        if (! $year)
+        if (!$year) {
             $year = date('Y');
+        }
 
         // base query
-        $query  = self::_get_info_query($year);
+        $query = self::_get_info_query($year);
 
         // related games_teams
         // has_manyのrelationで取得して、あとで配列から戻す
@@ -529,8 +511,7 @@ class Model_Game extends \Orm\Model
 
         $games = $query->get();
 
-        foreach ( $games as $id => $game )
-        {
+        foreach ($games as $id => $game) {
             // scoreの合計を結果に
             $score = $game->games_runningscore;
             $game->tsum = $score->tsum;
@@ -543,20 +524,23 @@ class Model_Game extends \Orm\Model
             $game->games_team = $team;
 
             // result
-            if ($team->order === 'top')
-            {
+            if ($team->order === 'top') {
                 $my_score = $score->tsum;
                 $oppo_score = $score->bsum;
-            }
-            else
-            {
+            } else {
                 $my_score = $score->bsum;
                 $oppo_score = $score->tsum;
             }
 
-            if ($my_score === $oppo_score) $game->result = '△';
-            if ($my_score > $oppo_score) $game->result = '○';
-            if ($my_score < $oppo_score) $game->result = '●';
+            if ($my_score === $oppo_score) {
+                $game->result = '△';
+            }
+            if ($my_score > $oppo_score) {
+                $game->result = '○';
+            }
+            if ($my_score < $oppo_score) {
+                $game->result = '●';
+            }
         }
 
         return $games;
@@ -566,14 +550,17 @@ class Model_Game extends \Orm\Model
     {
         $game = self::find($game_id);
 
-        if ($game->game_status < $status)
+        if ($game->game_status < $status) {
             $game->game_status = $status;
+        }
 
-        if ($game->top_status < $status)
+        if ($game->top_status < $status) {
             $game->top_status = $status;
+        }
 
-        if ($game->bottom_status < $status)
+        if ($game->bottom_status < $status) {
             $game->bottom_status = $status;
+        }
 
         $game->save();
     }
@@ -581,7 +568,9 @@ class Model_Game extends \Orm\Model
     public static function update_status($game_id, $status)
     {
         $game = self::find($game_id);
-        if ( ! $game ) return false;
+        if (!$game) {
+            return false;
+        }
 
         // 大会の場合は、大会管理者だけが出来るようにする。
 
@@ -610,83 +599,75 @@ class Model_Game extends \Orm\Model
         $play_game_ids = self::get_play_game($player_id);
 
         $alert_games = array();
-        foreach ( $play_game_ids as $game_id => $data )
-        {
+        foreach ($play_game_ids as $game_id => $data) {
             // game_statusのチェック
             // 成績入力中のものに関してのみアラートを表示する
-            if ( $data['game_status'] !== '1' )
-            {
+            if ($data['game_status'] !== '1') {
                 continue;
             }
 
             // 野手成績の入力が完了しているかどうか
-            if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
-            { 
+            if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete') {
                 $alert_games[] = array('kind' => 'batter') + $data;
-                continue; 
+                continue;
             }
-            
+
             // 投手成績のアラート
-            if ( strstr($data['position'], '1') )
-            {
-                if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
-                { 
+            if (strstr($data['position'], '1')) {
+                if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete') {
                     $alert_games[] = array('kind' => 'pitcher') + $data;
-                    continue; 
+                    continue;
                 }
             }
-        } 
+        }
 
         return $alert_games;
     }
 
-    public static function remind_mail( $game_id, $team_id )
+    public static function remind_mail($game_id, $team_id)
     {
         // played player
         $players = Model_Stats_Player::get_participate_players($game_id, $team_id);
 
-        foreach ( $players as $index => $player )
-        {
+        foreach ($players as $index => $player) {
             $player_id = $player['player_id'];
             $paths = array();
 
             // player_idが0だったらスキップ（スタメン未登録
-            if ( $player['player_id'] === '0' )
-            {
+            if ($player['player_id'] === '0') {
                 continue;
             }
 
             // statusをチェックして、未完了であればメール送信
-            if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete')
-            { 
+            if (Model_Stats_Hitting::get_input_status($game_id, $player_id) !== 'complete') {
                 $paths[] = "game/{$game_id}/batter/{$team_id}";
             }
 
             // 投手成績のアラート
-            if ( in_array('1', $player['position'] ) )
-            {
-                if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete')
-                { 
+            if (in_array('1', $player['position'])) {
+                if (Model_Stats_Pitching::get_input_status($game_id, $player_id) !== 'complete') {
                     $paths[] = "game/{$game_id}/pitcher/{$team_id}";
                 }
             }
 
             // 対象があればメール
-            if (count($paths) !== 0)
+            if (count($paths) !== 0) {
                 Common_Email::remind_game_stats($player_id, $paths);
+            }
         }
     }
 
     /**
-     * private function : return query for get game info
+     * private function : return query for get game info.
      *
      * @return : Queyry Builder object
      */
     private static function _get_info_query($year = null)
     {
         // $year default
-        if (! $year)
+        if (!$year) {
             $year = date('Y');
+        }
 
         $query = self::query()
             ->where('game_status', '!=', -1)
@@ -694,7 +675,7 @@ class Model_Game extends \Orm\Model
             ->order_by('date', 'desc');
 
         $query->related('games_runningscore', array(
-            'select' => array('tsum', 'bsum')
+            'select' => array('tsum', 'bsum'),
         ));
 
         return $query;

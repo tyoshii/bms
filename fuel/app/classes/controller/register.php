@@ -3,13 +3,12 @@
 class Controller_Register extends Controller
 {
     /**
-     * new user register form
+     * new user register form.
      */
     public function action_index()
     {
         // ログイン中だったらトップへ飛ばす
-        if (Auth::check() and ! Auth::has_access('admin.admin'))
-        {
+        if (Auth::check() and !Auth::has_access('admin.admin')) {
             return Response::redirect(Uri::create('/'));
         }
 
@@ -21,15 +20,13 @@ class Controller_Register extends Controller
         $val = $form->validation();
 
         // TODO: POSTじゃないときにset_flashしてて何かあれ
-        if (Input::post() && $val->run())
-        {
+        if (Input::post() && $val->run()) {
             // パスワードが送信されている場合、BMSオリジナルIDでの登録
-            if (Input::post('password'))
-            {
+            if (Input::post('password')) {
                 // 本登録確認のメールを送信
-                if (Common_Email::regist_user())
-                {
+                if (Common_Email::regist_user()) {
                     Session::set_flash('info', 'メールアドレに登録確認のメールを送信しました。');
+
                     return Response::redirect('/login');
                 }
             }
@@ -42,9 +39,7 @@ class Controller_Register extends Controller
                 Response::redirect(Uri::create('/login'));
             }
 */
-        }
-        else
-        {
+        } else {
             Session::set_flash('error', $val->show_errors());
         }
 
@@ -55,17 +50,17 @@ class Controller_Register extends Controller
     }
 
     /**
-     * confirm regist new user
+     * confirm regist new user.
      */
     public function action_confirm()
     {
-        $time  = Input::get('t');
+        $time = Input::get('t');
         $crypt = Input::get('c');
 
         // 時間切れ
-        if (Common::check_crypt_time($time))
-        {
+        if (Common::check_crypt_time($time)) {
             Session::set_flash('error', '有効期限切れのリンクです。もう一度やり直して下さい。');
+
             return Response::redirect('/');
         }
 
@@ -73,27 +68,25 @@ class Controller_Register extends Controller
         list($crypt_time, $fullname, $email, $password) = explode("\t", Crypt::decode($crypt));
 
         // check
-        if ($time !== $crypt_time)
-        {
+        if ($time !== $crypt_time) {
             Session::set_flash('error', '不正なアクセスです。もう一度やり直してください。');
+
             return Response::redirect('/');
         }
 
         // regist
-        if (Model_User::regist($fullname, $email, $password))
-        {
+        if (Model_User::regist($fullname, $email, $password)) {
             // 成功した場合は、loginページへリダイレクト
             Session::set_flash('info', 'ユーザー登録に成功しました。ログインしてください。');
+
             return Response::redirect(Uri::create('/login'));
-        }
-        else
-        {
+        } else {
             return Response::redirect(Uri::create('/'));
         }
     }
 
     /**
-     * forget password form
+     * forget password form.
      */
     public function action_forget_password()
     {
@@ -119,20 +112,14 @@ class Controller_Register extends Controller
         $val = $form->validation();
 
         // valid
-        if ( ! $val->run())
-        {
+        if (!$val->run()) {
             Session::set_flash('error', $val->show_errors());
-        }
-        else
-        {
+        } else {
             // 入力されたメールアドレスが存在するかどうか
             $user = Model_User::find_by_email(Input::post('email'));
-            if ( ! $user)
-            {
+            if (!$user) {
                 Session::set_flash('error', '存在しないメールアドレスです');
-            }
-            else
-            {
+            } else {
                 $time = time();
                 $crypt = Crypt::encode($time.$user->username);
 
@@ -158,16 +145,16 @@ class Controller_Register extends Controller
         $crypt = Input::get('c');
 
         // 時間切れ
-        if (time() - $time > 60 * 60)
-        {
+        if (time() - $time > 60 * 60) {
             Session::set_flash('error', '有効期限切れのリンクです');
+
             return Response::redirect('/');
         }
 
         // cryptチェック
-        if (Crypt::decode($crypt) !== $time.$username)
-        {
+        if (Crypt::decode($crypt) !== $time.$username) {
             Session::set_flash('error', '不正なアクセスです。');
+
             return Response::redirect('/');
         }
 

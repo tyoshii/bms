@@ -2,11 +2,9 @@
 
 class Model_Score_Team
 {
-
     public static function get_team_score($team_id = null)
     {
-        if (is_null($team_id))
-        {
+        if (is_null($team_id)) {
             $team_id = Model_Player::get_my_team_id();
         }
 
@@ -65,12 +63,11 @@ __QUERY__;
     }
 
     /**
-     * 安打数合計や打率などを配列に付与
+     * 安打数合計や打率などを配列に付与.
      */
     public static function give_stats(&$stats)
     {
-        if ( ! $stats)
-        {
+        if (!$stats) {
             return $stats = array();
         }
 
@@ -99,8 +96,7 @@ __QUERY__;
             'SOR' => '0.000', // 三振率 SwingOutRate
         );
 
-        if ($stats['AB'] !== 0 and $stats['AB'] !== '0')
-        {
+        if ($stats['AB'] !== 0 and $stats['AB'] !== '0') {
             $stats['rate']['AVG'] = sprintf('%.3f', $stats['total']['TH'] / $stats['AB']);
             $stats['rate']['OBP'] = sprintf('%.3f', ($stats['total']['TH'] + $stats['total']['TBB']) / $stats['total']['THA']);
             $stats['rate']['SLG'] = sprintf('%.3f', $stats['TB'] / $stats['AB']);
@@ -111,8 +107,7 @@ __QUERY__;
 
     public static function get_team_game_info($team_id = null)
     {
-        if ( ! $team_id)
-        {
+        if (!$team_id) {
             $team_id = Model_Player::get_my_team_id();
         }
 
@@ -158,35 +153,28 @@ __QUERY__;
 
         $ret = array(
             'games' => count($infos),
-            'win'   => 0,
-            'lose'  => 0,
-            'draw'  => 0,
-            'rate'  => array(
-                'win'  => 0.000,
+            'win' => 0,
+            'lose' => 0,
+            'draw' => 0,
+            'rate' => array(
+                'win' => 0.000,
                 'lose' => 0.000,
             ),
         );
 
         // 勝敗
-        foreach ($infos as $info)
-        {
-            if ($info['tsum'] > $info['bsum'])
-            {
+        foreach ($infos as $info) {
+            if ($info['tsum'] > $info['bsum']) {
                 $info['order'] == 'top' ? ++$ret['win'] : ++$ret['lose'];
-            }
-            elseif ($info['tsum'] < $info['bsum'])
-            {
+            } elseif ($info['tsum'] < $info['bsum']) {
                 $info['order'] == 'top' ? ++$ret['lose'] : ++$ret['win'];
-            }
-            else
-            {
+            } else {
                 ++$ret['draw'];
             }
         }
 
         // 勝率計算
-        if ($ret['games'] !== 0)
-        {
+        if ($ret['games'] !== 0) {
             $ret['rate']['win'] = sprintf('%.3f', $ret['win'] / $ret['games']);
             $ret['rate']['lose'] = sprintf('%.3f', $ret['lose'] / $ret['games']);
         }

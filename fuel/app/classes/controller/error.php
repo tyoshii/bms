@@ -3,7 +3,7 @@
 class Controller_Error extends Controller
 {
     /**
-     * error common function
+     * error common function.
      */
     public function action_index()
     {
@@ -14,7 +14,7 @@ class Controller_Error extends Controller
     }
 
     /**
-     * 404 specify error
+     * 404 specify error.
      */
     public function action_error404()
     {

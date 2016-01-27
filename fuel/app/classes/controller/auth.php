@@ -3,14 +3,14 @@
 class Controller_Auth extends Controller
 {
     /**
-     * oauth index
+     * oauth index.
      */
     public function action_oauth($provider = null)
     {
         // bail out if we don't have an OAuth provider to call
-        if ($provider === null)
-        {
+        if ($provider === null) {
             Log::error('login-no-provider-specified');
+
             return \Response::redirect_back();
         }
 
@@ -19,7 +19,7 @@ class Controller_Auth extends Controller
     }
 
     /**
-     * logout
+     * logout.
      */
     public function action_logout()
     {
@@ -35,13 +35,12 @@ class Controller_Auth extends Controller
     }
 
     /**
-     * callback from OpenID
+     * callback from OpenID.
      */
     public function action_callback()
     {
         // Opauth can throw all kinds of nasty bits, so be prepared
-        try
-        {
+        try {
             // get the Opauth object
             $opauth = \Auth_Opauth::forge(false);
 
@@ -52,8 +51,7 @@ class Controller_Auth extends Controller
             $provider = $opauth->get('auth.provider', '?');
 
             // deal with the result of the callback process
-            switch ($status)
-            {
+            switch ($status) {
                 // a local user was logged-in, the provider has been linked to this user
                 case 'linked':
                     // inform the user the link was succesfully made
@@ -95,22 +93,20 @@ class Controller_Auth extends Controller
         }
 
         // deal with Opauth exceptions
-        catch (\OpauthException $e)
-        {
+        catch (\OpauthException $e) {
             Log::error($e->getMessage());
             \Response::redirect_back();
         }
 
         // catch a user cancelling the authentication attempt (some providers allow that)
-        catch (\OpauthCancelException $e)
-        {
+        catch (\OpauthCancelException $e) {
             // you should probably do something a bit more clean here...
             exit('It looks like you canceled your authorisation.'.\Html::anchor('users/oath/'.$provider, 'Click here').' to try again.');
         }
     }
 
     /**
-     * register user for oauth
+     * register user for oauth.
      */
     public function action_register()
     {
@@ -118,23 +114,20 @@ class Controller_Auth extends Controller
         $user_hash = \Session::get('auth-strategy.user', array());
 
         $fullname = \Arr::get($user_hash, 'name');
-        $email    = \Arr::get($user_hash, 'email');
+        $email = \Arr::get($user_hash, 'email');
 
         // 既にメールアドレスが登録されている場合
         // リクエストのあったProviderでもログイン出来るようにするかどうかをさせる
-        if (Model_User::find_by_email($email))
-        {
-            
+        if (Model_User::find_by_email($email)) {
             $authentication = \Session::get('auth-strategy.authentication', array());
             $provider = $authentication['provider'];
-            
+
             $crypt = Crypt::encode($provider."\t".$email);
 
             return Response::redirect('/auth/multiple_confirm?c='.$crypt);
         }
 
-        if ($user_id = Model_User::regist($fullname, $email))
-        {
+        if ($user_id = Model_User::regist($fullname, $email)) {
             $this->link_provider($user_id);
 
             // login
@@ -143,33 +136,30 @@ class Controller_Auth extends Controller
             // success
             Session::set_flash('info', 'ユーザー登録が完了しました');
         }
-            
+
         return Response::redirect('/');
     }
 
     /**
-     * 複数のOpenID認証をひもづけるかどうかの確認画面
+     * 複数のOpenID認証をひもづけるかどうかの確認画面.
      */
     public function action_multiple_confirm()
     {
         // crypt encode
-        try
-        {
+        try {
             $crypt = Input::param('c');
             list($provider, $email) = explode("\t", Crypt::decode($crypt));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Session::set_flash('error', '不正なURLです。');
+
             return Response::redirect('/');
         }
 
         // 連携する
-        if (Input::method() === 'POST')
-        {
-            if (Input::post('email') !== $email)
-            {
+        if (Input::method() === 'POST') {
+            if (Input::post('email') !== $email) {
                 Session::set_flash('error', '不正なリクエストです。');
+
                 return Response::redirect('/');
             }
 
@@ -182,40 +172,40 @@ class Controller_Auth extends Controller
 
             // success
             Session::set_flash('info', $provider.' IDとの連携が完了しました。');
+
             return Response::redirect('/');
         }
 
         $view = View::forge('auth/multiple_confirm.twig');
-        $view->crypt    = $crypt;
+        $view->crypt = $crypt;
         $view->provider = $provider;
-        $view->email    = $email;
+        $view->email = $email;
 
         return Response::forge($view);
     }
 
     /**
-     * link_provider
+     * link_provider.
      *
      * @param string user_id
      */
     protected function link_provider($userid)
     {
         // do we have an auth strategy to match?
-        if ($authentication = \Session::get('auth-strategy.authentication', array()))
-        {
+        if ($authentication = \Session::get('auth-strategy.authentication', array())) {
             // don't forget to pass false, we need an object instance, not a strategy call
             $opauth = \Auth_Opauth::forge(false);
 
             // call Opauth to link the provider login with the local user
             $insert_id = $opauth->link_provider(array(
-                'parent_id'     => $userid,
-                'provider'      => $authentication['provider'],
-                'uid'           => $authentication['uid'],
-                'access_token'  => $authentication['access_token'],
-                'secret'        => $authentication['secret'],
+                'parent_id' => $userid,
+                'provider' => $authentication['provider'],
+                'uid' => $authentication['uid'],
+                'access_token' => $authentication['access_token'],
+                'secret' => $authentication['secret'],
                 'refresh_token' => $authentication['refresh_token'],
-                'expires'       => $authentication['expires'],
-                'created_at'    => time(),
+                'expires' => $authentication['expires'],
+                'created_at' => time(),
             ));
         }
     }

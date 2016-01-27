@@ -25,37 +25,35 @@ class Model_Conventions_Team extends \Orm\Model
 
     protected static $_has_one = array(
         'team' => array(
-            'key_from'       => 'team_id',
-            'model_to'       => 'Model_Team',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'key_from' => 'team_id',
+            'model_to' => 'Model_Team',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
     ),
     );
 
     /**
-     * get team data
+     * get team data.
      * 
      * Model_Team::get_teamsのラッパー
      * 大会IDが引数で指定されると、entriedキーが付与される
      *
      * @param string convention_id
+     *
      * @return array
      */
     public static function get_teams($convention_id = null)
     {
         $teams = Model_Team::get_teams();
 
-        if (is_null($convention_id))
-        {
+        if (is_null($convention_id)) {
             return $teams;
         }
 
         $entried = static::query()->where('convention_id', $convention_id)->get();
-        foreach ($entried as $team)
-        {
-            if (array_key_exists($team->team_id, $teams))
-            {
+        foreach ($entried as $team) {
+            if (array_key_exists($team->team_id, $teams)) {
                 $teams[$team->team_id]['entried'] = true;
             }
         }
@@ -64,8 +62,10 @@ class Model_Conventions_Team extends \Orm\Model
     }
 
     /**
-     * get entried team data
+     * get entried team data.
+     *
      * @param convention_id
+     *
      * @return array
      */
     public static function get_entried_teams($convention_id)
@@ -77,10 +77,12 @@ class Model_Conventions_Team extends \Orm\Model
     }
 
     /**
-     * add team to convention
+     * add team to convention.
+     *
      * @param convention_id
      * @param team_id
-     * @return boolean
+     *
+     * @return bool
      */
     public static function add($convention_id, $team_id)
     {
@@ -93,10 +95,12 @@ class Model_Conventions_Team extends \Orm\Model
     }
 
     /**
-     * remove team from convention
+     * remove team from convention.
+     *
      * @param convention_id
      * @param team_id
-     * @return boolean
+     *
+     * @return bool
      */
     public static function remove($convention_id, $team_id)
     {
@@ -105,8 +109,7 @@ class Model_Conventions_Team extends \Orm\Model
             ->where('team_id', $team_id)
             ->get();
 
-        foreach ($teams ?: array() as $team)
-        {
+        foreach ($teams ?: array() as $team) {
             $team->delete();
         }
 

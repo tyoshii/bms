@@ -14,15 +14,15 @@ class Controller_Convention_Game extends Controller_Convention
     }
 
     /**
-     * display convention game list
+     * display convention game list.
      */
     public function action_index()
     {
         return Response::forge($this->view);
     }
-    
+
     /**
-     * display convention game detail
+     * display convention game detail.
      */
     public function action_detail()
     {
@@ -30,7 +30,7 @@ class Controller_Convention_Game extends Controller_Convention
     }
 
     /**
-     * add convention game
+     * add convention game.
      */
     public function action_add()
     {
@@ -45,33 +45,25 @@ class Controller_Convention_Game extends Controller_Convention
         $form = Model_Game::get_regist_form_convention($this->convention->id);
         $val = $form->validation();
 
-        if ($val->run())
-        {
+        if ($val->run()) {
             // 同じチーム同士の対戦だったらエラー
-            $top    = Input::post('top');
+            $top = Input::post('top');
             $bottom = Input::post('bottom');
-            if ($top === $bottom)
-            {
+            if ($top === $bottom) {
                 Session::set_flash('error', '対戦チームが同じチーム同士です。');
-            }
-            else
-            {
-                if (Model_Conventions_Game::regist($this->convention->id))
-                {    
+            } else {
+                if (Model_Conventions_Game::regist($this->convention->id)) {
                     Session::set_flash('info', '試合を追加しました。');
-                }
-                else
-                {
+                } else {
                     Session::set_flash('error', '試合の追加に失敗しました。システムエラーです。');
                 }
-                    
+
                 // 成功しても失敗しても、大会トップに戻す
                 $url = '/convention/'.$this->convention->id.'/detail';
+
                 return Response::redirect($url);
             }
-        }
-        else
-        {
+        } else {
             Session::set_flash('error', $val->show_errors());
         }
 
@@ -80,9 +72,9 @@ class Controller_Convention_Game extends Controller_Convention
 
         return Response::forge($this->view);
     }
-    
+
     /**
-     * update convention game
+     * update convention game.
      */
     public function action_update()
     {

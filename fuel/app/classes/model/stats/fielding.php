@@ -14,11 +14,11 @@ class Model_Stats_Fielding extends Model_Base
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -39,8 +39,9 @@ class Model_Stats_Fielding extends Model_Base
         $props = $ids + array('player_id' => $player_id);
 
         $field = self::query()->where($props)->get_one();
-        if ( ! $field)
+        if (!$field) {
             $field = self::forge($props);
+        }
 
         $field->set($stat)->save();
     }

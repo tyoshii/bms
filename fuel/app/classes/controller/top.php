@@ -3,7 +3,7 @@
 class Controller_Top extends Controller_Base
 {
     /**
-     * トップページ
+     * トップページ.
      */
     public function action_index()
     {
@@ -11,13 +11,10 @@ class Controller_Top extends Controller_Base
 
         $view->teams = Model_Team::query()->order_by('updated_at', 'DESC')->get();
 
-        if (Auth::check())
-        {
+        if (Auth::check()) {
             // 所属チーム
             $view->my_teams = Model_Team::get_belong_teams();
-        }
-        else
-        {
+        } else {
             Auth::logout();
             $this->_login_form->repopulate();
             $view->set_safe('login_form', $this->_login_form->build(Uri::create('login')));
@@ -27,15 +24,17 @@ class Controller_Top extends Controller_Base
     }
 
     /**
-     * login
+     * login.
      */
     public function action_login()
     {
-        if (Auth::check())
+        if (Auth::check()) {
             return Response::redirect('/');
+        }
 
-        if (Input::get('url'))
+        if (Input::get('url')) {
             Session::set('redirect_to', Input::get('url'));
+        }
 
         $view = View::forge('login.twig');
         $view->set_safe('form', $this->_login_form->build(Uri::current()));
@@ -44,12 +43,13 @@ class Controller_Top extends Controller_Base
     }
 
     /**
-     * logout
+     * logout.
      */
     public function action_logout()
     {
         // TODO: OpenID連携の場合は don't remember したほうがいい？
         Auth::logout();
+
         return Response::redirect(Uri::create('/'));
     }
 
@@ -59,20 +59,17 @@ class Controller_Top extends Controller_Base
     }
 
     /**
-     * force login page. only development/test
+     * force login page. only development/test.
      */
     public function action_force_login()
     {
-        if (Fuel::$env === 'test' or Fuel::$env === 'development')
-        {
+        if (Fuel::$env === 'test' or Fuel::$env === 'development') {
             $username = $this->param('username');
-    
+
             $id = Model_User::find_by_username($username)->id;
-    
+
             Auth::force_login($id);
-        }
-        else
-        {
+        } else {
             Session::set_flash('error', '不正なURLです');
         }
 
@@ -80,11 +77,12 @@ class Controller_Top extends Controller_Base
     }
 
     /**
-     * about page
+     * about page.
      */
     public function action_about()
     {
         $view = View::forge('about.twig');
+
         return Response::forge($view);
     }
 }

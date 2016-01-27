@@ -3,23 +3,23 @@
 class Controller_Api_Download_Stats extends Controller_Rest
 {
     /**
-     * チーム成績のダウンロード
+     * チーム成績のダウンロード.
      */
     public function action_team()
     {
         // validation parameter
         $year = Input::get('year', null);
         $team_id = Input::get('team_id');
-        if ( ! $team_id)
-        {
+        if (!$team_id) {
             Session::set_flash('error', '不正なパラメーターです');
+
             return Response::redirect('error/400');
         }
 
         // validation acl
-        if ( ! Model_Player::has_team_admin($team_id))
-        {
+        if (!Model_Player::has_team_admin($team_id)) {
             Session::set_flash('error', '権限を持っていません');
+
             return Response::redirect('error/403');
         }
 
@@ -40,12 +40,12 @@ class Controller_Api_Download_Stats extends Controller_Rest
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
 
-        $writer = PHPExcel_IOFactory::createWriter($book, "Excel5");
-        $writer->save('php://output');  
+        $writer = PHPExcel_IOFactory::createWriter($book, 'Excel5');
+        $writer->save('php://output');
     }
 
     /**
-     * IT LEAGUE仕様の成績のダウンロード
+     * IT LEAGUE仕様の成績のダウンロード.
      */
     public function action_itleague()
     {
@@ -54,9 +54,9 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $val->add_field('game_id', '', 'required');
         $val->add_field('team_id', '', 'required');
 
-        if ( ! $val->run(Input::get()))
-        {
+        if (!$val->run(Input::get())) {
             Session::set_flash('error', '不正なパラメーターです');
+
             return Response::redirect('error/400');
         }
 
@@ -65,17 +65,17 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $book->createSheet();
         $book->createSheet();
         $book->createSheet();
-        
+
         // 選手
         $book->setActiveSheetIndex(0);
         $sheet = $book->getActiveSheet();
         self::_set_player_stats($sheet);
-        
+
         // 試合
         $book->setActiveSheetIndex(1);
         $sheet = $book->getActiveSheet();
         self::_set_game_stats($sheet);
-        
+
         // 打撃
         $book->setActiveSheetIndex(2);
         $sheet = $book->getActiveSheet();
@@ -95,12 +95,12 @@ class Controller_Api_Download_Stats extends Controller_Rest
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
 
-        $writer = PHPExcel_IOFactory::createWriter($book, "Excel5");
-        $writer->save('php://output');  
+        $writer = PHPExcel_IOFactory::createWriter($book, 'Excel5');
+        $writer->save('php://output');
     }
-    
+
     /**
-     * チーム成績をsheetにプロット
+     * チーム成績をsheetにプロット.
      */
     private static function _set_team_batter_stats(&$sheet, $stats)
     {
@@ -142,25 +142,21 @@ class Controller_Api_Download_Stats extends Controller_Rest
         );
 
         // title追加
-        foreach ($props as $col => $prop)
-        {
+        foreach ($props as $col => $prop) {
             $sheet->setCellValueByColumnAndRow($col, 1, $prop['title']);
         }
 
         // 成績プロット
-        foreach ($stats as $row => $stat)
-        {
+        foreach ($stats as $row => $stat) {
             // 2行目からプロットする
             $row += 2;
 
-            foreach ($props as $col => $prop)
-            {
+            foreach ($props as $col => $prop) {
                 // key名が配列を指す場合
                 $val = null;
-                foreach (explode('.', $prop['key']) as $key)
-                {
+                foreach (explode('.', $prop['key']) as $key) {
                     $val = is_null($val) ? $stat[$key] : $val[$key];
-                }    
+                }
 
                 $sheet->setCellValueByColumnAndRow($col, $row, $val);
             }
@@ -183,15 +179,14 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $players = Model_Player::get_players(Input::get('team_id'));
 
         // set data to excel
-        foreach ($players as $index => $player)
-        {
-            $sheet->setCellValue('A'.($index+2), $player['number']);
-            $sheet->setCellValue('B'.($index+2), $player['name']);
+        foreach ($players as $index => $player) {
+            $sheet->setCellValue('A'.($index + 2), $player['number']);
+            $sheet->setCellValue('B'.($index + 2), $player['name']);
         }
     }
 
     /**
-     * 試合に関する成績を付与
+     * 試合に関する成績を付与.
      */
     private static function _set_game_stats(&$sheet)
     {
@@ -215,7 +210,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 
         // get game data
         $game = self::_get_game_data();
-        
+
         // create data
         $datas = array(
             $game->date,
@@ -226,25 +221,20 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $score = $game->games_runningscore;
         $result = '分';
 
-        if ($score->tsum < $score->bsum)
-        {
+        if ($score->tsum < $score->bsum) {
             $result = $game->games_team->order === 'top' ? '負' : '勝';
         }
-        
-        if ($score->tsum > $score->bsum)
-        {
+
+        if ($score->tsum > $score->bsum) {
             $result = $game->games_team->order === 'top' ? '勝' : '負';
         }
 
         $datas[] = $result;
 
         // スコア
-        if ($game->games_team->order === 'top')
-        {
+        if ($game->games_team->order === 'top') {
             $datas[] = $score->tsum.' - '.$score->bsum;
-        }
-        else
-        {
+        } else {
             $datas[] = $score->bsum.' - '.$score->tsum;
         }
 
@@ -254,14 +244,13 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $datas[] = Input::get('game_id');
 
         // 勝利投手/敗戦投手/勝利打点/セーブ
-        $win  = '';
+        $win = '';
         $lose = '';
         $save = '';
         $pitchings = Model_Stats_Pitching::get_stats_by_playeds(Input::get('game_id'), Input::get('team_id'));
 
-        foreach ($pitchings as $pitcher)
-        {
-            $win  = $pitcher['W']  === '1' ? $pitcher['name'] : '';
+        foreach ($pitchings as $pitcher) {
+            $win = $pitcher['W']  === '1' ? $pitcher['name'] : '';
             $lose = $pitcher['L']  === '1' ? $pitcher['name'] : '';
             $save = $pitcher['SV'] === '1' ? $pitcher['name'] : '';
         }
@@ -274,9 +263,8 @@ class Controller_Api_Download_Stats extends Controller_Rest
         // 備考（MIP）
         $award = Model_Stats_Award::get_stats(Input::get('game_id'), Input::get('team_id'));
         $mip = $award['mvp_player_name'];
-        if ($award['second_mvp_player_name'] !== '')
-        {
-             $mip .= '、'.$award['second_mvp_player_name'];
+        if ($award['second_mvp_player_name'] !== '') {
+            $mip .= '、'.$award['second_mvp_player_name'];
         }
 
         $datas[] = $mip;
@@ -285,16 +273,15 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $datas[] = $game->games_team->order === 'top' ? '先攻' : '後攻';
 
         // set data to excel
-        foreach ($datas as $index => $data)
-        {
-            $sheet->setCellValue(chr(97+$index).'2', $data);
+        foreach ($datas as $index => $data) {
+            $sheet->setCellValue(chr(97 + $index).'2', $data);
         }
 
         return true;
     }
-    
+
     /**
-     * 打撃に関する成績を付与
+     * 打撃に関する成績を付与.
      */
     private static function _set_hitting_stats(&$sheet)
     {
@@ -324,8 +311,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
         $hittings = Model_Stats_Hitting::get_stats_by_playeds(Input::get('game_id'), Input::get('team_id'));
 
         // set to excel
-        foreach ($hittings as $index => $hitting)
-        {
+        foreach ($hittings as $index => $hitting) {
             // 試合ID/選手ID/選手
             $data = array();
             $data[] = Input::get('game_id');
@@ -336,19 +322,16 @@ class Controller_Api_Download_Stats extends Controller_Rest
             //              内フ, 内ゴ, 外フ, 三振, 四球, 死球, 送バ, 犠打, H,  2B, 3B, HR
             $result = array('',   '',   '',   '',   '',   '',   '',   '',   '', '', '', '');
 
-            foreach ($hitting['details'] as $detail)
-            {
-                switch ($detail['result_id'])
-                {
+            foreach ($hitting['details'] as $detail) {
+                switch ($detail['result_id']) {
                     // 凡打
                     case '11':
                         // 外野
-                        if ($detail['direction'] >= 7 and $detail['direction'] <= 9)
-                        {
-                            $result[2]++;
-                        }
-                        else //内野
-                        {
+                        if ($detail['direction'] >= 7 and $detail['direction'] <= 9) {
+                            ++$result[2];
+                        } else {
+                            //内野
+
                             $detail['kind'] === '1' ? $result[1]++ : $result[0]++;
                         }
                     break;
@@ -408,15 +391,14 @@ class Controller_Api_Download_Stats extends Controller_Rest
             $data[] = $hitting['SB']  !== '0' ? $hitting['SB']  : '';
 
             // set to excel
-            foreach ($data as $i => $d)
-            {
-                $sheet->setCellValue(chr(97+$i).($index+2), $d);
+            foreach ($data as $i => $d) {
+                $sheet->setCellValue(chr(97 + $i).($index + 2), $d);
             }
         }
     }
 
     /**
-     * 投手に関する成績を付与
+     * 投手に関する成績を付与.
      */
     private static function _set_pitching_stats(&$sheet)
     {
@@ -440,8 +422,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
         // get stats
         $pitchings = Model_Stats_Pitching::get_stats_by_playeds(Input::get('game_id'), Input::get('team_id'));
 
-        foreach ($pitchings as $row => $pitching)
-        {
+        foreach ($pitchings as $row => $pitching) {
             // 試合ID/選手ID/選手
             $data = array();
             $data[] = Input::get('game_id');
@@ -449,13 +430,10 @@ class Controller_Api_Download_Stats extends Controller_Rest
             $data[] = $pitching['name'];
 
             // 完投/完封
-            if (count($pitchings) === 1)
-            {
+            if (count($pitchings) === 1) {
                 $data[] = 1;
                 $data[] = $pitching['R'] === '0' ? 1 : '';
-            }
-            else
-            {
+            } else {
                 $data[] = '';
                 $data[] = '';
             }
@@ -470,17 +448,16 @@ class Controller_Api_Download_Stats extends Controller_Rest
             $data[] = $pitching['IP_frac'];
             $data[] = $pitching['SO'];
             $data[] = $pitching['R'];
-            
+
             // set to excel
-            foreach ($data as $col => $d)
-            {
-                $sheet->setCellValue(chr(97+$col).($row+2), $d);
+            foreach ($data as $col => $d) {
+                $sheet->setCellValue(chr(97 + $col).($row + 2), $d);
             }
         }
     }
 
     /**
-     * 試合情報の取得（将来的にはモデルへ）
+     * 試合情報の取得（将来的にはモデルへ）.
      */
     private static function _get_game_data()
     {
@@ -494,8 +471,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
 
         $game = $query->get_one();
 
-        if ( ! $game)
-        {
+        if (!$game) {
             throw new Exception('データが存在しません。');
         }
 

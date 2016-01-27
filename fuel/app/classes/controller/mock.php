@@ -9,5 +9,4 @@ class Controller_Mock extends Controller_Base
 
         return Response::forge($view);
     }
-
 }

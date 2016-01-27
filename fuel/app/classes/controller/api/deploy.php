@@ -9,8 +9,7 @@ class Controller_Api_Deploy extends Controller
         // debug
         echo $data['ref']."\n";
 
-        if ($data['ref'] === 'refs/heads/master')
-        {
+        if ($data['ref'] === 'refs/heads/master') {
             self::_deploy(
                 '/home/tyoshii/git/tyoshii/bms/',
                 'master',
@@ -19,8 +18,7 @@ class Controller_Api_Deploy extends Controller
             );
         }
 
-        if ($data['ref'] === 'refs/heads/staging')
-        {
+        if ($data['ref'] === 'refs/heads/staging') {
             self::_deploy(
                 '/home/tyoshii/git/tyoshii/bms_staging/',
                 'staging',
@@ -32,8 +30,7 @@ class Controller_Api_Deploy extends Controller
 
     private static function _deploy($git_dir, $branch, $fuel_env, $deploy_list)
     {
-        try
-        {
+        try {
             chdir($git_dir);
 
             // service out
@@ -67,9 +64,7 @@ class Controller_Api_Deploy extends Controller
             `/usr/bin/env php oil r version`;
 
             echo 'DEPLOY DONE';
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             echo $e->getMessage();
 
             // service in

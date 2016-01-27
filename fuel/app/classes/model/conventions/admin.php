@@ -24,15 +24,16 @@ class Model_Conventions_Admin extends \Orm\Model
     protected static $_table_name = 'conventions_admins';
 
     /**
-     * add admin username
+     * add admin username.
+     *
      * @param convention_id
      * @parma username
-     * @return boolean
+     *
+     * @return bool
      */
     public static function add($id, $username)
     {
-        if (static::check_auth($id, $username))
-        {
+        if (static::check_auth($id, $username)) {
             // already exists
             return true;
         }
@@ -48,10 +49,12 @@ class Model_Conventions_Admin extends \Orm\Model
     }
 
     /**
-     * check admin user
+     * check admin user.
+     *
      * @param convention_id
      * @param username
-     * @return boolean
+     *
+     * @return bool
      */
     public static function check_auth($id, $username)
     {

@@ -28,11 +28,11 @@ class Model_Stats_Hitting extends Model_Base
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -40,27 +40,27 @@ class Model_Stats_Hitting extends Model_Base
 
     protected static $_has_many = array(
         'details' => array(
-            'model_to'       => 'Model_Stats_Hittingdetail',
-            'key_from'       => 'game_id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Hittingdetail',
+            'key_from' => 'game_id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
 
     protected static $_has_one = array(
         'games' => array(
-            'model_to'       => 'Model_Game',
-            'key_from'       => 'game_id',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Game',
+            'key_from' => 'game_id',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'games_team' => array(
-            'model_to'       => 'Model_Games_Team',
-            'key_from'       => 'game_id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Games_Team',
+            'key_from' => 'game_id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
@@ -88,7 +88,7 @@ class Model_Stats_Hitting extends Model_Base
     }
 
     /**
-     * 成績の合計を配列で返す
+     * 成績の合計を配列で返す.
      *
      * @param string game_id
      * @param string team_id
@@ -99,10 +99,8 @@ class Model_Stats_Hitting extends Model_Base
     {
         $query = DB::select()->from(self::$_table_name);
 
-        foreach (self::$_properties as $key => $column)
-        {
-            if (is_array($column))
-            {
+        foreach (self::$_properties as $key => $column) {
+            if (is_array($column)) {
                 $column = $key;
             }
 
@@ -118,9 +116,10 @@ class Model_Stats_Hitting extends Model_Base
     }
 
     /**
-     * 指定されたplayer_idが出場した試合ごとの打撃成績を返す
+     * 指定されたplayer_idが出場した試合ごとの打撃成績を返す.
      *
      * @param string player_id
+     *
      * @return array
      */
     public static function get_stats_per_game($player_id)
@@ -129,8 +128,7 @@ class Model_Stats_Hitting extends Model_Base
 
         $return = array();
 
-        foreach ($played_games ?: array() as $stats_player) 
-        {
+        foreach ($played_games ?: array() as $stats_player) {
             $stats = static::query()
                 ->where('player_id', $player_id)
                 ->where('game_id', $stats_player->game_id)
@@ -141,9 +139,9 @@ class Model_Stats_Hitting extends Model_Base
                 ->get_one();
 
             $return[] = array(
-                'game_id'            => $stats_player->games->id,
-                'date'               => $stats_player->games->date,
-                'opponent_team_id'   => $stats_player->games->games_team->opponent_team_id,
+                'game_id' => $stats_player->games->id,
+                'date' => $stats_player->games->date,
+                'opponent_team_id' => $stats_player->games->games_team->opponent_team_id,
                 'opponent_team_name' => $stats_player->games->games_team->opponent_team_name,
                 'stats' => $stats,
             );
@@ -153,7 +151,7 @@ class Model_Stats_Hitting extends Model_Base
     }
 
     /**
-     * 出場選手に従って打撃成績取得
+     * 出場選手に従って打撃成績取得.
      *
      * @param string game_id
      * @param string team_id
@@ -169,7 +167,7 @@ class Model_Stats_Hitting extends Model_Base
         $query = Model_Stats_Player::get_query($game_id, $team_id, $player_id);
 
         // 交代も含めて表示順をそろえる
-        $query->order_by('p.disp_order');    
+        $query->order_by('p.disp_order');
 
         // join table
         $join_tables = array(
@@ -177,8 +175,7 @@ class Model_Stats_Hitting extends Model_Base
             'stats_fieldings',
         );
 
-        foreach ($join_tables as $table)
-        {
+        foreach ($join_tables as $table) {
             $query->join($table, 'LEFT')
                 ->on($table.'.player_id', '=', 'p.player_id')
                 ->and_on($table.'.game_id', '=', 'p.game_id')
@@ -188,8 +185,7 @@ class Model_Stats_Hitting extends Model_Base
         $result = $query->execute()->as_array();
 
         // add hittingdetails
-        foreach ($result as $index => $res)
-        {
+        foreach ($result as $index => $res) {
             $query = DB::select()->from('stats_hittingdetails')
                 ->where('game_id', $res['game_id'])
                 ->where('team_id', $res['team_id'])
@@ -203,7 +199,7 @@ class Model_Stats_Hitting extends Model_Base
     }
 
     /**
-     * 成績取得
+     * 成績取得.
      */
     public static function get_stats($game_id, $team_id)
     {
@@ -219,26 +215,25 @@ class Model_Stats_Hitting extends Model_Base
     {
         return array(
             'TPA' => $stat['seiseki']['daseki'],
-            'AB'  => $stat['seiseki']['dasuu'],
-            'H'   => $stat['seiseki']['anda'],
-            '2B'  => $stat['seiseki']['niruida'],
-            '3B'  => $stat['seiseki']['sanruida'],
-            'HR'  => $stat['seiseki']['honruida'],
-            'SO'  => $stat['seiseki']['sanshin'],
-            'BB'  => $stat['seiseki']['yontama'],
+            'AB' => $stat['seiseki']['dasuu'],
+            'H' => $stat['seiseki']['anda'],
+            '2B' => $stat['seiseki']['niruida'],
+            '3B' => $stat['seiseki']['sanruida'],
+            'HR' => $stat['seiseki']['honruida'],
+            'SO' => $stat['seiseki']['sanshin'],
+            'BB' => $stat['seiseki']['yontama'],
             'HBP' => $stat['seiseki']['shikyuu'],
             'SAC' => $stat['seiseki']['gida'],
-            'SF'  => $stat['seiseki']['gihi'],
+            'SF' => $stat['seiseki']['gihi'],
             'RBI' => $stat['seiseki']['daten'],
-            'R'   => $stat['seiseki']['tokuten'],
-            'SB'  => $stat['seiseki']['steal'],
+            'R' => $stat['seiseki']['tokuten'],
+            'SB' => $stat['seiseki']['steal'],
         );
     }
 
     private static function _increment_stats(&$stats, $result_id)
     {
-        if ($result_id and array_key_exists($result_id, self::$_result_map))
-        {
+        if ($result_id and array_key_exists($result_id, self::$_result_map)) {
             $map = self::$_result_map[$result_id];
 
             $stats['TPA'] += $map[0];
@@ -259,26 +254,24 @@ class Model_Stats_Hitting extends Model_Base
     {
         Mydb::begin();
 
-        try
-        {
-            foreach ($datas as $key => $data)
-            {
-                if ( ! $data) continue;
+        try {
+            foreach ($datas as $key => $data) {
+                if (!$data) {
+                    continue;
+                }
 
                 // set value
                 $player_id = $data['player_id'];
-                $detail    = array_key_exists('detail', $data) ? $data['detail'] : null;
-                $stats     = array_key_exists('stats', $data)  ? $data['stats']  : null;
+                $detail = array_key_exists('detail', $data) ? $data['detail'] : null;
+                $stats = array_key_exists('stats', $data)  ? $data['stats']  : null;
 
-                if ($detail)
-                {
+                if ($detail) {
                     // clean hitting detail stats
                     // - 例えば4打席が予め登録されていて、修正された3打席分の成績がくると
                     // - 4打席目が残ってしまうため、一度削除している
                     Model_Stats_Hittingdetail::clean($ids + array('player_id' => $player_id));
 
-                    foreach ($detail as $bat_times => $d)
-                    {
+                    foreach ($detail as $bat_times => $d) {
                         // regist detail
                         Model_Stats_Hittingdetail::regist($ids, $player_id, $bat_times, $d);
 
@@ -289,14 +282,14 @@ class Model_Stats_Hitting extends Model_Base
 
                 // insert stats_hittings
                 $hit = self::query()->where($ids + array('player_id' => $player_id))->get_one();
-                if ( ! $hit)
+                if (!$hit) {
                     $hit = self::forge($ids + array('player_id' => $player_id));
+                }
 
                 $hit->set($stats);
 
                 // status
-                if ( ! is_null($status))
-                {
+                if (!is_null($status)) {
                     $hit->input_status = $status;
                 }
 
@@ -307,9 +300,7 @@ class Model_Stats_Hitting extends Model_Base
             }
 
             Mydb::commit();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Mydb::rollback();
             throw new Exception($e->getMessage());
         }
@@ -318,7 +309,7 @@ class Model_Stats_Hitting extends Model_Base
     public static function get_input_status($game_id, $player_id)
     {
         $s = self::query()->where(array(
-            'game_id'   => $game_id,
+            'game_id' => $game_id,
             'player_id' => $player_id,
         ))->get_one();
 

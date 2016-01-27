@@ -4,30 +4,30 @@ class Model_Team extends \Orm\Model
 {
     protected static $_properties = array(
         'id',
-        'name'       => array(
-            'date_type'  => 'varchar',
-            'form'       => array(
+        'name' => array(
+            'date_type' => 'varchar',
+            'form' => array(
                 'class' => 'form-control',
-                'type'  => 'text',
+                'type' => 'text',
             ),
-            'label'      => 'チーム名',
+            'label' => 'チーム名',
             'validation' => array(
                 'required',
                 'max_length' => array(64),
             ),
         ),
-        'url_path'   => array(
-            'date_type'  => 'varchar',
-            'form'       => array(
+        'url_path' => array(
+            'date_type' => 'varchar',
+            'form' => array(
                 'class' => 'form-control',
-                'type'  => 'text',
+                'type' => 'text',
                 'description' => '半角英数字と-_が使えます',
             ),
-            'label'      => '英語名',
+            'label' => '英語名',
             'validation' => array(
                 'required',
-                'max_length'   => array(64),
-                'valid_string' => array(array('alpha','numeric','dashes')),
+                'max_length' => array(64),
+                'valid_string' => array(array('alpha', 'numeric', 'dashes')),
             ),
         ),
         'regulation_at_bats' => array(
@@ -36,12 +36,12 @@ class Model_Team extends \Orm\Model
             'label' => '規定打席数',
             'form' => array(
                 'class' => 'form-control',
-                'type'  => 'select',
+                'type' => 'select',
             ),
         ),
-        'status'     => array(
+        'status' => array(
             'default' => 0,
-            'form'    => array('type' => false),
+            'form' => array('type' => false),
         ),
         'created_at' => array('form' => array('type' => false)),
         'updated_at' => array('form' => array('type' => false)),
@@ -49,11 +49,11 @@ class Model_Team extends \Orm\Model
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -61,26 +61,26 @@ class Model_Team extends \Orm\Model
 
     protected static $_has_many = array(
         'players' => array(
-            'model_to'       => 'Model_Player',
-            'key_from'       => 'id',
-            'key_to'         => 'team_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Player',
+            'key_from' => 'id',
+            'key_to' => 'team_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
-        )
+        ),
     );
 
     protected static $_belongs_to = array(
         'conventions_team' => array(
-            'model_to'       => 'Model_Conventions_Team',
-            'key_from'       => 'id',
-            'key_to'         => 'team_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Conventions_Team',
+            'key_from' => 'id',
+            'key_to' => 'team_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
-        )
+        ),
     );
 
     /**
-     * 新規チーム登録
+     * 新規チーム登録.
      *
      * @param array properties
      *              - name     : チーム名
@@ -93,30 +93,30 @@ class Model_Team extends \Orm\Model
         extract($props);
 
         // validation
-        if ( ! isset($name) or ! isset($url_path))
-        {
+        if (!isset($name) or !isset($url_path)) {
             Log::error('name/url_pathが指定されていません');
+
             return false;
         }
 
         // duplicate check
-        if (Model_Team::find_by_url_path($url_path))
-        {
+        if (self::find_by_url_path($url_path)) {
             Log::error('そのURLは既に使われています。');
+
             return false;
         }
 
         // チーム登録
-        $team = Model_Team::forge($props);
+        $team = self::forge($props);
         $team->save();
 
         // チーム登録したユーザーをadminとして選手登録
         $props = array(
-            'team_id'  => $team->id,
-            'name'     => Auth::get_profile_fields('fullname'),
-            'number'   => 0,
+            'team_id' => $team->id,
+            'name' => Auth::get_profile_fields('fullname'),
+            'number' => 0,
             'username' => Auth::get('username'),
-            'role'     => 'admin',
+            'role' => 'admin',
         );
         Model_Player::regist($props);
 
@@ -124,7 +124,7 @@ class Model_Team extends \Orm\Model
     }
 
     /**
-     * 自分の所属するチームを返す
+     * 自分の所属するチームを返す.
      *
      * @return mix object Model_Team / null
      */
@@ -135,7 +135,7 @@ class Model_Team extends \Orm\Model
         return is_array($teams) ? reset($teams) : null;
     }
     /**
-     * 自分の所属するチームを返す（複数チーム所属している場合
+     * 自分の所属するチームを返す（複数チーム所属している場合.
      *
      * @return array Model_Team
      */
@@ -161,8 +161,7 @@ class Model_Team extends \Orm\Model
         $teams = self::get_teams();
 
         $kv = array();
-        foreach ($teams as $id => $team)
-        {
+        foreach ($teams as $id => $team) {
             $kv[$id] = $team['name'];
         }
 
@@ -170,7 +169,8 @@ class Model_Team extends \Orm\Model
     }
 
     /**
-     * regist new team form
+     * regist new team form.
+     *
      * @return object Fieldset
      */
     public static function get_regist_form()
@@ -186,7 +186,7 @@ class Model_Team extends \Orm\Model
             'value' => '新規チーム登録',
             'class' => 'btn btn-success',
         ));
-            
+
         return $form;
     }
 }

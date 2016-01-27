@@ -3,7 +3,7 @@
 class Model_Score_Self
 {
     /**
-     * 個人成績取得
+     * 個人成績取得.
      *
      * @param team_id
      * @param is_regulation 規定打席を考慮するかどうか
@@ -11,12 +11,10 @@ class Model_Score_Self
      */
     public static function get_self_scores($team_id = null, $is_regulation = true, $year = null)
     {
-        if (is_null($team_id))
-        {
+        if (is_null($team_id)) {
             $team_id = Model_Player::get_my_team_id();
         }
-        if (is_null($year))
-        {
+        if (is_null($year)) {
             $year = date('Y');
         }
 
@@ -82,13 +80,10 @@ __QUERY__;
         $total_games = count(Model_Games_Team::query()->where('team_id', $team_id)->get());
         $regulation_at_bats = Model_Team::find($team_id)->regulation_at_bats;
 
-        foreach ($result as $index => $res)
-        {
+        foreach ($result as $index => $res) {
             // 規定打席以下のデータを削除
-            if ($is_regulation)
-            {
-                if ($res['TPA'] < ($total_games * $regulation_at_bats))
-                {
+            if ($is_regulation) {
+                if ($res['TPA'] < ($total_games * $regulation_at_bats)) {
                     unset($result[$index]);
                     continue;
                 }

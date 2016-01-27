@@ -14,15 +14,15 @@ class Controller_Convention_Team extends Controller_Convention
     }
 
     /**
-     * display convention team list
+     * display convention team list.
      */
     public function action_index()
     {
         return Response::forge($this->view);
     }
-    
+
     /**
-     * add convention team
+     * add convention team.
      */
     public function action_add()
     {

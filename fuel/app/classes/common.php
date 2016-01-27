@@ -3,18 +3,19 @@
 class Common
 {
     /**
-     * generate random string
+     * generate random string.
      *
      * @return string
      */
     public static function random_string()
     {
-        return time().rand(1000,9999).rand(1000,9999);
+        return time().rand(1000, 9999).rand(1000, 9999);
     }
 
     /**
-     * check crypt time
-     * @return boolean
+     * check crypt time.
+     *
+     * @return bool
      */
     public static function check_crypt_time($time)
     {
@@ -25,8 +26,9 @@ class Common
     {
         $query = DB::delete($table);
 
-        if ($where)
+        if ($where) {
             $query->where($where);
+        }
 
         $query->execute();
     }
@@ -41,8 +43,9 @@ class Common
     public static function redirect($uri)
     {
         $redirect_to = Session::get('redirect_to');
-        if ( ! $redirect_to)
+        if (!$redirect_to) {
             $redirect_to = $uri ? $uri : Uri::current();
+        }
 
         Response::redirect(Uri::create($redirect));
     }
@@ -59,8 +62,9 @@ class Common
     {
         $info = Auth::get_profile_fields();
 
-        foreach ($props as $key => $val)
+        foreach ($props as $key => $val) {
             $info[$key] = $val;
+        }
 
         Auth::update_user($info, Auth::get_screen_name());
     }
@@ -76,21 +80,20 @@ class Common
     }
 
     /**
-     * ログイン後にリダイレクトする先のURL
+     * ログイン後にリダイレクトする先のURL.
      */
     public static function get_url_redirect_after_login()
     {
         // セッションにredirectURLが入っている場合
-        if ($url = Session::get('redirect_to'))
-        {
+        if ($url = Session::get('redirect_to')) {
             Session::delete('redirect_to');
+
             return $url;
         }
 
         // 所属チームがある場合は、チームページへredirect
         $team = Model_Team::get_belong_team();
-        if ($team)
-        {
+        if ($team) {
             return '/team/'.$team->url_path;
         }
 

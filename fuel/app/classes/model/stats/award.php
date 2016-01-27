@@ -6,7 +6,7 @@ class Model_Stats_Award extends Model_Base
         'id',
         'game_id',
         'team_id',
-        'mvp_player_id'        => array('default' => 0),
+        'mvp_player_id' => array('default' => 0),
         'second_mvp_player_id' => array('default' => 0),
         'created_at',
         'updated_at',
@@ -14,11 +14,11 @@ class Model_Stats_Award extends Model_Base
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -42,6 +42,7 @@ WHERE
 __SQL__;
 
         $result = DB::query($query)->execute()->as_array();
+
         return reset($result);
     }
 

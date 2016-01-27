@@ -14,14 +14,14 @@ class Controller_Convention extends Controller_Base
 
         // global value
         $this->convention = Model_Convention::find($this->param('convention_id'));
-        $this->game       = Model_Game::find($this->param('game_id'));
+        $this->game = Model_Game::find($this->param('game_id'));
 
         $this->set_global('convention', $this->convention);
         $this->set_global('game', $this->game);
     }
 
     /**
-     * display convention list
+     * display convention list.
      */
     public function action_index()
     {
@@ -29,9 +29,9 @@ class Controller_Convention extends Controller_Base
 
         return Response::forge($this->view);
     }
-    
+
     /**
-     * add convention
+     * add convention.
      */
     public function action_add()
     {
@@ -45,20 +45,18 @@ class Controller_Convention extends Controller_Base
     public function post_add()
     {
         $form = Model_Convention::get_form();
-        $val  = $form->validation();
+        $val = $form->validation();
 
-        if ($val->run())
-        {
-            Model_Convention::regist($val->validated());            
+        if ($val->run()) {
+            Model_Convention::regist($val->validated());
 
             Session::set_flash('info', '新しく大会を登録しました。');
+
             return Response::redirect(Uri::create('/convention'));
-        }
-        else
-        {
+        } else {
             Session::set_flash('error', $val->show_errors());
         }
-    
+
         $form->repopulate();
         $this->view->set_safe('form', $form->build(Uri::current()));
 
@@ -66,7 +64,7 @@ class Controller_Convention extends Controller_Base
     }
 
     /**
-     * convention detail
+     * convention detail.
      */
     public function action_detail()
     {
@@ -77,9 +75,9 @@ class Controller_Convention extends Controller_Base
 
         return Response::forge($this->view);
     }
-    
+
     /**
-     * convention update
+     * convention update.
      */
     public function action_update()
     {
@@ -94,15 +92,15 @@ class Controller_Convention extends Controller_Base
     }
 
     /**
-     * convention stats
+     * convention stats.
      */
     public function action_stats()
     {
         return Response::forge($this->view);
     }
-    
+
     /**
-     * convention games list
+     * convention games list.
      */
     public function action_games()
     {

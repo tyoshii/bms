@@ -29,22 +29,22 @@ class Model_User extends \Orm\Model
                 'class' => 'form-control',
             ),
         ),
-        'username'       => array('form' => array('type' => false)),
-        'group'          => array('form' => array('type' => false)),
-        'last_login'     => array('form' => array('type' => false)),
-        'login_hash'     => array('form' => array('type' => false)),
+        'username' => array('form' => array('type' => false)),
+        'group' => array('form' => array('type' => false)),
+        'last_login' => array('form' => array('type' => false)),
+        'login_hash' => array('form' => array('type' => false)),
         'profile_fields' => array('form' => array('type' => false)),
-        'created_at'     => array('form' => array('type' => false)),
-        'updated_at'     => array('form' => array('type' => false)),
+        'created_at' => array('form' => array('type' => false)),
+        'updated_at' => array('form' => array('type' => false)),
     );
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -57,8 +57,7 @@ class Model_User extends \Orm\Model
             ->execute()->as_array();
 
         $return = array();
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $return[$user['username']] = $user['username'];
         }
 
@@ -66,7 +65,7 @@ class Model_User extends \Orm\Model
     }
 
     /**
-     * new user registe
+     * new user registe.
      *
      * @param string fullname
      * @param string email
@@ -80,14 +79,12 @@ class Model_User extends \Orm\Model
 
         // generate username,password
         $username = Common::random_string();
-        if (is_null($password))
-        {
+        if (is_null($password)) {
             $regist_by_openid = true;
             $password = Common::random_string();
         }
 
-        try
-        {
+        try {
             // user create
             $user_id = Auth::create_user(
                 $username,
@@ -95,28 +92,23 @@ class Model_User extends \Orm\Model
                 $email,
                 1,
                 array(
-                    'fullname'         => $fullname,
+                    'fullname' => $fullname,
                     'regist_by_openid' => $regist_by_openid ? 1 : 0,
                 )
             );
 
-            if ($user_id === false)
-            {
+            if ($user_id === false) {
                 throw new Exception('Internal Error');
             }
 
             return $user_id;
-
-        }
-        catch (SimpleUserUpdateException $e)
-        {
+        } catch (SimpleUserUpdateException $e) {
             Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
+
             return false;
-
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Session::set_flash('error', 'アカウントの作成に失敗しました：'.$e->getMessage());
+
             return false;
         }
     }
@@ -124,14 +116,11 @@ class Model_User extends \Orm\Model
     private static function _update($username, $values)
     {
         // グループ更新
-        try
-        {
+        try {
             Auth::update_user($values, $username);
-
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Session::set_flash('error', $e->getMessage());
+
             return false;
         }
 
@@ -145,9 +134,9 @@ class Model_User extends \Orm\Model
 
     public static function disable($username)
     {
-        if ($username === Auth::get('username'))
-        {
+        if ($username === Auth::get('username')) {
             Session::set_flash('error', '自分自身のアカウントは無効にできません');
+
             return false;
         }
 
@@ -158,7 +147,9 @@ class Model_User extends \Orm\Model
     public static function get_users_only_my_team()
     {
         $team_id = Model_Player::get_my_team_id();
-        if ( ! $team_id) return array();
+        if (!$team_id) {
+            return array();
+        }
 
         $players = Model_Player::query()
             ->where('team_id', $team_id)
@@ -166,8 +157,9 @@ class Model_User extends \Orm\Model
             ->get();
 
         $usernames = array();
-        foreach ($players as $player)
+        foreach ($players as $player) {
             $usernames[] = $player->username;
+        }
 
         return DB::select()->from(self::$_table_name)
             ->where('username', 'in', $usernames)
@@ -175,7 +167,7 @@ class Model_User extends \Orm\Model
     }
 
     /**
-     * get register form
+     * get register form.
      */
     public static function get_register_form()
     {

@@ -12,20 +12,17 @@ class Controller_Team extends Controller_Base
         parent::before();
 
         // team 情報
-        if ($url_path = $this->param('url_path'))
-        {
-            if ( ! $this->_team = Model_Team::find_by_url_path($url_path))
-            {
+        if ($url_path = $this->param('url_path')) {
+            if (!$this->_team = Model_Team::find_by_url_path($url_path)) {
                 Session::set_flash('error', $url_path.'正しいチーム情報が取得できませんでした。');
+
                 return Response::redirect('error/404');
             }
         }
 
-        if ($this->_team)
-        {
+        if ($this->_team) {
             // チーム管理者権限があるかどうか
-            if (Model_Player::has_team_admin($this->_team->id))
-            {
+            if (Model_Player::has_team_admin($this->_team->id)) {
                 $this->_team_admin = true;
             }
 
@@ -34,15 +31,13 @@ class Controller_Team extends Controller_Base
         }
 
         // ログイン中ユーザーの選手情報/alert情報
-        if (Auth::check() and $this->_team)
-        {
+        if (Auth::check() and $this->_team) {
             $this->_player = Model_Player::query()->where(array(
                 array('team_id', $this->_team->id),
                 array('username', Auth::get('username')),
             ))->get_one();
 
-            if ($this->_player)
-            {
+            if ($this->_player) {
                 $this->_alerts = Model_Stats_Common::get_stats_alerts($this->_team->id, $this->_player->id);
             }
         }
@@ -55,15 +50,14 @@ class Controller_Team extends Controller_Base
 
         // postメソッドであれば、teamのupdated_atを更新
         // - トップページのsort keyに利用
-        if (Input::post() and $this->_team)
-        {
+        if (Input::post() and $this->_team) {
             $this->_team->updated_at = time();
             $this->_team->save();
         }
     }
 
     /**
-     * チームページトップ
+     * チームページトップ.
      */
     public function action_index()
     {
@@ -76,7 +70,7 @@ class Controller_Team extends Controller_Base
     }
 
     /**
-     * チーム検索画面
+     * チーム検索画面.
      */
     public function action_search()
     {
@@ -84,8 +78,7 @@ class Controller_Team extends Controller_Base
 
         $query = Model_Team::query()->order_by('created_at');
 
-        if ($q = Input::get('query'))
-        {
+        if ($q = Input::get('query')) {
             $query->where('name', 'LIKE', '%'.$q.'%');
         }
 
@@ -95,7 +88,7 @@ class Controller_Team extends Controller_Base
     }
 
     /**
-     * チーム、新規登録
+     * チーム、新規登録.
      */
     public function action_regist()
     {
@@ -104,36 +97,28 @@ class Controller_Team extends Controller_Base
         // form
         $form = Model_Team::get_regist_form();
 
-        if (Input::post())
-        {
+        if (Input::post()) {
             $val = $form->validation();
 
-            if ($val->run())
-            {
+            if ($val->run()) {
                 $url_path = Input::post('url_path');
 
                 // duplicate url_path check
                 // TODO: validation model or javascript check
-                if (Model_Team::find_by_url_path($url_path))
-                {
+                if (Model_Team::find_by_url_path($url_path)) {
                     Session::set_flash('error', 'その英語名は既に登録されています。');
-                }
-                else
-                {
-                    if (Model_Team::regist(Input::post()))
-                    {
+                } else {
+                    if (Model_Team::regist(Input::post())) {
                         Session::set_flash('info', '新しくチームを作成しました。');
+
                         return Response::redirect('/team/'.$url_path);
-                    }
-                    else
-                    {
+                    } else {
                         Session::set_flash('error', 'システムエラーが発生しました。');
+
                         return Response::redirect('/');
                     }
                 }
-            }
-            else
-            {
+            } else {
                 Session::set_flash('error', $val->show_errors());
             }
         }
@@ -145,30 +130,27 @@ class Controller_Team extends Controller_Base
     }
 
     /**
-     * 選手一覧/個人
+     * 選手一覧/個人.
      */
     public function action_player()
     {
-        if ($player_id = $this->param('player_id'))
-        {
+        if ($player_id = $this->param('player_id')) {
             // 個人
             $view = View::forge('team/player/personal.twig');
-            if ( ! $view->player = Model_Player::find($player_id))
-            {
+            if (!$view->player = Model_Player::find($player_id)) {
                 Session::set_flash('error', '選手情報が取得できませんでした');
+
                 return Response::redirect($this->_team->href);
             }
 
             // 試合ごとの野手成績
             $view->stats_per_games = Model_Stats_Hitting::get_stats_per_game($player_id);
-        }
-        else
-        {
+        } else {
             // 選手一覧
             $view = View::forge('team/player/list.twig');
-            if ( ! $view->players = Model_Player::get_players($this->_team->id))
-            {
+            if (!$view->players = Model_Player::get_players($this->_team->id)) {
                 Session::set_flash('error', '選手情報が取得できませんでした');
+
                 return Response::redirect($this->_team->href);
             }
         }
@@ -177,7 +159,7 @@ class Controller_Team extends Controller_Base
     }
 
     /**
-     * 成績
+     * 成績.
      */
     public function action_stats()
     {
@@ -198,6 +180,7 @@ class Controller_Team extends Controller_Base
     public function action_offer()
     {
         $view = View::forge('team/offer.twig');
+
         return Response::forge($view);
     }
 }

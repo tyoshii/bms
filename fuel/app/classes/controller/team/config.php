@@ -3,7 +3,7 @@
 class Controller_Team_Config extends Controller_Team
 {
     /**
-     * indexアクション。すべてのteam/configリクエストはここを通る
+     * indexアクション。すべてのteam/configリクエストはここを通る.
      * 
      * param string kind
      *  - team_admin
@@ -19,31 +19,30 @@ class Controller_Team_Config extends Controller_Team
     public function action_index()
     {
         // 選手情報が無い
-        if ( ! $this->_player)
-        {
+        if (!$this->_player) {
             Session::set_flash('error', '権限がありません');
+
             return Response::redirect($this->_team->href);
         }
 
         // 特定のconfigはチーム管理者専門
         $kind = $this->param('kind');
-        if (in_array($kind, array('info', 'delete', 'admin', 'notice')))
-        {
-            if ( ! $this->_team_admin)
-            {
+        if (in_array($kind, array('info', 'delete', 'admin', 'notice'))) {
+            if (!$this->_team_admin) {
                 Session::set_flash('error', '権限がありません');
+
                 return Response::redirect($this->_team->href);
             }
         }
 
         // action
         $action = 'action_'.$kind;
-        if ( method_exists($this, $action) )
-        {
+        if (method_exists($this, $action)) {
             return $this->$action();
         }
 
         Session::set_flash('error', '存在しないURLです');
+
         return Response::redirect($this->_team->href);
     }
 
@@ -84,11 +83,11 @@ class Controller_Team_Config extends Controller_Team
         ));
 
         // sendmail
-        if (Input::post())
-        {
+        if (Input::post()) {
             Common_Email::team_notice($this->_team->id, Input::post('subject'), Input::post('body'));
 
             Session::set_flash('info', 'メールを送信しました。');
+
             return Response::redirect(Uri::current());
         }
 
@@ -99,7 +98,7 @@ class Controller_Team_Config extends Controller_Team
     }
 
     /**
-     * 選出追加
+     * 選出追加.
      */
     public function action_player()
     {
@@ -110,12 +109,11 @@ class Controller_Team_Config extends Controller_Team
         $form = Model_Player::get_form(array('submit' => '登録'));
 
         // player_idが遅れらて来ると、更新
-        if ($player_id = $this->param('player_id'))
-        {
+        if ($player_id = $this->param('player_id')) {
             // 自分自身か、チーム管理者でなかったら、権限なし
-            if ($this->_player->id !== $player_id and ! $this->_team_admin)
-            {
+            if ($this->_player->id !== $player_id and !$this->_team_admin) {
                 Session::get_error('権限がありません');
+
                 return Response::redirect($this->_team->href);
             }
 
@@ -126,35 +124,29 @@ class Controller_Team_Config extends Controller_Team
             $player = Model_Player::find($player_id);
 
             // formに初期値セット
-            $form->field('name')->set_value($player->name);        
-            $form->field('number')->set_value($player->number);        
+            $form->field('name')->set_value($player->name);
+            $form->field('number')->set_value($player->number);
         }
 
         // post request
-        if (Input::post())
-        {
+        if (Input::post()) {
             $val = $form->validation();
 
-            if ($val->run())
-            {
+            if ($val->run()) {
                 $props = array(
-                    'team_id'  => $this->_team->id,
-                    'name'     => Input::post('name'),
-                    'number'   => Input::post('number'),
+                    'team_id' => $this->_team->id,
+                    'name' => Input::post('name'),
+                    'number' => Input::post('number'),
                 );
 
-                if (Model_Player::regist($props, $this->param('player_id')))
-                {
+                if (Model_Player::regist($props, $this->param('player_id'))) {
                     Session::set_flash('info', '選手情報を登録しました。');
+
                     return Response::redirect(Uri::current());
-                }
-                else
-                {
+                } else {
                     Session::set_flash('error', '選手データ保存でシステムエラーが発生しました。');
                 }
-            }
-            else
-            {
+            } else {
                 Session::set_flash('error', $val->show_errors());
             }
 
@@ -168,7 +160,7 @@ class Controller_Team_Config extends Controller_Team
     }
 
     /**
-     * チーム基本情報の設定
+     * チーム基本情報の設定.
      */
     public function action_info()
     {
@@ -186,10 +178,8 @@ class Controller_Team_Config extends Controller_Team
         $form->field('url_path')->set_value($this->_team->url_path);
 
         $regulation_at_bats = array();
-        for ($i = 0; $i <= 3; $i++)
-        {
-            for ($j = 0; $j <= 9; $j++)
-            {
+        for ($i = 0; $i <= 3; ++$i) {
+            for ($j = 0; $j <= 9; ++$j) {
                 $v = $i.'.'.$j;
                 $regulation_at_bats[$v] = $v;
             }
@@ -203,27 +193,24 @@ class Controller_Team_Config extends Controller_Team
 
         // add submit
         $form->add('submit', '', array(
-            'type'  => 'submit',
+            'type' => 'submit',
             'value' => '更新',
             'class' => 'btn btn-success',
         ));
 
         // 更新処理
-        if (Input::post())
-        {
+        if (Input::post()) {
             $val = $form->validation();
 
-            if ($val->run())
-            {
+            if ($val->run()) {
                 $this->_team->name = Input::post('name');
                 $this->_team->regulation_at_bats = Input::post('regulation_at_bats');
                 $this->_team->save();
 
                 Session::set_flash('info', 'チーム情報を更新しました');
+
                 return Response::redirect(Uri::current());
-            }
-            else
-            {
+            } else {
                 Session::set_flash('error', $val->show_errors());
             }
 
@@ -237,18 +224,14 @@ class Controller_Team_Config extends Controller_Team
     }
 
     /**
-     * 管理者設定
+     * 管理者設定.
      */
     public function action_admin()
     {
-        if ($player_id = Input::get('player_id') and $role = Input::get('role'))
-        {
-            if (Model_Player::update_role($this->_team->id, $player_id, $role))
-            {
+        if ($player_id = Input::get('player_id') and $role = Input::get('role')) {
+            if (Model_Player::update_role($this->_team->id, $player_id, $role)) {
                 Session::set_flash('info', '権限を更新しました。');
-            }
-            else
-            {
+            } else {
                 Session::set_flash('error', '権限の更新に失敗しました');
             }
 
@@ -266,11 +249,12 @@ class Controller_Team_Config extends Controller_Team
     }
 
     /**
-     * チーム削除
+     * チーム削除.
      */
     public function action_delete()
     {
         $view = View::forge('team/config/delete.twig');
+
         return Response::forge($view);
     }
 
@@ -280,6 +264,7 @@ class Controller_Team_Config extends Controller_Team
     public function action_leave()
     {
         $view = View::forge('team/config/leave.twig');
+
         return Response::forge($view);
     }
 }

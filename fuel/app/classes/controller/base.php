@@ -14,29 +14,24 @@ class Controller_Base extends Controller
 
         // default view
         $path = implode('/', Request::main()->route->segments);
-        $path.= '.twig';
+        $path .= '.twig';
 
-        if (is_file(APPPATH.DS.'views'.DS.$path))
-        {
+        if (is_file(APPPATH.DS.'views'.DS.$path)) {
             $this->view = View::forge($path);
         }
 
         // login
         $this->_login_form = self::_get_login_form();
 
-        if (Auth::check())
-        {
+        if (Auth::check()) {
             return;
         }
 
-        if (Input::post())
-        {
+        if (Input::post()) {
             Auth::logout();
-            if ($this->_login_form->validation()->run())
-            {
+            if ($this->_login_form->validation()->run()) {
                 $auth = Auth::instance();
-                if ($auth->login(Input::post('email'), Input::post('password')))
-                {
+                if ($auth->login(Input::post('email'), Input::post('password'))) {
                     Session::set_flash('info', 'ログインに成功しました！');
 
                     Response::redirect(Common::get_url_redirect_after_login());
@@ -71,24 +66,23 @@ class Controller_Base extends Controller
     }
 
     /**
-     * game object set to global
+     * game object set to global.
      *
      * @param string game_id
      *
-     * @return boolean
+     * @return bool
      */
     public function set_global_game_object($game_id = false)
     {
         $game_id = $game_id ?: $this->param('game_id');
 
-        if ( ! $game_id)
-        {
+        if (!$game_id) {
             return false;
         }
 
-        if ( ! $this->game = Model_Game::find($game_id))
-        {
+        if (!$this->game = Model_Game::find($game_id)) {
             Session::set_flash('error', '試合情報が取得できませんでした。');
+
             return Response::redirect('/');
         }
 
@@ -99,20 +93,20 @@ class Controller_Base extends Controller
     }
 
     /**
-     * login form Fieldset::forge()
+     * login form Fieldset::forge().
      */
-    static public function _get_login_form()
+    public static function _get_login_form()
     {
         // login form
         $form = Fieldset::forge('login', array(
             'form_attributes' => array(
                 'class' => 'form',
-                'role'  => 'login',
+                'role' => 'login',
             ),
         ));
 
         $form->add('email', 'メールアドレス', array(
-            'type'  => 'email',
+            'type' => 'email',
             'class' => 'form-control',
         ))
             ->add_rule('required');

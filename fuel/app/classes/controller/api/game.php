@@ -5,10 +5,8 @@ class Controller_Api_Game extends Controller_Rest
     public function router($resource, $arguments)
     {
         // 権限チェック
-        if (in_array($resource, array('updateScore', 'updatePlayer', 'updateOther')))
-        {
-            if ( ! Model_Player::has_team_admin(Input::post('team_id')))
-            {
+        if (in_array($resource, array('updateScore', 'updatePlayer', 'updateOther'))) {
+            if (!Model_Player::has_team_admin(Input::post('team_id'))) {
                 Log::warning('updateScore/Player/Otherに対して権限の無いアクセス');
                 throw new Exception('権限がありません');
             }
@@ -23,7 +21,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * ステータス更新
+     * ステータス更新.
      */
     public function post_updateStatus()
     {
@@ -31,8 +29,9 @@ class Controller_Api_Game extends Controller_Rest
 
         $ret = Model_Game::update_status($ids['game_id'], Input::post('status'));
 
-        if ( ! $ret)
+        if (!$ret) {
             throw new Exception('ステータスのアップデートに失敗しました');
+        }
 
         Session::set_flash('info', '試合ステータスを更新しました。');
 
@@ -40,7 +39,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * スコア更新
+     * スコア更新.
      */
     public function post_updateScore()
     {
@@ -53,8 +52,7 @@ class Controller_Api_Game extends Controller_Rest
         $val = $form->validation();
 
         // validate
-        if ( ! $val->run($stats, true))
-        {
+        if (!$val->run($stats, true)) {
             return Response::forge($val->show_errors(), 400);
         }
 
@@ -65,7 +63,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * 出場選手登録
+     * 出場選手登録.
      */
     public function post_updatePlayer()
     {
@@ -73,16 +71,14 @@ class Controller_Api_Game extends Controller_Rest
 
         // parameter
         $players = Input::post('stats');
-        $status  = Input::post('status');
+        $status = Input::post('status');
 
         // regist
         Model_Stats_Player::regist($ids, $players);
 
         // notice
-        if ($status === 'complete')
-        {
-            foreach ($players as $player)
-            {
+        if ($status === 'complete') {
+            foreach ($players as $player) {
                 Common_Email::regist_starter($ids['game_id'], $ids['team_id'], $player['player_id']);
             }
         }
@@ -94,7 +90,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * 投手成績更新
+     * 投手成績更新.
      */
     public function post_updatePitcher()
     {
@@ -102,14 +98,13 @@ class Controller_Api_Game extends Controller_Rest
 
         // stats_pitchingsへのinsert
         $pitcher = Input::post('stats');
-        $status  = Input::post('status', null);
+        $status = Input::post('status', null);
 
         // 複数登録できるのはチーム管理者だけ
         self::_validate_stats_count($pitcher, $ids['team_id']);
 
         // 複数登録の場合は、ステータスの更新はしない
-        if (count($pitcher) > 1)
-        {
+        if (count($pitcher) > 1) {
             $status = null;
         }
 
@@ -120,7 +115,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * 野手成績更新
+     * 野手成績更新.
      */
     public function post_updateBatter()
     {
@@ -134,8 +129,7 @@ class Controller_Api_Game extends Controller_Rest
         self::_validate_stats_count($batter, $ids['team_id']);
 
         // 複数登録の場合は、ステータスの更新はしない
-        if (count($batter) > 1)
-        {
+        if (count($batter) > 1) {
             $status = null;
         }
 
@@ -146,7 +140,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * その他の記録を更新
+     * その他の記録を更新.
      */
     public function post_updateOther()
     {
@@ -164,7 +158,7 @@ class Controller_Api_Game extends Controller_Rest
 
         // update award(mvp)
         $stats = array(
-            'mvp_player_id'        => $stats['mvp'],
+            'mvp_player_id' => $stats['mvp'],
             'second_mvp_player_id' => $stats['second_mvp'],
         );
         Model_Stats_Award::regist($ids['game_id'], $ids['team_id'], $stats);
@@ -173,7 +167,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * get post game_id/team_id and each validation
+     * get post game_id/team_id and each validation.
      */
     private static function _get_ids()
     {
@@ -182,26 +176,22 @@ class Controller_Api_Game extends Controller_Rest
         $val->add('game_id', 'game_id')->add_rule('required');
         $val->add('team_id', 'team_id')->add_rule('required');
 
-        if ( ! $val->run())
-        {
+        if (!$val->run()) {
             throw new Exception($val->show_errors());
         }
 
         $ids = $val->validated();
 
         // 自分のチームの試合かどうか
-        if ( ! Model_Player::is_belong(Input::post('team_id')))
-        {
+        if (!Model_Player::is_belong(Input::post('team_id'))) {
             throw new Exception('権限がありません');
         }
 
         // check game status
         $action = Request::main()->action;
-        if ($action !== 'updateStatus' and $action !== 'updateOther')
-        {
+        if ($action !== 'updateStatus' and $action !== 'updateOther') {
             $game = Model_Game::find($ids['game_id']);
-            if ( ! $game or $game->game_status === '2')
-            {
+            if (!$game or $game->game_status === '2') {
                 throw new Exception('既に成績入力を完了している試合です');
             }
         }
@@ -209,10 +199,9 @@ class Controller_Api_Game extends Controller_Rest
         return $ids;
     }
 
-
     /**
      * statsに複数の成績が送られてきたときはチーム管理者の権限が必要
-     * リクエストユーザーに権限があるかどうかをチェック
+     * リクエストユーザーに権限があるかどうかをチェック.
      *
      * @param array  stats
      * @param string team_id
@@ -221,10 +210,8 @@ class Controller_Api_Game extends Controller_Rest
      */
     private static function _validate_stats_count($stats, $team_id)
     {
-        if (count($stats) > 1)
-        {
-            if ( ! Model_Player::has_team_admin($team_id))
-            {
+        if (count($stats) > 1) {
+            if (!Model_Player::has_team_admin($team_id)) {
                 throw new Exception('複数の成績登録はチーム管理者のみが許可されています');
             }
         }
@@ -233,7 +220,7 @@ class Controller_Api_Game extends Controller_Rest
     }
 
     /**
-     * 正常レスポンス
+     * 正常レスポンス.
      */
     private function _success()
     {

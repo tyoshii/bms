@@ -27,11 +27,11 @@ class Model_Stats_Pitching extends Model_Base
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -39,23 +39,23 @@ class Model_Stats_Pitching extends Model_Base
 
     protected static $_has_one = array(
         'games' => array(
-            'model_to'       => 'Model_Game',
-            'key_from'       => 'game_id',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Game',
+            'key_from' => 'game_id',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
         'games_team' => array(
-            'model_to'       => 'Model_Games_Team',
-            'key_from'       => 'game_id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Games_Team',
+            'key_from' => 'game_id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
 
     /**
-     * 出場選手に従って投手成績取得
+     * 出場選手に従って投手成績取得.
      *
      * @param string game_id
      * @param string team_id
@@ -88,7 +88,8 @@ class Model_Stats_Pitching extends Model_Base
     }
 
     /**
-     * 投手成績を取得
+     * 投手成績を取得.
+     *
      * @parma string game_id
      * @parma string team_id
      */
@@ -98,24 +99,25 @@ class Model_Stats_Pitching extends Model_Base
             'game_id' => $game_id,
             'team_id' => $team_id,
         );
+
         return self::select_as_array(self::$_table_name, $where, 'player_id');
     }
 
     private static function _get_insert_props($stat)
     {
         return array(
-            'W'       => $stat['result'] === 'win'  ? 1 : 0,
-            'L'       => $stat['result'] === 'lose' ? 1 : 0,
-            'HLD'     => $stat['result'] === 'hold' ? 1 : 0,
-            'SV'      => $stat['result'] === 'save' ? 1 : 0,
-            'IP'      => $stat['IP'],
+            'W' => $stat['result'] === 'win'  ? 1 : 0,
+            'L' => $stat['result'] === 'lose' ? 1 : 0,
+            'HLD' => $stat['result'] === 'hold' ? 1 : 0,
+            'SV' => $stat['result'] === 'save' ? 1 : 0,
+            'IP' => $stat['IP'],
             'IP_frac' => $stat['IP_frac'],
-            'H'       => $stat['H'],
-            'SO'      => $stat['SO'],
-            'BB'      => $stat['BB'],
-            'HB'      => $stat['HB'],
-            'ER'      => $stat['ER'],
-            'R'       => $stat['R'],
+            'H' => $stat['H'],
+            'SO' => $stat['SO'],
+            'BB' => $stat['BB'],
+            'HB' => $stat['HB'],
+            'ER' => $stat['ER'],
+            'R' => $stat['R'],
         );
     }
 
@@ -123,12 +125,12 @@ class Model_Stats_Pitching extends Model_Base
     {
         Mydb::begin();
 
-        try
-        {
+        try {
             // regist new data
-            foreach ($stats as $order => $stat)
-            {
-                if ( ! $stat) continue;
+            foreach ($stats as $order => $stat) {
+                if (!$stat) {
+                    continue;
+                }
 
                 // get model
                 $pitch = self::get_one_or_forge($ids + array('player_id' => $stat['player_id']));
@@ -138,9 +140,8 @@ class Model_Stats_Pitching extends Model_Base
                 $pitch->set($props);
 
                 // other
-                $pitch->order  = $order;
-                if ( ! is_null($status))
-                {
+                $pitch->order = $order;
+                if (!is_null($status)) {
                     $pitch->input_status = $status;
                 }
 
@@ -148,9 +149,7 @@ class Model_Stats_Pitching extends Model_Base
             }
 
             Mydb::commit();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Mydb::rollback();
             throw new Exception($e->getMessage());
         }
@@ -159,7 +158,7 @@ class Model_Stats_Pitching extends Model_Base
     public static function get_input_status($game_id, $player_id)
     {
         $s = self::query()->where(array(
-            'game_id'   => $game_id,
+            'game_id' => $game_id,
             'player_id' => $player_id,
         ))->get_one();
 

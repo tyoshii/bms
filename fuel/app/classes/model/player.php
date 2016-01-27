@@ -3,13 +3,13 @@
 class Model_Player extends \Orm\Model
 {
     protected static $_properties = array(
-        'id'      => array('form' => array('type' => false)),
+        'id' => array('form' => array('type' => false)),
         'team_id' => array('form' => array('type' => false)),
-        'name'    => array(
+        'name' => array(
             'data_type' => 'varchar',
             'form' => array(
                 'class' => 'form-control',
-                'type'  => 'text',
+                'type' => 'text',
             ),
             'label' => '選手名',
             'validation' => array(
@@ -21,12 +21,12 @@ class Model_Player extends \Orm\Model
             'data_type' => 'varchar',
             'form' => array(
                 'class' => 'form-control',
-                'type'  => 'text',
+                'type' => 'text',
             ),
             'label' => '背番号',
             'validation' => array(
                 'required',
-                'max_length'   => array(4),
+                'max_length' => array(4),
                 'valid_string' => array('numeric'),
             ),
         ),
@@ -34,7 +34,7 @@ class Model_Player extends \Orm\Model
             'form' => array('type' => false),
             'default' => '',
         ),
-        'status'   => array(
+        'status' => array(
             'default' => 1,
             'form' => array('type' => false),
         ),
@@ -48,94 +48,103 @@ class Model_Player extends \Orm\Model
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
     protected static $_table_name = 'players';
-    
+
     protected static $_has_one = array(
         'team' => array(
-            'model_to'       => 'Model_Team',
-            'key_from'       => 'team_id',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Team',
+            'key_from' => 'team_id',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
-        )
+        ),
     );
 
     protected static $_belongs_to = array(
         'teams' => array(
-            'model_to'       => 'Model_Team',
-            'key_from'       => 'team_id',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Team',
+            'key_from' => 'team_id',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
-        )
+        ),
     );
 
     /**
-     * get player name by username
+     * get player name by username.
+     *
      * @param string username
+     *
      * @return string/null player name
      */
     public static function get_name_by_username($username = null)
     {
-        if ( ! $username)
-            return null;
+        if (!$username) {
+            return;
+        }
 
-        if ($player = self::find_by_username($username))
+        if ($player = self::find_by_username($username)) {
             return $player->name;
+        }
 
-        return null;
+        return;
     }
 
     /**
-     * get login user player id
+     * get login user player id.
+     *
      * @return string/null player id
      */
     public static function get_my_player_id()
     {
-        if ($res = self::find_by_username(Auth::get_screen_name()))
+        if ($res = self::find_by_username(Auth::get_screen_name())) {
             return $res->id;
+        }
 
-        return null;
+        return;
     }
 
     /**
-     * get login user team name
+     * get login user team name.
+     *
      * @return string/null team name
      */
     public static function get_my_team_name()
     {
-        if ($team_id = self::get_my_team_id())
-        {
+        if ($team_id = self::get_my_team_id()) {
             return Model_Team::find($team_id)->name;
         }
 
-        return null;
+        return;
     }
 
     /**
-     * get login user team id
+     * get login user team id.
      *
      * TODO: 複数チームに所属している場合に対応しきれない（１つしか返せない）
      */
     public static function get_my_team_id()
     {
-        if ($res = self::find_by_username(Auth::get_screen_name()))
+        if ($res = self::find_by_username(Auth::get_screen_name())) {
             return $res->team_id;
+        }
 
-        return null;
+        return;
     }
 
     /**
-     * get players
+     * get players.
+     *
      * @param string team_id
+     *
      * @return array
      */
     public static function get_players($team_id = null)
@@ -146,14 +155,15 @@ class Model_Player extends \Orm\Model
             ->where('p.status', '!=', -1)
             ->order_by(DB::expr('CAST(p.number as SIGNED)'));
 
-        if ($team_id)
+        if ($team_id) {
             $query->where('p.team_id', $team_id);
+        }
 
         return $query->execute()->as_array();
     }
 
     /**
-     * 選手登録
+     * 選手登録.
      *
      * @param $props
      * @param array properties
@@ -167,20 +177,17 @@ class Model_Player extends \Orm\Model
      */
     public static function regist($props, $id = null)
     {
-        try
-        {
+        try {
             $player = $id ? self::find($id) : self::forge();
 
             // 既に登録されたusernameかチェック
-            if (array_key_exists('username', $props) and $props['username'] !== $player->username)
-            {
+            if (array_key_exists('username', $props) and $props['username'] !== $player->username) {
                 $already = self::query()->where(array(
                     array('username', $props['username']),
                     array('team_id', $props['team_id']),
                 ))->get();
 
-                if ($already)
-                {
+                if ($already) {
                     throw new Exception('そのユーザーは既に他の選手に紐づいています');
                 }
             }
@@ -190,18 +197,16 @@ class Model_Player extends \Orm\Model
             $player->save();
 
             return true;
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return false;
         }
     }
 
     public static function disable($id)
     {
-        try
-        {
+        try {
             $player = self::find($id);
 
             $player->number = '';
@@ -211,18 +216,18 @@ class Model_Player extends \Orm\Model
             $player->save();
 
             return true;
-
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Session::set_flash('error', $e->getMessage());
+
             return false;
         }
     }
 
     /**
-     * get player email address
+     * get player email address.
+     *
      * @param string player_id
+     *
      * @return string email(or empty)
      */
     public static function get_player_email($player_id)
@@ -234,14 +239,12 @@ class Model_Player extends \Orm\Model
             ->limit(1)
             ->execute()->as_array();
 
-        if (count($user) === 0)
-        {
+        if (count($user) === 0) {
             return '';
         }
 
         $user = $user[0];
-        if ($user['username'] === '')
-        {
+        if ($user['username'] === '') {
             return '';
         }
 
@@ -249,7 +252,7 @@ class Model_Player extends \Orm\Model
     }
 
     /**
-     * 指定されたチームにユーザーが所属しているかどうか
+     * 指定されたチームにユーザーが所属しているかどうか.
      *
      * @param string team_id
      * @param string username
@@ -258,13 +261,11 @@ class Model_Player extends \Orm\Model
      */
     public static function is_belong($team_id = null, $username = null)
     {
-        if (is_null($team_id))
-        {
+        if (is_null($team_id)) {
             return false;
         }
 
-        if (is_null($username))
-        {
+        if (is_null($username)) {
             $username = Auth::get('username');
         }
 
@@ -277,11 +278,11 @@ class Model_Player extends \Orm\Model
     }
 
     /**
-     * チームの管理者権限をもっているかどうか
+     * チームの管理者権限をもっているかどうか.
      *
      * @param string team_id
      *
-     * @return boolean
+     * @return bool
      */
     public static function has_team_admin($team_id)
     {
@@ -294,13 +295,13 @@ class Model_Player extends \Orm\Model
     }
 
     /**
-     * player.roleを更新
+     * player.roleを更新.
      *
      * @param string team_id
      * @param string player_id
      * @param string role
      *
-     * @return boolean
+     * @return bool
      */
     public static function update_role($team_id, $player_id, $role)
     {
@@ -308,15 +309,15 @@ class Model_Player extends \Orm\Model
             'where' => array(array('team_id', $team_id)),
         ));
 
-        if ( ! $player)
-        {
+        if (!$player) {
             Log::error('選手が存在しません');
+
             return false;
         }
 
-        if ( ! in_array($role, array('user', 'admin')))
-        {
+        if (!in_array($role, array('user', 'admin'))) {
             Log::error('存在しないroleです');
+
             return false;
         }
 
@@ -328,7 +329,8 @@ class Model_Player extends \Orm\Model
     }
 
     /**
-     * フォーム取得
+     * フォーム取得.
+     *
      * @param array field_name => value
      *
      * @return Fieldset object
@@ -336,21 +338,20 @@ class Model_Player extends \Orm\Model
     public static function get_form($values = array())
     {
         $form = Fieldset::forge('profile', array(
-            'form_attributes' => array('class' => 'form')
+            'form_attributes' => array('class' => 'form'),
         ));
 
         $form->add_model(self::forge());
 
         // submit
         $form->add('submit', '', array(
-            'type'  => 'submit',
+            'type' => 'submit',
             'value' => '更新',
             'class' => 'btn btn-success',
         ));
 
         // default value
-        foreach ($values as $name => $value)
-        {
+        foreach ($values as $name => $value) {
             $form->field($name)->set_value($value);
         }
 

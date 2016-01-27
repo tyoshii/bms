@@ -10,8 +10,7 @@ class Controller_Score extends Controller_Base
     public function action_record_team()
     {
         // 所属チームがなければエラーページ
-        if (is_null(Model_Player::get_my_team_id()))
-        {
+        if (is_null(Model_Player::get_my_team_id())) {
             return Response::forge(View::forge('score/not_belong_team.twig'));
         }
 

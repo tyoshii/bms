@@ -63,8 +63,10 @@ class Model_Convention extends \Orm\Model
     protected static $_table_name = 'conventions';
 
     /**
-     * convention add/update form
+     * convention add/update form.
+     *
      * @param Model_Convention
+     *
      * @return FieldsetObject
      */
     public static function get_form($model = false)
@@ -80,8 +82,7 @@ class Model_Convention extends \Orm\Model
         ));
 
         // when update ..
-        if ($model)
-        {
+        if ($model) {
             // add id field
             $form->add('id', '', array(
                 'type' => 'hidden',
@@ -101,20 +102,20 @@ class Model_Convention extends \Orm\Model
     }
 
     /**
-     * convention regist
+     * convention regist.
+     *
      * @param array $val->validated()
-     * @return boolean
+     *
+     * @return bool
      */
     public static function regist($prop)
     {
-        if (array_key_exists('id', $prop))
-        {
+        if (array_key_exists('id', $prop)) {
             // update
         }
 
         // new
-        if (! array_key_exists('published', $prop) || ! $prop['published'])
-        {
+        if (!array_key_exists('published', $prop) || !$prop['published']) {
             $prop['published'] = 'true';
         }
 
@@ -132,7 +133,8 @@ class Model_Convention extends \Orm\Model
 
     /**
      * get own convnetion list
-     *   published = true && admin convention
+     *   published = true && admin convention.
+     *
      * @return array
      */
     public static function get_own_list()

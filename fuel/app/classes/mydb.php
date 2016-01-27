@@ -11,8 +11,7 @@ class Mydb
     {
         static::$_callnum--;
 
-        if (static::$_callnum < 0)
-        {
+        if (static::$_callnum < 0) {
             static::$_callnum = 0;
         }
     }
@@ -21,8 +20,7 @@ class Mydb
     {
         static::_increment();
 
-        if (DB::in_transaction())
-        {
+        if (DB::in_transaction()) {
             return false;
         }
 
@@ -32,9 +30,10 @@ class Mydb
     public static function commit()
     {
         static::_decrement();
-        
-        if (DB::in_transaction() && static::$_callnum === 0)
+
+        if (DB::in_transaction() && static::$_callnum === 0) {
             return DB::commit_transaction();
+        }
 
         return false;
     }
@@ -43,8 +42,9 @@ class Mydb
     {
         static::_decrement();
 
-        if (DB::in_transaction() && static::$_callnum === 0)
+        if (DB::in_transaction() && static::$_callnum === 0) {
             return DB::rollback_transaction();
+        }
 
         return false;
     }

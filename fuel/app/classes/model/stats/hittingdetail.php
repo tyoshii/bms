@@ -17,11 +17,11 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
     protected static $_observers = array(
         'Orm\Observer_CreatedAt' => array(
-            'events'          => array('before_insert'),
+            'events' => array('before_insert'),
             'mysql_timestamp' => false,
         ),
         'Orm\Observer_UpdatedAt' => array(
-            'events'          => array('before_update'),
+            'events' => array('before_update'),
             'mysql_timestamp' => false,
         ),
     );
@@ -29,20 +29,20 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
     protected static $_has_one = array(
         'batter_results' => array(
-            'model_to'       => 'Model_Batter_Result',
-            'key_from'       => 'result_id',
-            'key_to'         => 'id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Batter_Result',
+            'key_from' => 'result_id',
+            'key_to' => 'id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
 
     protected static $_belongs_to = array(
         'details' => array(
-            'model_to'       => 'Model_Stats_Hitting',
-            'key_from'       => 'game_id',
-            'key_to'         => 'game_id',
-            'cascade_save'   => false,
+            'model_to' => 'Model_Stats_Hitting',
+            'key_from' => 'game_id',
+            'key_to' => 'game_id',
+            'cascade_save' => false,
             'cascade_delete' => false,
         ),
     );
@@ -59,8 +59,7 @@ class Model_Stats_Hittingdetail extends \Orm\Model
         $query->order_by('bat_times');
 
         // where
-        foreach ($where as $key => $val)
-        {
+        foreach ($where as $key => $val) {
             $query->where($key, $val);
         }
 
@@ -68,12 +67,12 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
         // データ整形
         $stats = array();
-        foreach ($result as $res)
-        {
+        foreach ($result as $res) {
             $key = $res['player_id'];
 
-            if ( ! array_key_exists($key, $stats))
+            if (!array_key_exists($key, $stats)) {
                 $stats[$key] = array();
+            }
 
             array_push($stats[$key], $res);
         }
@@ -87,7 +86,7 @@ class Model_Stats_Hittingdetail extends \Orm\Model
             'player_id' => $player_id,
             'bat_times' => $bat_times,
             'direction' => $stat['direction'],
-            'kind'      => $stat['kind'],
+            'kind' => $stat['kind'],
             'result_id' => $stat['result'],
         );
 
@@ -95,9 +94,10 @@ class Model_Stats_Hittingdetail extends \Orm\Model
     }
 
     /**
-     * 指定されたplayer_idが出場した試合ごとの打撃成績を返す
+     * 指定されたplayer_idが出場した試合ごとの打撃成績を返す.
      *
      * @param string player_id
+     *
      * @return array
      */
     public static function get_stats_per_game($player_id)
@@ -106,8 +106,7 @@ class Model_Stats_Hittingdetail extends \Orm\Model
 
         $return = array();
 
-        foreach ($played_games ?: array() as $stats_player) 
-        {
+        foreach ($played_games ?: array() as $stats_player) {
             $stats = static::query()
                 ->where('player_id', $player_id)
                 ->where('game_id', $stats_player->game_id)
@@ -116,9 +115,9 @@ class Model_Stats_Hittingdetail extends \Orm\Model
                 ->get();
 
             $return[] = array(
-                'game_id'            => $stats_player->games->id,
-                'date'               => $stats_player->games->date,
-                'opponent_team_id'   => $stats_player->games->games_team->opponent_team_id,
+                'game_id' => $stats_player->games->id,
+                'date' => $stats_player->games->date,
+                'opponent_team_id' => $stats_player->games->games_team->opponent_team_id,
                 'opponent_team_name' => $stats_player->games->games_team->opponent_team_name,
                 'stats' => $details,
             );

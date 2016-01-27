@@ -2,50 +2,50 @@
 
 class Mydb
 {
-	private static $_callnum = 0;
-	private static function _increment()
-	{
-		static::$_callnum++;
-	}
-	private static function _decrement()
-	{
-		static::$_callnum--;
+    private static $_callnum = 0;
+    private static function _increment()
+    {
+        static::$_callnum++;
+    }
+    private static function _decrement()
+    {
+        static::$_callnum--;
 
-		if (static::$_callnum < 0)
-		{
-			static::$_callnum = 0;
-		}
-	}
+        if (static::$_callnum < 0)
+        {
+            static::$_callnum = 0;
+        }
+    }
 
-	public static function begin()
-	{
-		static::_increment();
+    public static function begin()
+    {
+        static::_increment();
 
-		if (DB::in_transaction())
-		{
-			return false;
-		}
+        if (DB::in_transaction())
+        {
+            return false;
+        }
 
-		return DB::start_transaction();
-	}
+        return DB::start_transaction();
+    }
 
-	public static function commit()
-	{
-		static::_decrement();
-		
-		if (DB::in_transaction() && static::$_callnum === 0)
-			return DB::commit_transaction();
+    public static function commit()
+    {
+        static::_decrement();
+        
+        if (DB::in_transaction() && static::$_callnum === 0)
+            return DB::commit_transaction();
 
-		return false;
-	}
+        return false;
+    }
 
-	public static function rollback()
-	{
-		static::_decrement();
+    public static function rollback()
+    {
+        static::_decrement();
 
-		if (DB::in_transaction() && static::$_callnum === 0)
-			return DB::rollback_transaction();
+        if (DB::in_transaction() && static::$_callnum === 0)
+            return DB::rollback_transaction();
 
-		return false;
-	}
+        return false;
+    }
 }

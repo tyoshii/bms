@@ -9,6 +9,7 @@ before_install:
   - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.2.jar
   - java -jar selenium-server-standalone-2.42.2.jar > /tmp/selenium.log 2> /tmp/selenium.error &
   - curl -s https://getcomposer.org/installer | php
+  - composer global require hirak/prestissimo
 
 before_script:
   - mkdir -p build/logs

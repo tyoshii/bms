@@ -40,7 +40,7 @@ class Test_Model_Conventions_Team extends \Test_Model_Base
 		$id = Model_Convention::find('first')->id;
 		$teams = Model_Conventions_Team::get_teams();
 		$this->assertTrue(is_array(Model_Conventions_Team::get_teams()));
-			
+
 		// パラメーターが足りない場合はfalse
 		$this->assertFalse(Model_Team::regist());
 		$this->assertFalse(Model_Team::regist(array('name' => 'name')));

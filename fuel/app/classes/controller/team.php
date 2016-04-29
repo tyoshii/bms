@@ -179,8 +179,38 @@ class Controller_Team extends Controller_Base
      */
     public function action_offer()
     {
-        $view = View::forge('team/offer.twig');
+				if (Input::post()) {
 
+					// 未ログインの場合は、ログインページヘ
+					if (! Auth::check()) {
+						return Response::redirect('/login?url='.Uri::current());
+					}
+
+					// 加入者にメール
+					$time = time();
+					$username = Auth::get('username');
+					$crypt = Crypt::encode($time.$username);
+					$offer_confirm_url = sprintf('%soffer/confirm?t=%s&u=%s&c=%s', Uri::base(false), $time, $username, $crypt);
+
+					$subject = '入部オファーが届いています';
+					$body = <<<__BODY__
+チーム「{$this->_team->name}」に入部オファーが届いています。
+以下のURLから入部オファーを確認してください。
+
+$offer_confirm_url
+__BODY__;
+
+					$admins = Model_Team::get_admins($this->_team->id);
+					foreach ($admins as $admin) {
+						Common_Email::sendmail(Model_Player::get_player_email($admin->id), $subject, $body);
+					}
+
+					// 成功ページ
+					Session::set_flash('info', 'チーム管理者にチーム加入リクエストを送付しました。');
+					return Response::redirect($this->_team->href);
+				}
+
+        $view = View::forge('team/offer.twig');
         return Response::forge($view);
     }
 }

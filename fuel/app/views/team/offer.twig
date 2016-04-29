@@ -5,10 +5,23 @@
 <h3>入部オファー</h3>
 
 <pre>
-はいりたいチームへ入部のオファーが出来ます。
-入部オファーするとチーム管理者に通知が行き、
-入部を承諾されるとあなたに通知が行きます。
-
-未実装です。
+加入したいチームへ入部のオファーが出来ます。
+入部オファーするとチーム管理者にお知らせがいきます。
+入部を承諾されるとあなたに通知が届きます。
 </pre>
+
+<hr>
+
+{% if auth_check() %}
+
+<form classs="form" action="" method="POST">
+<input type="submit" class="btn btn-success" name="submit" value="このチームに入部オファーを出す">
+</form>
+
+{% else %}
+
+<a href="/login?url={{current_url()}}">ログインしてください。</a>
+
+{% endif %}
+
 {% endblock main %}

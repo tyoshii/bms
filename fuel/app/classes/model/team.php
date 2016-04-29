@@ -189,4 +189,18 @@ class Model_Team extends \Orm\Model
 
         return $form;
     }
+
+		/**
+		 * get admins list
+		 *
+		 * @param string team id
+		 * @return object Model_Player admins player list
+		 */
+		public static function get_admins($team_id) {
+
+			return Model_Player::query()
+				->where('team_id', $team_id)
+				->where('role', 'admin')
+				->get();
+		}
 }

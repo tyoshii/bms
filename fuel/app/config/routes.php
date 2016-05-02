@@ -41,6 +41,7 @@ return array(
 
 	// team/offer
 	'team/(:url_path)/offer'                        => 'team/offer',
+	'team/(:url_path)/offer/confirm'								=> 'team/offer_confirm',
 
 	// team/index
 	'team/(:url_path)'                              => 'team/index',

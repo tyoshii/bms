@@ -179,38 +179,101 @@ class Controller_Team extends Controller_Base
      */
     public function action_offer()
     {
-				if (Input::post()) {
+        if (Input::post()) {
 
-					// 未ログインの場合は、ログインページヘ
-					if (! Auth::check()) {
-						return Response::redirect('/login?url='.Uri::current());
-					}
+            // 未ログインの場合は、ログインページヘ
+            if (!Auth::check()) {
+                return Response::redirect('/login?url='.Uri::current());
+            }
 
-					// 加入者にメール
-					$time = time();
-					$username = Auth::get('username');
-					$crypt = Crypt::encode($time.$username);
-					$offer_confirm_url = sprintf('%soffer/confirm?t=%s&u=%s&c=%s', Uri::base(false), $time, $username, $crypt);
+            // 加入者にメール
+            $time = time();
+            $username = Auth::get('username');
+            $crypt = Crypt::encode($time.$username);
+            $offer_confirm_url = sprintf('%s%s/offer/confirm?t=%s&u=%s&c=%s', Uri::base(false), $this->_team->href, $time, $username, $crypt);
 
-					$subject = '入部オファーが届いています';
-					$body = <<<__BODY__
-チーム「{$this->_team->name}」に入部オファーが届いています。
-以下のURLから入部オファーを確認してください。
-
-$offer_confirm_url
+            $subject = '入部オファーが届いています';
+            $body = <<<__BODY__
+    チーム「{$this->_team->name}」に入部オファーが届いています。
+    以下のURLから入部オファーを確認してください。
+    
+    $offer_confirm_url
 __BODY__;
 
-					$admins = Model_Team::get_admins($this->_team->id);
-					foreach ($admins as $admin) {
-						Common_Email::sendmail(Model_Player::get_player_email($admin->id), $subject, $body);
-					}
+            $admins = Model_Team::get_admins($this->_team->id);
+            foreach ($admins as $admin) {
+                Common_Email::sendmail(Model_Player::get_player_email($admin->id), $subject, $body);
+            }
 
-					// 成功ページ
-					Session::set_flash('info', 'チーム管理者にチーム加入リクエストを送付しました。');
-					return Response::redirect($this->_team->href);
-				}
+            // 成功ページ
+            Session::set_flash('info', 'チーム管理者にチーム加入リクエストを送付しました。');
+
+            return Response::redirect($this->_team->href);
+        }
 
         $view = View::forge('team/offer.twig');
+
+        return Response::forge($view);
+    }
+
+    /**
+     * このチームに入る、っていうオファー
+     */
+    public function action_offer_confirm()
+    {
+        $username = Input::get('u');
+        $time = Input::get('t');
+        $crypt = Input::get('c');
+
+        $user = Model_User::find_by_username($username);
+
+        // cryptが有効化どうか検証
+
+        // チーム加入処理
+        if (Input::get('accept')) {
+
+            // チーム加入処理
+            $player = Model_Player::regist(array(
+                'team_id' => $this->_team->id,
+                'name' => '（未設定）',
+                'number' => 999,
+                'username' => $username,
+            ));
+
+            if ($player === false) {
+                Session::set_flash('error', 'そのユーザーは既にチームに加入済みです');
+
+                return Response::redirect($this->_team->href);
+            }
+
+            $player_url = Uri::base(false).$this->_team->href.'/player/'.$player->id;
+
+            // ユーザーへメール連絡
+            $subject = 'チーム加入のお知らせ';
+            $body = <<<__BODY__
+チーム {$this->_team->name} へ加入しました。
+
+$player_url
+__BODY__;
+            Common_Email::sendmail($user->email, $subject, $body);
+
+            // success return
+            Session::set_flash('info', 'チームへの加入を承諾しました。名前と背番号を入力してください。');
+
+            return Response::redirect($player_url);
+        }
+
+        // チーム加入を否認（何もしない）
+        if (Input::get('reject')) {
+            // success return
+            Session::set('info', 'チームへの加入を否認しました。');
+
+            return Response::redirect($this->_team->href);
+        }
+
+        $view = View::forge('team/offer_confirm.twig');
+        $view->user = $user;
+
         return Response::forge($view);
     }
 }

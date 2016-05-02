@@ -196,7 +196,7 @@ class Model_Player extends \Orm\Model
             $player->set($props);
             $player->save();
 
-            return true;
+            return $player;
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

@@ -83,6 +83,9 @@ Vagrant.configure(2) do |config|
     service httpd start
     chkconfig httpd on
 
+		# Apache conf
+		cp /var/www/html/conf/httpd/development.conf /etc/httpd/conf.d/
+
     # MySQL
     yum -y install mysql mysql-server mysql-devel
     service mysqld start

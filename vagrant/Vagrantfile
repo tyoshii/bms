@@ -108,6 +108,7 @@ Vagrant.configure(2) do |config|
 		# database schema
 		mysql -e 'create database bms'
 		FUEL_ENV=development /usr/bin/php /var/www/html/oil r migrate:current --all
+		FUEL_ENV=development /usr/bin/php /var/www/html/oil r dbinit:insert_data_for_travis
 
     # Git
     yum install -y git

@@ -112,7 +112,7 @@ class Controller_Team_Config extends Controller_Team
         if ($player_id = $this->param('player_id')) {
             // 自分自身か、チーム管理者でなかったら、権限なし
             if ($this->_player->id !== $player_id and !$this->_team_admin) {
-                Session::get_error('権限がありません');
+                Session::set_flash('error', '権限がありません');
 
                 return Response::redirect($this->_team->href);
             }

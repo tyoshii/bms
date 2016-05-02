@@ -4,7 +4,7 @@ class Controller_Team_Config extends Controller_Team
 {
     /**
      * indexアクション。すべてのteam/configリクエストはここを通る.
-     * 
+     *
      * param string kind
      *  - team_admin
      *    - admin
@@ -108,7 +108,7 @@ class Controller_Team_Config extends Controller_Team
         // form
         $form = Model_Player::get_form(array('submit' => '登録'));
 
-        // player_idが遅れらて来ると、更新
+        // player_idが送られて来ると、更新
         if ($player_id = $this->param('player_id')) {
             // 自分自身か、チーム管理者でなかったら、権限なし
             if ($this->_player->id !== $player_id and !$this->_team_admin) {

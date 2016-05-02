@@ -29,11 +29,11 @@ return array(
 	'team/(:url_path)/game/add'                     => 'team/game/add',
 	'team/(:url_path)/game/(:game_id)/edit/(:kind)' => 'team/game/edit',
 	'team/(:url_path)/game/(:game_id)'              => 'team/game/detail',
-	
+
 	// team/config
 	'team/(:url_path)/config/(:kind)/(:player_id)'  => 'team/config/index',
 	'team/(:url_path)/config/(:kind)'               => 'team/config/index',
-	
+
 	// team/stats team/player
 	'team/(:url_path)/player/(:player_id)'          => 'team/player',
 	'team/(:url_path)/player'                       => 'team/player',

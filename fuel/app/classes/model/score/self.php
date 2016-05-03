@@ -20,57 +20,57 @@ class Model_Score_Self
 
         $query = <<<__QUERY__
 SELECT
-		s.player_id,
-		p.number,
-		t.name as team,
-		p.name,
-		count(s.id) as G,
-		sum(s.TPA) as TPA,
-		sum(s.AB)  as AB,
-		sum(s.H)   as H,
-		sum(s.2B)  as 2B,
-		sum(s.3B)  as 3B,
-		sum(s.HR)  as HR,
-		sum(s.RBI) as RBI,
-		sum(s.R)   as R,
-		sum(s.SO)  as SO,
-		sum(s.BB)  as BB,
-		sum(s.HBP) as HBP,
-		sum(s.SAC) as SAC,
-		sum(s.SF)  as SF,
-		sum(s.SB)  as SB,
-		(SELECT sum(E) from stats_fieldings where player_id = s.player_id) as E
+    s.player_id,
+    p.number,
+    t.name as team,
+    p.name,
+    count(s.id) as G,
+    sum(s.TPA) as TPA,
+    sum(s.AB)  as AB,
+    sum(s.H)   as H,
+    sum(s.2B)  as 2B,
+    sum(s.3B)  as 3B,
+    sum(s.HR)  as HR,
+    sum(s.RBI) as RBI,
+    sum(s.R)   as R,
+    sum(s.SO)  as SO,
+    sum(s.BB)  as BB,
+    sum(s.HBP) as HBP,
+    sum(s.SAC) as SAC,
+    sum(s.SF)  as SF,
+    sum(s.SB)  as SB,
+    (SELECT sum(E) from stats_fieldings where player_id = s.player_id) as E
 FROM
-		stats_hittings AS s
+    stats_hittings AS s
 
 LEFT JOIN
-		players AS p
+    players AS p
 ON
-		s.player_id = p.id
+    s.player_id = p.id
 
 LEFT JOIN
-		teams AS  t
+    teams AS  t
 ON
-		t.id = p.team_id
+    t.id = p.team_id
 
 LEFT JOIN
-		games AS g
+    games AS g
 ON
-		s.game_id = g.id AND
-		g.game_status != -1
+    s.game_id = g.id AND
+    g.game_status != -1
 
 WHERE
-		p.team_id = $team_id AND
-		p.status != -1       AND
-		g.game_status = 2    AND
-		g.date >= "$year-01-01" AND
-	 	g.date <= "$year-12-31"
+    p.team_id = $team_id AND
+    p.status != -1       AND
+    g.game_status = 2    AND
+    g.date >= "$year-01-01" AND
+     g.date <= "$year-12-31"
 
 GROUP BY
-		s.player_id
+    s.player_id
 
 ORDER BY
-		G DESC
+    G DESC
 ;
 __QUERY__;
 

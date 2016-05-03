@@ -29,16 +29,16 @@ class Model_Stats_Award extends Model_Base
     {
         $query = <<<__SQL__
 SELECT
-	*,
-	(SELECT name FROM players WHERE id = stats_awards.mvp_player_id)
-		as mvp_player_name,
-	(SELECT name FROM players WHERE id = stats_awards.second_mvp_player_id)
-		as second_mvp_player_name
+  *,
+  (SELECT name FROM players WHERE id = stats_awards.mvp_player_id)
+    as mvp_player_name,
+  (SELECT name FROM players WHERE id = stats_awards.second_mvp_player_id)
+    as second_mvp_player_name
 FROM
-	stats_awards
+  stats_awards
 WHERE
-	game_id = $game_id AND
-	team_id = $team_id
+  game_id = $game_id AND
+  team_id = $team_id
 __SQL__;
 
         $result = DB::query($query)->execute()->as_array();

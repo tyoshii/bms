@@ -10,47 +10,47 @@ class Model_Score_Team
 
         $query = <<<__QUERY__
 SELECT
-		s.game_id,
-		sum(s.TPA) as TPA,
-		sum(s.AB)  as AB,
-		sum(s.H)   as H,
-		sum(s.2B)  as 2B,
-		sum(s.3B)  as 3B,
-		sum(s.HR)  as HR,
-		sum(s.RBI) as RBI,
-		sum(s.R)   as R,
-		sum(s.SO)  as SO,
-		sum(s.BB)  as BB,
-		sum(s.HBP) as HBP,
-		sum(s.SAC) as SAC,
-		sum(s.SF)  as SF,
-		sum(s.SB)  as SB,
-		(SELECT sum(E) from stats_fieldings where team_id = $team_id) as E
+    s.game_id,
+    sum(s.TPA) as TPA,
+    sum(s.AB)  as AB,
+    sum(s.H)   as H,
+    sum(s.2B)  as 2B,
+    sum(s.3B)  as 3B,
+    sum(s.HR)  as HR,
+    sum(s.RBI) as RBI,
+    sum(s.R)   as R,
+    sum(s.SO)  as SO,
+    sum(s.BB)  as BB,
+    sum(s.HBP) as HBP,
+    sum(s.SAC) as SAC,
+    sum(s.SF)  as SF,
+    sum(s.SB)  as SB,
+    (SELECT sum(E) from stats_fieldings where team_id = $team_id) as E
 FROM
-		stats_hittings AS s
+    stats_hittings AS s
 
 LEFT JOIN
-		games as g
+    games as g
 ON
-		s.game_id = g.id
+    s.game_id = g.id
 
 LEFT JOIN
-		players AS p
+    players AS p
 ON
-		s.player_id = p.id
+    s.player_id = p.id
 
 LEFT JOIN
-		teams AS  t
+    teams AS  t
 ON
-		t.id = p.team_id
+    t.id = p.team_id
 
 WHERE
-		p.status != -1       AND
-		s.team_id = $team_id AND
-		g.game_status = 2	
+    p.status != -1       AND
+    s.team_id = $team_id AND
+    g.game_status = 2  
 
 GROUP BY
-		s.team_id
+    s.team_id
 ;
 __QUERY__;
 
@@ -113,31 +113,31 @@ __QUERY__;
 
         $query = <<<__QUERY__
 SELECT
-	g.id,
-	gr.tsum,
-	gr.bsum,
-	gt.order,
-	g.game_status,
-	g.date
+  g.id,
+  gr.tsum,
+  gr.bsum,
+  gt.order,
+  g.game_status,
+  g.date
 FROM
-	games as g
+  games as g
 
 LEFT JOIN
-	games_runningscores as gr
+  games_runningscores as gr
 ON
-	g.id = gr.game_id
+  g.id = gr.game_id
 
 LEFT JOIN
-	games_teams as gt
+  games_teams as gt
 ON
-	g.id = gt.game_id
+  g.id = gt.game_id
 
 WHERE
-	gt.team_id = $team_id AND
-	g.game_status = 2
+  gt.team_id = $team_id AND
+  g.game_status = 2
 
 ORDER BY
-	g.date DESC
+  g.date DESC
 ;
 __QUERY__;
 

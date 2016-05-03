@@ -288,7 +288,7 @@ class Controller_Api_Download_Stats extends Controller_Rest
         // sheet name
         $sheet->setTitle('打撃DB');
 
-        // set header	
+        // set header
         $sheet->setCellValue('A1', '試合ID');
         $sheet->setCellValue('B1', '選手ID');
         $sheet->setCellValue('C1', '選手');

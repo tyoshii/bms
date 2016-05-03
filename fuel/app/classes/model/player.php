@@ -357,4 +357,16 @@ class Model_Player extends \Orm\Model
 
         return $form;
     }
+
+    /**
+     * ユーザー登録されていない選手一覧を取得
+     */
+    public static function get_noregist_players($team_id)
+    {
+        return static::query()
+                ->where('team_id', $team_id)
+                ->where('username', '')
+                ->get();
+    }
+
 }

@@ -191,13 +191,14 @@ class Controller_Team extends Controller_Base
             $username = Auth::get('username');
             $crypt = Crypt::encode($time.$username);
             $offer_confirm_url = sprintf('%s%s/offer/confirm?t=%s&u=%s&c=%s', Uri::base(false), $this->_team->href, $time, $username, $crypt);
+            Log::warning('offer_confirm_url: '.$offer_confirm_url);
 
             $subject = '入部オファーが届いています';
             $body = <<<__BODY__
-    チーム「{$this->_team->name}」に入部オファーが届いています。
-    以下のURLから入部オファーを確認してください。
-    
-    $offer_confirm_url
+チーム「{$this->_team->name}」に入部オファーが届いています。
+以下のURLから入部オファーを確認してください。
+
+$offer_confirm_url
 __BODY__;
 
             $admins = Model_Team::get_admins($this->_team->id);
@@ -227,7 +228,7 @@ __BODY__;
 
         $user = Model_User::find_by_username($username);
 
-        // cryptが有効化どうか検証
+        // cryptが有効かどうか検証
 
         // チーム加入処理
         if (Input::get('accept')) {
@@ -246,21 +247,38 @@ __BODY__;
                 return Response::redirect($this->_team->href);
             }
 
-            $player_url = Uri::base(false).$this->_team->href.'/player/'.$player->id;
 
             // ユーザーへメール連絡
-            $subject = 'チーム加入のお知らせ';
-            $body = <<<__BODY__
-チーム {$this->_team->name} へ加入しました。
-
-$player_url
-__BODY__;
-            Common_Email::sendmail($user->email, $subject, $body);
+            $this->_team_join_mail($user->email, $player->id);
 
             // success return
             Session::set_flash('info', 'チームへの加入を承諾しました。名前と背番号を入力してください。');
 
+            $player_url = $this->_player_url($player->id);
             return Response::redirect($player_url);
+        }
+
+        // ひもづけ
+        if (Input::get('link')) {
+
+          $player = Model_Player::find(Input::get('player_id'));
+
+          // player_idがひもづけられてないかチェック
+          if ($player->username !== '') {
+            Session::set_flash('error', 'その選手はすでにユーザー登録されています');
+          } else {
+            $player->username = $username;
+            $player->save();
+
+            // ユーザーへメール連絡
+            $this->_team_join_mail($user->email, $player->id);
+
+            // success return
+            Session::set_flash('info', '選手とのひもづけが完了しました。');
+
+            $player_url = $this->_player_url($player->id);
+            return Response::redirect($player_url);
+          }
         }
 
         // チーム加入を否認（何もしない）
@@ -273,7 +291,29 @@ __BODY__;
 
         $view = View::forge('team/offer_confirm.twig');
         $view->user = $user;
+        $view->players = Model_Player::get_noregist_players($this->_team->id);
 
         return Response::forge($view);
+    }
+
+    /**
+     * チームへ加入したことをメールで知らせる
+     */
+    private function _team_join_mail($to, $player_id)
+    {
+        $player_url = $this->_player_url($player_id);
+        $subject = 'チーム加入のお知らせ';
+        $body = <<<__BODY__
+チーム {$this->_team->name} へ加入しました。
+
+$player_url
+__BODY__;
+
+        Common_Email::sendmail($to, $subject, $body);
+    }
+
+    private function _player_url($player_id)
+    {
+        return Uri::base(false).$this->_team->href.'/player/'.$player_id;
     }
 }

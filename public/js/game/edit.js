@@ -8,9 +8,13 @@ var stats = {
   }
 };
 
-
 $(document).ready(function(){
   batter_result_update();
+
+  // 背番号の更新
+  $("select.select2.player_id").each(function(){
+    update_number(this);
+  });
 });
 
 var result_map = {

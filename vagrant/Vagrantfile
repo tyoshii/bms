@@ -83,8 +83,8 @@ Vagrant.configure(2) do |config|
     service httpd start
     chkconfig httpd on
 
-		# Apache conf
-		cp /var/www/html/conf/httpd/development.conf /etc/httpd/conf.d/
+    # Apache conf
+    cp /var/www/html/conf/httpd/development.conf /etc/httpd/conf.d/
 
     # MySQL
     yum -y install mysql mysql-server mysql-devel
@@ -93,7 +93,7 @@ Vagrant.configure(2) do |config|
 
     # PHP
     rpm -Uvh http://ftp.iij.ad.jp/pub/linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
-		rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 
     yum -y install --enablerepo=remi-php56 php php-common php-mysqlnd
 
@@ -105,10 +105,10 @@ Vagrant.configure(2) do |config|
 
     service httpd restart
 
-		# database schema
-		mysql -e 'create database bms'
-		FUEL_ENV=development /usr/bin/php /var/www/html/oil r migrate:current --all
-		FUEL_ENV=development /usr/bin/php /var/www/html/oil r dbinit:insert_data_for_travis
+    # database schema
+    mysql -e 'create database bms'
+    FUEL_ENV=development /usr/bin/php /var/www/html/oil r migrate:current --all
+    FUEL_ENV=development /usr/bin/php /var/www/html/oil r dbinit:insert_data_for_travis
 
     # Git
     yum install -y git

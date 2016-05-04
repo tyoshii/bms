@@ -1,20 +1,20 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
+  - 5.6
 
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.2.jar
-  - java -jar selenium-server-standalone-2.42.2.jar > /tmp/selenium.log 2> /tmp/selenium.error &
+  - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
+  - java -jar selenium-server-standalone-2.53.0.jar > /tmp/selenium.log 2> /tmp/selenium.error &
+  - curl -s https://getcomposer.org/installer | php
+  - composer global require hirak/prestissimo
 
 before_script:
   - mkdir -p build/logs
   - mysql -e 'create database bms;'
-  - php composer.phar self-update
-  - FUEL_ENV=test php composer.phar install
+  - FUEL_ENV=test composer install
   - php -S localhost:8888 -t public > builtinserver.log 2>&1 &
 
 script:

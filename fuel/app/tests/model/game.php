@@ -80,4 +80,14 @@ class Test_Model_Game extends \Test_Model_Base
 			$this->assertSame($game->games_team->team_id, $id);
 		}
 	}
+
+	/**
+	 *
+	 */
+	public function test_get_distinct_yearで年数が正しく取得できるか()
+	{
+		$result = Model_Game::get_distinct_year();
+
+		// TODO:
+	}
 }

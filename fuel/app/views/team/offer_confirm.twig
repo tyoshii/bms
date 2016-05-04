@@ -1,0 +1,69 @@
+{% extends 'layout/team.twig' %}
+
+{% block main %}
+
+<h3>入部リクエストの処理</h3>
+
+以下のユーザーから、チームへの加入リクエストが届いています。
+
+<ul>
+<li>{{ user.username }}
+<li>{{ user.email }}
+</ul>
+
+以下の3つから対応を選んでください。
+
+<ul>
+<li>新しく選手として登録する
+<li>すでに登録されている選手にひもづける
+<li>オファーを断る
+</ul>
+
+<hr>
+<h3>新しく選手として登録する</h3>
+
+<p>
+新入団の選手として登録します。登録名と背番号はあとで変更します。
+</p>
+
+<form class="form" method="GET">
+<input type="hidden" name="u" value="{{input_get('u')}}">
+<input type="hidden" name="t" value="{{input_get('t')}}">
+<input type="hidden" name="c" value="{{input_get('c')}}">
+<input type="submit" class="btn btn-success" name="accept" value="選手追加">
+</form>
+
+<hr>
+<h3>すでに登録されている選手にひもづける</h3>
+
+<p>
+すでに登録されている選手と、入部オファーのあったユーザーをひも付けます。
+</p>
+
+<form class="form" method="GET">
+
+<div class="form-group">
+<select class="form-control" name="player_id">
+<option disabled selected>対象の選手</option>
+{% for player in players %}
+<option value="{{player.id}}">{{player.name}}</option>
+{% endfor %}
+</select>
+</div>
+
+<input type="hidden" name="u" value="{{input_get('u')}}">
+<input type="hidden" name="t" value="{{input_get('t')}}">
+<input type="hidden" name="c" value="{{input_get('c')}}">
+<input type="submit" class="btn btn-success" name="link" value="ひもづけ">
+</form>
+
+<hr>
+<h3>オファーを断る</h3>
+
+<form class="form" method="GET">
+<input type="hidden" name="u" value="{{input_get('u')}}">
+<input type="hidden" name="t" value="{{input_get('t')}}">
+<input type="hidden" name="c" value="{{input_get('c')}}">
+<input type="submit" class="btn btn-danger" name="reject" value="オファーを断る">
+</form>
+{% endblock main %}

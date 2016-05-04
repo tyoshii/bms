@@ -201,6 +201,15 @@ comming soon ...
 <li><a href="/api/download/stats/team?team_id={{ global.team.id }}">Excel形式でダウンロード</a></li>
 </ul>
 
+<form action="/api/download/stats/team" method="GET">
+<input type="hidden" name="team_id" value="{{ global.team.id }}">
+<select name="year">
+<option value="2015">2015</option>
+<option value="2014">2014</option>
+</select>
+<input type="submit" value="download">
+</form>
+
 {# <div id="nav-tabs-downalod"> #}
 </div>
 

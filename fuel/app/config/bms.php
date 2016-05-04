@@ -5,4 +5,7 @@ return array(
   array(
     0 => '1',
   ),
+	'test_email' => array(
+		'tyoshii716.*@gmail.com',
+	),
 );

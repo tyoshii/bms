@@ -15,8 +15,10 @@
 <button type="button" class="btn btn-default">保存</button>
 {% elseif role == 'score' %}
 <button type="button" class="btn btn-success">登録</button>
-{% else %}
+{% elseif role == 'player' %}
 <button type="button" class="btn btn-default" data-status="save">保存</button>
+<button type="button" class="btn btn-success" data-status="complete">决定</button>
+{% else %}
 <button type="button" class="btn btn-success" data-status="complete">决定</button>
 {% endif %}
 </div>

@@ -138,7 +138,7 @@ class Controller_Team_Game extends Controller_Team
         }
 
         // kind validation
-        if (!in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher'))) {
+        if (!in_array($kind, array('score', 'player', 'other', 'batter', 'pitcher', 'exchange'))) {
             Session::set_flash('error', '不正なURLです。');
 
             return Response::redirect($this->_team->href);
@@ -237,6 +237,58 @@ class Controller_Team_Game extends Controller_Team
                     $view->pitchers = Model_Stats_Pitching::get_stats_by_playeds(
                         $game_id, $team_id, $this->_player->id);
                 }
+            break;
+
+            // 攻守交代
+            case 'exchange':
+
+                try {
+                    Mydb::begin();
+
+                    // gamesテーブル
+                    // top_statusとbottom_statusの入れ替え
+                    $props = array(
+                        'top_status' => $this->_game->top_status,
+                        'bottom_status' => $this->_game->bottom_status,
+                    );
+                    $this->_game->set($props);
+                    $this->_game->save();
+
+                    // games_runningscoresテーブル
+                    // ランニングスコアの入れ替え
+                    $rs = Model_Games_Runningscore::find_by_game_id($game_id);
+
+                    $props = array(
+                        'tsum' => $rs->bsum,
+                        'bsum' => $rs->tsum,
+                    );
+                    for ($i = 1; $i <= 18; ++$i) {
+                        $tkey = 't'.$i;
+                        $bkey = 'b'.$i;
+                        $props[$tkey] = $rs->$bkey;
+                        $props[$bkey] = $rs->$tkey;
+                    }
+
+                    $rs->set($props);
+                    $rs->save();
+
+                    // games_teamsテーブル
+                    // gamesテーブルに合わせてorderの変更
+                    $datas = Model_Games_Team::find_by('game_id', $game_id);
+                    foreach ($datas as $data) {
+                        $data->order = $data->order === 'top' ? 'bottom' : 'top';
+                        $data->save();
+                    }
+
+                    // commit and success
+                    Mydb::commit();
+                    Session::set_flash('info', '攻守を交代しました');
+                } catch (Exception $e) {
+                    Mydb::rollback();
+                    Session::set_flash('error', '攻守の交代に失敗しました '.$e->getMessage());
+                }
+
+                return Response::redirect($this->_game->href.'/edit/score');
             break;
 
             default:

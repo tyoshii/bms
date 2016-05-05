@@ -4,7 +4,6 @@ namespace Fuel\Tasks;
 
 class Backup
 {
-
     /**
      * This method gets ran when a valid method name is not used in the command.
      *
@@ -37,15 +36,16 @@ class Backup
         $backup_file = APPPATH.'/tmp/mysqldump_'.\Fuel::$env.'_'.date('Ymd').'_'.time();
         if (file_exists($backup_file)) {
             echo $backup_file."\n";
-            die("バックアップ先のファイルが既にあります");
+            die('バックアップ先のファイルが既にあります');
         }
 
         $mysqldump = shell_exec('which mysqldump');
         $mysqldump = trim($mysqldump);
 
         $cmd = "{$mysqldump} -u {$user} -h {$host} -P {$port}";
-        if ($pass and $pass !== '')
+        if ($pass and $pass !== '') {
             $cmd .= " -p{$pass}";
+        }
 
         $cmd .= " bms > {$backup_file}";
 
@@ -66,6 +66,5 @@ class Backup
         $body = '';
         \Common_Email::sendmail($to, $subject, $body, $backup_file);
     }
-
 }
 /* End of file tasks/backup.php */

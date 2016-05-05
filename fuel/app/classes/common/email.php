@@ -19,7 +19,7 @@ __FOOTER__;
     /**
      * メールを送信する.
      */
-    public static function sendmail($to, $subject, $body)
+    public static function sendmail($to, $subject, $body, $file = false)
     {
         if (Fuel::$env === 'development') {
             // テスト用のメールアドレス以外は送信しない
@@ -46,6 +46,10 @@ __FOOTER__;
         $email->subject(self::$_subject_header.$subject);
 
         $email->body(self::$_body_header.$body.self::$_body_footer);
+
+        if ($file !== false) {
+            $email->attach($file);
+        }
 
         $email->send();
 

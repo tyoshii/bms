@@ -9,5 +9,8 @@ return array(
 			'username' => 'root',
 			'password' => Config::get('password.mysql.development.root'),
 		),
+        'backup' => array(
+            'username' => 'root',
+        ),
 	),
 );

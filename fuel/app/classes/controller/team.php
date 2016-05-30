@@ -230,6 +230,18 @@ __BODY__;
 
         // cryptが有効かどうか検証
 
+        // ログイン必須
+        if (! Auth::check()) {
+            Session::set('redirect_to', Uri::current()."?".Uri::build_query_string(Input::get()));
+            return Response::redirect('/login');
+        }
+
+        // チーム管理者じゃなければエラー
+        if ($this->_team_admin === false) {
+            Session::set_flash('error', 'チーム管理者ではありません。無効なURLです。');
+            return Response::redirect($this->_team->href);
+        }
+
         // チーム加入処理
         if (Input::get('accept')) {
 

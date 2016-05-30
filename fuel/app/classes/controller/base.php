@@ -33,8 +33,7 @@ class Controller_Base extends Controller
                 $auth = Auth::instance();
                 if ($auth->login(Input::post('email'), Input::post('password'))) {
                     Session::set_flash('info', 'ログインに成功しました！');
-
-                    Response::redirect(Common::get_url_redirect_after_login());
+                    return Response::redirect(Common::get_url_redirect_after_login());
                 }
             }
 

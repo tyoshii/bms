@@ -170,3 +170,8 @@ table#batter td.E input {
 .min-width-100 {
 	min-width: 100px;
 }
+
+img.usericon {
+  max-width: 200px;
+  max-height: 200px;
+}

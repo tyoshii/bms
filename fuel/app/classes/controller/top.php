@@ -63,9 +63,11 @@ class Controller_Top extends Controller_Base
         if (Fuel::$env === 'test' or Fuel::$env === 'development') {
             $username = $this->param('username');
 
-            $id = Model_User::find_by_username($username)->id;
-
-            Auth::force_login($id);
+            if ($user = Model_User::find_by_username($username)) {
+                Auth::force_login($user->id);
+            } else {
+                Session::set_flash('error', '存在しないユーザー名です。');
+            }
         } else {
             Session::set_flash('error', '不正なURLです');
         }

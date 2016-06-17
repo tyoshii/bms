@@ -79,46 +79,6 @@ __BODY__;
     }
 
     /**
-     * new user regist, confirm mail send.
-     *
-     * @param string email
-     * @param string time
-     * @param string crypt
-     *
-     * @return bool
-     */
-    public static function regist_user()
-    {
-        // already check
-        if (Model_User::find_by_email(Input::post('email'))) {
-            Session::set_flash('error', 'そのメールアドレスは既に登録済みです。');
-
-            return false;
-        }
-
-        // create crypt
-        $time = time();
-        $fullname = Input::post('furllname');
-        $email = Input::post('email');
-        $password = Input::post('password', null);
-
-        $crypt = Crypt::encode(implode("\t", array($time, $fullname, $email, $password)));
-
-        $url = sprintf('%sregister/confirm/?t=%s&c=%s', Uri::base(false), $time, $crypt);
-
-        $subject = 'BMS本登録のご案内';
-        $body = <<<__BODY__
-本登録を完了するには、以下のリンクをクリックして下さい。
-
-{$url}
-__BODY__;
-
-        static::sendmail($email, $subject, $body);
-
-        return true;
-    }
-
-    /**
      * スタメン登録されたことの通知.
      */
     public static function regist_starter($game_id, $team_id, $player_id)

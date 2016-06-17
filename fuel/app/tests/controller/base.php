@@ -55,49 +55,4 @@ class Test_Controller_Base extends Test_Base
 
 		Auth::logout();
 	}
-
-	/**
-	 *
-	 */
-	public function test_未ログイン状態でPOSTリクエストを送ると、ログインを検証()
-	{
-		$_POST['username'] = '';
-		$_POST['password'] = '';
-
-		$res = Request::forge('/')->set_method('POST')->execute()->response();
-
-		$this->assertFalse(Auth::check());
-		$this->assertSame('ログインに失敗しました', Session::get_flash('error'));
-	}
-
-	/**
-	 *
-	 */
-	public function test_ログインに成功したらトップページへリダイレクト()
-	{
-		InputEx::reset();
-
-		// create user for test
-		$rand = rand(1000, 9999).rand(1000, 9999);
-		$username = 'test_'.$rand;
-		$password = $rand;
-		$email = $rand.'@yahoo.co.jp';
-
-		Auth::create_user($username, $password, $email);
-
-		// login
-		$_POST['email']    = $email;
-		$_POST['password'] = $password;
-
-		$res = Request::forge('/')->set_method('POST')->execute()->response();
-
-		$this->assertTrue(Auth::check());
-		$this->assertSame('ログインに成功しました！', Session::get_flash('info'));
-
-		// logout
-		Auth::logout();
-
-		// delete user
-		Auth::delete_user($username);
-	}
 }

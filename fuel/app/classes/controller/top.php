@@ -16,8 +16,6 @@ class Controller_Top extends Controller_Base
             $view->my_teams = Model_Team::get_belong_teams();
         } else {
             Auth::logout();
-            $this->_login_form->repopulate();
-            $view->set_safe('login_form', $this->_login_form->build(Uri::create('login')));
         }
 
         return Response::forge($view);
@@ -37,7 +35,6 @@ class Controller_Top extends Controller_Base
         }
 
         $view = View::forge('login.twig');
-        $view->set_safe('form', $this->_login_form->build(Uri::current()));
 
         return Response::forge($view);
     }

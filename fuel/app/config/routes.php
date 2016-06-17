@@ -79,12 +79,6 @@ return array(
 	'api/convention/team/add' => 'api/convention/team/add',
 	'api/convention/team/remove' => 'api/convention/team/remove',
 
-
-	'register'                                      => 'register/index',
-	'register/confirm'                              => 'register/confirm',
-	'forget_password'                               => 'register/forget_password',
-	'reset_password'                                => 'register/reset_password',
-
 	'error/(:status_code)'                          => 'error/index',
 	'_404_'                                         => 'error/error404',
 

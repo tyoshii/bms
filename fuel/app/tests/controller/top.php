@@ -22,17 +22,6 @@ class Test_Controller_Top extends Test_Base
 	/**
 	 *
 	 */
-	public function test_未ログイン状態でトップにアクセス()
-	{
-		$res = Request::forge('/')->execute()->response();
-
-		// login_form
-		$this->_assert_login_form($res->body->login_form);
-	}
-
-	/**
-	 *
-	 */
 	public function test_ログイン状態でトップにアクセス()
 	{
 		// login
@@ -71,20 +60,6 @@ class Test_Controller_Top extends Test_Base
 
 		// logout
 		Auth::logout();
-	}
-
-	/**
-	 *
-	 */
-	public function test_未ログイン状態でログインページにアクセスするとログインフォームを表示()
-	{
-		// logout
-		Auth::logout();
-
-		$res = Request::forge('login')->execute()->response();
-
-		$this->assertNull(Session::get('redirect_to'));
-		$this->_assert_login_form($res->body->form);
 	}
 
 	/**

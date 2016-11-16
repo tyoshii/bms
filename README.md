@@ -4,7 +4,7 @@
 Baseball Management System
 ==========================
 
-http://bm-s.info
+http://b-ms.info
 
 草野球の試合における成績管理ができるシステムです。
 

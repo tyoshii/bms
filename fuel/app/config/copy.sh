@@ -1,5 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-cp _crypt.php crypt.php
-cp _password.php password.php
-cp _salt.php salt.php
+set -euxo pipefail
+
+BASEDIR=$(dirname "$0")
+cp ${BASEDIR}/_crypt.php ${BASEDIR}/crypt.php
+cp ${BASEDIR}/_password.php ${BASEDIR}/password.php
+cp ${BASEDIR}/_salt.php ${BASEDIR}/salt.php

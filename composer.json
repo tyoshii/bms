@@ -25,7 +25,8 @@
     "require": {
         "php": ">=5.3.3",
         "monolog/monolog": "1.5.*",
-    	"fuelphp/upload": "2.0.1",
+        "fuelphp/upload": "2.0.1",
+        "phpseclib/phpseclib": "2.0.0",
         "twig/twig": "1.15.0",
         "phpoffice/phpexcel": "1.7.*",
         "opauth/opauth": "0.4.*",

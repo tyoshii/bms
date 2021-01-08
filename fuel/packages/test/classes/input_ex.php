@@ -8,10 +8,10 @@ class InputEX extends Input {
     /**
      * @var null
      */
-    private $input;
+    private $input = null;
 
     public static function reset(){
-        self::$input = null;
-//    parent::$input = null;
+        // self::$input = null;
+        // parent::$input = null;
   }
 }

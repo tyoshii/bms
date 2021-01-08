@@ -92,9 +92,7 @@ jobs:
       - name: Run phpunit/phpunit
         run: |
           echo $FUEL_ENV
-          find . -name phpunit
           ./fuel/vendor/bin/phpunit --coverage-text fuel/app/tests || :
-          php oil t:help || :
           php oil t --coverage-clover=./build/logs/clover.xml || :
         env:
           FUEL_ENV: test

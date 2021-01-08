@@ -1,0 +1,19 @@
+[Unit]
+Description=docker-compose bms service
+After=network.target
+Requires=docker.service
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/bms
+PrivateTmp=true
+Type=simple
+# PIDFile=/var/run/notebook/notebook.pid
+# EnvironmentFile=/etc/default/notebook
+ExecStart=/usr/bin/docker-compose up --abort-on-container-exit
+Restart=always
+RestartSec=120s
+
+[Install]
+WantedBy=multi-user.target

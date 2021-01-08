@@ -1,0 +1,103 @@
+---
+- name: "start docker setting"
+  debug:
+
+- name: Add the user 'nginx'
+  user:
+    name: nginx
+    groups:
+    - ubuntu
+    - staff
+    shell: /usr/sbin/nologin
+
+- name: Install docker, docker-compose packages
+  become: true
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - nginx
+    - docker.io
+    - docker-compose
+    - awscli
+
+# NOTE: Now working
+- import_tasks: setup-aws-credentials.yml
+
+- name: Add ubuntu to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups:
+      - docker
+    append: yes
+
+- name: reset ssh connection to allow user changes to affect 'current login user'
+  meta: reset_connection
+
+# Docker pull
+- name: pull mysql image
+  community.general.docker_image:
+    name: "{{ item.image }}"
+    tag: "{{ item.tag }}"
+    source: pull
+  with_items:
+    - { image: 'mysql', tag: '5.6'}
+    - { image: 'php', tag: '5.6-apache'}
+    - { image: 'php', tag: '7.3-apache'}
+
+- name: pull bms application image
+  community.general.docker_image:
+    name: "{{ item.image }}"
+    tag: "{{ item.tag }}"
+    source: pull
+  with_items:
+    - { image: '949140100595.dkr.ecr.ap-northeast-1.amazonaws.com/bms-legacy', tag: '2101.01'}
+
+# Tasks for Docker-compose
+# NOTE: Task for the start-at-task option
+# e.g: ansible-playbook -i inventory/web.yml --diff --start-at-task="start bms setting" main_playbook.yml
+- name: "start bms setting"
+  debug:
+
+- name: Create directories for docker-compose
+  file:
+    path: "{{ item.directory_name }}"
+    state: directory
+    owner: ubuntu
+    group: staff
+    mode: 0755
+    recurse: yes
+  with_items:
+    - {directory_name: '/opt/bms/' }
+    - {directory_name: '/opt/bms/db' }
+    - {directory_name: '/opt/bms/log' }
+    - {directory_name: '/opt/bms/db/mysql_data' }
+
+- name: Put /opt/bms/docker-compose.yml
+  template:
+    src:   docker-compose.yml.j2
+    dest:  /opt/bms/docker-compose.yml
+    owner: ubuntu
+    group: ubuntu
+    mode:  0644
+    backup: true
+  notify: "restart bms.service"
+
+- name: Put /etc/systemd/system/docker-compose.service
+  template:
+    src:   bms.service.j2
+    dest:  /etc/systemd/system/bms.service
+    owner: ubuntu
+    group: ubuntu
+    mode:  0644
+    backup: true
+  notify: "restart bms.service"
+
+# - name: Start bms.service
+#   systemd:
+#     name:    bms.service
+#     state:   started
+#     enabled: yes
+#   notify: "restart bms.service"

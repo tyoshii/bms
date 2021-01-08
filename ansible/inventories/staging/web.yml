@@ -1,0 +1,8 @@
+#; https://docs.ansible.com/ansible/latest/python_3_support.html
+#; https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+
+all:
+  children:
+    web:
+      hosts:
+        13.231.137.71:

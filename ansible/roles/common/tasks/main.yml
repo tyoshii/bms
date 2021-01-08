@@ -1,0 +1,124 @@
+---
+- name: Upgrade base package
+  become: true
+  apt: name="{{ packages }}" state=present update_cache=yes
+  vars:
+    packages:
+    - git
+    - vim
+    - zsh
+    - tree
+    - language-pack-ja
+
+- name: Copy .bash_profile
+  copy:
+    src: .bash_profile
+    dest: /home/ubuntu/.bash_profile
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: Install prezto
+  # git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+  git:
+    repo: https://github.com/sorin-ionescu/prezto.git
+    recursive: yes
+    track_submodules: yes
+    force: yes
+    # dest: {{ ansible_env.HOME }}/.zprezto
+    dest: /home/ubuntu/.zprezto
+
+  # create a directory if it doesn't exist
+- name: Create /home/ubuntu/.zprezto directory
+  file:
+    path: /home/ubuntu/.zprezto
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    recurse: yes
+
+- name: Make symlinks for zprezto
+  # setopt EXTENDED_GLOB;
+  # for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  #   ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}";
+  # done
+  file:
+    src: '/home/ubuntu/.zprezto/runcoms/{{ item.src }}'
+    dest: '/home/ubuntu/.{{ item.src }}'
+    owner: ubuntu
+    group: ubuntu
+    state: link
+  with_items:
+    - { src: 'zlogin'}
+    - { src: 'zlogout'}
+    - { src: 'zpreztorc'}
+    - { src: 'zprofile'}
+    - { src: 'zshenv'}
+    - { src: 'zshrc'}
+  ignore_errors: True
+
+
+### NOTE: Create users
+- name: "Create users: tyoshii"
+  user:
+    name: tyoshii
+    comment: Takanao Yoshii
+    shell: /bin/bash
+    uid: 502
+    password: '$6$eI.997Qp$LHsn6Z.6oFvsB/ene8EYE2OJKXEI89ZyLOisX7czUVhjc6ASmyfPMCfhgbuxH0j.QYmBxXuZGQGxKkedYCO6v.'
+    groups:
+      - staff
+      - users
+      - sudo
+    append: yes
+
+- name: Set authorized keys taken from url
+  ansible.posix.authorized_key:
+    user: tyoshii
+    state: present
+    key: https://github.com/tyoshii.keys
+
+- name: "Create users: yuokada"
+  user:
+    name: yuokada
+    comment: Yukihiro Okada
+    shell: /bin/bash
+    uid: 504
+    password: '$6$ty52m0sb$aWckiyGiSZdYkDpvKczqzHmDqU0syGrRYnxrRY6r5AXKdJqoJRWzw8jQBeTWJxkw.W9ie1DYXdRytNFEQCrdl0'
+    groups:
+      - staff
+      - users
+      - sudo
+    append: yes
+
+- name: Set authorized keys taken from url
+  ansible.posix.authorized_key:
+    user: yuokada
+    state: present
+    key: https://github.com/yuokada.keys
+
+- name: Set authorized keys taken from url for ubuntu
+  ansible.posix.authorized_key:
+    user: ubuntu
+    state: present
+    key: "https://github.com/{{ item.user }}.keys"
+  with_items:
+    - {user: yuokada}
+    - {user: tyoshii}
+
+- name: Put a file for sudoers
+  copy:
+    dest: /etc/sudoers.d/users
+    owner: root
+    group: root
+    mode:  0644
+    content: "%users    ALL=(ALL:ALL) ALL"
+
+# - name: Ensure the default Apache port is 8080
+#   lineinfile:
+#     path: /etc/sudoers
+#     regexp: '^#includedir /etc/sudoers.d'
+#     insertafter: '^#includedir /etc/sudoers.d '
+#     # insertbefore: '### Powered by ansible'
+#     line: '#includedir /etc/sudoers.d'
+#     state: present

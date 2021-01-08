@@ -1,0 +1,20 @@
+exclude_paths:
+  # - ./my/excluded/directory/
+  # - ./my/other/excluded/directory/
+  - ./roles/web/meta/
+  - ./roles/common/meta/
+  - ./roles/jupyter/meta/
+
+parseable: true
+quiet: true
+skip_list:
+  - '204'
+  - '301'
+  - '305'
+  - '401'
+  - '403'
+  - '405'
+# tags:
+#   - run_this_tag
+use_default_rules: true
+verbosity: 1

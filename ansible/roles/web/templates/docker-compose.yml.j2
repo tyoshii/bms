@@ -1,0 +1,31 @@
+version: '3'
+
+# see: https://docs.docker.jp/compose/overview.html
+# see: https://docs.docker.jp/compose/compose-file.html
+services:
+  # web:
+  #   working_dir: /var/www/bms
+  #   build:
+  #     context: ./web
+  #     dockerfile: Dockerfile.legacy
+  #   ports:
+  #   - "8888:80"
+  #   volumes:
+  #   # - .:/code
+  #   - ./web/ga:/var/www/bms/fuel/app/config/test
+  #   links:
+  #   - mysql_server
+  mysql_server:
+    image: mysql:5.6
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+    - "3306:3306"
+    volumes:
+      # - ./db/mysql_init:/docker-entrypoint-initdb.d
+      - /opt/bms/db/mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+      MYSQL_USER: "{{ mysql_appuser }}"
+      MYSQL_PASSWORD: "{{ mysql_appuser_password }}"
+      TZ: 'Asia/Tokyo'

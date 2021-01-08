@@ -1,0 +1,8 @@
+---
+mysql_root_password: 'password'
+mysql_database: 'bms'
+mysql_appuser: 'apiuser'
+mysql_appuser_password: 'password'
+
+aws_access_key_id : 'dummy access key'
+aws_secret_access_key : 'dummy secret key'

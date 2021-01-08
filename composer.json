@@ -26,7 +26,7 @@
         "php": ">=5.3.3",
         "monolog/monolog": "1.5.*",
         "fuelphp/upload": "2.0.1",
-        "mthaml/mthaml-bundle": "1.5.0",
+        "mthaml/mthaml": "*",
         "phpseclib/phpseclib": "2.0.0",
         "twig/twig": "1.15.0",
         "phpoffice/phpexcel": "1.7.*",

@@ -1,0 +1,5 @@
+all:
+  children:
+    bms:
+      hosts:
+        www15205ue.sakura.ne.jp:

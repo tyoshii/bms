@@ -1,0 +1,122 @@
+---
+- name: Setup repository
+  # https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#local-playbooks
+  hosts: bms
+  # become: yes
+  # gather_facts: yes
+  # connection: local
+  # vars:
+
+  tasks:
+    - name: Execute simple commands
+      shell: |
+        hostname
+        date
+        uptime
+
+    # - name: Remove dirty files
+    #   file:
+    #     path: /tmp/bms/
+    #     state: absent
+    #   # become: yes
+
+    - name: Create the tar archive for backup
+      shell: |
+        rm -rf /tmp/bms
+        cp -Lr /var/www/bms /tmp/ 2>/dev/null || :
+        chown -R root:wheel /tmp/bms
+        cd /tmp && tar zcf /tmp/bms.tgz bms
+      become: yes
+
+    # NOTE: THe archive module doesn't follow link files
+    # - name: Create the tar archive for backup
+    #   archive:
+    #     path:
+    #       - /var/www/bms
+    #     dest: /tmp/bms.tgz
+    #     owner: root
+    #     group: wheel
+    #     exclude_path:
+    #       - /var/www/bms/fuel/app/cache/
+    #       - /var/www/bms/fuel/app/logs/
+    #   become: yes
+
+    - name: Fetch bms files
+      fetch:
+        follow: yes
+        src: /tmp/bms.tgz
+        dest: assets
+
+    # see: https://docs.ansible.com/ansible/2.9_ja/user_guide/playbooks_delegation.html
+    # see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html
+    - name: Fetch backup file with local_action
+      local_action: command sftp {{ inventory_hostname}}:/tmp/bms.tgz .
+      run_once: True
+
+    # # https://docs.ansible.com/ansible/2.7/modules/homebrew_tap_module.html
+    # - name: Install Homebrew taps
+    #   homebrew_tap:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop: "{{ brew_taps }}"
+    #   tags:
+    #     - tap
+
+    # - name: Install treasure-data tap
+    #   homebrew_tap:
+    #     name: treasure-data/tap
+    #     state: present
+    #     url: "git@github.com:treasure-data/homebrew-tap.git"
+
+    # - name: Install Homebrew (td-security) Packages
+    #   homebrew:
+    #     name: td-security
+    #     state: present
+    #   tags:
+    #     - brew_package
+
+    # # https://docs.ansible.com/ansible/2.7/modules/homebrew_module.html
+    # - name: Update Homebrew
+    #   homebrew:
+    #     update_homebrew: yes
+
+    # - name: Install Homebrew Packages
+    #   homebrew:
+    #     name: "{{ brew_packages }}"
+    #     state: present
+    #   tags:
+    #     - brew_package
+
+    # # Section: hotdog
+    # - name: mkdir ~/.hotdog
+    #   file:
+    #     path: "{{ lookup('env', 'HOME') }}/.hotdog"
+    #     owner: "{{ lookup('env', 'USER') }}"
+    #     group: staff
+    #     mode: 0755
+    #   tags: hotdog
+
+    # - name: Touch hotdog configuration file
+    #   file:
+    #     path: "{{ lookup('env', 'HOME') }}/.hotdog/config.yml"
+    #     state: touch
+    #   tags: hotdog
+
+    # - name: Insert/Update hotdog configuration file
+    #   blockinfile:
+    #     path: "{{ lookup('env', 'HOME') }}/.hotdog/config.yml"
+    #     backup: yes
+    #     content: |
+    #       primary_tag: ssh_ipv4
+    #       ssh_config: "~/.ssh/treasuredata.config"
+    #       key_command: |
+    #         tds vault-read secret/treasuredata/datadog | jq -r '.api_key+":"+.application_key'
+    #   tags: hotdog
+
+    # #  NOTE: Adhoc code.
+    # - name: Install brew gem packages
+    #   command: brew gem install {{ item }}
+    #   loop:
+    #     - hotdog
+    #     - bundler
+    #   tags: gem

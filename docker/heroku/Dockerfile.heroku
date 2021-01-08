@@ -1,0 +1,54 @@
+# FROM php:7.3-apache
+FROM php:5.6-apache
+
+RUN apt-get update -y && apt-get install -q -y git && \
+    apt-get install -q -y vim mysql-client && \
+    groupadd wheel && \
+    install -o nobody -g nogroup -m 0755 -d /var/www/bms/public/ && \
+    install -o nobody -g nogroup -m 0755 -d /var/www/bms/fuel/ && \
+    install -o nobody -g nogroup -m 0755 -d /var/www/bms/fuel/app/ && \
+    install -o nobody -g wheel   -m 0777 -d /var/www/bms/fuel/app/cache/ && \
+    install -o nobody -g wheel   -m 0777 -d /var/www/bms/fuel/app/log/ && \
+    docker-php-ext-install pdo_mysql && \
+    pecl install xdebug-2.5.5  && \
+    docker-php-ext-enable xdebug  && \
+    a2enmod rewrite && \
+    ls -lhtr "$PHP_INI_DIR"
+
+# TODO: copy php.ini
+COPY apprepo/conf/bms.ini $PHP_INI_DIR/conf.d/
+
+# COPY etc/httpd/virtualhost-00.conf   /etc/apache2/sites-enabled/
+COPY etc/httpd/virtualhost-bms.conf  /etc/apache2/sites-enabled/
+
+COPY apprepo/public/          /var/www/bms/public/
+COPY apprepo/public/index.php /var/www/bms/public/index.php
+COPY apprepo/CHANGELOG.md     /var/www/bms/CHANGELOG.md
+COPY apprepo/oil              /var/www/bms/oil
+
+COPY legacy/bms               /var/www/bms/
+
+# Install composer
+WORKDIR /var/www/bms
+# RUN curl -s https://getcomposer.org/installer | php
+# COPY apprepo/composer.json /var/www/bms
+# RUN sed -i.bak -e '/php-coveralls/d' /var/www/bms/composer.json && \
+#     php composer.phar update --no-dev --prefer-dist && \
+#     php composer.phar install --no-dev
+# NOTE: php composer.phar update --no-dev --prefer-dist
+# COPY src/ /var/www/html/
+
+
+RUN printf OK > /var/www/html/index.html && \
+    printf "<?php\nphpinfo();" >  /var/www/html/phpinfo.php
+
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+CMD sed -i -e "s/Listen 80/Listen $PORT/" /etc/apache2/ports.conf && \
+    sed -i -e "s/80/$PORT/"               /etc/apache2/sites-enabled/*.conf && \
+    ls -lh /etc/apache2/sites-enabled/ && \
+    cat /etc/apache2/sites-enabled/000-default.conf &&\
+    cp  /etc/apache2/sites-enabled/virtualhost-bms.conf /etc/apache2/sites-enabled/000-default.conf && \
+    apache2ctl -t && \
+    apache2-foreground

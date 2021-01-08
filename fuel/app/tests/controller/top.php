@@ -71,11 +71,12 @@ class Test_Controller_Top extends Test_Base
 		Auth::logout();
 
 		// parameter
-		$url = 'http://bm-s.info/test';
+		$url = 'http://bm-s.info/about';
 		$_GET = array('url' => $url);
 
 		$res = Request::forge('login')->execute()->response();
 
+		var_dump($res);
 		$this->assertSame($url, Session::get('redirect_to'));
 	}
 

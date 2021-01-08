@@ -15,6 +15,7 @@ class Common
     /**
      * check crypt time.
      *
+     * @param $time
      * @return bool
      */
     public static function check_crypt_time($time)
@@ -47,7 +48,7 @@ class Common
             $redirect_to = $uri ? $uri : Uri::current();
         }
 
-        Response::redirect(Uri::create($redirect));
+        Response::redirect(Uri::create($redirect_to));
     }
 
     public static function get_dispname()

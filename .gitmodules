@@ -16,3 +16,9 @@
 [submodule "fuel/packages/email"]
 	path = fuel/packages/email
 	url = git://github.com/fuel/email.git
+[submodule "docker/heroku/apprepo"]
+	path = docker/heroku/apprepo
+	url = https://github.com/tyoshii/bms.git
+[submodule "docker/web/apprepo"]
+	path = docker/web/apprepo
+	url = https://github.com/tyoshii/bms.git

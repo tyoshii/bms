@@ -1,0 +1,5 @@
+### Ansible ###
+*.retry
+venv
+assets
+*.tgz

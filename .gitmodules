@@ -1,21 +1,27 @@
 [submodule "fuel/core"]
 	path = fuel/core
 	url = git://github.com/fuel/core.git
+	branch = 1.7/master
 [submodule "fuel/packages/oil"]
 	path = fuel/packages/oil
 	url = git://github.com/fuel/oil.git
+	branch = 1.7/master
 [submodule "fuel/packages/auth"]
 	path = fuel/packages/auth
 	url = git://github.com/fuel/auth.git
+	branch = 1.7/master
 [submodule "fuel/packages/parser"]
 	path = fuel/packages/parser
 	url = git://github.com/fuel/parser.git
+	branch = 1.7/master
 [submodule "fuel/packages/orm"]
 	path = fuel/packages/orm
 	url = git://github.com/fuel/orm.git
+	branch = 1.7/master
 [submodule "fuel/packages/email"]
 	path = fuel/packages/email
 	url = git://github.com/fuel/email.git
+	branch = 1.7/master
 [submodule "docker/heroku/apprepo"]
 	path = docker/heroku/apprepo
 	url = https://github.com/tyoshii/bms.git

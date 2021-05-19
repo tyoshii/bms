@@ -3,11 +3,12 @@
 return array(
 	'default' => array(
 		'connection' => array(
-			'host'     => 'localhost',
+			'host'     => '127.0.0.1',
 			'port'     => '3306',
 			'database' => 'bms',
 			'username' => 'root',
-			'password' => Config::get('password.mysql.development.root'),
+			'password' => 'password',
+			// 'password' => Config::get('password.mysql.development.root'),
 		),
 	),
 );

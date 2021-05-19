@@ -58,6 +58,7 @@ class Test_Controller_Team extends Test_Base
 		// assertion
 		$this->assertSame(200, $res->status);
 
+		var_dump($res->body->teams);
 		foreach ($res->body->teams as $team)
 		{
 			$this->assertRegExp('/'.$sample_team_name.'/', $team->name);

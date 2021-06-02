@@ -16,7 +16,7 @@ services:
   #   links:
   #   - mysql_server
   fuelphp:
-    image: 949140100595.dkr.ecr.ap-northeast-1.amazonaws.com/bms-legacy:{{ web_container_tag }}
+    image: {{ web_container_image }}:{{ web_container_tag }}
     # image: bms-legacy:{{ web_container_tag }}
     ports:
     # - "9000:9000"

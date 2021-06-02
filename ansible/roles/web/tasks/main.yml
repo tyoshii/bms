@@ -58,7 +58,7 @@
     tag: "{{ item.tag }}"
     source: pull
   with_items:
-    - { image: '{{ web_container_image }}', tag: '{{ web_container_tag}}'}
+    - { image: '{{ web_container_image }}', tag: '{{ web_container_tag }}'}
 
 # Tasks for Docker-compose
 # NOTE: Task for the start-at-task option

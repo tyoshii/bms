@@ -24,6 +24,11 @@
     - awscli
 
 # NOTE: Now working
+# NOTE: This task is just a check point task
+- name: Start AWS ECR tasks
+  ansible.builtin.debug:
+    msg: "Start the tasks related to AWS ECR"
+
 - import_tasks: setup-aws-credentials.yml
 
 - name: Add ubuntu to docker group
@@ -53,7 +58,7 @@
     tag: "{{ item.tag }}"
     source: pull
   with_items:
-    - { image: '949140100595.dkr.ecr.ap-northeast-1.amazonaws.com/bms-legacy', tag: '2101.01'}
+    - { image: '949140100595.dkr.ecr.ap-northeast-1.amazonaws.com/bms-legacy', tag: '{{ web_container_tag}}'}
 
 # Tasks for Docker-compose
 # NOTE: Task for the start-at-task option
@@ -68,12 +73,33 @@
     owner: ubuntu
     group: staff
     mode: 0755
-    recurse: yes
+    recurse: no
   with_items:
     - {directory_name: '/opt/bms/' }
     - {directory_name: '/opt/bms/db' }
-    - {directory_name: '/opt/bms/log' }
+
+- name: Create directories for the mysql container
+  file:
+    path: "{{ item.directory_name }}"
+    state: directory
+    owner: systemd-coredump
+    group: staff
+    mode: 0755
+    recurse: no
+  with_items:
     - {directory_name: '/opt/bms/db/mysql_data' }
+
+- name: Create directories for docker-compose with permission free
+  file:
+    path: "{{ item.directory_name }}"
+    state: directory
+    owner: ubuntu
+    group: staff
+    mode: 0777
+    recurse: no
+  with_items:
+    - {directory_name: '/opt/bms/log' }
+    - {directory_name: '/opt/bms/cache' }
 
 - name: Put /opt/bms/docker-compose.yml
   template:

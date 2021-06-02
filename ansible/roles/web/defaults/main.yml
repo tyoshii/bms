@@ -1,5 +1,5 @@
 ---
-mysql_root_password: 'password'
+mysql_root_password: 'mysqlroot'
 mysql_database: 'bms'
 mysql_appuser: 'apiuser'
 mysql_appuser_password: 'password'

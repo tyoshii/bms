@@ -9,6 +9,7 @@
     - zsh
     - tree
     - language-pack-ja
+    - debian-goodies
 
 - name: Copy .bash_profile
   copy:
@@ -23,10 +24,12 @@
   git:
     repo: https://github.com/sorin-ionescu/prezto.git
     recursive: yes
-    track_submodules: yes
+    # track_submodules: yes
     force: yes
     # dest: {{ ansible_env.HOME }}/.zprezto
     dest: /home/ubuntu/.zprezto
+    # accept_hostkey: 'yes'
+  become: no
 
   # create a directory if it doesn't exist
 - name: Create /home/ubuntu/.zprezto directory

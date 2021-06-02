@@ -17,10 +17,17 @@ all:
     aws_secret_access_key: YOUR_AWS_SECRET_KEY
 
 # dry run
-$ ansible-playbook -i inventories/production/hosts --check --diff --skip-tags ecr main_playbook.yml
+$ ansible-playbook -i inventories/production/hosts -K --check --diff --skip-tags ecr main_playbook.yml
+BECOME password:  # <= ubuntu's password
 
 # Apply
-$ ansible-playbook -i inventories/production/hosts --diff main_playbook.yml
+$ ansible-playbook -i inventories/production/hosts -K --diff main_playbook.yml
+BECOME password:  # <= ubuntu's password
+
+
+# Apply only tasks associated with AWS ECR and the containers
+$ ansible-playbook -i inventories/production/hosts -K --diff --start-at-task="Start AWS ECR tasks" main_playbook.yml
+BECOME password:  # <= ubuntu's password
 ```
 
 

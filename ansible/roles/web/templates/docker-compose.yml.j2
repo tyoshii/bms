@@ -21,8 +21,8 @@ services:
     ports:
     # - "9000:9000"
     # - "8888:80"
-    - "39000:9000"
-    - "30080:80"
+    - "{{ fuelphp_debugger_port }}:9000"
+    - "{{ fuelphp_app_port }}:80"
     volumes:
     - ./log:/var/www/bms/fuel/app/logs/
     - ./cache:/var/www/bms/fuel/app/cache/

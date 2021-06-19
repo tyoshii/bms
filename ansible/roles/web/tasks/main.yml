@@ -99,6 +99,7 @@
     recurse: no
   with_items:
     - {directory_name: '/opt/bms/log' }
+    - {directory_name: '/opt/bms/log/nginx' }
     - {directory_name: '/opt/bms/cache' }
     - {directory_name: '/opt/bms/cache/twig' }
 

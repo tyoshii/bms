@@ -77,6 +77,7 @@
   with_items:
     - {directory_name: '/opt/bms/' }
     - {directory_name: '/opt/bms/db' }
+    - {directory_name: '/opt/bms/nginx' }
 
 - name: Create directories for the mysql container
   file:
@@ -99,8 +100,22 @@
     recurse: no
   with_items:
     - {directory_name: '/opt/bms/log' }
+    - {directory_name: '/opt/bms/log/nginx' }
     - {directory_name: '/opt/bms/cache' }
     - {directory_name: '/opt/bms/cache/twig' }
+
+# Nginx container
+- name: Put nginx stuffs
+  template:
+    src:   "{{ item.src_name }}"
+    dest:  "{{ item.dest_name }}"
+    owner: ubuntu
+    group: ubuntu
+    mode:  0664
+    backup: true
+  with_items:
+    - {src_name: 'Dockerfile.nginx.j2', dest_name: '/opt/bms/nginx/Dockerfile.nginx' }
+    - {src_name: 'nginx.conf.j2', dest_name: '/opt/bms/nginx/nginx.conf' }
 
 - name: Put /opt/bms/docker-compose.yml
   template:

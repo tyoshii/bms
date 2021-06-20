@@ -1,7 +1,7 @@
 # NOTE: The builder part is nessessary to build headers more module
-FROM nginx:1.18.0 as builder
+FROM nginx:1.21.0 as builder
 
-ENV NGINX_VERSION 1.18.0
+ENV NGINX_VERSION 1.21.0
 ENV HEADERS_MORE_VERSION 0.33
 
 RUN apt-get update && apt-get install -y \
@@ -27,7 +27,7 @@ RUN MORE_DIR="/usr/local/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEAD
     ./configure --with-compat $CONFARGS --add-dynamic-module=$MORE_DIR && \
     make modules && make install
 
-FROM nginx:1.18.0
+FROM nginx:1.21.0
 
 COPY --from=builder /usr/local/nginx/modules/ngx_http_headers_more_filter_module.so /usr/local/nginx/modules/ngx_http_headers_more_filter_module.so
 

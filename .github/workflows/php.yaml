@@ -49,7 +49,7 @@ jobs:
           coverage: xdebug
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, dom, pdo_mysql, zip, :opcache
-          ini-values: error_reporting=E_ALL|E_STRICT, display_errors=on, date.timezone=Asia/Tokyo, open_basedir=none, expose_php=Off, track_errors=On, display_startup_errors=On, browscap=/home/runner/work/bms/bms/fuel/app/config/lite_php_browscap.ini
+          ini-values: error_reporting=E_ALL|E_STRICT, display_errors=on, date.timezone=Asia/Tokyo, open_basedir=none, expose_php=Off, track_errors=Off, display_startup_errors=On, browscap=/home/runner/work/bms/bms/fuel/app/config/lite_php_browscap.ini
 
       - name: Determine composer cache directory
         id: determine-composer-cache-directory

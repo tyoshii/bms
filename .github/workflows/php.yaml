@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - 5.6
+          # - 5.6
           - 7.3
 
     services:
@@ -41,6 +41,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+
+      - name: Install zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -q -y zip unzip
 
       # see: https://github.com/marketplace/actions/setup-php-action#memo-usage
       - name: Install PHP
@@ -61,11 +66,6 @@ jobs:
           path: ${{ steps.determine-composer-cache-directory.outputs.directory }}
           key: php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: php-${{ matrix.php-version }}-composer-
-
-      - name: Install zip
-        run: |
-          sudo apt-get update
-          sudo apt-get install -q -y zip unzip
 
       - name: Install dependencies
         run: FUEL_ENV=test composer install

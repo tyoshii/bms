@@ -15,6 +15,17 @@ services:
   #   - ./web/ga:/var/www/bms/fuel/app/config/test
   #   links:
   #   - mysql_server
+  web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.nginx
+    ports:
+    - "{{ nginx_app_port }}:80"
+    - "{{ nginx_status_port }}:81"
+    volumes:
+    - ./log/nginx:/var/log/nginx
+    links:
+    - fuelphp
   fuelphp:
     image: {{ web_container_image }}:{{ web_container_tag }}
     # image: bms-legacy:{{ web_container_tag }}

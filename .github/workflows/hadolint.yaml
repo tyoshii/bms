@@ -12,14 +12,14 @@ jobs:
       # see: https://github.com/hadolint/hadolint#configure
       # see: https://hub.docker.com/r/hadolint/hadolint
       # see: https://github.com/marketplace/actions/hadolint-action
-      - uses: brpaz/hadolint-action@v1.2.1
+      - uses: hadolint/hadolint-action@v1.5.0
         with:
           dockerfile: ./docker/web/Dockerfile
 
-      - uses: brpaz/hadolint-action@v1.2.1
+      - uses: hadolint/hadolint-action@v1.5.0
         with:
           dockerfile: ./docker/web/Dockerfile.legacy
 
-      - uses: brpaz/hadolint-action@v1.2.1
+      - uses: hadolint/hadolint-action@v1.5.0
         with:
           dockerfile: ./docker/heroku/Dockerfile.heroku

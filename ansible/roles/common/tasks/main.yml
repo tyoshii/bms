@@ -8,6 +8,7 @@
     - vim
     - zsh
     - tree
+    - expect
     - language-pack-ja
     - debian-goodies
 

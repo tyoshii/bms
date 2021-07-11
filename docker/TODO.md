@@ -14,7 +14,7 @@
 [Image Layer Details \- php:5\.6\-apache \- sha256:46d4ecf689a983cfc42f73abb435b0f67ad454964779d66b933b5d0949022fff \- Docker Hub](https://hub.docker.com/layers/php/library/php/5.6-apache/images/sha256-46d4ecf689a983cfc42f73abb435b0f67ad454964779d66b933b5d0949022fff?context=explore)
 
 ```bash
-$ docker pull php:5.6-apache
+$ docker pull php:7.3-apache
 ```
 
 1. Install docker-compose

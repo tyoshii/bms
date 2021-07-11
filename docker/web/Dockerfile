@@ -1,5 +1,4 @@
 FROM php:7.3-apache
-# FROM php:5.6-apache
 
 RUN apt-get update -y && apt-get install -y git
 RUN install -o nobody -g nogroup -m 0755 -d /var/www/bms/public/ && \

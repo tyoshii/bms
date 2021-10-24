@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.SCHEMA:bms</OriginalElement>
+  <nodes>
+    <node x="222.50000000000003" y="2209.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessionscopes</node>
+    <node x="1769.0" y="917.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittingdetails</node>
+    <node x="2174.592857142857" y="249.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players</node>
+    <node x="1053.5" y="1579.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.leagues</node>
+    <node x="2011.0" y="796.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittings</node>
+    <node x="0.0" y="972.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_teams</node>
+    <node x="583.5" y="1883.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_providers</node>
+    <node x="1314.2190476190478" y="238.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games</node>
+    <node x="1250.5" y="1579.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.migration</node>
+    <node x="2523.0" y="807.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_pitchings</node>
+    <node x="585.0" y="1579.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users</node>
+    <node x="839.5" y="1579.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.batter_results</node>
+    <node x="459.0" y="972.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_games</node>
+    <node x="345.5" y="1960.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_scopes</node>
+    <node x="671.0" y="950.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_awards</node>
+    <node x="88.50000000000003" y="1883.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessions</node>
+    <node x="1765.5" y="0.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams</node>
+    <node x="1523.0" y="928.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_players</node>
+    <node x="981.0" y="928.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games_teams</node>
+    <node x="1275.0" y="554.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games_runningscores</node>
+    <node x="209.0" y="972.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_admins</node>
+    <node x="2305.0" y="950.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_fieldings</node>
+    <node x="229.71904761904784" y="282.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions</node>
+    <node x="0.0" y="1579.0">5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_clients</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_fieldings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="-66.0" y="-94.0" />
+      <point x="2338.0" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_pitchings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="-91.33333333333348" y="-237.0" />
+      <point x="2568.6666666666665" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" relationship="REFERENCES">
+      <point x="0.0" y="-248.0" />
+      <point x="2148.0" y="523.0" />
+      <point x="2271.592857142857" y="523.0" />
+      <point x="0.0" y="116.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessions" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_clients" relationship="REFERENCES">
+      <point x="-2.8421709430404007E-14" y="-138.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_providers" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users" relationship="REFERENCES">
+      <point x="0.0" y="-138.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessionscopes" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_scopes" relationship="REFERENCES">
+      <point x="51.0" y="-61.0" />
+      <point x="375.5" y="2184.0" />
+      <point x="442.0" y="2184.0" />
+      <point x="0.0" y="61.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_players" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="0.0" y="-116.0" />
+      <point x="1636.0" y="523.0" />
+      <point x="1646.8333333333335" y="523.0" />
+      <point x="1646.8333333333335" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittingdetails" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" relationship="REFERENCES">
+      <point x="74.0" y="-127.0" />
+      <point x="1954.0" y="523.0" />
+      <point x="2271.592857142857" y="523.0" />
+      <point x="0.0" y="116.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games_teams" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="68.5" y="-116.0" />
+      <point x="1186.5" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_games" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="48.0" y="-72.0" />
+      <point x="603.0" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_pitchings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="91.33333333333348" y="-237.0" />
+      <point x="2751.3333333333335" y="533.0" />
+      <point x="2693.97380952381" y="533.0" />
+      <point x="2693.97380952381" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_fieldings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="66.0" y="-94.0" />
+      <point x="2470.0" y="513.0" />
+      <point x="2488.504761904762" y="513.0" />
+      <point x="2488.504761904762" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_awards" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="72.5" y="-94.0" />
+      <point x="888.5" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="-91.33333333333348" y="-248.0" />
+      <point x="2056.6666666666665" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_teams" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions" relationship="REFERENCES">
+      <point x="47.25" y="-72.0" />
+      <point x="141.75" y="533.0" />
+      <point x="352.21904761904784" y="533.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_players" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" relationship="REFERENCES">
+      <point x="75.33333333333326" y="-116.0" />
+      <point x="1711.3333333333333" y="523.0" />
+      <point x="2271.592857142857" y="523.0" />
+      <point x="0.0" y="116.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittingdetails" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="0.0" y="-127.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="91.33333333333348" y="-248.0" />
+      <point x="2239.3333333333335" y="513.0" />
+      <point x="2379.092857142857" y="513.0" />
+      <point x="2379.092857142857" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_games" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions" relationship="REFERENCES">
+      <point x="-48.0" y="-72.0" />
+      <point x="507.0" y="533.0" />
+      <point x="352.21904761904784" y="533.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_fieldings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" relationship="REFERENCES">
+      <point x="0.0" y="-94.0" />
+      <point x="2404.0" y="523.0" />
+      <point x="2271.592857142857" y="523.0" />
+      <point x="0.0" y="116.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_admins" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions" relationship="REFERENCES">
+      <point x="0.0" y="-72.0" />
+      <point x="324.0" y="533.0" />
+      <point x="352.21904761904784" y="533.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_hittingdetails" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="-74.0" y="-127.0" />
+      <point x="1806.0" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_awards" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="-72.5" y="-94.0" />
+      <point x="743.5" y="523.0" />
+      <point x="723.8428571428572" y="523.0" />
+      <point x="723.8428571428572" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessionscopes" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.users_sessions" relationship="REFERENCES">
+      <point x="-51.0" y="-61.0" />
+      <point x="273.5" y="2184.0" />
+      <point x="207.00000000000003" y="2184.0" />
+      <point x="0.0" y="138.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_pitchings" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" relationship="REFERENCES">
+      <point x="0.0" y="-237.0" />
+      <point x="2660.0" y="523.0" />
+      <point x="2271.592857142857" y="523.0" />
+      <point x="0.0" y="116.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games_runningscores" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="0.0" y="-490.0" />
+      <point x="1389.0" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.players" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="0.0" y="-116.0" />
+      <point x="2271.592857142857" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.conventions_teams" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="-47.25" y="-72.0" />
+      <point x="47.25" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_players" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games" relationship="REFERENCES">
+      <point x="-75.33333333333326" y="-116.0" />
+      <point x="1560.6666666666667" y="533.0" />
+      <point x="1400.7190476190478" y="533.0" />
+      <point x="0.0" y="127.0" />
+    </edge>
+    <edge source="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.games_teams" target="5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.teams" relationship="REFERENCES">
+      <point x="-68.5" y="-116.0" />
+      <point x="1049.5" y="523.0" />
+      <point x="984.0571428571429" y="523.0" />
+      <point x="984.0571428571429" y="213.0" />
+      <point x="1880.0" y="213.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.338855806039983" showDependencies="false" x="1605.824326868763" y="645.145923554886" />
+  <SelectedNodes>
+    <node>5a6d5a78-54b5-4e12-aabc-16ad6bf7827b.TABLE:bms.stats_pitchings</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

@@ -101,6 +101,25 @@
     state: present
     key: https://github.com/yuokada.keys
 
+- name: "Create users: ryoksmt"
+  user:
+    name: ryoksmt
+    comment: Arima
+    shell: /bin/bash
+    uid: 505
+    password: '$6$7cEKGqyAgO4CgXSR$wh1PgL4nGJiAjf9QQI0l.NDFh7FasOL9bMtRs2HEji6vEmcMIbcHxIhqhiG5notvT3s2RH9hp9ty/MCB/2yXI1'
+    groups:
+      - staff
+      - users
+      - sudo
+    append: yes
+
+- name: Set authorized keys taken from url
+  ansible.posix.authorized_key:
+    user: ryoksmt
+    state: present
+    key: https://github.com/ryoksmt.keys
+
 - name: Set authorized keys taken from url for ubuntu
   ansible.posix.authorized_key:
     user: ubuntu

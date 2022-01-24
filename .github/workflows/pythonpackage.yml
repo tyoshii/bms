@@ -9,7 +9,8 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8 , 3.9]
+        # python-version: [3.8 , 3.9]
+        python-version: ['3.9', '3.10']
 
     steps:
     - uses: actions/checkout@v1
@@ -32,5 +33,5 @@ jobs:
       run: |
         ansible --version
         ansible-lint --version
-        ansible-lint ansible/roles/*/*/*.yml
+        ansible-lint -v -x meta-no-info -x meta-no-tags ansible/roles/*/*/*.yml
         ansible-playbook -i ansible/inventories/staging/web.yml --syntax-check ansible/*.yml

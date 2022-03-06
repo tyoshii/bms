@@ -9,7 +9,7 @@ aws_secret_access_key : 'dummy secret key'
 
 # web container
 web_container_image: '949140100595.dkr.ecr.ap-northeast-1.amazonaws.com/bms-legacy'
-web_container_tag: '2106.01'
+web_container_tag: '2201.00'
 fuelphp_app_port: 8080
 fuelphp_debugger_port: 9000
 nginx_app_port: 80

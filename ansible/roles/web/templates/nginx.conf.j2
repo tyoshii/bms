@@ -50,7 +50,7 @@ http {
     location / {
       proxy_pass http://fuelphp:80;
 
-      more_set_headers "Content-Security-Policy: default-src 'self'";
+      # more_set_headers "Content-Security-Policy: default-src 'self'";
       more_set_headers "Strict-Transport-Security: max-age=86400";
 
       more_set_headers "Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin";

@@ -1,0 +1,12 @@
+# see: https://docs.ansible.com/ansible/latest/python_3_support.html
+# see: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+
+all:
+  children:
+    web:
+      hosts:
+        192.168.0.1:
+  vars:
+    aws_access_key_id: MY-ACCESS-KEY
+    aws_secret_access_key: MY-SECRET-KEY
+    mysql_appuser_password: MYSQL-PASSWORD

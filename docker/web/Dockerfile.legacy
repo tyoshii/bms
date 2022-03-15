@@ -1,8 +1,8 @@
 # FROM php:7.3-apache
-FROM php:5.6-apache
+FROM php:7.3-apache
 
 RUN apt-get update -y && apt-get install -q -y git && \
-    apt-get install -q -y vim mysql-client && \
+    apt-get install -q -y vim mariadb-client-10.3 && \
     groupadd wheel && \
     install -o nobody -g nogroup -m 0755 -d /var/www/bms/public/ && \
     install -o nobody -g nogroup -m 0755 -d /var/www/bms/fuel/ && \
@@ -10,7 +10,7 @@ RUN apt-get update -y && apt-get install -q -y git && \
     install -o nobody -g wheel   -m 0777 -d /var/www/bms/fuel/app/cache/ && \
     install -o nobody -g wheel   -m 0777 -d /var/www/bms/fuel/app/log/ && \
     docker-php-ext-install pdo_mysql && \
-    pecl install xdebug-2.5.5  && \
+    pecl install xdebug-2.9.8  && \
     docker-php-ext-enable xdebug  && \
     a2enmod rewrite && \
     ls -lhtr "$PHP_INI_DIR"

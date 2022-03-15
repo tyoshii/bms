@@ -17,24 +17,23 @@
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "1.0.2",
-        "phpunit/phpunit": "4.1.*",
-        "phpunit/phpunit-selenium": ">=1.2",
-        "squizlabs/php_codesniffer": "*",
-        "fabpot/php-cs-fixer": "dev-master"
+        "phpunit/phpunit": ">=4.1.10",
+        "phpunit/phpunit-selenium": ">=3.0.0",
+        "squizlabs/php_codesniffer": "*"
     },
     "require": {
-        "php": ">=5.3.3",
-        "monolog/monolog": "1.5.*",
-        "fuelphp/upload": "2.0.1",
+        "php": ">=7.3.0",
+        "monolog/monolog": ">=1.26.0",
+        "fuelphp/upload": ">=2.0.6",
         "mthaml/mthaml": "*",
-        "phpseclib/phpseclib": "2.0.0",
-        "twig/twig": "1.40.0",
-        "phpoffice/phpexcel": "1.7.*",
+        "phpseclib/phpseclib": ">=2.0.32",
+        "twig/twig": ">=1.44.4",
+        "phpoffice/phpexcel": "1.8.*",
         "opauth/opauth": "0.4.*",
         "opauth/google": "dev-master",
         "opauth/facebook": "dev-master",
-        "crossjoin/browscap": "~2.0.0",
-        "browscap/browscap-php": "2.0.*"
+        "crossjoin/browscap": "~2.0",
+        "browscap/browscap-php": "~2.0"
     },
     "suggest": {
         "mustache/mustache": "Allow Mustache templating with the Parser package",

@@ -6,9 +6,9 @@ name: Dockerfile validation
 
 jobs:
   docker_validate:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # see: https://github.com/hadolint/hadolint#configure
       # see: https://hub.docker.com/r/hadolint/hadolint
       # see: https://github.com/marketplace/actions/hadolint-action

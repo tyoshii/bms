@@ -14,3 +14,9 @@ updates:
     open-pull-requests-limit: 5
     reviewers:
       - "yuokada"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    reviewers:
+      - "yuokada"

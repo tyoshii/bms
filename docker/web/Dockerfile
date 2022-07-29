@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM docker.io/php:7.3-apache
 # FROM php:5.6-apache
 
 RUN apt-get update -y && apt-get install -y git
@@ -33,5 +33,5 @@ RUN sed -i.bak -e '/php-coveralls/d' /var/www/bms/composer.json && \
 # COPY src/ /var/www/html/
 
 # Use the default production configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-RUN ls -lhtr "$PHP_INI_DIR/conf.d"
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" && \
+    ls -lhtr "$PHP_INI_DIR/conf.d"

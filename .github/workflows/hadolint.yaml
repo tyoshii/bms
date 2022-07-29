@@ -15,11 +15,14 @@ jobs:
       - uses: hadolint/hadolint-action@v1.7.0
         with:
           dockerfile: ./docker/web/Dockerfile
+          trusted-registries: docker.io
 
       - uses: hadolint/hadolint-action@v1.7.0
         with:
           dockerfile: ./docker/web/Dockerfile.legacy
+          trusted-registries: docker.io
 
       - uses: hadolint/hadolint-action@v1.7.0
         with:
           dockerfile: ./docker/heroku/Dockerfile.heroku
+          trusted-registries: docker.io

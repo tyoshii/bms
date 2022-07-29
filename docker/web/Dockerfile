@@ -33,5 +33,5 @@ RUN sed -i.bak -e '/php-coveralls/d' /var/www/bms/composer.json && \
 # COPY src/ /var/www/html/
 
 # Use the default production configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-RUN ls -lhtr "$PHP_INI_DIR/conf.d"
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" && \
+    ls -lhtr "$PHP_INI_DIR/conf.d"

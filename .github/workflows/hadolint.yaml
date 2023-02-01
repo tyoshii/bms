@@ -12,17 +12,17 @@ jobs:
       # see: https://github.com/hadolint/hadolint#configure
       # see: https://hub.docker.com/r/hadolint/hadolint
       # see: https://github.com/marketplace/actions/hadolint-action
-      - uses: hadolint/hadolint-action@v1.7.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ./docker/web/Dockerfile
           trusted-registries: docker.io
 
-      - uses: hadolint/hadolint-action@v1.7.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ./docker/web/Dockerfile.legacy
           trusted-registries: docker.io
 
-      - uses: hadolint/hadolint-action@v1.7.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ./docker/heroku/Dockerfile.heroku
           trusted-registries: docker.io

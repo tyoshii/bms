@@ -6,23 +6,23 @@ name: Dockerfile validation
 
 jobs:
   docker_validate:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       # see: https://github.com/hadolint/hadolint#configure
       # see: https://hub.docker.com/r/hadolint/hadolint
       # see: https://github.com/marketplace/actions/hadolint-action
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: hadolint/hadolint-action@v3
         with:
           dockerfile: ./docker/web/Dockerfile
           trusted-registries: docker.io
 
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: hadolint/hadolint-action@v3
         with:
           dockerfile: ./docker/web/Dockerfile.legacy
           trusted-registries: docker.io
 
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: hadolint/hadolint-action@v3
         with:
           dockerfile: ./docker/heroku/Dockerfile.heroku
           trusted-registries: docker.io

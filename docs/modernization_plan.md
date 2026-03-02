@@ -13,14 +13,15 @@
 ## ターゲット技術スタック（2026）
 - Frontend: `React 19` + `TypeScript` + `Next.js 16`（App Router, Server Components）
 - UI: `Tailwind CSS v4` + `shadcn/ui` + `TanStack Table`
-- Backend: `NestJS`（TypeScript）+ `OpenAPI` + `Zod` バリデーション
-- DB: `PostgreSQL 17` + `Prisma`
-- Cache/Queue: `Redis` + `BullMQ`
+- Backend: `Java 21` + `Quarkus`（`quarkus-rest`, Validation, Security）+ `OpenAPI`
+- DB: `PostgreSQL 17` + `Hibernate ORM with Panache` + `Flyway`
+- Cache/Queue: `Redis` + `SQS`（非同期ジョブ）
 - Auth: `Auth.js` + OAuth2/OIDC（Google）
 - File Export: `ExcelJS`（xlsx出力）
 - Infra: `AWS`（ECS/Fargate, RDS, ElastiCache, S3, CloudFront, WAF）
 - Observability: `OpenTelemetry` + `Datadog` or `Grafana Cloud`
 - CI/CD: `GitHub Actions` + preview環境 + 本番自動デプロイ
+- OpenAPI運用: QuarkusのOpenAPI/Swagger UI拡張（`quarkus-smallrye-openapi`）を利用し、OpenAPI定義からサーバーサイド実装の土台を生成
 
 ## アーキテクチャ方針
 - APIファースト（OpenAPIを単一契約としてフロント/バックで共有）
@@ -37,7 +38,7 @@
 4. 試合管理
 5. 成績入力（打撃/投球）
 6. 統計ダッシュボード（チーム/個人）
-7. Excelエクスポート
+7. Excelエクスポート（低優先度。初期リリース後の後段実装）
 
 - 廃止対象
 1. 大会管理（大会一覧、大会試合、大会成績、関連管理画面/API/テーブル）
@@ -52,12 +53,12 @@
 ### フェーズ1: 設計（4週間）
 1. ドメイン設計（Team, Player, Game, Stats, Export, Auth）
 2. DB論理/物理設計（PostgreSQL前提）
-3. OpenAPI設計とエラーモデル標準化
+3. OpenAPI設計とエラーモデル標準化（Quarkus拡張を使ったサーバー実装生成前提）
 4. デザインシステム設計（タイポ、カラー、コンポーネント、アクセシビリティ）
 5. 監査ログ・セキュリティ設計（PII、権限、監査証跡）
 
 ### フェーズ2: 基盤構築（3週間）
-1. Monorepo構築（`pnpm` + `Turborepo`）
+1. リポジトリ/ビルド基盤構築（Frontend: `pnpm` / Backend: `Gradle`）
 2. CI/CD・IaC・環境分離（dev/stg/prod）
 3. 認証基盤・共通UI基盤・共通エラーハンドリング実装
 4. 監視/通知基盤（APM, ログ, メトリクス, アラート）
@@ -68,7 +69,7 @@
 3. 試合登録・参加者管理
 4. 成績入力UI（高速入力、バリデーション、下書き保存）
 5. 統計画面（フィルタ、期間比較、ランキング）
-6. Excel出力
+6. Excel出力（低優先度のため、正式リリース後のスプリントで実装）
 7. 管理画面（運用者向け）
 
 ### フェーズ4: 総合検証（4週間）

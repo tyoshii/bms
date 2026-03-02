@@ -25,6 +25,7 @@
 13. [CI/CD パイプライン](#13-cicd-パイプライン)
 14. [設定・環境管理](#14-設定環境管理)
 15. [セキュリティ](#15-セキュリティ)
+16. [シーケンス図](#16-シーケンス図)
 
 ---
 
@@ -240,20 +241,260 @@ bms/
 
 ## 5. データベース設計
 
-### 5.1 エンティティ関連図（概略）
+### 5.1 ER図（Mermaid）
 
-```
-users ──────── players ─────── teams
-                  │                │
-                  │                └─── games ──── stats_players
-                  │                         │      stats_hittings
-                  └─────────────────────────┤      stats_pitchings
-                                            │      stats_fieldings
-                                            │      games_runningscores
-                                            └──── games_teams
+```mermaid
+erDiagram
+    users {
+        int id PK
+        varchar username UK
+        varchar password
+        int group
+        varchar email
+        int last_login
+        varchar login_hash
+        text profile_fields
+        int created_at
+        int updated_at
+    }
 
-conventions ── conventions_teams (teams)
-           └── conventions_games (games)
+    teams {
+        int id PK
+        varchar name
+        varchar url_path UK
+        varchar regulation_at_bats
+        int status
+        int created_at
+        int updated_at
+    }
+
+    players {
+        int id PK
+        int team_id FK
+        varchar name
+        varchar number
+        varchar username
+        int status
+        varchar role
+        int created_at
+        int updated_at
+    }
+
+    games {
+        int id PK
+        date date
+        varchar start_time
+        varchar stadium
+        varchar memo
+        int game_status
+        int top_status
+        int bottom_status
+        int created_at
+        int updated_at
+    }
+
+    games_teams {
+        int id PK
+        int game_id FK
+        int team_id FK
+        enum order
+        int opponent_team_id
+        varchar opponent_team_name
+        enum input_status
+        int created_at
+        int updated_at
+    }
+
+    games_runningscores {
+        int id PK
+        int game_id FK
+        tinyint t1
+        tinyint t2
+        tinyint t3
+        tinyint t4
+        tinyint t5
+        tinyint t6
+        tinyint t7
+        tinyint t8
+        tinyint t9
+        tinyint tsum
+        tinyint b1
+        tinyint b2
+        tinyint b3
+        tinyint b4
+        tinyint b5
+        tinyint b6
+        tinyint b7
+        tinyint b8
+        tinyint b9
+        tinyint bsum
+        int last_inning
+        int created_at
+        int updated_at
+    }
+
+    stats_players {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int player_id FK
+        tinyint order
+        varchar position
+        tinyint disp_order
+        int created_at
+        int updated_at
+    }
+
+    stats_hittings {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int player_id FK
+        varchar input_status
+        tinyint TPA
+        tinyint AB
+        tinyint H
+        tinyint 2B
+        tinyint 3B
+        tinyint HR
+        tinyint SO
+        tinyint BB
+        tinyint HBP
+        tinyint SAC
+        tinyint SF
+        tinyint RBI
+        tinyint R
+        tinyint SB
+        int created_at
+        int updated_at
+    }
+
+    stats_hittingdetails {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int player_id FK
+        tinyint bat_times
+        tinyint direction
+        tinyint kind
+        tinyint result_id
+        int created_at
+        int updated_at
+    }
+
+    stats_pitchings {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int player_id FK
+        int order
+        varchar input_status
+        tinyint W
+        tinyint L
+        tinyint HLD
+        tinyint SV
+        tinyint IP
+        tinyint IP_frac
+        tinyint H
+        tinyint SO
+        tinyint BB
+        tinyint HB
+        tinyint ER
+        tinyint R
+        int created_at
+        int updated_at
+    }
+
+    stats_fieldings {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int player_id FK
+        tinyint E
+        int created_at
+        int updated_at
+    }
+
+    stats_awards {
+        int id PK
+        int game_id FK
+        int team_id FK
+        int mvp_player_id
+        int second_mvp_player_id
+        int created_at
+        int updated_at
+    }
+
+    batter_results {
+        int id PK
+        varchar result
+        int created_at
+        int updated_at
+    }
+
+    conventions {
+        int id PK
+        varchar name
+        enum kind
+        enum published
+        int created_at
+        int updated_at
+    }
+
+    conventions_admins {
+        int id PK
+        int convention_id FK
+        varchar username
+        int created_at
+        int updated_at
+    }
+
+    conventions_teams {
+        int id PK
+        int convention_id FK
+        int team_id FK
+        int created_at
+        int updated_at
+    }
+
+    conventions_games {
+        int id PK
+        int convention_id FK
+        int game_id FK
+        int created_at
+        int updated_at
+    }
+
+    leagues {
+        int id PK
+        varchar name
+        int created_at
+        int updated_at
+    }
+
+    %% Relationships
+    users ||--o{ players : "username"
+    teams ||--o{ players : "team_id"
+    teams ||--o{ games_teams : "team_id"
+    games ||--o{ games_teams : "game_id"
+    games ||--|| games_runningscores : "game_id"
+    games ||--o{ stats_players : "game_id"
+    games ||--o{ stats_hittings : "game_id"
+    games ||--o{ stats_hittingdetails : "game_id"
+    games ||--o{ stats_pitchings : "game_id"
+    games ||--o{ stats_fieldings : "game_id"
+    games ||--o{ stats_awards : "game_id"
+    players ||--o{ stats_players : "player_id"
+    players ||--o{ stats_hittings : "player_id"
+    players ||--o{ stats_hittingdetails : "player_id"
+    players ||--o{ stats_pitchings : "player_id"
+    players ||--o{ stats_fieldings : "player_id"
+    batter_results ||--o{ stats_hittingdetails : "result_id"
+    conventions ||--o{ conventions_admins : "convention_id"
+    conventions ||--o{ conventions_teams : "convention_id"
+    conventions ||--o{ conventions_games : "convention_id"
+    teams ||--o{ conventions_teams : "team_id"
+    games ||--o{ conventions_games : "game_id"
 ```
 
 ### 5.2 主要テーブル定義
@@ -908,7 +1149,240 @@ services:
 
 ---
 
-## 付録
+## 16. シーケンス図
+
+### 16.1 ユーザー登録・ログインフロー
+
+#### パスワード認証ログイン
+
+```mermaid
+sequenceDiagram
+    actor User as ユーザー
+    participant Browser as ブラウザ
+    participant Controller as Controller_Auth
+    participant SimpleAuth as SimpleAuth
+    participant DB as MySQL
+
+    User->>Browser: ログインフォームに入力
+    Browser->>Controller: POST /login (username, password)
+    Controller->>SimpleAuth: Auth::login(username, password)
+    SimpleAuth->>DB: SELECT * FROM users WHERE username=?
+    DB-->>SimpleAuth: ユーザーレコード
+    SimpleAuth->>SimpleAuth: パスワードハッシュ検証
+    alt 認証成功
+        SimpleAuth-->>Controller: true
+        SimpleAuth->>DB: UPDATE users SET last_login=?, login_hash=?
+        Controller->>Browser: redirect /team/{url_path}
+        Browser-->>User: チームページを表示
+    else 認証失敗
+        SimpleAuth-->>Controller: false
+        Controller->>Browser: redirect /login (エラーメッセージ)
+        Browser-->>User: ログインエラーを表示
+    end
+```
+
+#### OAuthログイン（Google/Facebook）
+
+```mermaid
+sequenceDiagram
+    actor User as ユーザー
+    participant Browser as ブラウザ
+    participant Controller as Controller_Auth
+    participant Opauth as Opauth
+    participant OAuthProvider as OAuth プロバイダー
+    participant DB as MySQL
+
+    User->>Browser: Googleでログインをクリック
+    Browser->>Controller: GET /auth/google
+    Controller->>Opauth: OAuth認証開始
+    Opauth->>Browser: OAuthプロバイダーへリダイレクト
+    Browser->>OAuthProvider: 認証要求
+    OAuthProvider-->>Browser: 認証コード
+    Browser->>Controller: GET /auth/google/callback
+    Controller->>Opauth: アクセストークン取得
+    Opauth->>OAuthProvider: アクセストークン要求
+    OAuthProvider-->>Opauth: アクセストークン + ユーザー情報
+    Controller->>DB: ユーザーアカウント検索/作成
+    DB-->>Controller: ユーザーレコード
+    Controller->>Browser: redirect /team/{url_path}
+    Browser-->>User: チームページを表示
+```
+
+---
+
+### 16.2 試合登録フロー
+
+```mermaid
+sequenceDiagram
+    actor Admin as チーム管理者
+    participant Browser as ブラウザ
+    participant Controller as Controller_Team_Game
+    participant Model as Model_Game
+    participant DB as MySQL
+    participant Email as Common_Email
+
+    Admin->>Browser: 試合登録フォームに入力
+    Browser->>Controller: POST /team/{url_path}/game/regist
+    Controller->>Controller: 権限チェック（チーム管理者か）
+    Controller->>Model: Model_Game::regist(data)
+    Model->>DB: BEGIN TRANSACTION
+    Model->>DB: INSERT INTO games (date, stadium, ...)
+    DB-->>Model: game_id
+    Model->>DB: INSERT INTO games_teams (game_id, team_id, order=top)
+    Model->>DB: INSERT INTO games_teams (game_id, team_id, order=bottom)
+    Model->>DB: INSERT INTO games_runningscores (game_id)
+    Model->>DB: INSERT INTO stats_players x9 (初期参加選手)
+    Model->>DB: COMMIT
+    Model-->>Controller: 登録完了
+    alt 大会試合の場合
+        Controller->>DB: INSERT INTO conventions_games (convention_id, game_id)
+    end
+    Controller->>Email: 参加選手への通知メール送信
+    Controller->>Browser: redirect /team/{url_path}/game/{id}
+    Browser-->>Admin: 試合詳細ページを表示
+```
+
+---
+
+### 16.3 成績入力フロー
+
+```mermaid
+sequenceDiagram
+    actor Player as 選手
+    participant Browser as ブラウザ
+    participant API as API_Game
+    participant Model as Model_Stats_Hitting
+    participant DB as MySQL
+
+    Player->>Browser: 成績入力ページを開く
+    Browser->>API: GET /team/{url_path}/game/{id}/input
+    API->>DB: SELECT stats_players WHERE game_id=? AND team_id=?
+    DB-->>API: 参加選手リスト
+    API->>Browser: 成績入力フォームを表示
+    Browser-->>Player: フォームを表示
+
+    Player->>Browser: 打撃成績を入力して保存
+    Browser->>API: POST /api/game/updateBatter (stats data)
+    API->>API: バリデーション（打席数整合性チェック等）
+    alt バリデーション成功
+        API->>Model: Model_Stats_Hitting::regist(data)
+        Model->>DB: BEGIN TRANSACTION
+        Model->>DB: INSERT/UPDATE stats_hittings
+        Model->>DB: DELETE stats_hittingdetails WHERE player_id=? AND game_id=?
+        loop 各打席の詳細
+            Model->>DB: INSERT INTO stats_hittingdetails
+        end
+        Model->>DB: INSERT/UPDATE stats_fieldings
+        Model->>DB: COMMIT
+        API-->>Browser: {"status":"success"}
+        Browser-->>Player: 保存完了メッセージ
+    else バリデーション失敗
+        API-->>Browser: {"status":"error", "message":"..."}
+        Browser-->>Player: エラーメッセージを表示
+    end
+
+    Player->>Browser: 入力完了マークをクリック
+    Browser->>API: POST /api/game/updateStatus (input_status=complete)
+    API->>DB: UPDATE stats_hittings SET input_status='complete'
+    API->>DB: UPDATE games SET top_status=2 (または bottom_status=2)
+    API-->>Browser: {"status":"success"}
+    Browser-->>Player: 完了状態を表示
+```
+
+---
+
+### 16.4 参加選手登録フロー
+
+```mermaid
+sequenceDiagram
+    actor Admin as チーム管理者
+    participant Browser as ブラウザ
+    participant API as API_Game
+    participant Model as Model_Stats_Player
+    participant DB as MySQL
+
+    Admin->>Browser: 参加選手登録フォームを開く
+    Browser->>API: GET /team/{url_path}/game/{id}/player
+    API->>DB: SELECT players WHERE team_id=? AND status=1
+    DB-->>API: 選手リスト
+    API->>Browser: 選手選択フォームを表示
+    Browser-->>Admin: フォームを表示
+
+    Admin->>Browser: 参加選手・打順・ポジションを選択
+    Browser->>API: POST /api/game/updatePlayer
+    API->>Model: Model_Stats_Player::regist(game_id, team_id, players)
+    Model->>DB: BEGIN TRANSACTION
+    Model->>DB: DELETE FROM stats_players WHERE game_id=? AND team_id=?
+    loop 各参加選手
+        Model->>DB: INSERT INTO stats_players (player_id, order, position)
+    end
+    Model->>DB: COMMIT
+    API-->>Browser: {"status":"success"}
+    Browser-->>Admin: 登録完了を表示
+```
+
+---
+
+### 16.5 大会管理フロー
+
+```mermaid
+sequenceDiagram
+    actor ConvAdmin as 大会管理者
+    participant Browser as ブラウザ
+    participant Controller as Controller_Convention
+    participant API as API_Convention
+    participant DB as MySQL
+
+    ConvAdmin->>Browser: 大会作成フォームに入力
+    Browser->>Controller: POST /convention/regist
+    Controller->>DB: INSERT INTO conventions (name, kind, published)
+    DB-->>Controller: convention_id
+    Controller->>DB: INSERT INTO conventions_admins (convention_id, username)
+    Controller->>Browser: redirect /convention/{id}
+    Browser-->>ConvAdmin: 大会詳細ページを表示
+
+    ConvAdmin->>Browser: チーム追加ボタンをクリック
+    Browser->>API: POST /api/convention/team/add
+    API->>API: 権限チェック（大会管理者か）
+    API->>DB: INSERT INTO conventions_teams (convention_id, team_id)
+    API-->>Browser: {"status":"success"}
+
+    ConvAdmin->>Browser: 試合を大会に追加
+    Browser->>Controller: POST /convention/{id}/game/add
+    Controller->>DB: INSERT INTO conventions_games (convention_id, game_id)
+    Controller->>Browser: redirect /convention/{id}
+    Browser-->>ConvAdmin: 更新済み大会ページを表示
+```
+
+---
+
+### 16.6 成績リマインダーメール送信フロー
+
+```mermaid
+sequenceDiagram
+    participant Trigger as バッチ/手動実行
+    participant API as API_Mail
+    participant DB as MySQL
+    participant Email as Common_Email
+    participant SMTP as SMTPサーバー
+    actor Player as 成績未入力の選手
+
+    Trigger->>API: GET /api/mail/remind
+    API->>DB: SELECT games WHERE game_status=1 AND date < NOW()
+    DB-->>API: 完了していない試合リスト
+    loop 各試合
+        API->>DB: SELECT stats_hittings WHERE input_status='save'
+        DB-->>API: 未完了の成績レコード
+        loop 各未完了選手
+            API->>DB: SELECT users WHERE username=player.username
+            DB-->>API: ユーザーメールアドレス
+            API->>Email: リマインダーメール作成
+            Email->>SMTP: メール送信
+            SMTP-->>Player: リマインダーメール受信
+        end
+    end
+    API-->>Trigger: 送信完了レポート
+```
 
 ### A. 計算指標一覧
 

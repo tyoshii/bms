@@ -16,12 +16,14 @@
 - フレームワーク: Quarkus 3.x
 - REST: `quarkus-rest`
 - OpenAPI: `quarkus-smallrye-openapi` + Swagger UI
+- Security(JWT): `quarkus-smallrye-jwt`
+- Security(OIDC Client): `quarkus-oidc-client`
 - ORM: Hibernate ORM with Panache
 - Migration: Flyway
 - DB: PostgreSQL 17
 - Cache: Redis
 - Queue: AWS SQS（後段導入）
-- 認証連携: Auth.js (Frontend) + OIDCトークン検証（Backend）
+- 認証連携: Auth.js (Frontend) + OIDC/JWT検証（Backend）
 - 観測: OpenTelemetry
 
 ## 3. システム構成
@@ -82,7 +84,10 @@ Repository、外部サービス接続（Redis/S3等）
 - 認証
 1. Frontend(Auth.js)でログイン
 2. OIDC/JWT を Backend に Bearer 送信
-3. Backend で署名・有効期限・issuer/audience を検証
+3. Backend で `quarkus-smallrye-jwt` により署名・有効期限・issuer/audience を検証
+- OIDC client の役割
+1. `quarkus-oidc-client` は Backend から外部OIDC保護APIを呼ぶ際のトークン取得/更新に利用
+2. ユーザーから受信した Bearer JWT の検証自体は `quarkus-smallrye-jwt` を主に利用
 - 認可（RBAC）
 1. `SYSTEM_ADMIN`（旧100）
 2. `TEAM_ADMIN`（旧50）

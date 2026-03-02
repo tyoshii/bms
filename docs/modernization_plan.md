@@ -13,10 +13,10 @@
 ## ターゲット技術スタック（2026）
 - Frontend: `React 19` + `TypeScript` + `Next.js 16`（App Router, Server Components）
 - UI: `Tailwind CSS v4` + `shadcn/ui` + `TanStack Table`
-- Backend: `Java 21` + `Quarkus`（`quarkus-rest`, Validation, Security）+ `OpenAPI`
+- Backend: `Java 21` + `Quarkus`（`quarkus-rest`, `quarkus-smallrye-jwt`, `quarkus-oidc-client`, Validation, Security）+ `OpenAPI`
 - DB: `PostgreSQL 17` + `Hibernate ORM with Panache` + `Flyway`
 - Cache/Queue: `Redis`（`SQS` は後段の低優先度機能として導入）
-- Auth: `Auth.js` + OAuth2/OIDC（Google）
+- Auth: `Auth.js` + OAuth2/OIDC（Google）+ BE側 JWT検証/RBAC（`quarkus-smallrye-jwt`）+ 外部向けトークン取得（`quarkus-oidc-client`）
 - File Export: `ExcelJS`（xlsx出力）
 - Infra: `AWS`（ECS/Fargate, RDS, ElastiCache, S3, CloudFront, WAF）
 - Observability: `OpenTelemetry` + `Datadog` or `Grafana Cloud`

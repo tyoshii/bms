@@ -75,9 +75,9 @@ Repository、外部サービス接続（Redis/S3等）
 2. `quarkus-smallrye-openapi`（OpenAPI/Swagger UI）
 - 設計フロー
 1. Backend は Code First とし、Resource Interface/DTO を Java で先行実装
-2. Quarkus 拡張で Java ソースから `openapi.yaml` を生成
+2. Quarkus 拡張で Java ソースから `openapi-definition/openapi.yaml` を生成
 3. CIで OpenAPI lint と破壊的変更チェックを実施
-4. Frontend は生成済み `openapi.yaml` を入力にクライアント処理を実装
+4. Frontend は生成済み `openapi-definition/openapi.yaml` を入力にクライアント処理を実装
 - OpenAPI は PR レビュー必須（Backend + Frontend 両承認）
 
 ## 8. 認証・認可
@@ -214,8 +214,8 @@ backend/
   src/main/resources/
     application.yml
     db/migration/
-  docs/openapi/
-    bms.v1.yaml
+  openapi-definition/
+    openapi.yaml
 ```
 
 ## 19. リリース・移行（並行稼働なし）
@@ -231,7 +231,6 @@ backend/
 2. 判定後は新システム継続、差分修正で対応
 
 ## 20. 未決事項
-1. OpenAPI生成物（`openapi.yaml`）のリポジトリ管理方針（コミット運用 or CI生成配布）
-2. SQS導入の判定基準（負荷閾値、運用コスト、整合性要件）
-3. Excelエクスポートの実装時期（正式版+1スプリントを想定）
-4. 旧大会データの参照アーカイブ提供方式
+1. SQS導入の判定基準（負荷閾値、運用コスト、整合性要件）
+2. Excelエクスポートの実装時期（正式版+1スプリントを想定）
+3. 旧大会データの参照アーカイブ提供方式

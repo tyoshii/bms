@@ -7,7 +7,7 @@
 
 ## 目標
 - UI/UX、アーキテクチャ、運用基盤、認証、開発体験を2026年水準へ刷新
-- 野球成績管理の中核機能（チーム、選手、試合、打撃/投球成績、集計、Excel出力）を再設計
+- 野球成績管理の中核機能（チーム、選手、試合、打撃/投球成績、集計）を再設計し、Excel出力は低優先度で後段実装
 - セキュアかつ高速で、モバイル中心でも入力しやすいプロダクトへ再構築
 
 ## ターゲット技術スタック（2026）
@@ -21,7 +21,7 @@
 - Infra: `AWS`（ECS/Fargate, RDS, ElastiCache, S3, CloudFront, WAF）
 - Observability: `OpenTelemetry` + `Datadog` or `Grafana Cloud`
 - CI/CD: `GitHub Actions` + preview環境 + 本番自動デプロイ
-- OpenAPI運用: Backend は Code First（Java Interface/DTO 先行）で実装し、QuarkusのOpenAPI/Swagger UI拡張（`quarkus-smallrye-openapi`）で `openapi.yaml` を生成。Frontend は `openapi.yaml` からクライアント処理を実装
+- OpenAPI運用: Backend は Code First（Java Interface/DTO 先行）で実装し、QuarkusのOpenAPI/Swagger UI拡張（`quarkus-smallrye-openapi`）で `openapi-definition/openapi.yaml` を生成。Frontend はこの `openapi.yaml` からクライアント処理を実装
 
 ## アーキテクチャ方針
 - APIファースト（OpenAPIを単一契約としてフロント/バックで共有）
@@ -53,7 +53,7 @@
 ### フェーズ1: 設計（4週間）
 1. ドメイン設計（Team, Player, Game, Stats, Export, Auth）
 2. DB論理/物理設計（PostgreSQL前提）
-3. OpenAPI設計とエラーモデル標準化（Code First: Java実装から `openapi.yaml` を生成し、FEクライアント生成に利用）
+3. OpenAPI設計とエラーモデル標準化（Code First: Java実装から `openapi-definition/openapi.yaml` を生成し、FEクライアント生成に利用）
 4. デザインシステム設計（タイポ、カラー、コンポーネント、アクセシビリティ）
 5. 監査ログ・セキュリティ設計（PII、権限、監査証跡）
 

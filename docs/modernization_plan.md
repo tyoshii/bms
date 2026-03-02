@@ -15,18 +15,18 @@
 - UI: `Tailwind CSS v4` + `shadcn/ui` + `TanStack Table`
 - Backend: `Java 21` + `Quarkus`（`quarkus-rest`, Validation, Security）+ `OpenAPI`
 - DB: `PostgreSQL 17` + `Hibernate ORM with Panache` + `Flyway`
-- Cache/Queue: `Redis` + `SQS`（非同期ジョブ）
+- Cache/Queue: `Redis`（`SQS` は後段の低優先度機能として導入）
 - Auth: `Auth.js` + OAuth2/OIDC（Google）
 - File Export: `ExcelJS`（xlsx出力）
 - Infra: `AWS`（ECS/Fargate, RDS, ElastiCache, S3, CloudFront, WAF）
 - Observability: `OpenTelemetry` + `Datadog` or `Grafana Cloud`
 - CI/CD: `GitHub Actions` + preview環境 + 本番自動デプロイ
-- OpenAPI運用: QuarkusのOpenAPI/Swagger UI拡張（`quarkus-smallrye-openapi`）を利用し、OpenAPI定義からサーバーサイド実装の土台を生成
+- OpenAPI運用: Backend は Code First（Java Interface/DTO 先行）で実装し、QuarkusのOpenAPI/Swagger UI拡張（`quarkus-smallrye-openapi`）で `openapi.yaml` を生成。Frontend は `openapi.yaml` からクライアント処理を実装
 
 ## アーキテクチャ方針
 - APIファースト（OpenAPIを単一契約としてフロント/バックで共有）
 - モジュラーモノリスで開始し、必要時にサービス分割
-- 成績集計はオンライン集計 + 非同期再計算ジョブを併用
+- プロトタイプ段階はオンライン集計を優先し、非同期再計算ジョブは後段導入
 - 権限制御はRBACを明文化（管理者/チーム管理者/一般）
 - BFF（Backend for Frontend）を採用し、画面要件に最適化したAPIを提供
 
@@ -53,7 +53,7 @@
 ### フェーズ1: 設計（4週間）
 1. ドメイン設計（Team, Player, Game, Stats, Export, Auth）
 2. DB論理/物理設計（PostgreSQL前提）
-3. OpenAPI設計とエラーモデル標準化（Quarkus拡張を使ったサーバー実装生成前提）
+3. OpenAPI設計とエラーモデル標準化（Code First: Java実装から `openapi.yaml` を生成し、FEクライアント生成に利用）
 4. デザインシステム設計（タイポ、カラー、コンポーネント、アクセシビリティ）
 5. 監査ログ・セキュリティ設計（PII、権限、監査証跡）
 
@@ -69,8 +69,11 @@
 3. 試合登録・参加者管理
 4. 成績入力UI（高速入力、バリデーション、下書き保存）
 5. 統計画面（フィルタ、期間比較、ランキング）
-6. Excel出力（低優先度のため、正式リリース後のスプリントで実装）
-7. 管理画面（運用者向け）
+6. 管理画面（運用者向け）
+
+### フェーズ6: 後段機能（低優先度）
+1. Excel出力（正式リリース後のスプリントで実装）
+2. SQS を利用した非同期再計算ジョブ導入
 
 ### フェーズ4: 総合検証（4週間）
 1. E2E/統合/負荷/セキュリティテスト
@@ -84,7 +87,7 @@
 3. 新システム切替
 4. 初期監視強化（72時間）
 
-### フェーズ6: 安定化（2〜4週間）
+### フェーズ7: 安定化（2〜4週間）
 1. 障害/性能チューニング
 2. UX改善の短期反映
 3. 廃止機能導線の最終整理（大会機能完全撤去）

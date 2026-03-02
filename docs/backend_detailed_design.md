@@ -5,10 +5,11 @@
 - 対象は以下
 1. API/ドメイン/データモデル
 2. 認証認可
-3. 集計・非同期処理
+3. 入力機能・閲覧機能（プロトタイプ）
 4. 運用・監視・品質保証
 - 大会機能（Convention）は対象外（廃止）
 - Excelエクスポートは低優先度機能として後段実装
+- SQS 利用は低優先度機能として後段実装
 
 ## 2. 採用技術
 - 言語: Java 21
@@ -19,7 +20,7 @@
 - Migration: Flyway
 - DB: PostgreSQL 17
 - Cache: Redis
-- Queue: AWS SQS
+- Queue: AWS SQS（後段導入）
 - 認証連携: Auth.js (Frontend) + OIDCトークン検証（Backend）
 - 観測: OpenTelemetry
 
@@ -27,7 +28,7 @@
 - Frontend（Next.js）から BFF API を呼び出し
 - BFF API は Quarkus 単一アプリ（モジュラーモノリス）として稼働
 - 主データは PostgreSQL、短期キャッシュは Redis
-- 非同期ジョブは SQS 経由で Worker が処理
+- プロトタイプでは同期処理中心で実装し、SQS を使う非同期処理は後段で追加
 
 ## 4. モジュール構成
 - `auth`: トークン検証、ユーザー解決、権限判定
@@ -48,7 +49,7 @@ RESTエンドポイント。DTO入出力とHTTP責務のみ
 - `domain`:
 エンティティ/値オブジェクト/ドメインサービス
 - `infra`:
-Repository、外部サービス接続（Redis/SQS/S3等）
+Repository、外部サービス接続（Redis/S3等）
 
 ## 6. API設計方針
 - APIファースト。OpenAPIを唯一の契約として管理
@@ -71,10 +72,10 @@ Repository、外部サービス接続（Redis/SQS/S3等）
 1. `quarkus-rest`（REST実装）
 2. `quarkus-smallrye-openapi`（OpenAPI/Swagger UI）
 - 設計フロー
-1. OpenAPI YAML を `docs/openapi/bms.v1.yaml` で管理
-2. CIで OpenAPI lint と破壊的変更チェック
-3. サーバー側の Resource Interface/DTO の土台を生成
-4. 生成コードに対して Application 層を実装
+1. Backend は Code First とし、Resource Interface/DTO を Java で先行実装
+2. Quarkus 拡張で Java ソースから `openapi.yaml` を生成
+3. CIで OpenAPI lint と破壊的変更チェックを実施
+4. Frontend は生成済み `openapi.yaml` を入力にクライアント処理を実装
 - OpenAPI は PR レビュー必須（Backend + Frontend 両承認）
 
 ## 8. 認証・認可
@@ -124,9 +125,9 @@ Repository、外部サービス接続（Redis/SQS/S3等）
 3. 保存時に整合性チェック（例: 打数 >= 安打）
 - 集計
 1. 即時計算: 試合詳細表示に必要な軽量集計
-2. 非同期再計算: シーズン集計、ランキング
-3. 再計算トリガー: 成績更新イベントを SQS に投入
-4. 再計算結果は materialized view 相当テーブルに保持
+2. DBクエリ最適化: シーズン集計、ランキングはインデックスと集約SQLで対応
+3. プロトタイプでは非同期再計算は導入しない
+4. 高負荷化した場合に SQS ベースの再計算ジョブを後段で導入
 
 ## 11. キャッシュ戦略
 - 対象
@@ -140,9 +141,9 @@ Repository、外部サービス接続（Redis/SQS/S3等）
 1. 試合・成績更新時に関連キーをイベント駆動で削除
 2. TTL は 5〜15分を基本
 
-## 12. 非同期処理
-- Queue: SQS Standard
-- Worker: Quarkus scheduled/consumer
+## 12. 非同期処理（後段・低優先度）
+- Queue: SQS Standard（プロトタイプでは未導入）
+- Worker: Quarkus scheduled/consumer（後段導入）
 - ジョブ種別
 1. `stats.recalculate`
 2. `audit.export`（将来）
@@ -154,7 +155,7 @@ Repository、外部サービス接続（Redis/SQS/S3等）
 
 ## 13. トランザクション方針
 - 原則: 1 API リクエスト = 1 トランザクション
-- 外部I/O（SQS/Redis）は DBコミット後に実行
+- 外部I/O（Redis）は DBコミット後に実行
 - 複数集約にまたがる更新は Application 層で順序制御
 
 ## 14. 監査ログ
@@ -180,7 +181,7 @@ Repository、外部サービス接続（Redis/SQS/S3等）
 1. API latency p50/p95/p99
 2. 4xx/5xx rate
 3. DB query latency
-4. Queue lag/DLQ件数
+4. Queue lag/DLQ件数（SQS導入後）
 - ログ
 1. JSON構造化ログ
 2. PIIマスキング
@@ -225,7 +226,7 @@ backend/
 2. 判定後は新システム継続、差分修正で対応
 
 ## 20. 未決事項
-1. Auth.js 連携時の最終トークン形式（JWTクレーム設計）
-2. 統計再計算の許容遅延（SLA）
+1. OpenAPI生成物（`openapi.yaml`）のリポジトリ管理方針（コミット運用 or CI生成配布）
+2. SQS導入の判定基準（負荷閾値、運用コスト、整合性要件）
 3. Excelエクスポートの実装時期（正式版+1スプリントを想定）
 4. 旧大会データの参照アーカイブ提供方式
